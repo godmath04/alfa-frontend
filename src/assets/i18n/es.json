@@ -1,0 +1,19 @@
+{
+  "auth.login.title": "Iniciar Sesión",
+  "auth.login.subtitle": "Ingrese sus credenciales para acceder al sistema",
+  "auth.login.email": "Correo Electrónico",
+  "auth.login.password": "Contraseña",
+  "auth.login.button": "Iniciar Sesión",
+  "auth.login.forgot-password": "¿Olvidaste tu contraseña?",
+  "auth.login.register": "¿No tienes cuenta? Registrarse",
+  "auth.register.title": "Crear Cuenta",
+  "auth.register.button": "Registrarse",
+  "auth.register.already-account": "¿Ya tienes cuenta? Iniciar Sesión",
+  "common.buttons.save": "Guardar",
+  "common.buttons.cancel": "Cancelar",
+  "common.buttons.back": "Volver",
+  "common.buttons.next": "Siguiente",
+  "common.errors.required": "Este campo es requerido",
+  "common.errors.invalid-email": "Ingrese un correo válido",
+  "common.errors.min-password": "Mínimo 8 caracteres"
+}
