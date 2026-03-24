@@ -1,0 +1,103 @@
+<div class="login-page">
+
+  <!-- Panel izquierdo -->
+  <div class="login-left">
+    <div class="login-brand">
+      <img src="/images/LOGO.svg" alt="Alfa Hospital" class="login-brand__logo" />
+      <p class="login-brand__subtitle">{{ translate.get('auth.login.brand.subtitle') }}</p>
+    </div>
+
+    <div class="login-features">
+      <div *ngFor="let feature of features" class="login-feature">
+        <div class="login-feature__icon">
+          <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
+        </div>
+        <div class="login-feature__text">
+          <h3>{{ translate.get(feature.titleKey) }}</h3>
+          <p>{{ translate.get(feature.descKey) }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel derecho -->
+  <div class="login-right">
+    <div class="login-card">
+
+      <div class="login-header">
+        <h2 class="login-title">{{ translate.get('auth.login.title') }}</h2>
+        <p class="login-subtitle">{{ translate.get('auth.login.subtitle') }}</p>
+      </div>
+
+      <!-- Error general -->
+      <div *ngIf="errorMessage" class="login-alert">
+        <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="_onSubmit()" class="login-form">
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="field-label">{{ translate.get('auth.login.email') }}</label>
+          <div class="field-input-wrapper" [class.field-input-wrapper--error]="emailError">
+            <lucide-icon name="mail" [size]="18" class="field-icon"></lucide-icon>
+            <input
+              type="email"
+              class="field-input"
+              [placeholder]="translate.get('auth.login.email.placeholder')"
+              formControlName="email"
+            />
+          </div>
+          <span *ngIf="emailError" class="field-error">{{ emailError }}</span>
+        </div>
+
+        <!-- Password -->
+        <div class="field-group">
+          <label class="field-label">{{ translate.get('auth.login.password') }}</label>
+          <div class="field-input-wrapper" [class.field-input-wrapper--error]="passwordError">
+            <lucide-icon name="lock" [size]="18" class="field-icon"></lucide-icon>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="field-input field-input--with-toggle"
+              [placeholder]="translate.get('auth.login.password.placeholder')"
+              formControlName="password"
+            />
+            <button type="button" class="field-toggle" (click)="_togglePassword()">
+              <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+            </button>
+          </div>
+          <span *ngIf="passwordError" class="field-error">{{ passwordError }}</span>
+        </div>
+
+        <!-- Remember me + Forgot password -->
+        <div class="login-options">
+          <label class="login-remember">
+            <input type="checkbox" formControlName="rememberMe" />
+            <span>{{ translate.get('auth.login.remember-me') }}</span>
+          </label>
+          <a routerLink="/auth/forgot-password" class="login-forgot">
+            {{ translate.get('auth.login.forgot-password') }}
+          </a>
+        </div>
+
+        <!-- Submit -->
+        <app-button
+          type="submit"
+          variant="primary"
+          size="large"
+          [disabled]="isLoading">
+          <app-spinner *ngIf="isLoading" size="small"></app-spinner>
+          <span *ngIf="!isLoading">{{ translate.get('auth.login.button') }}</span>
+        </app-button>
+
+      </form>
+
+      <div class="login-footer">
+        <a routerLink="/auth/register">{{ translate.get('auth.login.register') }}</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>

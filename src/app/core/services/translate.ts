@@ -6,15 +6,12 @@ import { lastValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class Translate {
-
   private _translations: Record<string, string> = {};
 
   constructor(private http: HttpClient) {}
 
   load(): Promise<void> {
-    return lastValueFrom(
-      this.http.get<Record<string, string>>('/assets/i18n/es.json')
-    ).then(data => {
+    return lastValueFrom(this.http.get<Record<string, string>>('/i18n/es.json')).then((data) => {
       this._translations = data || {};
     });
   }
