@@ -232,17 +232,21 @@
           </div>
 
           <!-- Submit -->
-          <app-button
-            type="submit"
-            variant="primary"
-            size="large"
-            [disabled]="isLoading || success"
-          >
-            <app-spinner *ngIf="isLoading" size="small"></app-spinner>
-            <lucide-icon *ngIf="success" name="check-circle-2" [size]="18"></lucide-icon>
-            <span *ngIf="!isLoading && !success">{{ translate.get('auth.register.button') }}</span>
-            <span *ngIf="success">{{ translate.get('auth.register.success.button') }}</span>
-          </app-button>
+          <div class="register-submit">
+            <app-button
+              type="submit"
+              variant="primary"
+              size="large"
+              [disabled]="isLoading || success"
+            >
+              <app-spinner *ngIf="isLoading" size="small"></app-spinner>
+              <lucide-icon *ngIf="success" name="check-circle-2" [size]="18"></lucide-icon>
+              <span *ngIf="!isLoading && !success">{{
+                translate.get('auth.register.button')
+              }}</span>
+              <span *ngIf="success">{{ translate.get('auth.register.success.button') }}</span>
+            </app-button>
+          </div>
         </form>
 
         <div class="register-footer">

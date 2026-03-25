@@ -1,6 +1,6 @@
 .register-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary-medium) 60%, var(--color-accent-1) 100%);
+  background-color: var(--color-primary-dark);
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
@@ -119,6 +119,11 @@
 .register-subtitle {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+}
+.register-submit {
+  app-button button {
+    width: 100%;
+  }
 }
 
 // ── Alerts ──────────────────────────────────
