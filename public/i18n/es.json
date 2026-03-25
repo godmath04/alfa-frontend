@@ -117,5 +117,20 @@
       "invalid-email": "Ingrese un correo válido",
       "min-password": "Mínimo 8 caracteres"
     }
+  },
+  "paciente": {
+    "sidebar": {
+      "subtitle": "Healthcare Management"
+    },
+    "nav": {
+      "profile": "Mi Perfil",
+      "appointments": "Agendar Cita",
+      "lab": "Laboratorio",
+      "logout": "Cerrar sesión"
+    },
+    "dashboard": {
+      "title": "Mi Perfil",
+      "welcome": "Bienvenido de nuevo"
+    }
   }
 }
