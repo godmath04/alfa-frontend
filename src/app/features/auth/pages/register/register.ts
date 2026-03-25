@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from '../../../../core/services/auth/auth';
 import { Translate } from '../../../../core/services/translate';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -42,6 +43,7 @@ export class Register {
     private _auth: Auth,
     private _router: Router,
     private _translate: Translate,
+    private _cdr: ChangeDetectorRef
   ) {
     this.translate = this._translate;
     this.registerForm = this._fb.group({
@@ -70,33 +72,64 @@ export class Register {
   }
 
   _onSubmit(): void {
-  this.errors = [];
+    this.errors = [];
 
-  if (this.registerForm.invalid) {
-    this.registerForm.markAllAsTouched();
-    return;
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phone,
+      idType,
+      idNumber,
+      birthDate,
+      city,
+      gender,
+    } = this.registerForm.value;
+
+    if (password !== confirmPassword) {
+      this.errors = [this.translate.get('auth.register.errors.password-mismatch')];
+      return;
+    }
+
+    this.isLoading = true;
+
+    this._auth
+      .register({
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        idType,
+        idNumber,
+        birthDate,
+        city,
+        gender,
+      })
+      .pipe(timeout(10000))
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.success = true;
+          this._cdr.detectChanges();
+          setTimeout(() => this._router.navigate(['/auth/login']), 2000);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          if (err.name === 'TimeoutError') {
+            this.errors = ['La solicitud tardó demasiado. Intenta nuevamente.'];
+          } else {
+            this.errors = [err.error?.message || 'Error al crear la cuenta'];
+          }
+          this._cdr.detectChanges();
+        },
+      });
   }
-
-  const { firstName, lastName, email, password, confirmPassword, phone, idType, idNumber, birthDate, city, gender } = this.registerForm.value;
-
-  if (password !== confirmPassword) {
-    this.errors = [this.translate.get('auth.register.errors.password-mismatch')];
-    return;
-  }
-
-  this.isLoading = true;
-
-  this._auth.register({ firstName, lastName, email, password, phone, idType, idNumber, birthDate, city, gender })
-    .subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.success = true;
-        setTimeout(() => this._router.navigate(['/auth/login']), 2000);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errors = [err.error?.message || 'Error al crear la cuenta'];
-      }
-    });
-}
 }
