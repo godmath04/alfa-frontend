@@ -58,6 +58,18 @@
       "email": {
         "placeholder": "juan.perez@ejemplo.com"
       },
+      "id-type": {
+        "label": "Tipo de Documento",
+        "cedula": "Cédula",
+        "passport": "Pasaporte"
+      },
+      "id-number": "Número de Documento",
+      "gender": {
+        "label": "Sexo",
+        "placeholder": "Selecciona...",
+        "male": "Masculino",
+        "female": "Femenino"
+      },
       "terms": {
         "prefix": "Acepto los",
         "link": "Términos y Condiciones",

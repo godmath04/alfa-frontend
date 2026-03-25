@@ -23,39 +23,41 @@ export class Register {
     {
       icon: 'check-circle-2',
       titleKey: 'auth.register.feature.secure.title',
-      descKey: 'auth.register.feature.secure.desc'
+      descKey: 'auth.register.feature.secure.desc',
     },
     {
       icon: 'check-circle-2',
       titleKey: 'auth.register.feature.access.title',
-      descKey: 'auth.register.feature.access.desc'
+      descKey: 'auth.register.feature.access.desc',
     },
     {
       icon: 'check-circle-2',
       titleKey: 'auth.register.feature.care.title',
-      descKey: 'auth.register.feature.care.desc'
-    }
+      descKey: 'auth.register.feature.care.desc',
+    },
   ];
 
   constructor(
     private _fb: FormBuilder,
     private _auth: Auth,
     private _router: Router,
-    private _translate: Translate
+    private _translate: Translate,
   ) {
     this.translate = this._translate;
     this.registerForm = this._fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.minLength(10)]],
-      cedula: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
-      ciudad: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.minLength(10)]],
+      idType: ['cedula', Validators.required],
+      idNumber: ['', Validators.required],
+      birthDate: ['', Validators.required],
+      city: ['', Validators.required],
+      gender: ['', Validators.required],
       acceptTerms: [false, Validators.requiredTrue],
-      acceptData: [false, Validators.requiredTrue]
+      acceptData: [false, Validators.requiredTrue],
     });
   }
 
@@ -68,24 +70,24 @@ export class Register {
   }
 
   _onSubmit(): void {
-    this.errors = [];
+  this.errors = [];
 
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      return;
-    }
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
+    return;
+  }
 
-    const { password, confirmPassword } = this.registerForm.value;
-    if (password !== confirmPassword) {
-      this.errors = [this.translate.get('auth.register.errors.password-mismatch')];
-      return;
-    }
+  const { firstName, lastName, email, password, confirmPassword, phone, idType, idNumber, birthDate, city, gender } = this.registerForm.value;
 
-    this.isLoading = true;
+  if (password !== confirmPassword) {
+    this.errors = [this.translate.get('auth.register.errors.password-mismatch')];
+    return;
+  }
 
-    const { nombre, apellido, email } = this.registerForm.value;
+  this.isLoading = true;
 
-    this._auth.register({ nombre, apellido, email, password }).subscribe({
+  this._auth.register({ firstName, lastName, email, password, phone, idType, idNumber, birthDate, city, gender })
+    .subscribe({
       next: () => {
         this.isLoading = false;
         this.success = true;
@@ -96,5 +98,5 @@ export class Register {
         this.errors = [err.error?.message || 'Error al crear la cuenta'];
       }
     });
-  }
+}
 }
