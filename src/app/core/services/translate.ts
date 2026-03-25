@@ -6,17 +6,28 @@ import { lastValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class Translate {
-  private _translations: Record<string, string> = {};
+
+  private _translations: Record<string, any> = {};
 
   constructor(private http: HttpClient) {}
 
   load(): Promise<void> {
-    return lastValueFrom(this.http.get<Record<string, string>>('/i18n/es.json')).then((data) => {
+    return lastValueFrom(
+      this.http.get<Record<string, any>>('/i18n/es.json')
+    ).then(data => {
       this._translations = data || {};
     });
   }
 
   get(key: string): string {
-    return this._translations[key] || key;
+    const keys = key.split('.');
+    let result: any = this._translations;
+
+    for (const k of keys) {
+      if (result?.[k] === undefined) return key;
+      result = result[k];
+    }
+
+    return typeof result === 'string' ? result : key;
   }
 }

@@ -1,0 +1,255 @@
+<div class="register-page">
+  <!-- Volver al login -->
+  <button class="register-back" routerLink="/auth/login">
+    <lucide-icon name="arrow-left" [size]="20"></lucide-icon>
+    <span>{{ translate.get('auth.register.back') }}</span>
+  </button>
+
+  <div class="register-layout">
+    <!-- Panel izquierdo -->
+    <div class="register-left">
+      <div class="register-brand">
+        <img src="/images/LOGO.svg" alt="Alfa Hospital" class="register-brand__logo" />
+        <p class="register-brand__subtitle">{{ translate.get('auth.register.brand.subtitle') }}</p>
+      </div>
+
+      <div class="register-features">
+        <div *ngFor="let feature of features" class="register-feature">
+          <div class="register-feature__icon">
+            <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
+          </div>
+          <div class="register-feature__text">
+            <h3>{{ translate.get(feature.titleKey) }}</h3>
+            <p>{{ translate.get(feature.descKey) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel derecho -->
+    <div class="register-right">
+      <div class="register-card">
+        <div class="register-header">
+          <h2 class="register-title">{{ translate.get('auth.register.title') }}</h2>
+          <p class="register-subtitle">{{ translate.get('auth.register.subtitle') }}</p>
+        </div>
+
+        <!-- Éxito -->
+        <div *ngIf="success" class="register-success">
+          <lucide-icon name="check-circle-2" [size]="20"></lucide-icon>
+          <div>
+            <p class="register-success__title">
+              {{ translate.get('auth.register.success.title') }}
+            </p>
+            <p class="register-success__desc">{{ translate.get('auth.register.success.desc') }}</p>
+          </div>
+        </div>
+
+        <!-- Errores -->
+        <div *ngIf="errors.length > 0" class="register-errors">
+          <div class="register-errors__header">
+            <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+            <span>{{ translate.get('auth.register.errors.title') }}</span>
+          </div>
+          <ul>
+            <li *ngFor="let error of errors">{{ error }}</li>
+          </ul>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="_onSubmit()" class="register-form">
+          <!-- Nombre y Apellido -->
+          <!-- Nombre y Apellido -->
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.first-name.label') }}
+                <span class="field-required">*</span></label
+              >
+              <input
+                type="text"
+                class="field-input-simple"
+                [placeholder]="translate.get('auth.register.first-name.placeholder')"
+                formControlName="nombre"
+              />
+            </div>
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.last-name.label') }}
+                <span class="field-required">*</span></label
+              >
+              <input
+                type="text"
+                class="field-input-simple"
+                [placeholder]="translate.get('auth.register.last-name.placeholder')"
+                formControlName="apellido"
+              />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="field-group">
+            <label class="field-label"
+              >{{ translate.get('auth.login.email.label') }}
+              <span class="field-required">*</span></label
+            >
+            <div class="field-input-wrapper">
+              <lucide-icon name="mail" [size]="18" class="field-icon"></lucide-icon>
+              <input
+                type="email"
+                class="field-input"
+                [placeholder]="translate.get('auth.register.email.placeholder')"
+                formControlName="email"
+              />
+            </div>
+          </div>
+
+          <!-- Password y Confirm -->
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.login.password.label') }}
+                <span class="field-required">*</span></label
+              >
+              <div class="field-input-wrapper">
+                <lucide-icon name="lock" [size]="18" class="field-icon"></lucide-icon>
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="field-input field-input--with-toggle"
+                  placeholder="••••••••"
+                  formControlName="password"
+                />
+                <button type="button" class="field-toggle" (click)="_togglePassword()">
+                  <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+                </button>
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.confirm-password') }}
+                <span class="field-required">*</span></label
+              >
+              <div class="field-input-wrapper">
+                <lucide-icon name="lock" [size]="18" class="field-icon"></lucide-icon>
+                <input
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  class="field-input field-input--with-toggle"
+                  placeholder="••••••••"
+                  formControlName="confirmPassword"
+                />
+                <button type="button" class="field-toggle" (click)="_toggleConfirmPassword()">
+                  <lucide-icon
+                    [name]="showConfirmPassword ? 'eye-off' : 'eye'"
+                    [size]="18"
+                  ></lucide-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Teléfono y Cédula -->
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.phone') }}
+                <span class="field-required">*</span></label
+              >
+              <div class="field-input-wrapper">
+                <lucide-icon name="phone" [size]="18" class="field-icon"></lucide-icon>
+                <input
+                  type="tel"
+                  class="field-input"
+                  placeholder="0987654321"
+                  formControlName="telefono"
+                />
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.cedula') }}
+                <span class="field-required">*</span></label
+              >
+              <div class="field-input-wrapper">
+                <lucide-icon name="id-card" [size]="18" class="field-icon"></lucide-icon>
+                <input
+                  type="text"
+                  class="field-input"
+                  placeholder="1234567890"
+                  formControlName="cedula"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Fecha de nacimiento y Ciudad -->
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.birth-date') }}
+                <span class="field-required">*</span></label
+              >
+              <div class="field-input-wrapper">
+                <lucide-icon name="calendar" [size]="18" class="field-icon"></lucide-icon>
+                <input type="date" class="field-input" formControlName="fechaNacimiento" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label"
+                >{{ translate.get('auth.register.city') }}
+                <span class="field-required">*</span></label
+              >
+              <div class="field-input-wrapper">
+                <lucide-icon name="map-pin" [size]="18" class="field-icon"></lucide-icon>
+                <input
+                  type="text"
+                  class="field-input"
+                  placeholder="Ibarra"
+                  formControlName="ciudad"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Términos -->
+          <div class="field-check">
+            <input type="checkbox" id="acceptTerms" formControlName="acceptTerms" />
+            <label for="acceptTerms">
+              {{ translate.get('auth.register.terms.prefix') }}
+              <a href="#" class="field-link">{{ translate.get('auth.register.terms.link') }}</a>
+              {{ translate.get('auth.register.terms.and') }}
+              <a href="#" class="field-link">{{ translate.get('auth.register.terms.privacy') }}</a>
+              <span class="field-required"> *</span>
+            </label>
+          </div>
+
+          <!-- Protección de datos -->
+          <div class="field-check">
+            <input type="checkbox" id="acceptData" formControlName="acceptData" />
+            <label for="acceptData">
+              {{ translate.get('auth.register.data.prefix') }}
+              <a href="#" class="field-link">{{ translate.get('auth.register.data.link') }}</a>
+              <span class="field-required"> *</span>
+            </label>
+          </div>
+
+          <!-- Submit -->
+          <app-button
+            type="submit"
+            variant="primary"
+            size="large"
+            [disabled]="isLoading || success"
+          >
+            <app-spinner *ngIf="isLoading" size="small"></app-spinner>
+            <lucide-icon *ngIf="success" name="check-circle-2" [size]="18"></lucide-icon>
+            <span *ngIf="!isLoading && !success">{{ translate.get('auth.register.button') }}</span>
+            <span *ngIf="success">{{ translate.get('auth.register.success.button') }}</span>
+          </app-button>
+        </form>
+
+        <div class="register-footer">
+          <span>{{ translate.get('auth.register.already-account') }}</span>
+          <a routerLink="/auth/login" class="field-link">{{ translate.get('auth.login.title') }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

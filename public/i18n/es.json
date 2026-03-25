@@ -1,29 +1,109 @@
 {
-  "auth.login.title": "Iniciar Sesión",
-  "auth.login.subtitle": "Ingrese sus credenciales para acceder al sistema",
-  "auth.login.email": "Correo Electrónico",
-  "auth.login.email.placeholder": "Ingrese su correo",
-  "auth.login.password": "Contraseña",
-  "auth.login.password.placeholder": "Ingrese su contraseña",
-  "auth.login.button": "Iniciar Sesión",
-  "auth.login.forgot-password": "¿Olvidaste tu contraseña?",
-  "auth.login.register": "¿No tienes cuenta? Registrarse",
-  "auth.login.remember-me": "Recordarme",
-  "auth.login.brand.subtitle": "Healthcare Management System",
-  "auth.login.feature.patient.title": "Portal Paciente",
-  "auth.login.feature.patient.desc": "Agenda citas y consulta resultados de laboratorio",
-  "auth.login.feature.doctor.title": "Portal Médico",
-  "auth.login.feature.doctor.desc": "Gestiona tu agenda y citas del día",
-  "auth.login.feature.admin.title": "Analítica Ejecutiva",
-  "auth.login.feature.admin.desc": "Dashboards e inteligencia de negocio con IA",
-  "auth.register.title": "Crear Cuenta",
-  "auth.register.button": "Registrarse",
-  "auth.register.already-account": "¿Ya tienes cuenta? Iniciar Sesión",
-  "common.buttons.save": "Guardar",
-  "common.buttons.cancel": "Cancelar",
-  "common.buttons.back": "Volver",
-  "common.buttons.next": "Siguiente",
-  "common.errors.required": "Este campo es requerido",
-  "common.errors.invalid-email": "Ingrese un correo válido",
-  "common.errors.min-password": "Mínimo 8 caracteres"
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "subtitle": "Ingrese sus credenciales para acceder al sistema",
+      "button": "Iniciar Sesión",
+      "register": "¿No tienes cuenta? Registrarse",
+      "remember-me": "Recordarme",
+      "forgot-password": "¿Olvidaste tu contraseña?",
+      "brand": {
+        "subtitle": "Healthcare Management System"
+      },
+      "email": {
+        "label": "Correo Electrónico",
+        "placeholder": "Ingrese su correo"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Ingrese su contraseña"
+      },
+      "feature": {
+        "patient": {
+          "title": "Portal Paciente",
+          "desc": "Agenda citas y consulta resultados de laboratorio"
+        },
+        "doctor": {
+          "title": "Portal Médico",
+          "desc": "Gestiona tu agenda y citas del día"
+        },
+        "admin": {
+          "title": "Analítica Ejecutiva",
+          "desc": "Dashboards e inteligencia de negocio con IA"
+        }
+      }
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "subtitle": "Completa tus datos para comenzar",
+      "button": "Crear Cuenta",
+      "back": "Volver al inicio de sesión",
+      "already-account": "¿Ya tienes cuenta?",
+      "confirm-password": "Confirmar Contraseña",
+      "phone": "Teléfono",
+      "cedula": "Cédula",
+      "birth-date": "Fecha de Nacimiento",
+      "city": "Ciudad",
+      "brand": {
+        "subtitle": "Crea tu cuenta para comenzar"
+      },
+      "first-name": {
+        "label": "Nombre",
+        "placeholder": "Juan"
+      },
+      "last-name": {
+        "label": "Apellido",
+        "placeholder": "Pérez"
+      },
+      "email": {
+        "placeholder": "juan.perez@ejemplo.com"
+      },
+      "terms": {
+        "prefix": "Acepto los",
+        "link": "Términos y Condiciones",
+        "and": "y la",
+        "privacy": "Política de Privacidad"
+      },
+      "data": {
+        "prefix": "Estoy de acuerdo con la",
+        "link": "protección de datos personales"
+      },
+      "errors": {
+        "title": "Por favor corrige los siguientes errores:",
+        "password-mismatch": "Las contraseñas no coinciden"
+      },
+      "success": {
+        "title": "¡Registro exitoso!",
+        "desc": "Redirigiendo al inicio de sesión...",
+        "button": "¡Registro completo!"
+      },
+      "feature": {
+        "secure": {
+          "title": "Seguro y Privado",
+          "desc": "Tus datos médicos están cifrados y protegidos"
+        },
+        "access": {
+          "title": "Acceso 24/7",
+          "desc": "Gestiona citas y resultados en cualquier momento"
+        },
+        "care": {
+          "title": "Atención Experta",
+          "desc": "Conéctate con profesionales de salud certificados"
+        }
+      }
+    }
+  },
+  "common": {
+    "buttons": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "back": "Volver",
+      "next": "Siguiente"
+    },
+    "errors": {
+      "required": "Este campo es requerido",
+      "invalid-email": "Ingrese un correo válido",
+      "min-password": "Mínimo 8 caracteres"
+    }
+  }
 }

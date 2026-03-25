@@ -17,23 +17,23 @@ export class Login {
   showPassword: boolean = false;
   translate: Translate;
 
-  features = [
-    {
-      icon: 'user',
-      titleKey: 'auth.login.feature.patient.title',
-      descKey: 'auth.login.feature.patient.desc'
-    },
-    {
-      icon: 'stethoscope',
-      titleKey: 'auth.login.feature.doctor.title',
-      descKey: 'auth.login.feature.doctor.desc'
-    },
-    {
-      icon: 'bar-chart-3',
-      titleKey: 'auth.login.feature.admin.title',
-      descKey: 'auth.login.feature.admin.desc'
-    }
-  ];
+features = [
+  {
+    icon: 'user',
+    titleKey: 'auth.login.feature.patient.title',
+    descKey: 'auth.login.feature.patient.desc'
+  },
+  {
+    icon: 'stethoscope',
+    titleKey: 'auth.login.feature.doctor.title',
+    descKey: 'auth.login.feature.doctor.desc'
+  },
+  {
+    icon: 'bar-chart-3',
+    titleKey: 'auth.login.feature.admin.title',
+    descKey: 'auth.login.feature.admin.desc'
+  }
+];
 
   constructor(
     private _fb: FormBuilder,
