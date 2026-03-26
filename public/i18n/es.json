@@ -43,7 +43,11 @@
       "phone": "Teléfono",
       "cedula": "Cédula",
       "birth-date": "Fecha de Nacimiento",
-      "city": "Ciudad",
+      "city": {
+        "label": "Ciudad",
+        "placeholder": "Seleccionar...",
+        "other": "Otra ciudad / cantón"
+      },
       "brand": {
         "subtitle": "Crea tu cuenta para comenzar"
       },
@@ -66,9 +70,10 @@
       "id-number": "Número de Documento",
       "gender": {
         "label": "Sexo",
-        "placeholder": "Selecciona...",
+        "placeholder": "Seleccionar...",
         "male": "Masculino",
-        "female": "Femenino"
+        "female": "Femenino",
+        "other": "Otro"
       },
       "terms": {
         "prefix": "Acepto los",
