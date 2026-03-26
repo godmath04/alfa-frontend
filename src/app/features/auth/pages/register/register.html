@@ -35,7 +35,7 @@
           <p class="register-subtitle">{{ translate.get('auth.register.subtitle') }}</p>
         </div>
 
-        <!-- Éxito -->
+        <!-- Success -->
         @if (success) {
           <div class="register-success">
             <lucide-icon name="check-circle-2" [size]="20"></lucide-icon>
@@ -46,7 +46,7 @@
           </div>
         }
 
-        <!-- Errores -->
+        <!-- Errors -->
         @if (errors.length > 0) {
           <div class="register-errors">
             <div class="register-errors__header">
