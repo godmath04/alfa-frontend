@@ -165,15 +165,19 @@
 
           <!-- Born date and City -->
           <div class="field-row">
+            <!-- Gender -->
             <div class="field-group">
-              <label class="field-label">{{ translate.get('auth.register.birth-date') }} <span
+              <label class="field-label">{{ translate.get('auth.register.gender.label') }} <span
                   class="field-required">*</span></label>
-              <div class="field-input-wrapper">
-                <lucide-icon name="calendar" [size]="18" class="field-icon"></lucide-icon>
-                <input type="date" class="field-input" formControlName="birthDate" [max]="maxDate"/>
-              </div>
+              <select class="field-select" formControlName="gender">
+                <option value="">{{ translate.get('auth.register.gender.placeholder') }}</option>
+                <option value="M">{{ translate.get('auth.register.gender.male') }}</option>
+                <option value="F">{{ translate.get('auth.register.gender.female') }}</option>
+                <option value="O">{{ translate.get('auth.register.gender.other')}}</option>
+              </select>
             </div>
 
+            <!-- City -->
             <div class="field-group">
               <label class="field-label">{{ translate.get('auth.register.city.label') }} <span
                   class="field-required">*</span></label>
@@ -187,21 +191,41 @@
                 }
 
                 <!-- Other -->
-                 <option value="Otra">{{ translate.get('auth.register.city.other') }}</option>
+                <option value="Otra">{{ translate.get('auth.register.city.other') }}</option>
               </select>
             </div>
           </div>
 
-          <!-- Gender -->
+          
+          <!-- Birthday-->
           <div class="field-group">
-            <label class="field-label">{{ translate.get('auth.register.gender.label') }} <span
+            <label class="field-label">{{ translate.get('auth.register.birth-date') }} <span
                 class="field-required">*</span></label>
-            <select class="field-select" formControlName="gender">
-              <option value="">{{ translate.get('auth.register.gender.placeholder') }}</option>
-              <option value="M">{{ translate.get('auth.register.gender.male') }}</option>
-              <option value="F">{{ translate.get('auth.register.gender.female') }}</option>
-              <option value="O">{{ translate.get('auth.register.gender.other')}}</option>
-            </select>
+                          <div style="display: flex; gap: 8px; width: 100%;">
+              
+              <select class="field-select" formControlName="birthDay">
+                <option value="">Día</option>
+                @for (day of days; track day) {
+                  <option [value]="day">{{ day }}</option>
+                }
+              </select>
+
+              <select class="field-select" formControlName="birthMonth">
+                <option value="">Mes</option>
+                @for (month of months; track month.value) {
+                  <option [value]="month.value">{{ month.name }}</option>
+                }
+              </select>
+
+              <select class="field-select" formControlName="birthYear">
+                <option value="">Año</option>
+                @for (year of years; track year) {
+                  <option [value]="year">{{ year }}</option>
+                }
+              </select>
+
+            </div>
+
           </div>
 
           <!-- Terms -->

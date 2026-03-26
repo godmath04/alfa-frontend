@@ -19,8 +19,19 @@ export class Register {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   translate: Translate;
-  maxDate: string = new Date().toISOString().split('T')[0];
 
+  //Data for date selector
+  days: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
+  months: { value: string, name: string }[] = [
+    { value: '01', name: 'Enero' }, { value: '02', name: 'Febrero' },
+    { value: '03', name: 'Marzo' }, { value: '04', name: 'Abril' },
+    { value: '05', name: 'Mayo' }, { value: '06', name: 'Junio' },
+    { value: '07', name: 'Julio' }, { value: '08', name: 'Agosto' },
+    { value: '09', name: 'Septiembre' }, { value: '10', name: 'Octubre' },
+    { value: '11', name: 'Noviembre' }, { value: '12', name: 'Diciembre' }
+  ];
+  years: number[] = [];
+  
 
   //List of cities
   cities: string[] = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
@@ -51,6 +62,12 @@ export class Register {
     private _cdr: ChangeDetectorRef
   ) {
     this.translate = this._translate;
+
+    const currentYear = new Date().getFullYear();
+    for (let i = currentYear; i >= currentYear - 100; i--) {
+      this.years.push(i);
+    }
+
     this.registerForm = this._fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -60,12 +77,21 @@ export class Register {
       phone: ['', [Validators.required, Validators.minLength(10)]],
       idType: ['cedula', Validators.required],
       idNumber: ['', Validators.required],
-      birthDate: ['', Validators.required],
+      //birthDate: ['', Validators.required],
+      birthDay: ['', Validators.required],
+      birthMonth: ['', Validators.required],
+      birthYear: ['', Validators.required],
       city: ['', Validators.required],
       gender: ['', Validators.required],
       acceptTerms: [false, Validators.requiredTrue],
       acceptData: [false, Validators.requiredTrue],
     });
+    this.registerForm.get('birthMonth')?.valueChanges.subscribe(() => {
+      this.updateDaysInMonth();
+    });
+    this.registerForm.get('birthYear')?.valueChanges.subscribe(() => {
+      this.updateDaysInMonth();
+    })
   }
 
   //Getter de validación del email en el register form
@@ -88,6 +114,29 @@ export class Register {
     const control = this.registerForm.get('lastName');
     return (control?.touched && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
   }
+
+  updateDaysInMonth(): void {
+    const year = this.registerForm.get('birthYear')?.value;
+    const month = this.registerForm.get('birthMonth')?.value;
+
+    // Only calculate if the user has already selected both a month and a year
+    if (year && month) {
+      // new Date(year, month, 0) returns the last day of the specified month.
+      // parseInt() ensures the string value (e.g., '01') is treated as a number.
+      const daysCount = new Date(parseInt(year), parseInt(month), 0).getDate();
+      
+      // Regenerate the days array with the exact count for that month
+      this.days = Array.from({ length: daysCount }, (_, i) => i + 1);
+
+      // Safety check: If the user previously selected day 31 and then switches 
+      // to February, 31 becomes invalid. Reset the day field in such cases.
+      const currentDay = this.registerForm.get('birthDay')?.value;
+      if (currentDay && parseInt(currentDay) > daysCount) {
+        this.registerForm.get('birthDay')?.setValue('');
+      }
+    }
+  }
+
 
   _togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -114,7 +163,10 @@ export class Register {
       phone,
       idType,
       idNumber,
-      birthDate,
+      //birthDate,
+      birthDay,
+      birthMonth,
+      birthYear,
       city,
       gender,
     } = this.registerForm.value;
@@ -123,6 +175,9 @@ export class Register {
       this.errors = [this.translate.get('auth.register.errors.password-mismatch')];
       return;
     }
+
+    const formattedDay = birthDay.toString().padStart(2, '0');
+    const finalBirthDate = `${birthYear}-${birthMonth}-${formattedDay}`;
 
     this.isLoading = true;
 
@@ -135,7 +190,7 @@ export class Register {
         phone,
         idType,
         idNumber,
-        birthDate,
+        birthDate: finalBirthDate,
         city,
         gender,
       })
