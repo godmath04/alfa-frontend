@@ -20,6 +20,9 @@ export class Register {
   showConfirmPassword: boolean = false;
   translate: Translate;
 
+  //List of cities
+  cities: string[] = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
+
   features = [
     {
       icon: 'check-circle-2',

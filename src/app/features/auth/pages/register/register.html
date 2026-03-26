@@ -181,14 +181,10 @@
               <select class="field-select" formControlName="city">
                 <option value="">{{translate.get('auth.register.city.placeholder')}}</option>
 
-                <!-- Principal cities -->
-                <option value="Ibarra">Ibarra</option>
-                <option value="Atuntaqui">Atuntaqui</option>
-                <option value="Otavalo">Otavalo</option>
-                <option value="Cotacachi">Cotacachi</option>
-                <option value="Quito">Quito</option>
-                <option value="Guayaquil">Guayaquil</option>
-                <option value="Cuenca">Cuenca</option>
+                <!-- Principal cities from .ts file-->
+                @for (city of cities; track city){
+                  <option [value]="city">{{ city }}</option>
+                }
 
                 <!-- Other -->
                  <option value="Otra">{{ translate.get('auth.register.city.other') }}</option>
