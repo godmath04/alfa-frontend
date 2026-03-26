@@ -170,7 +170,7 @@
                   class="field-required">*</span></label>
               <div class="field-input-wrapper">
                 <lucide-icon name="calendar" [size]="18" class="field-icon"></lucide-icon>
-                <input type="date" class="field-input" formControlName="birthDate" />
+                <input type="date" class="field-input" formControlName="birthDate" [max]="maxDate"/>
               </div>
             </div>
 

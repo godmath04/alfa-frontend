@@ -19,6 +19,8 @@ export class Register {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   translate: Translate;
+  maxDate: string = new Date().toISOString().split('T')[0];
+
 
   //List of cities
   cities: string[] = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
