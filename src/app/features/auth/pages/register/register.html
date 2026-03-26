@@ -13,15 +13,17 @@
         <p class="register-brand__subtitle">{{ translate.get('auth.register.brand.subtitle') }}</p>
       </div>
       <div class="register-features">
-        <div *ngFor="let feature of features" class="register-feature">
-          <div class="register-feature__icon">
-            <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
+        @for (feature of features; track feature.titleKey) {
+          <div class="register-feature">
+            <div class="register-feature__icon">
+              <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
+            </div>
+            <div class="register-feature__text">
+              <h3>{{ translate.get(feature.titleKey) }}</h3>
+              <p>{{ translate.get(feature.descKey) }}</p>
+            </div>
           </div>
-          <div class="register-feature__text">
-            <h3>{{ translate.get(feature.titleKey) }}</h3>
-            <p>{{ translate.get(feature.descKey) }}</p>
-          </div>
-        </div>
+        }
       </div>
     </div>
 
@@ -34,24 +36,30 @@
         </div>
 
         <!-- Éxito -->
-        <div *ngIf="success" class="register-success">
-          <lucide-icon name="check-circle-2" [size]="20"></lucide-icon>
-          <div>
-            <p class="register-success__title">{{ translate.get('auth.register.success.title') }}</p>
-            <p class="register-success__desc">{{ translate.get('auth.register.success.desc') }}</p>
+        @if (success) {
+          <div class="register-success">
+            <lucide-icon name="check-circle-2" [size]="20"></lucide-icon>
+            <div>
+              <p class="register-success__title">{{ translate.get('auth.register.success.title') }}</p>
+              <p class="register-success__desc">{{ translate.get('auth.register.success.desc') }}</p>
+            </div>
           </div>
-        </div>
+        }
 
         <!-- Errores -->
-        <div *ngIf="errors.length > 0" class="register-errors">
-          <div class="register-errors__header">
-            <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
-            <span>{{ translate.get('auth.register.errors.title') }}</span>
+        @if (errors.length > 0) {
+          <div class="register-errors">
+            <div class="register-errors__header">
+              <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+              <span>{{ translate.get('auth.register.errors.title') }}</span>
+            </div>
+            <ul>
+              @for (error of errors; track $index) {
+                <li>{{ error }}</li>
+              }
+            </ul>
           </div>
-          <ul>
-            <li *ngFor="let error of errors">{{ error }}</li>
-          </ul>
-        </div>
+        }
 
         <form [formGroup]="registerForm" (ngSubmit)="_onSubmit()" class="register-form">
 
@@ -205,10 +213,18 @@
           <!-- Submit -->
           <div class="register-submit">
             <app-button type="submit" variant="primary" size="large" [disabled]="isLoading || success">
-              <app-spinner *ngIf="isLoading" size="small"></app-spinner>
-              <lucide-icon *ngIf="success" name="check-circle-2" [size]="18"></lucide-icon>
-              <span *ngIf="!isLoading && !success">{{ translate.get('auth.register.button') }}</span>
-              <span *ngIf="success">{{ translate.get('auth.register.success.button') }}</span>
+              @if (isLoading) {
+                <app-spinner size="small"></app-spinner>
+              }
+              @if (success) {
+                <lucide-icon name="check-circle-2" [size]="18"></lucide-icon>
+              }
+              @if (!isLoading && !success) {
+                <span>{{ translate.get('auth.register.button') }}</span>
+              }
+              @if (success) {
+                <span>{{ translate.get('auth.register.success.button') }}</span>
+              }
             </app-button>
           </div>
 
