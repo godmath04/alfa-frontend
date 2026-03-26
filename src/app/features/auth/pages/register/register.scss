@@ -18,7 +18,9 @@
   margin-bottom: var(--spacing-md);
   padding: 0;
 
-  &:hover { color: var(--color-accent-2); }
+  &:hover {
+    color: var(--color-accent-2);
+  }
 }
 
 .register-layout {
@@ -44,7 +46,9 @@
   position: sticky;
   top: var(--spacing-lg);
 
-  @media (max-width: 768px) { display: none; }
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .register-brand {
@@ -52,8 +56,15 @@
   flex-direction: column;
   gap: var(--spacing-sm);
 
-  &__logo { width: 200px; height: auto; }
-  &__subtitle { font-size: var(--font-size-lg); color: var(--color-accent-2); }
+  &__logo {
+    width: 200px;
+    height: auto;
+  }
+
+  &__subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-accent-2);
+  }
 }
 
 .register-features {
@@ -80,8 +91,15 @@
   }
 
   &__text {
-    h3 { font-size: var(--font-size-base); font-weight: 600; }
-    p  { font-size: var(--font-size-sm); color: var(--color-accent-2); }
+    h3 {
+      font-size: var(--font-size-base);
+      font-weight: 600;
+    }
+
+    p {
+      font-size: var(--font-size-sm);
+      color: var(--color-accent-2);
+    }
   }
 }
 
@@ -120,11 +138,13 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
+
 .register-submit {
   app-button button {
     width: 100%;
   }
 }
+
 .field-select {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
@@ -143,7 +163,9 @@
   background-position: right var(--spacing-sm) center;
   padding-right: 2.5rem;
 
-  &:focus { border-color: var(--color-accent-1); }
+  &:focus {
+    border-color: var(--color-accent-1);
+  }
 }
 
 // ── Alerts ──────────────────────────────────
@@ -157,8 +179,14 @@
   border-radius: var(--radius-md);
   color: var(--color-success);
 
-  &__title { font-weight: 600; font-size: var(--font-size-sm); }
-  &__desc  { font-size: var(--font-size-xs); }
+  &__title {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+  }
+
+  &__desc {
+    font-size: var(--font-size-xs);
+  }
 }
 
 .register-errors {
@@ -180,7 +208,10 @@
   ul {
     margin-left: var(--spacing-lg);
     font-size: var(--font-size-sm);
-    li { margin-bottom: var(--spacing-xs); }
+
+    li {
+      margin-bottom: var(--spacing-xs);
+    }
   }
 }
 
@@ -196,7 +227,9 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-md);
 
-  @media (max-width: 480px) { grid-template-columns: 1fr; }
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .field-group {
@@ -211,7 +244,9 @@
   color: var(--color-primary-dark);
 }
 
-.field-required { color: var(--color-error); }
+.field-required {
+  color: var(--color-error);
+}
 
 .field-input-simple {
   width: 100%;
@@ -225,7 +260,13 @@
   outline: none;
   transition: border-color 0.2s ease;
 
-  &:focus { border-color: var(--color-accent-1); }
+  &:focus {
+    border-color: var(--color-accent-1);
+  }
+
+  &--error { 
+    border-color: var(--color-error);
+  }
 }
 
 .field-input-wrapper {
@@ -237,7 +278,13 @@
   background-color: var(--color-background);
   transition: border-color 0.2s ease;
 
-  &:focus-within { border-color: var(--color-accent-1); }
+  &:focus-within {
+    border-color: var(--color-accent-1);
+  }
+
+  &--error { 
+    border-color: var(--color-error);
+  }
 }
 
 .field-icon {
@@ -257,7 +304,9 @@
   border: none;
   outline: none;
 
-  &--with-toggle { padding-right: 2.5rem; }
+  &--with-toggle {
+    padding-right: 2.5rem;
+  }
 }
 
 .field-toggle {
@@ -269,7 +318,10 @@
   color: var(--color-text-muted);
   display: flex;
   align-items: center;
-  &:hover { color: var(--color-primary-dark); }
+
+  &:hover {
+    color: var(--color-primary-dark);
+  }
 }
 
 .field-check {
@@ -295,8 +347,18 @@
   color: var(--color-accent-1);
   text-decoration: none;
   font-weight: 500;
-  &:hover { color: var(--color-primary-dark); }
+
+  &:hover {
+    color: var(--color-primary-dark);
+  }
 }
+
+.field-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  margin-top: 2px;
+}
+
 
 // ── Footer ───────────────────────────────────
 .register-footer {

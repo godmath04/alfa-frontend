@@ -63,6 +63,27 @@ export class Register {
     });
   }
 
+  //Getter de validación del email en el register form
+  get emailError(): string{
+    const control = this.registerForm.get('email');
+    if (control?.touched && control?.errors) {
+      if (control.errors['required']) return this._translate.get('common.errors.required');
+      if (control.errors['email']) return this._translate.get('common.errors.invalid-email')
+    }
+    return "";
+  }
+
+  //Getter de validación de nombres
+  get firstNameError(): string{
+    const control = this.registerForm.get('firstName');
+    return (control?.touched && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get lastNameError(): string{
+    const control = this.registerForm.get('lastName');
+    return (control?.touched && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
   _togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
