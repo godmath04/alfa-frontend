@@ -166,6 +166,10 @@
   &:focus {
     border-color: var(--color-accent-1);
   }
+
+  &--error {
+    border-color: var(--color-error);
+  }
 }
 
 // ── Alerts ──────────────────────────────────
@@ -340,6 +344,11 @@
     height: 16px;
     margin-top: 2px;
     flex-shrink: 0;
+
+    &.field-checkbox--error {
+      outline: 2px solid var(--color-error);
+      outline-offset: 2px;
+    }
   }
 }
 

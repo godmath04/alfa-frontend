@@ -100,88 +100,88 @@ export class Register {
   }
 
   //Getter de validación del email en el register form
-  get emailError(): string{
+  get emailError(): string | boolean {
     const control = this.registerForm.get('email');
     if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return this._translate.get('common.errors.required');
+      if (control.errors['required']) return true;
       if (control.errors['email']) return this._translate.get('common.errors.invalid-email')
     }
-    return "";
+    return false;
   }
 
   //Getter de validación de nombres
-  get firstNameError(): string{
+  get firstNameError(): boolean {
     const control = this.registerForm.get('firstName');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get lastNameError(): string{
+  get lastNameError(): boolean {
     const control = this.registerForm.get('lastName');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get passwordError(): string {
+  get passwordError(): string | boolean {
     const control = this.registerForm.get('password');
     if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return this._translate.get('common.errors.required');
+      if (control.errors['required']) return true;
       if (control.errors['minlength']) return this._translate.get('common.errors.min-password');
       if (control.errors['pattern']) return this._translate.get('common.errors.invalid-password');
     }
-    return '';
+    return false;
   }
 
-  get confirmPasswordError(): string {
+  get confirmPasswordError(): boolean {
     const control = this.registerForm.get('confirmPassword');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get phoneError(): string {
+  get phoneError(): string | boolean {
     const control = this.registerForm.get('phone');
     if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return this._translate.get('common.errors.required');
+      if (control.errors['required']) return true;
       if (control.errors['minlength'] || control.errors['pattern']) return this._translate.get('common.errors.invalid-phone');
     }
-    return '';
+    return false;
   }
 
-  get idTypeError(): string {
+  get idTypeError(): boolean {
     const control = this.registerForm.get('idType');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get idNumberError(): string {
+  get idNumberError(): boolean {
     const control = this.registerForm.get('idNumber');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get genderError(): string {
+  get genderError(): boolean {
     const control = this.registerForm.get('gender');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get cityError(): string {
+  get cityError(): boolean {
     const control = this.registerForm.get('city');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get birthDateError(): string {
+  get birthDateError(): boolean {
     const day = this.registerForm.get('birthDay');
     const month = this.registerForm.get('birthMonth');
     const year = this.registerForm.get('birthYear');
     if (this.isSubmitted && (day?.errors || month?.errors || year?.errors)) {
-      return this._translate.get('common.errors.required');
+      return true;
     }
-    return '';
+    return false;
   }
   
-  get acceptTermsError(): string {
+  get acceptTermsError(): boolean {
     const control = this.registerForm.get('acceptTerms');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get acceptDataError(): string {
+  get acceptDataError(): boolean {
     const control = this.registerForm.get('acceptData');
-    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
   updateDaysInMonth(): void {
