@@ -79,7 +79,7 @@ export class Register {
         Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])/)
       ]],
       confirmPassword: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.minLength(10)]],
+      phone: ['', [Validators.required, Validators.pattern(/^\+?\d{7,15}$/)]],
       idType: ['', Validators.required],
       idNumber: ['', Validators.required],
       //birthDate: ['', Validators.required],
@@ -151,7 +151,7 @@ export class Register {
     const control = this.registerForm.get('phone');
     if (this.isSubmitted && control?.errors) {
       if (control.errors['required']) return true;
-      if (control.errors['minlength'] || control.errors['pattern']) return this._translate.get('common.errors.invalid-phone');
+      if (control.errors['pattern']) return this._translate.get('common.errors.invalid-phone');
     }
     return false;
   }

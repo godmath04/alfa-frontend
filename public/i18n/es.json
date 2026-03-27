@@ -123,7 +123,7 @@
       "invalid-email": "Ingrese un correo válido",
       "invalid-password": "La contraseña debe tener al menos una mayúscula, minúscula y un carácter especial",
       "min-password": "Mínimo 8 caracteres",
-      "invalid-phone": "Ingrese un teléfono válido (10 dígitos)"
+      "invalid-phone": "Número de teléfono inválido"
     }
   },
   "paciente": {
