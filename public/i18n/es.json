@@ -64,6 +64,7 @@
       },
       "id-type": {
         "label": "Tipo de Documento",
+        "placeholder": "Seleccionar...",
         "cedula": "Cédula",
         "passport": "Pasaporte"
       },
@@ -120,7 +121,8 @@
     "errors": {
       "required": "Este campo es requerido",
       "invalid-email": "Ingrese un correo válido",
-      "min-password": "Mínimo 8 caracteres"
+      "min-password": "Mínimo 8 caracteres",
+      "invalid-phone": "Ingrese un teléfono válido (10 dígitos)"
     }
   },
   "paciente": {

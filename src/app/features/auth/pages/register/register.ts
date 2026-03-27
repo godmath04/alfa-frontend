@@ -14,6 +14,7 @@ import { timeout } from 'rxjs';
 export class Register {
   registerForm: FormGroup;
   isLoading: boolean = false;
+  isSubmitted: boolean = false;
   success: boolean = false;
   errors: string[] = [];
   showPassword: boolean = false;
@@ -75,7 +76,7 @@ export class Register {
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
       phone: ['', [Validators.required, Validators.minLength(10)]],
-      idType: ['cedula', Validators.required],
+      idType: ['', Validators.required],
       idNumber: ['', Validators.required],
       //birthDate: ['', Validators.required],
       birthDay: ['', Validators.required],
@@ -97,7 +98,7 @@ export class Register {
   //Getter de validación del email en el register form
   get emailError(): string{
     const control = this.registerForm.get('email');
-    if (control?.touched && control?.errors) {
+    if (this.isSubmitted && control?.errors) {
       if (control.errors['required']) return this._translate.get('common.errors.required');
       if (control.errors['email']) return this._translate.get('common.errors.invalid-email')
     }
@@ -107,12 +108,75 @@ export class Register {
   //Getter de validación de nombres
   get firstNameError(): string{
     const control = this.registerForm.get('firstName');
-    return (control?.touched && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
   }
 
   get lastNameError(): string{
     const control = this.registerForm.get('lastName');
-    return (control?.touched && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get passwordError(): string {
+    const control = this.registerForm.get('password');
+    if (this.isSubmitted && control?.errors) {
+      if (control.errors['required']) return this._translate.get('common.errors.required');
+      if (control.errors['minlength']) return this._translate.get('common.errors.min-password');
+    }
+    return '';
+  }
+
+  get confirmPasswordError(): string {
+    const control = this.registerForm.get('confirmPassword');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get phoneError(): string {
+    const control = this.registerForm.get('phone');
+    if (this.isSubmitted && control?.errors) {
+      if (control.errors['required']) return this._translate.get('common.errors.required');
+      if (control.errors['minlength'] || control.errors['pattern']) return this._translate.get('common.errors.invalid-phone');
+    }
+    return '';
+  }
+
+  get idTypeError(): string {
+    const control = this.registerForm.get('idType');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get idNumberError(): string {
+    const control = this.registerForm.get('idNumber');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get genderError(): string {
+    const control = this.registerForm.get('gender');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get cityError(): string {
+    const control = this.registerForm.get('city');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get birthDateError(): string {
+    const day = this.registerForm.get('birthDay');
+    const month = this.registerForm.get('birthMonth');
+    const year = this.registerForm.get('birthYear');
+    if (this.isSubmitted && (day?.errors || month?.errors || year?.errors)) {
+      return this._translate.get('common.errors.required');
+    }
+    return '';
+  }
+  
+  get acceptTermsError(): string {
+    const control = this.registerForm.get('acceptTerms');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
+  }
+
+  get acceptDataError(): string {
+    const control = this.registerForm.get('acceptData');
+    return (this.isSubmitted && control?.errors?.['required']) ? this._translate.get('common.errors.required') : '';
   }
 
   updateDaysInMonth(): void {
@@ -147,6 +211,7 @@ export class Register {
   }
 
   _onSubmit(): void {
+    this.isSubmitted = true;
     this.errors = [];
 
     if (this.registerForm.invalid) {
