@@ -127,12 +127,24 @@ export class Register {
       if (control.errors['minlength']) return this._translate.get('common.errors.min-password');
       if (control.errors['pattern']) return this._translate.get('common.errors.invalid-password');
     }
+
+    const confirmControl = this.registerForm.get('confirmPassword');
+    if (this.isSubmitted && control?.value && confirmControl?.value && control.value !== confirmControl.value){
+      return this._translate.get('auth.register.errors.password-mismatch');
+    }
     return false;
   }
 
   get confirmPasswordError(): boolean {
     const control = this.registerForm.get('confirmPassword');
-    return !!(this.isSubmitted && control?.errors?.['required']);
+
+    if (this.isSubmitted && control?.errors?.['required']) return true;
+
+    const passwordControl = this.registerForm.get('password');
+    if (this.isSubmitted && passwordControl?.value && control?.value && passwordControl.value !== control.value){
+      return true;
+    }
+    return false;
   }
 
   get phoneError(): string | boolean {
