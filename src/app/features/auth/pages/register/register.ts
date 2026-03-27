@@ -73,7 +73,11 @@ export class Register {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [
+        Validators.required, 
+        Validators.minLength(8), 
+        Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])/)
+      ]],
       confirmPassword: ['', Validators.required],
       phone: ['', [Validators.required, Validators.minLength(10)]],
       idType: ['', Validators.required],
@@ -121,6 +125,7 @@ export class Register {
     if (this.isSubmitted && control?.errors) {
       if (control.errors['required']) return this._translate.get('common.errors.required');
       if (control.errors['minlength']) return this._translate.get('common.errors.min-password');
+      if (control.errors['pattern']) return this._translate.get('common.errors.invalid-password');
     }
     return '';
   }

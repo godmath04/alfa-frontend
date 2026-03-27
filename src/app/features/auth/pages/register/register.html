@@ -118,7 +118,7 @@
                   <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
                 </button>
               </div>
-              @if (passwordError) { <span class="field-error">{{ passwordError }}</span> }
+              
             </div>
             <div class="field-group">
               <label class="field-label">{{ translate.get('auth.register.confirm-password') }} <span
@@ -131,9 +131,11 @@
                   <lucide-icon [name]="showConfirmPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
                 </button>
               </div>
-              @if (confirmPasswordError) { <span class="field-error">{{ confirmPasswordError }}</span> }
+              
             </div>
+            
           </div>
+          @if (passwordError) { <span class="field-error">{{ passwordError }}</span> }
 
           <!-- Phone -->
           <div class="field-group">
