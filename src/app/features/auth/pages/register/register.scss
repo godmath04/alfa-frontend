@@ -114,8 +114,14 @@
   background-color: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  padding: var(--spacing-xl);
   max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.register-card__inner {
+  padding: var(--spacing-xl);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
