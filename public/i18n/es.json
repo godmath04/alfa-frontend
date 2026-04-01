@@ -88,7 +88,9 @@
       },
       "errors": {
         "title": "Por favor corrige los siguientes errores:",
-        "password-mismatch": "Las contraseñas no coinciden"
+        "password-mismatch": "Las contraseñas no coinciden",
+        "invalid-cedula": "Cédula ecuatoriana inválida",
+        "invalid-passport": "Pasaporte inválido (6-15 caracteres alfanuméricos)"
       },
       "success": {
         "title": "¡Registro exitoso!",

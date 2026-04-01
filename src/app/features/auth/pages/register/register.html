@@ -169,6 +169,7 @@
                   <lucide-icon name="id-card" [size]="18" class="field-icon"></lucide-icon>
                   <input type="text" class="field-input" placeholder="0912345678" formControlName="idNumber" />
                 </div>
+                @if (idNumberError && idNumberError !== true) { <span class="field-error">{{ idNumberError }}</span> }
               </div>
             </div>
 

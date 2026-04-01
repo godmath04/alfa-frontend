@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Auth } from '../../../../core/services/auth/auth';
 import { Translate } from '../../../../core/services/translate';
 import { timeout } from 'rxjs';
+import { DocumentValidators } from '../../../../shared/validators/document.validator';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +33,7 @@ export class Register {
     { value: '11', name: 'Noviembre' }, { value: '12', name: 'Diciembre' }
   ];
   years: number[] = [];
-  
+
 
   //List of cities
   cities: string[] = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
@@ -74,8 +75,8 @@ export class Register {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
-        Validators.required, 
-        Validators.minLength(8), 
+        Validators.required,
+        Validators.minLength(8),
         Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])/)
       ]],
       confirmPassword: ['', Validators.required],
@@ -91,6 +92,23 @@ export class Register {
       acceptTerms: [false, Validators.requiredTrue],
       acceptData: [false, Validators.requiredTrue],
     });
+    this.registerForm.get('idType')?.valueChanges.subscribe((type) => {
+      const idControl = this.registerForm.get('idNumber');
+      
+      idControl?.setValue('');
+      idControl?.markAsUntouched();
+
+      if (type === 'cedula') {
+        idControl?.setValidators([Validators.required, DocumentValidators.cedula]);
+      } else if (type === 'passport') {
+        idControl?.setValidators([Validators.required, DocumentValidators.pasaporte]);
+      } else {
+        idControl?.setValidators([Validators.required]);
+      }
+
+      idControl?.updateValueAndValidity(); 
+    });
+
     this.registerForm.get('birthMonth')?.valueChanges.subscribe(() => {
       this.updateDaysInMonth();
     });
@@ -129,7 +147,7 @@ export class Register {
     }
 
     const confirmControl = this.registerForm.get('confirmPassword');
-    if (this.isSubmitted && control?.value && confirmControl?.value && control.value !== confirmControl.value){
+    if (this.isSubmitted && control?.value && confirmControl?.value && control.value !== confirmControl.value) {
       return this._translate.get('auth.register.errors.password-mismatch');
     }
     return false;
@@ -141,7 +159,7 @@ export class Register {
     if (this.isSubmitted && control?.errors?.['required']) return true;
 
     const passwordControl = this.registerForm.get('password');
-    if (this.isSubmitted && passwordControl?.value && control?.value && passwordControl.value !== control.value){
+    if (this.isSubmitted && passwordControl?.value && control?.value && passwordControl.value !== control.value) {
       return true;
     }
     return false;
@@ -161,9 +179,14 @@ export class Register {
     return !!(this.isSubmitted && control?.errors?.['required']);
   }
 
-  get idNumberError(): boolean {
+  get idNumberError(): string | boolean {
     const control = this.registerForm.get('idNumber');
-    return !!(this.isSubmitted && control?.errors?.['required']);
+    if (this.isSubmitted && control?.errors) {
+      if (control.errors['required']) return true;
+      if (control.errors['invalidCedula']) return this._translate.get('auth.register.errors.invalid-cedula');
+      if (control.errors['invalidPassport']) return this._translate.get('auth.register.errors.invalid-passport');
+    }
+    return false;
   }
 
   get genderError(): boolean {
@@ -185,7 +208,7 @@ export class Register {
     }
     return false;
   }
-  
+
   get acceptTermsError(): boolean {
     const control = this.registerForm.get('acceptTerms');
     return !!(this.isSubmitted && control?.errors?.['required']);
@@ -205,7 +228,7 @@ export class Register {
       // new Date(year, month, 0) returns the last day of the specified month.
       // parseInt() ensures the string value (e.g., '01') is treated as a number.
       const daysCount = new Date(parseInt(year), parseInt(month), 0).getDate();
-      
+
       // Regenerate the days array with the exact count for that month
       this.days = Array.from({ length: daysCount }, (_, i) => i + 1);
 
