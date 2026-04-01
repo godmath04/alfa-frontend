@@ -214,7 +214,7 @@
             <div class="field-group">
               <label class="field-label">{{ translate.get('auth.register.birth-date') }} <span
                   class="field-required">*</span></label>
-              <div style="display: flex; gap: 8px; width: 100%;">
+              <div class="field-date-group">
 
                 <select class="field-select" formControlName="birthDay" [class.field-select--error]="(getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear'))">
                   <option value="">Día</option>
