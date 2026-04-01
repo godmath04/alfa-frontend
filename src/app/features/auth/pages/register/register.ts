@@ -5,6 +5,8 @@ import { Auth } from '../../../../core/services/auth/auth';
 import { Translate } from '../../../../core/services/translate';
 import { timeout } from 'rxjs';
 import { DocumentValidators } from '../../../../shared/validators/document.validator';
+import { MatchValidators } from '../../../../shared/validators/match.validator';
+import { PatternValidators } from '../../../../shared/validators/pattern.validator';
 
 @Component({
   selector: 'app-register',
@@ -77,10 +79,10 @@ export class Register {
       password: ['', [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])/)
+        PatternValidators.strongPassword
       ]],
       confirmPassword: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(/^\+?\d{7,15}$/)]],
+      phone: ['', [Validators.required, PatternValidators.phoneEcuador]],
       idType: ['', Validators.required],
       idNumber: ['', Validators.required],
       //birthDate: ['', Validators.required],
@@ -91,6 +93,8 @@ export class Register {
       gender: ['', Validators.required],
       acceptTerms: [false, Validators.requiredTrue],
       acceptData: [false, Validators.requiredTrue],
+    }, {
+      validators: [MatchValidators.password('password', 'confirmPassword')]
     });
     this.registerForm.get('idType')?.valueChanges.subscribe((type) => {
       const idControl = this.registerForm.get('idNumber');
@@ -117,106 +121,41 @@ export class Register {
     })
   }
 
-  //Getter de validación del email en el register form
-  get emailError(): string | boolean {
-    const control = this.registerForm.get('email');
-    if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return true;
-      if (control.errors['email']) return this._translate.get('common.errors.invalid-email')
-    }
-    return false;
-  }
-
-  //Getter de validación de nombres
-  get firstNameError(): boolean {
-    const control = this.registerForm.get('firstName');
-    return !!(this.isSubmitted && control?.errors?.['required']);
-  }
-
-  get lastNameError(): boolean {
-    const control = this.registerForm.get('lastName');
-    return !!(this.isSubmitted && control?.errors?.['required']);
-  }
-
-  get passwordError(): string | boolean {
-    const control = this.registerForm.get('password');
-    if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return true;
-      if (control.errors['minlength']) return this._translate.get('common.errors.min-password');
-      if (control.errors['pattern']) return this._translate.get('common.errors.invalid-password');
+  /**
+   * Dynamic method to get the error of any field.
+   * Eliminates the need for 13 different "getters".
+   */
+  getFieldError(fieldName: string): string | boolean {
+    const control = this.registerForm.get(fieldName);
+    
+    // If the form has not been submitted or the control has no errors, do not show visual block
+    if (!this.isSubmitted || !control?.errors) {
+      return false;
     }
 
-    const confirmControl = this.registerForm.get('confirmPassword');
-    if (this.isSubmitted && control?.value && confirmControl?.value && control.value !== confirmControl.value) {
-      return this._translate.get('auth.register.errors.password-mismatch');
+    // The control has errors. We take the first error key found.
+    const errorKeys = Object.keys(control.errors);
+    const firstErrorKey = errorKeys[0];
+
+    // Translation dictionary mapping ErrorName -> TranslationKey
+    const errorTranslations: Record<string, string> = {
+      email: 'common.errors.invalid-email',
+      minlength: 'common.errors.min-password',
+      invalidPasswordPattern: 'common.errors.invalid-password',
+      passwordMismatch: 'auth.register.errors.password-mismatch',
+      invalidPhonePattern: 'common.errors.invalid-phone',
+      invalidCedula: 'auth.register.errors.invalid-cedula',
+      invalidPassport: 'auth.register.errors.invalid-passport',
+    };
+
+    // If the error (e.g., 'invalidPasswordPattern') is in the dictionary, return its translation
+    if (errorTranslations[firstErrorKey]) {
+      return this._translate.get(errorTranslations[firstErrorKey]);
     }
-    return false;
-  }
 
-  get confirmPasswordError(): boolean {
-    const control = this.registerForm.get('confirmPassword');
-
-    if (this.isSubmitted && control?.errors?.['required']) return true;
-
-    const passwordControl = this.registerForm.get('password');
-    if (this.isSubmitted && passwordControl?.value && control?.value && passwordControl.value !== control.value) {
-      return true;
-    }
-    return false;
-  }
-
-  get phoneError(): string | boolean {
-    const control = this.registerForm.get('phone');
-    if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return true;
-      if (control.errors['pattern']) return this._translate.get('common.errors.invalid-phone');
-    }
-    return false;
-  }
-
-  get idTypeError(): boolean {
-    const control = this.registerForm.get('idType');
-    return !!(this.isSubmitted && control?.errors?.['required']);
-  }
-
-  get idNumberError(): string | boolean {
-    const control = this.registerForm.get('idNumber');
-    if (this.isSubmitted && control?.errors) {
-      if (control.errors['required']) return true;
-      if (control.errors['invalidCedula']) return this._translate.get('auth.register.errors.invalid-cedula');
-      if (control.errors['invalidPassport']) return this._translate.get('auth.register.errors.invalid-passport');
-    }
-    return false;
-  }
-
-  get genderError(): boolean {
-    const control = this.registerForm.get('gender');
-    return !!(this.isSubmitted && control?.errors?.['required']);
-  }
-
-  get cityError(): boolean {
-    const control = this.registerForm.get('city');
-    return !!(this.isSubmitted && control?.errors?.['required']);
-  }
-
-  get birthDateError(): boolean {
-    const day = this.registerForm.get('birthDay');
-    const month = this.registerForm.get('birthMonth');
-    const year = this.registerForm.get('birthYear');
-    if (this.isSubmitted && (day?.errors || month?.errors || year?.errors)) {
-      return true;
-    }
-    return false;
-  }
-
-  get acceptTermsError(): boolean {
-    const control = this.registerForm.get('acceptTerms');
-    return !!(this.isSubmitted && control?.errors?.['required']);
-  }
-
-  get acceptDataError(): boolean {
-    const control = this.registerForm.get('acceptData');
-    return !!(this.isSubmitted && control?.errors?.['required']);
+    // If it is a generic error like 'required', simply return true 
+    // to trigger red borders or visual states in the HTML.
+    return true;
   }
 
   updateDaysInMonth(): void {

@@ -71,7 +71,7 @@
               <div class="field-group">
                 <label class="field-label">{{ translate.get('auth.register.first-name.label') }} <span
                     class="field-required">*</span></label>
-                <input type="text" class="field-input-simple" [class.field-input-simple--error]="firstNameError"
+                <input type="text" class="field-input-simple" [class.field-input-simple--error]="getFieldError('firstName')"
                   [placeholder]="translate.get('auth.register.first-name.placeholder')" formControlName="firstName" />
                 <!-- Error message -->
 
@@ -83,7 +83,7 @@
               <div class="field-group">
                 <label class="field-label">{{ translate.get('auth.register.last-name.label') }} <span
                     class="field-required">*</span></label>
-                <input type="text" class="field-input-simple" [class.field-input-simple--error]="lastNameError"
+                <input type="text" class="field-input-simple" [class.field-input-simple--error]="getFieldError('lastName')"
                   [placeholder]="translate.get('auth.register.last-name.placeholder')" formControlName="lastName" />
                 <!-- Error message -->
 
@@ -96,14 +96,14 @@
             <div class="field-group">
               <label class="field-label">{{ translate.get('auth.login.email.label') }} <span
                   class="field-required">*</span></label>
-              <div class="field-input-wrapper" [class.field-input-wrapper--error]="emailError">
+              <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('email')">
                 <lucide-icon name="mail" [size]="18" class="field-icon"></lucide-icon>
                 <input type="email" class="field-input" [placeholder]="translate.get('auth.register.email.placeholder')"
                   formControlName="email" />
               </div>
 
-              <!-- Error message -->
-              @if (emailError && emailError !== true){<span class="field-error">{{ emailError }}</span>}
+              <!-- Error message for email -->
+              @if (getFieldError('email') && getFieldError('email') !== true){<span class="field-error">{{ getFieldError('email') }}</span>}
             </div>
 
             <!-- Password and Confirm -->
@@ -115,7 +115,7 @@
                     *
                   </span>
                 </label>
-                <div class="field-input-wrapper" [class.field-input-wrapper--error]="passwordError">
+                <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('password')">
                   <lucide-icon name="lock" [size]="18" class="field-icon"></lucide-icon>
                   <input [type]="showPassword ? 'text' : 'password'" class="field-input field-input--with-toggle"
                     placeholder="••••••••" formControlName="password" />
@@ -123,13 +123,13 @@
                     <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
                   </button>
                 </div>
-                @if (passwordError && passwordError !== true) { <span class="field-error">{{ passwordError }}</span> }
+                @if (getFieldError('password') && getFieldError('password') !== true) { <span class="field-error">{{ getFieldError('password') }}</span> }
               </div>
 
               <div class="field-group">
                 <label class="field-label">{{ translate.get('auth.register.confirm-password') }} <span
                     class="field-required">*</span></label>
-                <div class="field-input-wrapper" [class.field-input-wrapper--error]="confirmPasswordError">
+                <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('confirmPassword')">
                   <lucide-icon name="lock" [size]="18" class="field-icon"></lucide-icon>
                   <input [type]="showConfirmPassword ? 'text' : 'password'" class="field-input field-input--with-toggle"
                     placeholder="••••••••" formControlName="confirmPassword" />
@@ -137,6 +137,9 @@
                     <lucide-icon [name]="showConfirmPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
                   </button>
                 </div>
+                @if (getFieldError('confirmPassword') && getFieldError('confirmPassword') !== true) { 
+                  <span class="field-error">{{ getFieldError('confirmPassword') }}</span> 
+                }
               </div>
             </div>
 
@@ -144,11 +147,11 @@
             <div class="field-group">
               <label class="field-label">{{ translate.get('auth.register.phone') }} <span
                   class="field-required">*</span></label>
-              <div class="field-input-wrapper" [class.field-input-wrapper--error]="phoneError">
+              <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('phone')">
                 <lucide-icon name="phone" [size]="18" class="field-icon"></lucide-icon>
                 <input type="tel" class="field-input" placeholder="0987654321" formControlName="phone" />
               </div>
-              @if (phoneError && phoneError !== true) { <span class="field-error">{{ phoneError }}</span> }
+              @if (getFieldError('phone') && getFieldError('phone') !== true) { <span class="field-error">{{ getFieldError('phone') }}</span> }
             </div>
 
             <!-- Type and number of document -->
@@ -156,7 +159,7 @@
               <div class="field-group">
                 <label class="field-label">{{ translate.get('auth.register.id-type.label') }} <span
                     class="field-required">*</span></label>
-                <select class="field-select" formControlName="idType" [class.field-select--error]="idTypeError">
+                <select class="field-select" formControlName="idType" [class.field-select--error]="getFieldError('idType')">
                   <option value="">{{ translate.get('auth.register.id-type.placeholder') }}</option>
                   <option value="cedula">{{ translate.get('auth.register.id-type.cedula') }}</option>
                   <option value="passport">{{ translate.get('auth.register.id-type.passport') }}</option>
@@ -165,11 +168,11 @@
               <div class="field-group">
                 <label class="field-label">{{ translate.get('auth.register.id-number') }} <span
                     class="field-required">*</span></label>
-                <div class="field-input-wrapper" [class.field-input-wrapper--error]="idNumberError">
+                <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('idNumber')">
                   <lucide-icon name="id-card" [size]="18" class="field-icon"></lucide-icon>
                   <input type="text" class="field-input" placeholder="0912345678" formControlName="idNumber" />
                 </div>
-                @if (idNumberError && idNumberError !== true) { <span class="field-error">{{ idNumberError }}</span> }
+                @if (getFieldError('idNumber') && getFieldError('idNumber') !== true) { <span class="field-error">{{ getFieldError('idNumber') }}</span> }
               </div>
             </div>
 
@@ -179,7 +182,7 @@
               <div class="field-group">
                 <label class="field-label">{{ translate.get('auth.register.gender.label') }} <span
                     class="field-required">*</span></label>
-                <select class="field-select" formControlName="gender" [class.field-select--error]="genderError">
+                <select class="field-select" formControlName="gender" [class.field-select--error]="getFieldError('gender')">
                   <option value="">{{ translate.get('auth.register.gender.placeholder') }}</option>
                   <option value="M">{{ translate.get('auth.register.gender.male') }}</option>
                   <option value="F">{{ translate.get('auth.register.gender.female') }}</option>
@@ -192,7 +195,7 @@
                 <label class="field-label">{{ translate.get('auth.register.city.label') }} <span
                     class="field-required">*</span></label>
 
-                <select class="field-select" formControlName="city" [class.field-select--error]="cityError">
+                <select class="field-select" formControlName="city" [class.field-select--error]="getFieldError('city')">
                   <option value="">{{translate.get('auth.register.city.placeholder')}}</option>
 
                   <!-- Principal cities from .ts file-->
@@ -213,21 +216,21 @@
                   class="field-required">*</span></label>
               <div style="display: flex; gap: 8px; width: 100%;">
 
-                <select class="field-select" formControlName="birthDay" [class.field-select--error]="birthDateError">
+                <select class="field-select" formControlName="birthDay" [class.field-select--error]="(getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear'))">
                   <option value="">Día</option>
                   @for (day of days; track day) {
                   <option [value]="day">{{ day }}</option>
                   }
                 </select>
 
-                <select class="field-select" formControlName="birthMonth" [class.field-select--error]="birthDateError">
+                <select class="field-select" formControlName="birthMonth" [class.field-select--error]="(getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear'))">
                   <option value="">Mes</option>
                   @for (month of months; track month.value) {
                   <option [value]="month.value">{{ month.name }}</option>
                   }
                 </select>
 
-                <select class="field-select" formControlName="birthYear" [class.field-select--error]="birthDateError">
+                <select class="field-select" formControlName="birthYear" [class.field-select--error]="(getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear'))">
                   <option value="">Año</option>
                   @for (year of years; track year) {
                   <option [value]="year">{{ year }}</option>
@@ -240,7 +243,7 @@
             <!-- Terms -->
             <div class="field-check">
               <input type="checkbox" id="acceptTerms" formControlName="acceptTerms"
-                [class.field-checkbox--error]="acceptTermsError" />
+                [class.field-checkbox--error]="getFieldError('acceptTerms')" />
               <label for="acceptTerms">
                 {{ translate.get('auth.register.terms.prefix') }}
                 <a href="#" class="field-link">{{ translate.get('auth.register.terms.link') }}</a>
@@ -253,7 +256,7 @@
             <!-- Protection of Data -->
             <div class="field-check">
               <input type="checkbox" id="acceptData" formControlName="acceptData"
-                [class.field-checkbox--error]="acceptDataError" />
+                [class.field-checkbox--error]="getFieldError('acceptData')" />
               <label for="acceptData">
                 {{ translate.get('auth.register.data.prefix') }}
                 <a href="#" class="field-link">{{ translate.get('auth.register.data.link') }}</a>

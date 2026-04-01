@@ -3,30 +3,30 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class DocumentValidators {
   
-  // Lo definimos como método estático para poder usarlo en cualquier lado sin instanciar la clase
+  // Defined as a static method so it can be used anywhere without instantiating the class
   static cedula(control: AbstractControl): ValidationErrors | null {
     const cedula = control.value;
     
-    if (!cedula) return null; // Si está vacío, de eso se encarga Validators.required
+    if (!cedula) return null; // If empty, Validators.required will handle it
 
-    // 1. Validar longitud y que sean solo números
+    // 1. Validate length and ensure it only contains numbers
     if (cedula.length !== 10 || !/^\d+$/.test(cedula)) {
       return { invalidCedula: true };
     }
 
-    // 2. Validar provincia
+    // 2. Validate province
     const provincia = parseInt(cedula.substring(0, 2), 10);
     if (provincia < 1 || (provincia > 24 && provincia !== 30)) {
       return { invalidCedula: true };
     }
 
-    // 3. Validar tercer dígito (personas naturales)
+    // 3. Validate third digit (natural persons)
     const tercerDigito = parseInt(cedula.substring(2, 3), 10);
     if (tercerDigito > 5) {
       return { invalidCedula: true };
     }
 
-    // 4. Módulo 10
+    // 4. Modulo 10
     const digitos = cedula.split('').map(Number);
     const digitoVerificador = digitos.pop();
     let suma = 0;
@@ -48,14 +48,14 @@ export class DocumentValidators {
       return { invalidCedula: true };
     }
 
-    return null; // Es válida
+    return null; // It is valid
   }
 
   static pasaporte(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
 
-    // Regla: Alfanumérico, entre 6 y 15 caracteres
+    // Rule: Alphanumeric, between 6 and 15 characters
     const passportRegex = /^[a-zA-Z0-9]{6,15}$/;
     const valid = passportRegex.test(value);
     
