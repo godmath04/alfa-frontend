@@ -43,7 +43,11 @@
       "phone": "Teléfono",
       "cedula": "Cédula",
       "birth-date": "Fecha de Nacimiento",
-      "city": "Ciudad",
+      "city": {
+        "label": "Ciudad",
+        "placeholder": "Seleccionar...",
+        "other": "Otra ciudad / cantón"
+      },
       "brand": {
         "subtitle": "Crea tu cuenta para comenzar"
       },
@@ -60,15 +64,17 @@
       },
       "id-type": {
         "label": "Tipo de Documento",
+        "placeholder": "Seleccionar...",
         "cedula": "Cédula",
         "passport": "Pasaporte"
       },
       "id-number": "Número de Documento",
       "gender": {
         "label": "Sexo",
-        "placeholder": "Selecciona...",
+        "placeholder": "Seleccionar...",
         "male": "Masculino",
-        "female": "Femenino"
+        "female": "Femenino",
+        "other": "Otro"
       },
       "terms": {
         "prefix": "Acepto los",
@@ -82,7 +88,9 @@
       },
       "errors": {
         "title": "Por favor corrige los siguientes errores:",
-        "password-mismatch": "Las contraseñas no coinciden"
+        "password-mismatch": "Las contraseñas no coinciden",
+        "invalid-cedula": "Cédula ecuatoriana inválida",
+        "invalid-passport": "Pasaporte inválido (6-15 caracteres alfanuméricos)"
       },
       "success": {
         "title": "¡Registro exitoso!",
@@ -115,7 +123,9 @@
     "errors": {
       "required": "Este campo es requerido",
       "invalid-email": "Ingrese un correo válido",
-      "min-password": "Mínimo 8 caracteres"
+      "invalid-password": "La contraseña debe tener al menos una mayúscula, minúscula y un carácter especial",
+      "min-password": "Mínimo 8 caracteres",
+      "invalid-phone": "Número de teléfono inválido"
     }
   },
   "paciente": {
