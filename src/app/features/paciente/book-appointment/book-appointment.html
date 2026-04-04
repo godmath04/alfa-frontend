@@ -1,0 +1,65 @@
+<div class="wizard">
+
+  <div class="wizard__header">
+    <h1 class="wizard__title">{{ _translate.get('paciente.appointments.title') }}</h1>
+    <p class="wizard__subtitle">{{ _translate.get('paciente.appointments.subtitle') }}</p>
+
+    <div class="wizard__steps">
+      @for (step of [1, 2, 3]; track step; let i = $index) {
+        <div
+          class="wizard__step"
+          [class.wizard__step--active]="_currentStep === step"
+          [class.wizard__step--done]="_currentStep > step"
+        >
+          <div class="wizard__step-circle">
+            @if (_currentStep <= step) {
+              <span>{{ step }}</span>
+            }
+            @if (_currentStep > step) {
+              <lucide-icon name="check" [size]="16"></lucide-icon>
+            }
+          </div>
+          <span class="wizard__step-label">
+            @if (step === 1) { {{ _translate.get('paciente.appointments.steps.specialty') }} }
+            @if (step === 2) { {{ _translate.get('paciente.appointments.steps.doctor') }} }
+            @if (step === 3) { {{ _translate.get('paciente.appointments.steps.datetime') }} }
+          </span>
+        </div>
+        @if (i < 2) {
+          <div class="wizard__step-line" [class.wizard__step-line--done]="_currentStep > step"></div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="wizard__body">
+    @if (_currentStep === 1) {
+      <p>Step 1</p>
+    }
+    @if (_currentStep === 2) {
+      <p>Step 2</p>
+    }
+    @if (_currentStep === 3) {
+      <p>Step 3</p>
+    }
+  </div>
+
+  <div class="wizard__footer">
+    @if (_currentStep > 1) {
+      <app-button variant="outline" (clicked)="_back()">
+        {{ _translate.get('paciente.appointments.footer.back') }}
+      </app-button>
+    }
+    @if (_currentStep < 3) {
+      <app-button variant="primary" (clicked)="_next()">
+        {{ _translate.get('paciente.appointments.footer.next') }}
+      </app-button>
+    }
+    @if (_currentStep === 3) {
+      <app-button variant="primary" (clicked)="_next()">
+        {{ _translate.get('paciente.appointments.footer.confirm') }}
+      </app-button>
+    }
+  </div>
+
+</div>

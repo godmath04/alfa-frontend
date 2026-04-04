@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { 
   LucideAngularModule, 
   Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
-  CheckCircle2, Phone, MapPin, Calendar, IdCard, ArrowLeft, AlertCircle
+  CheckCircle2, Phone, MapPin, Calendar, IdCard, ArrowLeft, AlertCircle,
+  Home, FileText, LogOut
 } from 'lucide-angular';
 
 import { Button } from './components/button/button';
@@ -19,7 +20,8 @@ import { Spinner } from './components/spinner/spinner';
     ReactiveFormsModule,
     LucideAngularModule.pick({ 
       Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
-      CheckCircle2, Phone, MapPin, Calendar, IdCard, ArrowLeft, AlertCircle
+      CheckCircle2, Phone, MapPin, Calendar, IdCard, ArrowLeft, AlertCircle,
+      Home, FileText, LogOut
     })
   ],
   exports: [

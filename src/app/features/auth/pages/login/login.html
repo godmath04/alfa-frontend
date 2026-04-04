@@ -1,6 +1,6 @@
 <div class="login-page">
 
-  <!-- Panel izquierdo -->
+  <!-- Left panel -->
   <div class="login-left">
     <div class="login-brand">
       <img src="/images/LOGO.svg" alt="Alfa Hospital" class="login-brand__logo" />
@@ -8,19 +8,21 @@
     </div>
 
     <div class="login-features">
-      <div *ngFor="let feature of features" class="login-feature">
-        <div class="login-feature__icon">
-          <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
+      @for (feature of features; track feature.titleKey) {
+        <div class="login-feature">
+          <div class="login-feature__icon">
+            <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
+          </div>
+          <div class="login-feature__text">
+            <h3>{{ translate.get(feature.titleKey) }}</h3>
+            <p>{{ translate.get(feature.descKey) }}</p>
+          </div>
         </div>
-        <div class="login-feature__text">
-          <h3>{{ translate.get(feature.titleKey) }}</h3>
-          <p>{{ translate.get(feature.descKey) }}</p>
-        </div>
-      </div>
+      }
     </div>
   </div>
 
-  <!-- Panel derecho -->
+  <!-- Right panel -->
   <div class="login-right">
     <div class="login-card">
 
@@ -29,11 +31,13 @@
         <p class="login-subtitle">{{ translate.get('auth.login.subtitle') }}</p>
       </div>
 
-      <!-- Error general -->
-      <div *ngIf="errorMessage" class="login-alert">
-        <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
-        <span>{{ errorMessage }}</span>
-      </div>
+      <!-- General error -->
+      @if (errorMessage) {
+        <div class="login-alert">
+          <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
 
       <form [formGroup]="loginForm" (ngSubmit)="_onSubmit()" class="login-form">
 
@@ -49,7 +53,9 @@
               formControlName="email"
             />
           </div>
-          <span *ngIf="emailError" class="field-error">{{ emailError }}</span>
+          @if (emailError) {
+            <span class="field-error">{{ emailError }}</span>
+          }
         </div>
 
         <!-- Password -->
@@ -67,7 +73,9 @@
               <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
             </button>
           </div>
-          <span *ngIf="passwordError" class="field-error">{{ passwordError }}</span>
+          @if (passwordError) {
+            <span class="field-error">{{ passwordError }}</span>
+          }
         </div>
 
         <!-- Remember me + Forgot password -->
@@ -87,8 +95,12 @@
           variant="primary"
           size="large"
           [disabled]="isLoading">
-          <app-spinner *ngIf="isLoading" size="small"></app-spinner>
-          <span *ngIf="!isLoading">{{ translate.get('auth.login.button') }}</span>
+          @if (isLoading) {
+            <app-spinner size="small"></app-spinner>
+          }
+          @if (!isLoading) {
+            <span>{{ translate.get('auth.login.button') }}</span>
+          }
         </app-button>
 
       </form>
