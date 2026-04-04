@@ -1,5 +1,7 @@
 <div class="input-wrapper">
-  <label *ngIf="label" class="input-label">{{ label }}</label>
+  @if (label) {
+    <label class="input-label">{{ label }}</label>
+  }
   <div class="input-container" [class.input-container--error]="errorMessage">
     <input
       [type]="type"
@@ -11,5 +13,7 @@
       (blur)="_onBlur()"
     />
   </div>
-  <span *ngIf="errorMessage" class="input-error">{{ errorMessage }}</span>
+  @if (errorMessage) {
+    <span class="input-error">{{ errorMessage }}</span>
+  }
 </div>

@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
+
 import { Translate } from '../../../core/services/translate';
+import { Button } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-book-appointment',
-  standalone: false,
+  standalone: true,
+  imports: [LucideAngularModule, Button],
   templateUrl: './book-appointment.html',
   styleUrl: './book-appointment.scss',
 })
 export class BookAppointment {
-  _currentStep = 1;
-  _totalSteps = 3;
 
-  constructor(public _translate: Translate) {}
+  readonly _translate = inject(Translate);
+
+  _currentStep = 1;
+  _totalSteps  = 3;
 
   _goToStep(step: number): void {
     if (step >= 1 && step <= this._totalSteps) {
@@ -19,11 +24,6 @@ export class BookAppointment {
     }
   }
 
-  _next(): void {
-    this._goToStep(this._currentStep + 1);
-  }
-
-  _back(): void {
-    this._goToStep(this._currentStep - 1);
-  }
+  _next(): void { this._goToStep(this._currentStep + 1); }
+  _back(): void { this._goToStep(this._currentStep - 1); }
 }

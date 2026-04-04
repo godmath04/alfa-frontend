@@ -2,18 +2,18 @@
 
   <!-- Left panel -->
   <div class="login-left">
-    <div class="login-brand">
-      <img src="/images/LOGO.svg" alt="Alfa Hospital" class="login-brand__logo" />
-      <p class="login-brand__subtitle">{{ translate.get('auth.login.brand.subtitle') }}</p>
+    <div class="auth-brand">
+      <img src="/images/LOGO.svg" alt="Alfa Hospital" class="auth-brand__logo" />
+      <p class="auth-brand__subtitle">{{ translate.get('auth.login.brand.subtitle') }}</p>
     </div>
 
-    <div class="login-features">
+    <div class="auth-features">
       @for (feature of features; track feature.titleKey) {
-        <div class="login-feature">
-          <div class="login-feature__icon">
+        <div class="auth-feature">
+          <div class="auth-feature__icon">
             <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
           </div>
-          <div class="login-feature__text">
+          <div class="auth-feature__text">
             <h3>{{ translate.get(feature.titleKey) }}</h3>
             <p>{{ translate.get(feature.descKey) }}</p>
           </div>
@@ -32,10 +32,10 @@
       </div>
 
       <!-- General error -->
-      @if (errorMessage) {
+      @if (vm.loginError()) {
         <div class="login-alert">
           <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
-          <span>{{ errorMessage }}</span>
+          <span>{{ vm.loginError() }}</span>
         </div>
       }
 
@@ -94,11 +94,11 @@
           type="submit"
           variant="primary"
           size="large"
-          [disabled]="isLoading">
-          @if (isLoading) {
+          [disabled]="vm.loading()">
+          @if (vm.loading()) {
             <app-spinner size="small"></app-spinner>
           }
-          @if (!isLoading) {
+          @if (!vm.loading()) {
             <span>{{ translate.get('auth.login.button') }}</span>
           }
         </app-button>

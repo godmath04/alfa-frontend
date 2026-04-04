@@ -8,17 +8,17 @@
   <div class="register-layout">
     <!-- Left panel -->
     <div class="register-left">
-      <div class="register-brand">
-        <img src="/images/LOGO.svg" alt="Alfa Hospital" class="register-brand__logo" />
-        <p class="register-brand__subtitle">{{ translate.get('auth.register.brand.subtitle') }}</p>
+      <div class="auth-brand">
+        <img src="/images/LOGO.svg" alt="Alfa Hospital" class="auth-brand__logo" />
+        <p class="auth-brand__subtitle">{{ translate.get('auth.register.brand.subtitle') }}</p>
       </div>
-      <div class="register-features">
+      <div class="auth-features auth-features--hidden-mobile">
         @for (feature of features; track feature.titleKey) {
-        <div class="register-feature">
-          <div class="register-feature__icon">
+        <div class="auth-feature">
+          <div class="auth-feature__icon">
             <lucide-icon [name]="feature.icon" [size]="24"></lucide-icon>
           </div>
-          <div class="register-feature__text">
+          <div class="auth-feature__text">
             <h3>{{ translate.get(feature.titleKey) }}</h3>
             <p>{{ translate.get(feature.descKey) }}</p>
           </div>
@@ -37,7 +37,7 @@
           </div>
 
           <!-- Success -->
-          @if (success) {
+          @if (vm.registerSuccess()) {
           <div class="register-success">
             <lucide-icon name="check-circle-2" [size]="20"></lucide-icon>
             <div>
@@ -48,14 +48,14 @@
           }
 
           <!-- Errors -->
-          @if (errors.length > 0) {
+          @if (vm.registerErrors().length > 0) {
           <div class="register-errors">
             <div class="register-errors__header">
               <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
               <span>{{ translate.get('auth.register.errors.title') }}</span>
             </div>
             <ul>
-              @for (error of errors; track $index) {
+              @for (error of vm.registerErrors(); track $index) {
               <li>{{ error }}</li>
               }
             </ul>
@@ -266,17 +266,17 @@
 
             <!-- Submit -->
             <div class="register-submit">
-              <app-button type="submit" variant="primary" size="large" [disabled]="isLoading || success">
-                @if (isLoading) {
+              <app-button type="submit" variant="primary" size="large" [disabled]="vm.loading() || vm.registerSuccess()">
+                @if (vm.loading()) {
                 <app-spinner size="small"></app-spinner>
                 }
-                @if (success) {
+                @if (vm.registerSuccess()) {
                 <lucide-icon name="check-circle-2" [size]="18"></lucide-icon>
                 }
-                @if (!isLoading && !success) {
+                @if (!vm.loading() && !vm.registerSuccess()) {
                 <span>{{ translate.get('auth.register.button') }}</span>
                 }
-                @if (success) {
+                @if (vm.registerSuccess()) {
                 <span>{{ translate.get('auth.register.success.button') }}</span>
                 }
               </app-button>
