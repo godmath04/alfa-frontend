@@ -131,6 +131,20 @@
     "dashboard": {
       "title": "Mi Perfil",
       "welcome": "Bienvenido de nuevo"
+    },
+    "appointments": {
+      "title": "Agendar Cita Médica",
+      "subtitle": "Sigue los pasos para programar tu consulta",
+      "steps": {
+        "specialty": "Seleccionar Especialidad",
+        "doctor": "Seleccionar Médico",
+        "datetime": "Elegir Fecha y Hora"
+      },
+      "footer": {
+        "back": "Volver",
+        "next": "Siguiente",
+        "confirm": "Confirmar Cita"
+      }
     }
   }
 }

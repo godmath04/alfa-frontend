@@ -1,0 +1,108 @@
+.wizard {
+  max-width: 800px;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-xl);
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+// ── HEADER ──────────────────────────────────────────
+.wizard__title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.wizard__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+// ── STEPPER ─────────────────────────────────────────
+.wizard__steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.wizard__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.wizard__step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-white);
+  transition: all 0.2s ease;
+}
+
+.wizard__step--active .wizard__step-circle {
+  background: var(--color-accent-1);
+  border-color: var(--color-accent-1);
+  color: var(--color-white);
+}
+
+.wizard__step--done .wizard__step-circle {
+  background: var(--color-accent-1);
+  border-color: var(--color-accent-1);
+  color: var(--color-white);
+}
+
+.wizard__step-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.wizard__step--active .wizard__step-label {
+  color: var(--color-accent-1);
+  font-weight: 600;
+}
+
+.wizard__step--done .wizard__step-label {
+  color: var(--color-accent-1);
+}
+
+.wizard__step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--color-border);
+  margin: 0 var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  transition: background 0.2s ease;
+}
+
+.wizard__step-line--done {
+  background: var(--color-accent-1);
+}
+
+// ── BODY ────────────────────────────────────────────
+.wizard__body {
+  min-height: 200px;
+  padding: var(--spacing-lg) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+// ── FOOTER ──────────────────────────────────────────
+.wizard__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+}
