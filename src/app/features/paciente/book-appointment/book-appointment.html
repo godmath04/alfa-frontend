@@ -56,7 +56,7 @@
           <div class="specialties-grid">
             <!-- Render the list by iterating Signals and using id for trackBy -->
             @for (specialty of vm.specialties(); track specialty.id) {
-              <div class="specialty-card" (click)="vm.onSpecialtySelected(specialty)">
+              <div class="specialty-card" (click)="vm.onSpecialtySelected(specialty); _next()">
                 
                 <!-- Base64 Rule or Placeholder -->
                 <img [src]="specialty.icono && specialty.iconoMimeType 
