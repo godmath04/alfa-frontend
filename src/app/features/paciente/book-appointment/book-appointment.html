@@ -34,7 +34,51 @@
 
   <div class="wizard__body">
     @if (_currentStep === 1) {
-      <p>Step 1</p>
+      <div class="specialties-container">
+        <!-- Loading state -->
+        @if (vm.loading()) {
+          <div class="loading-state">
+            <lucide-icon name="loader-2" class="animate-spin" [size]="32"></lucide-icon>
+            <p>Loading catalog...</p>
+          </div>
+        } 
+        
+        <!-- API Error state -->
+        @else if (vm.error()) {
+          <div class="error-state">
+            <lucide-icon name="alert-circle" [size]="32" color="red"></lucide-icon>
+            <p>{{ vm.error() }}</p>
+          </div>
+        } 
+        
+        <!-- Success state (List of specialties) -->
+        @else {
+          <div class="specialties-grid">
+            <!-- Render the list by iterating Signals and using id for trackBy -->
+            @for (specialty of vm.specialties(); track specialty.id) {
+              <div class="specialty-card" (click)="vm.onSpecialtySelected(specialty)">
+                
+                <!-- Base64 Rule or Placeholder -->
+                <img [src]="specialty.icono && specialty.iconoMimeType 
+                              ? 'data:' + specialty.iconoMimeType + ';base64,' + specialty.icono 
+                              : '/assets/placeholder-specialty.png'" 
+                     [alt]="specialty.nombre"
+                     class="specialty-icon">
+                
+                <div class="specialty-info">
+                  <h3>{{ specialty.nombre }}</h3>
+                  @if (specialty.descripcion) {
+                    <p class="specialty-desc">{{ specialty.descripcion }}</p>
+                  }
+                  <span class="specialty-badge">{{ specialty.cantidadMedicos }} doctor(s)</span>
+                </div>
+              </div>
+            } @empty {
+              <p>No specialties available at this moment.</p>
+            }
+          </div>
+        }
+      </div>
     }
     @if (_currentStep === 2) {
       <p>Step 2</p>

@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../core/services/translate';
+import { AppointmentViewModel } from '../../../core/services/appointment/appointment.view-model';
 import { Button } from '../../../shared/components/button/button';
 
 @Component({
@@ -11,19 +12,21 @@ import { Button } from '../../../shared/components/button/button';
   templateUrl: './book-appointment.html',
   styleUrl: './book-appointment.scss',
 })
-export class BookAppointment {
 
+export class BookAppointment implements OnInit {
   readonly _translate = inject(Translate);
-
+  readonly vm = inject(AppointmentViewModel); // Connection to ViewModel
   _currentStep = 1;
   _totalSteps  = 3;
-
+  ngOnInit(): void {
+    // When the view is loaded (Step 1), launch HTTP request with ViewModel
+    this.vm.loadSpecialties();
+  }
   _goToStep(step: number): void {
     if (step >= 1 && step <= this._totalSteps) {
       this._currentStep = step;
     }
   }
-
   _next(): void { this._goToStep(this._currentStep + 1); }
   _back(): void { this._goToStep(this._currentStep - 1); }
 }

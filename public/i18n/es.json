@@ -154,6 +154,9 @@
         "back": "Volver",
         "next": "Siguiente",
         "confirm": "Confirmar Cita"
+      },
+      "errors": {
+        "fetch-catalog": "No se pudo cargar el catálogo de especialidades"
       }
     }
   }
