@@ -23,6 +23,12 @@ export class AppointmentViewModel {
   // Computed property to check if there are any specialties
   readonly hasSpecialties = computed(() => this.specialties().length > 0);
 
+  // Doctors state
+  readonly doctors        = computed(() => this._stateService.doctors());
+  readonly doctorsLoading = computed(() => this._stateService.doctorsLoading());
+  readonly doctorsError   = computed(() => this._stateService.doctorsError());
+
+
   /**
    * Triggers the API call to load specialties.
    */
@@ -59,8 +65,37 @@ export class AppointmentViewModel {
    */
   onSpecialtySelected(specialty: SpecialtyCatalog): void {
     this._stateService.selectSpecialty(specialty);
-    // Future expansion: trigger navigation to "Step 2"
-    console.log('Specialty selected:', specialty.nombre);
+    // Start loading doctors
+    this.loadDoctors(specialty.id);
+  }
+  /**
+   * Triggers the API call to load doctors for step 2.
+   */
+  loadDoctors(especialidadId: number): void {
+    this._stateService.setDoctorsLoading(true);
+    this._stateService.setDoctorsError(null);
+    this._appointmentService.getMedicosPorEspecialidad(especialidadId)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (data) => {
+          this._stateService.setDoctors(data);
+          this._stateService.setDoctorsLoading(false);
+        },
+        error: (err) => {
+          console.error('Error fetching doctors:', err);
+          
+          // Fallback if backend doesn't provide a message 
+          let msg = this._translate.get('paciente.appointments.errors.fetch-doctors');
+          
+          // Si el Backend regresó 400 con un mensaje ("Especialidad no encontrada")
+          if (err.status === 400 && err.error?.message) {
+            msg = err.error.message;
+          }
+          
+          this._stateService.setDoctorsError(msg);
+          this._stateService.setDoctorsLoading(false);
+        }
+      });
   }
 
   /**

@@ -87,9 +87,63 @@
         }
       </div>
     }
+
     @if (_currentStep === 2) {
-      <p>Step 2</p>
+      <div class="doctors-container">
+        
+        <!-- Loading state -->
+        @if (vm.doctorsLoading()) {
+          <div class="loading-state">
+            <lucide-icon name="loader-2" class="animate-spin" [size]="32"></lucide-icon>
+            <p>Buscando médicos disponibles...</p>
+          </div>
+        } 
+        
+        <!-- API Error state -->
+        @else if (vm.doctorsError()) {
+          <div class="error-state">
+            <lucide-icon name="alert-circle" [size]="32" color="red"></lucide-icon>
+            <p>{{ vm.doctorsError() }}</p>
+          </div>
+        } 
+        
+        <!-- Success state (List of doctors) -->
+        @else {
+          <div class="doctors-grid">
+            @for (doctor of vm.doctors(); track doctor.id) {
+              <div class="doctor-card" (click)="_next()"> 
+                
+                <!-- Fallback a avatar por defecto si no posee fotoPerfil -->
+                <img [src]="doctor.fotoPerfil ? doctor.fotoPerfil : '/images/avatar-default.svg'" 
+                     (error)="onImageError($event)"
+                     [alt]="doctor.nombre"
+                     class="doctor-avatar">
+                
+                <div class="doctor-info">
+                  <h3>{{ doctor.nombre }} {{ doctor.apellido }}</h3>
+                  
+                  <!-- Formateando calificación a 1 digito ej. 4.6 -->
+                  <span class="doctor-rating">
+                    <lucide-icon name="star" [size]="16"></lucide-icon>
+                    {{ doctor.calificacion | number:'1.1-2' }}
+                  </span>
+                  
+                  <p class="doctor-exp">{{ doctor.experienciaAnios }} años de experiencia</p>
+                </div>
+              </div>
+            } @empty {
+              <!-- Estado vacío de Arrays cuando vienen con length = 0 -->
+              <div class="empty-state">
+                <p>No hay médicos disponibles para esta especialidad.</p>
+              </div>
+            }
+          </div>
+        }
+
+      </div>
     }
+
+
     @if (_currentStep === 3) {
       <p>Step 3</p>
     }

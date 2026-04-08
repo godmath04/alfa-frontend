@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { SpecialtyCatalog } from '../../models/appointment.model';
+import { MedicoEspecialidad, SpecialtyCatalog } from '../../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -15,5 +15,9 @@ export class AppointmentService {
   // Fetches specialties from the API Gateway
   getSpecialties(): Observable<SpecialtyCatalog[]> {
     return this._http.get<SpecialtyCatalog[]>(`${this.baseUrl}/api/agendamiento/especialidades`);
+  }
+
+  getMedicosPorEspecialidad(especialidadId: number): Observable<MedicoEspecialidad[]> {
+    return this._http.get<MedicoEspecialidad[]>(`${this.baseUrl}/api/agendamiento/especialidades/${especialidadId}/medicos`);
   }
 }

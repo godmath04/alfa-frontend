@@ -8,3 +8,12 @@ export interface SpecialtyCatalog {
   descripcion: string | null;
   cantidadMedicos: number;         // Assuming this might be useful to show later
 }
+
+export interface MedicoEspecialidad {
+  id: number;
+  nombre: string;
+  apellido: string;
+  fotoPerfil: string | null;
+  calificacion: number;
+  experienciaAnios: number;
+}

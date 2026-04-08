@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
+import { DecimalPipe } from '@angular/common';
 
 import { Translate } from '../../../core/services/translate';
 import { AppointmentViewModel } from '../../../core/services/appointment/appointment.view-model';
@@ -8,7 +9,7 @@ import { Button } from '../../../shared/components/button/button';
 @Component({
   selector: 'app-book-appointment',
   standalone: true,
-  imports: [LucideAngularModule, Button],
+  imports: [LucideAngularModule, Button, DecimalPipe],
   templateUrl: './book-appointment.html',
   styleUrl: './book-appointment.scss',
 })
