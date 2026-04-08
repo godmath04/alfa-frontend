@@ -21,7 +21,8 @@ export class AppointmentViewModel {
   readonly error       = computed(() => this._stateService.error());
   
   // Computed property to check if there are any specialties
-  readonly hasSpecialties = computed(() => this.specialties().length > 0);
+  readonly hasSpecialties    = computed(() => this.specialties().length > 0);
+  readonly selectedSpecialty = computed(() => this._stateService.selectedSpecialty());
 
   // Doctors state
   readonly doctors        = computed(() => this._stateService.doctors());

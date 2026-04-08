@@ -162,6 +162,7 @@
                  class="doctor-avatar-small">
             <div>
               <h4>{{ vm.selectedDoctor()!.firstName }} {{ vm.selectedDoctor()!.lastName || '' }}</h4>
+              <p class="doctor-specialty-subtitle">{{ vm.selectedSpecialty()?.nombre }}</p>
             </div>
           }
         </div>
