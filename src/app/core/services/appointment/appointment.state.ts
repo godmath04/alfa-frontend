@@ -1,7 +1,6 @@
 // src/app/core/services/appointment/appointment.state.ts
 import { Injectable, signal } from '@angular/core';
-import { SpecialtyCatalog } from '../../models/appointment.model';
-import { MedicoEspecialidad } from '../../models/appointment.model';
+import { SpecialtyCatalog, SpecialtyDoctor } from '../../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentStateService {
@@ -15,7 +14,7 @@ export class AppointmentStateService {
   readonly selectedSpecialty = signal<SpecialtyCatalog | null>(null);
 
   // --- Doctors signals ---
-  readonly doctors        = signal<MedicoEspecialidad[]>([]);
+  readonly doctors        = signal<SpecialtyDoctor[]>([]);
   readonly doctorsLoading = signal<boolean>(false);
   readonly doctorsError   = signal<string | null>(null);
 
@@ -49,7 +48,7 @@ export class AppointmentStateService {
   }
 
   // --- Doctors Setters ---
-  setDoctors(data: MedicoEspecialidad[]): void {
+  setDoctors(data: SpecialtyDoctor[]): void {
     this.doctors.set(data);
   }
   setDoctorsLoading(isLoading: boolean): void {

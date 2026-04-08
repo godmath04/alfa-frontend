@@ -71,10 +71,10 @@ export class AppointmentViewModel {
   /**
    * Triggers the API call to load doctors for step 2.
    */
-  loadDoctors(especialidadId: number): void {
+  loadDoctors(specialtyId: number): void {
     this._stateService.setDoctorsLoading(true);
     this._stateService.setDoctorsError(null);
-    this._appointmentService.getMedicosPorEspecialidad(especialidadId)
+    this._appointmentService.getDoctorsBySpecialty(specialtyId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (data) => {

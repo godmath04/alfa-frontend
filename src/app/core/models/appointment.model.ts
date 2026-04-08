@@ -9,11 +9,11 @@ export interface SpecialtyCatalog {
   cantidadMedicos: number;         // Assuming this might be useful to show later
 }
 
-export interface MedicoEspecialidad {
+export interface SpecialtyDoctor {
   id: number;
-  nombre: string;
-  apellido: string;
-  fotoPerfil: string | null;
-  calificacion: number;
-  experienciaAnios: number;
+  firstName: string;
+  lastName: string;
+  profilePicture: string | null;
+  rating: number;
+  yearsOfExperience: number;
 }

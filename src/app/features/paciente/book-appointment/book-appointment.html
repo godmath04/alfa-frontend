@@ -113,28 +113,28 @@
             @for (doctor of vm.doctors(); track doctor.id) {
               <div class="doctor-card" (click)="_next()"> 
                 
-                <!-- Fallback a avatar por defecto si no posee fotoPerfil -->
-                <img [src]="doctor.fotoPerfil ? doctor.fotoPerfil : '/images/avatar-default.svg'" 
+                <!-- Fallback to default avatar if profilePicture is null -->
+                <img [src]="doctor.profilePicture ? doctor.profilePicture : '/images/person-icon.png'" 
                      (error)="onImageError($event)"
-                     [alt]="doctor.nombre"
+                     [alt]="doctor.firstName"
                      class="doctor-avatar">
                 
                 <div class="doctor-info">
-                  <h3>{{ doctor.nombre }} {{ doctor.apellido }}</h3>
+                  <h3>{{ doctor.firstName }} {{ doctor.lastName }}</h3>
                   
-                  <!-- Formateando calificación a 1 digito ej. 4.6 -->
+                  <!-- Formats rating to 1-2 decimal places e.g. 4.60 -->
                   <span class="doctor-rating">
                     <lucide-icon name="star" [size]="16"></lucide-icon>
-                    {{ doctor.calificacion | number:'1.1-2' }}
+                    {{ doctor.rating | number:'1.1-2' }}
                   </span>
                   
-                  <p class="doctor-exp">{{ doctor.experienciaAnios }} años de experiencia</p>
+                  <p class="doctor-exp">{{ doctor.yearsOfExperience }} years of experience</p>
                 </div>
               </div>
             } @empty {
-              <!-- Estado vacío de Arrays cuando vienen con length = 0 -->
+              <!-- Empty state when array length is 0 -->
               <div class="empty-state">
-                <p>No hay médicos disponibles para esta especialidad.</p>
+                <p>There are no doctors available for this specialty.</p>
               </div>
             }
           </div>

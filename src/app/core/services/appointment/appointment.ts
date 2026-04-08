@@ -1,10 +1,10 @@
 // src/app/core/services/appointment/appointment.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { MedicoEspecialidad, SpecialtyCatalog } from '../../models/appointment.model';
+import { SpecialtyCatalog, SpecialtyDoctor } from '../../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -17,7 +17,17 @@ export class AppointmentService {
     return this._http.get<SpecialtyCatalog[]>(`${this.baseUrl}/api/agendamiento/especialidades`);
   }
 
-  getMedicosPorEspecialidad(especialidadId: number): Observable<MedicoEspecialidad[]> {
-    return this._http.get<MedicoEspecialidad[]>(`${this.baseUrl}/api/agendamiento/especialidades/${especialidadId}/medicos`);
+  getDoctorsBySpecialty(specialtyId: number): Observable<SpecialtyDoctor[]> {
+    return this._http.get<any[]>(`${this.baseUrl}/api/agendamiento/especialidades/${specialtyId}/medicos`)
+      .pipe(
+        map(response => response.map(doctor => ({
+          id: doctor.id,
+          firstName: doctor.nombre,
+          lastName: doctor.apellido,
+          profilePicture: doctor.fotoPerfil,
+          rating: doctor.calificacion,
+          yearsOfExperience: doctor.experienciaAnios
+        })))
+      );
   }
 }
