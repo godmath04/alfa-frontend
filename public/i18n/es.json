@@ -156,10 +156,14 @@
         "confirm": "Confirmar Cita"
       },
       "errors": {
-        "fetch-catalog": "No se pudo cargar el catálogo de especialidades"
+        "fetch-catalog": "No se pudo cargar el catálogo de especialidades",
+        "fetch-doctors": "No se pudieron cargar los médicos"
       },
       "doctorSingular": "médico",
-      "doctorPlural": "médicos"
+      "doctorPlural": "médicos",
+      "loadingDoctors": "Buscando médicos disponibles...",
+      "experienceYears": "años de experiencia",
+      "noDoctors": "No hay médicos disponibles para esta especialidad."
     }
   }
 }

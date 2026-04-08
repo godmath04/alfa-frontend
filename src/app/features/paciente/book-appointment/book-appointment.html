@@ -95,7 +95,7 @@
         @if (vm.doctorsLoading()) {
           <div class="loading-state">
             <lucide-icon name="loader-2" class="animate-spin" [size]="32"></lucide-icon>
-            <p>Buscando médicos disponibles...</p>
+            <p>{{ _translate.get('paciente.appointments.loadingDoctors') }}</p>
           </div>
         } 
         
@@ -120,21 +120,25 @@
                      class="doctor-avatar">
                 
                 <div class="doctor-info">
-                  <h3>{{ doctor.firstName }} {{ doctor.lastName }}</h3>
+                  <h3>{{ doctor.firstName }} {{ doctor.lastName || '' }}</h3>
                   
                   <!-- Formats rating to 1-2 decimal places e.g. 4.60 -->
-                  <span class="doctor-rating">
-                    <lucide-icon name="star" [size]="16"></lucide-icon>
-                    {{ doctor.rating | number:'1.1-2' }}
-                  </span>
+                  @if (doctor.rating != null) {
+                    <span class="doctor-rating">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      {{ doctor.rating | number:'1.1-2' }}
+                    </span>
+                  }
                   
-                  <p class="doctor-exp">{{ doctor.yearsOfExperience }} years of experience</p>
+                  @if (doctor.yearsOfExperience != null) {
+                    <p class="doctor-exp">{{ doctor.yearsOfExperience }} {{ _translate.get('paciente.appointments.experienceYears') }}</p>
+                  }
                 </div>
               </div>
             } @empty {
               <!-- Empty state when array length is 0 -->
               <div class="empty-state">
-                <p>There are no doctors available for this specialty.</p>
+                <p>{{ _translate.get('paciente.appointments.noDoctors') }}</p>
               </div>
             }
           </div>
