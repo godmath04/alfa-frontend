@@ -1,10 +1,10 @@
 // src/app/core/services/appointment/appointment.ts
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { SpecialtyCatalog, SpecialtyDoctor } from '../../models/appointment.model';
+import { SpecialtyCatalog, SpecialtyDoctor, DoctorAvailability } from '../../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -28,6 +28,22 @@ export class AppointmentService {
           rating: doctor.calificacion,
           yearsOfExperience: doctor.experienciaAnios
         })))
+      );
+  }
+
+  getAvailability(doctorId: number, date: string): Observable<DoctorAvailability> {
+    const params = new HttpParams()
+      .set('medicoId', doctorId.toString())
+      .set('fecha', date);
+
+    return this._http.get<any>(`${this.baseUrl}/api/agendamiento/disponibilidad`, { params })
+      .pipe(
+        map(response => ({
+          doctorId: response.medicoId,
+          doctorName: response.medicoNombre,
+          date: response.fecha,
+          availableTimes: response.horariosDisponibles
+        }))
       );
   }
 }

@@ -17,3 +17,10 @@ export interface SpecialtyDoctor {
   rating: number;
   yearsOfExperience: number;
 }
+
+export interface DoctorAvailability {
+  doctorId: number;
+  doctorName: string;
+  date: string;
+  availableTimes: string[];
+}

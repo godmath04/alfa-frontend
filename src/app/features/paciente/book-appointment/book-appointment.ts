@@ -38,4 +38,51 @@ export class BookAppointment implements OnInit {
       img.src = '/images/LOGO.svg';
     }
   }
+
+  /**
+   * Generates a timeline of dates starting from today.
+   * By starting from 'today', we naturally exclude and block past dates!
+   */
+  readonly availableDates = this.generateNextDays(14); 
+
+  private generateNextDays(count: number): { value: string, dayName: string, dayNumber: string, monthName: string }[] {
+    const days = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+    for (let i = 0; i < count; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const ddStr = String(d.getDate()).padStart(2, '0');
+        
+        days.push({
+            value: `${yyyy}-${mm}-${ddStr}`,
+            dayName: i === 0 ? 'Hoy' : i === 1 ? 'Mañana' : weekDays[d.getDay()],
+            dayNumber: ddStr,
+            monthName: months[d.getMonth()]
+        });
+    }
+    return days;
+  }
+
+  /**
+   * Transforms 24h string like '08:30:00' to 12h user-friendly string '8:30 AM'
+   */
+  formatToAmPm(timeStr: string): string {
+    if (!timeStr) return '';
+    const parts = timeStr.split(':');
+    if (parts.length < 2) return timeStr;
+    let h = parseInt(parts[0], 10);
+    const m = parts[1];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    h = h ? h : 12;
+    return `${h}:${m} ${ampm}`;
+  }
 }

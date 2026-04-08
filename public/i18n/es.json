@@ -157,14 +157,19 @@
       },
       "errors": {
         "fetch-catalog": "No se pudo cargar el catálogo de especialidades",
-        "fetch-doctors": "No se pudieron cargar los médicos"
+        "fetch-doctors": "No se pudieron cargar los médicos",
+        "doctor-not-found": "Médico no encontrado en el sistema.",
+        "doctor-not-available": "El médico no atiende este día."
       },
       "doctorSingular": "médico",
       "doctorPlural": "médicos",
       "loadingDoctors": "Buscando médicos disponibles...",
       "experienceYears": "años de experiencia",
       "noDoctors": "No hay médicos disponibles para esta especialidad.",
-      "noSpecialties": "No hay especialidades disponibles en este momento."
+      "noSpecialties": "No hay especialidades disponibles en este momento.",
+      "selectDateTitle": "Elegir Fecha",
+      "selectTimeTitle": "Horarios Disponibles",
+      "noAvailableTimes": "No hay disponibilidad para el día seleccionado."
     }
   }
 }

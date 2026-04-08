@@ -5,7 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppointmentService } from './appointment';
 import { AppointmentStateService } from './appointment.state';
 import { Translate } from '../translate';
-import { SpecialtyCatalog } from '../../models/appointment.model';
+import { SpecialtyCatalog, SpecialtyDoctor } from '../../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentViewModel {
@@ -27,6 +27,14 @@ export class AppointmentViewModel {
   readonly doctors        = computed(() => this._stateService.doctors());
   readonly doctorsLoading = computed(() => this._stateService.doctorsLoading());
   readonly doctorsError   = computed(() => this._stateService.doctorsError());
+
+  // Availability state
+  readonly selectedDoctor      = computed(() => this._stateService.selectedDoctor());
+  readonly selectedDate        = computed(() => this._stateService.selectedDate());
+  readonly selectedTime        = computed(() => this._stateService.selectedTime());
+  readonly availability        = computed(() => this._stateService.availability());
+  readonly availabilityLoading = computed(() => this._stateService.availabilityLoading());
+  readonly availabilityError   = computed(() => this._stateService.availabilityError());
 
 
   /**
@@ -94,6 +102,78 @@ export class AppointmentViewModel {
           
           this._stateService.setDoctorsError(msg);
           this._stateService.setDoctorsLoading(false);
+        }
+      });
+  }
+
+  /**
+   * Called when a user clicks a doctor card.
+   * Auto-selects today's date and navigates logically or triggers loadAvailability.
+   */
+  onDoctorSelected(doctor: SpecialtyDoctor): void {
+    this._stateService.selectDoctor(doctor);
+    
+    // Automatically select today's date
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const formattedToday = `${yyyy}-${mm}-${dd}`;
+    
+    this.onDateSelected(formattedToday);
+  }
+
+  /**
+   * Called when the user explicitely selects a date in Step 3.
+   */
+  onDateSelected(date: string): void {
+    this._stateService.selectDate(date);
+    this._stateService.selectTime(null);
+    this.loadAvailability(date);
+  }
+
+  /**
+   * Called when the user clicks an available time slot.
+   */
+  onTimeSelected(time: string): void {
+    this._stateService.selectTime(time);
+  }
+
+  /**
+   * Triggers the API call to load available times for the selected doctor and date.
+   */
+  loadAvailability(date: string): void {
+    const doctor = this.selectedDoctor();
+    if (!doctor) return;
+
+    this._stateService.setAvailabilityLoading(true);
+    this._stateService.setAvailabilityError(null);
+
+    this._appointmentService.getAvailability(doctor.id, date)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (data) => {
+          this._stateService.setAvailability(data.availableTimes);
+          this._stateService.setAvailabilityLoading(false);
+        },
+        error: (err) => {
+          console.error('Error fetching availability:', err);
+          let msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
+          
+          if (err.status === 400 && err.error?.message) {
+            const errorMsg = err.error.message.toLowerCase();
+            if (errorMsg.includes('encontrado')) {
+               msg = this._translate.get('paciente.appointments.errors.doctor-not-found');
+            } else if (errorMsg.includes('atiende')) {
+               msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
+            } else {
+               msg = err.error.message;
+            }
+          }
+          
+          this._stateService.setAvailabilityError(msg);
+          this._stateService.setAvailability([]); // Clear previous slots just in case
+          this._stateService.setAvailabilityLoading(false);
         }
       });
   }
