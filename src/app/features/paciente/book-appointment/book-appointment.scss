@@ -191,3 +191,72 @@
 .error-state {
   color: var(--color-danger, red);
 }
+
+// ── DOCTORS GRID (STEP 2) ───────────────────────────────
+.doctors-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.doctor-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent-1);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.doctor-avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: cover; // Better for photos than contain
+  border-radius: var(--radius-full); // Circular avatar
+  border: 2px solid var(--color-border);
+  background: var(--color-background, #f5f5f5);
+}
+
+.doctor-info {
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+}
+
+.doctor-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: #f59e0b; // Golden color for stars
+  font-weight: 500;
+}
+
+.doctor-exp {
+  margin: var(--spacing-xs) 0 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
