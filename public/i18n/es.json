@@ -163,7 +163,8 @@
       "doctorPlural": "médicos",
       "loadingDoctors": "Buscando médicos disponibles...",
       "experienceYears": "años de experiencia",
-      "noDoctors": "No hay médicos disponibles para esta especialidad."
+      "noDoctors": "No hay médicos disponibles para esta especialidad.",
+      "noSpecialties": "No hay especialidades disponibles en este momento."
     }
   }
 }
