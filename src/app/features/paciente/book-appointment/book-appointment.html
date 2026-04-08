@@ -58,10 +58,11 @@
             @for (specialty of vm.specialties(); track specialty.id) {
               <div class="specialty-card" (click)="vm.onSpecialtySelected(specialty); _next()">
                 
-                <!-- Base64 Rule or Placeholder -->
+                <!-- Base64 Rule or Placeholder with Error Handler -->
                 <img [src]="specialty.icono && specialty.iconoMimeType 
                               ? 'data:' + specialty.iconoMimeType + ';base64,' + specialty.icono 
-                              : '/assets/placeholder-specialty.png'" 
+                              : '/images/LOGO.svg'" 
+                     (error)="onImageError($event)"
                      [alt]="specialty.nombre"
                      class="specialty-icon">
                 
@@ -70,7 +71,13 @@
                   @if (specialty.descripcion) {
                     <p class="specialty-desc">{{ specialty.descripcion }}</p>
                   }
-                  <span class="specialty-badge">{{ specialty.cantidadMedicos }} doctor(s)</span>
+                  <span class="specialty-badge">
+                    {{ specialty.cantidadMedicos }} 
+                    {{ specialty.cantidadMedicos === 1 
+                        ? _translate.get('paciente.appointments.doctorSingular') 
+                        : _translate.get('paciente.appointments.doctorPlural') 
+                    }}
+                  </span>
                 </div>
               </div>
             } @empty {

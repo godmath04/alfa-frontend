@@ -144,8 +144,8 @@
   height: 54px;
   object-fit: contain;
   border-radius: var(--radius-sm);
-  background: var(--color-background-alt);
-  padding: 4px;
+  background: var(--color-primary, #004d73); // Dark blue fallback to ensure the white LOGO.svg is visible
+  padding: 8px;
 }
 
 .specialty-info {

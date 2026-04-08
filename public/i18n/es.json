@@ -157,7 +157,9 @@
       },
       "errors": {
         "fetch-catalog": "No se pudo cargar el catálogo de especialidades"
-      }
+      },
+      "doctorSingular": "médico",
+      "doctorPlural": "médicos"
     }
   }
 }

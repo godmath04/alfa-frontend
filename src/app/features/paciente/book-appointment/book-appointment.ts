@@ -29,4 +29,12 @@ export class BookAppointment implements OnInit {
   }
   _next(): void { this._goToStep(this._currentStep + 1); }
   _back(): void { this._goToStep(this._currentStep - 1); }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    // Prevenimos un bucle infinito si el LOGO.svg también fallara por ruta incorrecta
+    if (!img.src.includes('LOGO.svg')) {
+      img.src = '/images/LOGO.svg';
+    }
+  }
 }
