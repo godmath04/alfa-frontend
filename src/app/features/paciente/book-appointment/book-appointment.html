@@ -114,7 +114,7 @@
               <div class="doctor-card" (click)="_next()"> 
                 
                 <!-- Fallback to default avatar if profilePicture is null -->
-                <img [src]="doctor.profilePicture ? doctor.profilePicture : '/images/person-icon.png'" 
+                <img [src]="doctor.profilePicture ? doctor.profilePicture : '/images/person-icon.jpg'" 
                      (error)="onImageError($event)"
                      [alt]="doctor.firstName"
                      class="doctor-avatar">
