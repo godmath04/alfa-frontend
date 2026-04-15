@@ -146,9 +146,55 @@
       "title": "Agendar Cita Médica",
       "subtitle": "Sigue los pasos para programar tu consulta",
       "steps": {
-        "specialty": "Seleccionar Especialidad",
-        "doctor": "Seleccionar Médico",
-        "datetime": "Elegir Fecha y Hora"
+        "specialty": "Especialidad",
+        "doctor": "Médico",
+        "datetime": "Fecha y Hora",
+        "confirmation": "Confirmación",
+        "voucher": "Comprobante",
+        "quickSpecialtyDate": "Especialidad y Fecha",
+        "quickConfirm": "Confirmar Cita"
+      },
+      "flowSelector": {
+        "title": "¿Cómo deseas agendar tu cita?",
+        "manual": {
+          "title": "Cita Manual",
+          "description": "Elige paso a paso tu especialidad, médico, fecha y horario"
+        },
+        "quick": {
+          "title": "Cita Rápida",
+          "description": "Encontramos el mejor horario disponible para ti"
+        }
+      },
+      "confirmation": {
+        "title": "Resumen de tu cita",
+        "subtitle": "Revisa los datos antes de confirmar",
+        "specialtyLabel": "Especialidad",
+        "doctorLabel": "Médico",
+        "dateLabel": "Fecha",
+        "timeLabel": "Hora",
+        "officeLabel": "Consultorio",
+        "motivoLabel": "Motivo de consulta",
+        "motivoPlaceholder": "Describe brevemente el motivo de tu consulta...",
+        "motivoRequired": "El motivo es obligatorio",
+        "confirmButton": "Confirmar Cita",
+        "creating": "Creando cita..."
+      },
+      "voucher": {
+        "title": "¡Cita agendada exitosamente!",
+        "subtitle": "Guarda esta información para tu consulta",
+        "appointmentId": "N° de cita",
+        "patient": "Paciente",
+        "status": "Estado",
+        "newAppointment": "Agendar otra cita",
+        "goToDashboard": "Ir al inicio"
+      },
+      "quick": {
+        "searchButton": "Buscar horario disponible",
+        "proposalTitle": "Te encontramos este horario",
+        "expiresIn": "Expira en",
+        "cancelProposal": "Cancelar propuesta",
+        "expired": "La propuesta ha expirado. Intenta de nuevo.",
+        "searching": "Buscando el mejor horario..."
       },
       "footer": {
         "back": "Volver",
@@ -159,7 +205,13 @@
         "fetch-catalog": "No se pudo cargar el catálogo de especialidades",
         "fetch-doctors": "No se pudieron cargar los médicos",
         "doctor-not-found": "Médico no encontrado en el sistema.",
-        "doctor-not-available": "El médico no atiende este día."
+        "doctor-not-available": "El médico no atiende este día.",
+        "create-failed": "No se pudo crear la cita. Intenta de nuevo.",
+        "slot-conflict": "El horario seleccionado ya fue reservado. Por favor elige otro.",
+        "business-rule": "No se puede crear la cita en este horario.",
+        "proposal-failed": "No se encontró disponibilidad. Intenta otra fecha.",
+        "confirm-quick-failed": "No se pudo confirmar la cita rápida.",
+        "proposal-expired": "Tu reserva expiró. Solicita una nueva propuesta."
       },
       "doctorSingular": "médico",
       "doctorPlural": "médicos",
