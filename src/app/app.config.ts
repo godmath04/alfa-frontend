@@ -6,7 +6,8 @@ import {
   LucideAngularModule,
   Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
   CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
-  ArrowLeft, AlertCircle, Home, FileText, LogOut
+  ArrowLeft, AlertCircle, Home, FileText, LogOut,
+  ClipboardList, Zap, Loader2, Clock, TimerOff
 } from 'lucide-angular';
 
 import { APP_ROUTES } from './app.routes';
@@ -26,7 +27,8 @@ export const appConfig: ApplicationConfig = {
       LucideAngularModule.pick({
         Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
         CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
-        ArrowLeft, AlertCircle, Home, FileText, LogOut
+        ArrowLeft, AlertCircle, Home, FileText, LogOut,
+        ClipboardList, Zap, Loader2, Clock, TimerOff
       })
     ),
   ]

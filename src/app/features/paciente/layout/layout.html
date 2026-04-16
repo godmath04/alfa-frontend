@@ -1,5 +1,10 @@
 <div class="shell">
 
+  <!-- Mobile top bar (hidden on desktop) -->
+  <header class="topbar">
+    <span class="topbar__logo">Alfa Hospital</span>
+  </header>
+
   <aside class="sidebar">
     <div class="sidebar__logo">
       <span class="sidebar__logo-text">Alfa Hospital</span>
@@ -30,5 +35,23 @@
   <main class="content">
     <router-outlet></router-outlet>
   </main>
+
+  <!-- Mobile bottom nav (hidden on desktop) -->
+  <nav class="bottomnav">
+    @for (item of _navItems; track item.route) {
+      <button
+        class="bottomnav__item"
+        [class.bottomnav__item--active]="_isActive(item.route)"
+        (click)="_navigate(item.route)"
+      >
+        <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
+        <span>{{ _translate.get(item.key) }}</span>
+      </button>
+    }
+    <button class="bottomnav__item" (click)="_logout()">
+      <lucide-icon name="log-out" [size]="20"></lucide-icon>
+      <span>{{ _translate.get('paciente.nav.logout') }}</span>
+    </button>
+  </nav>
 
 </div>
