@@ -1,5 +1,6 @@
 import { Injectable, inject, DestroyRef, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { interval, Subject, takeUntil } from 'rxjs';
 
 import { AppointmentService } from './appointment';
 import { AppointmentStateService } from './appointment.state';
@@ -16,7 +17,7 @@ export class QuickAppointmentViewModel {
   private readonly _translate          = inject(Translate);
   private readonly _destroyRef         = inject(DestroyRef);
 
-  private _countdownInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly _stopCountdown$ = new Subject<void>();
 
   readonly proposal          = computed(() => this._stateService.proposal());
   readonly proposalCountdown = computed(() => this._stateService.proposalCountdown());
@@ -73,28 +74,27 @@ export class QuickAppointmentViewModel {
   }
 
   clearCountdown(): void {
-    if (this._countdownInterval) {
-      clearInterval(this._countdownInterval);
-      this._countdownInterval = null;
-    }
+    this._stopCountdown$.next();
   }
 
   private _startCountdown(seconds: number): void {
     this.clearCountdown();
     this._stateService.setProposalCountdown(seconds);
 
-    this._countdownInterval = setInterval(() => {
-      const current = this._stateService.proposalCountdown();
-      if (current <= 1) {
-        this.clearCountdown();
-        this._stateService.setProposalCountdown(0);
-        this._stateService.setProposal(null);
-        this._stateService.setProposalError(
-          this._translate.get('paciente.appointments.errors.proposal-expired')
-        );
-      } else {
-        this._stateService.setProposalCountdown(current - 1);
-      }
-    }, 1000);
+    interval(1000)
+      .pipe(takeUntil(this._stopCountdown$))
+      .subscribe(() => {
+        const current = this._stateService.proposalCountdown();
+        if (current <= 1) {
+          this.clearCountdown();
+          this._stateService.setProposalCountdown(0);
+          this._stateService.setProposal(null);
+          this._stateService.setProposalError(
+            this._translate.get('paciente.appointments.errors.proposal-expired')
+          );
+        } else {
+          this._stateService.setProposalCountdown(current - 1);
+        }
+      });
   }
 }

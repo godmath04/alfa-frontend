@@ -1,4 +1,3 @@
-// src/app/shared/validators/document.validator.ts
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class DocumentValidators {

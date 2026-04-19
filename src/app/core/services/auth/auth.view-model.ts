@@ -1,7 +1,7 @@
 import { Injectable, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { timeout } from 'rxjs';
+import { timeout, timer } from 'rxjs';
 
 import { AuthService } from './auth';
 import { AuthStateService } from './auth.state';
@@ -56,7 +56,9 @@ export class AuthViewModel {
         next: () => {
           this.loading.set(false);
           this.registerSuccess.set(true);
-          setTimeout(() => this._router.navigate(['/auth/login']), 2000);
+          timer(2000)
+            .pipe(takeUntilDestroyed(this._destroyRef))
+            .subscribe(() => this._router.navigate(['/auth/login']));
         },
         error: (raw) => {
           const err = toApiError(raw);
