@@ -7,6 +7,7 @@ import { AuthService } from './auth';
 import { AuthStateService } from './auth.state';
 import { RegisterRequest } from '../../models/auth.model';
 import { Role } from '../../models/role.enum';
+import { toApiError } from '../../models/api-error.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthViewModel {
@@ -33,12 +34,13 @@ export class AuthViewModel {
           this.loading.set(false);
           this._redirectByRole(response.role);
         },
-        error: (err) => {
+        error: (raw) => {
+          const err = toApiError(raw);
           this.loading.set(false);
-          if (err.name === 'TimeoutError') {
+          if (raw.name === 'TimeoutError') {
             this.loginError.set('La solicitud tardó demasiado. Intenta nuevamente.');
           } else {
-            this.loginError.set(err.error?.message || 'Error al iniciar sesión');
+            this.loginError.set(err.error.message ?? 'Error al iniciar sesión');
           }
         }
       });
@@ -56,12 +58,13 @@ export class AuthViewModel {
           this.registerSuccess.set(true);
           setTimeout(() => this._router.navigate(['/auth/login']), 2000);
         },
-        error: (err) => {
+        error: (raw) => {
+          const err = toApiError(raw);
           this.loading.set(false);
-          if (err.name === 'TimeoutError') {
+          if (raw.name === 'TimeoutError') {
             this.registerErrors.set(['La solicitud tardó demasiado. Intenta nuevamente.']);
           } else {
-            this.registerErrors.set([err.error?.message || 'Error al crear la cuenta']);
+            this.registerErrors.set([err.error.message ?? 'Error al crear la cuenta']);
           }
         }
       });

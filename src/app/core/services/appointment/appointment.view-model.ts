@@ -12,6 +12,7 @@ import {
   CreateAppointmentRequest,
   ConfirmQuickRequest
 } from '../../models/appointment.model';
+import { ApiError, toApiError } from '../../models/api-error.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentViewModel {
@@ -120,13 +121,8 @@ export class AppointmentViewModel {
           this._stateService.setSpecialties(data);
           this._stateService.setLoading(false);
         },
-        error: (err) => {
-          console.error('Error fetching specialties:', err);
-
-          // Using the i18n JSON service for the error message
-          const errorMessage = this._translate.get('paciente.appointments.errors.fetch-catalog');
-          this._stateService.setError(errorMessage);
-
+        error: () => {
+          this._stateService.setError(this._translate.get('paciente.appointments.errors.fetch-catalog'));
           this._stateService.setLoading(false);
         }
       });
@@ -159,17 +155,12 @@ export class AppointmentViewModel {
           this._stateService.setDoctors(data);
           this._stateService.setDoctorsLoading(false);
         },
-        error: (err) => {
-          console.error('Error fetching doctors:', err);
-
-          // Fallback if backend doesn't provide a message
+        error: (raw) => {
+          const err = toApiError(raw);
           let msg = this._translate.get('paciente.appointments.errors.fetch-doctors');
-
-          // Si el Backend regresó 400 con un mensaje ("Especialidad no encontrada")
-          if (err.status === 400 && err.error?.message) {
+          if (err.status === 400 && err.error.message) {
             msg = err.error.message;
           }
-
           this._stateService.setDoctorsError(msg);
           this._stateService.setDoctorsLoading(false);
         }
@@ -229,23 +220,21 @@ export class AppointmentViewModel {
           this._stateService.setSlotDurationMinutes(data.slotDurationMinutes);
           this._stateService.setAvailabilityLoading(false);
         },
-        error: (err) => {
-          console.error('Error fetching availability:', err);
+        error: (raw) => {
+          const err = toApiError(raw);
           let msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
-
-          if (err.status === 400 && err.error?.message) {
-            const errorMsg = err.error.message.toLowerCase();
-            if (errorMsg.includes('encontrado')) {
-               msg = this._translate.get('paciente.appointments.errors.doctor-not-found');
-            } else if (errorMsg.includes('atiende')) {
-               msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
+          if (err.status === 400 && err.error.message) {
+            const detail = err.error.message.toLowerCase();
+            if (detail.includes('encontrado')) {
+              msg = this._translate.get('paciente.appointments.errors.doctor-not-found');
+            } else if (detail.includes('atiende')) {
+              msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
             } else {
-               msg = err.error.message;
+              msg = err.error.message;
             }
           }
-
           this._stateService.setAvailabilityError(msg);
-          this._stateService.setAvailability([]); // Clear previous slots just in case
+          this._stateService.setAvailability([]);
           this._stateService.setAvailabilityLoading(false);
         }
       });
@@ -293,9 +282,8 @@ export class AppointmentViewModel {
           this._stateService.setCreating(false);
           onSuccess();
         },
-        error: (err) => {
-          console.error('Error creating appointment:', err);
-          const msg = this._mapCreateError(err);
+        error: (raw) => {
+          const msg = this._mapCreateError(toApiError(raw));
           this._stateService.setCreateError(msg);
           this._stateService.setCreating(false);
         }
@@ -324,10 +312,10 @@ export class AppointmentViewModel {
           this._startCountdown(proposal.expiresInSeconds);
           onSuccess();
         },
-        error: (err) => {
-          console.error('Error requesting quick proposal:', err);
+        error: (raw) => {
+          const err = toApiError(raw);
           let msg = this._translate.get('paciente.appointments.errors.proposal-failed');
-          if (err.status === 400 && err.error?.message) {
+          if (err.status === 400 && err.error.message) {
             msg = err.error.message;
           }
           this._stateService.setProposalError(msg);
@@ -361,9 +349,8 @@ export class AppointmentViewModel {
           this._clearCountdownInterval();
           onSuccess();
         },
-        error: (err) => {
-          console.error('Error confirming quick appointment:', err);
-          const msg = this._mapCreateError(err);
+        error: (raw) => {
+          const msg = this._mapCreateError(toApiError(raw));
           this._stateService.setCreateError(msg);
           this._stateService.setCreating(false);
         }
@@ -462,11 +449,11 @@ export class AppointmentViewModel {
   /**
    * Maps HTTP error responses to user-friendly i18n messages.
    */
-  private _mapCreateError(err: { status?: number; error?: { message?: string } }): string {
+  private _mapCreateError(err: ApiError): string {
     if (err.status === 409) {
       return this._translate.get('paciente.appointments.errors.slot-conflict');
     }
-    if (err.status === 400 && err.error?.message) {
+    if (err.status === 400 && err.error.message) {
       return err.error.message;
     }
     return this._translate.get('paciente.appointments.errors.create-failed');
