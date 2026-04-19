@@ -1,5 +1,4 @@
-// src/app/core/services/appointment/appointment.state.ts
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import {
   SpecialtyCatalog,
   SpecialtyDoctor,
@@ -8,167 +7,133 @@ import {
   QuickProposalResponse
 } from '../../models/appointment.model';
 
+interface SpecialtyState {
+  catalog:  SpecialtyCatalog[];
+  selected: SpecialtyCatalog | null;
+  loading:  boolean;
+  error:    string | null;
+}
+
+interface DoctorState {
+  list:     SpecialtyDoctor[];
+  selected: SpecialtyDoctor | null;
+  loading:  boolean;
+  error:    string | null;
+}
+
+interface AvailabilityState {
+  times:               string[];
+  selectedDate:        string | null;
+  selectedTime:        string | null;
+  loading:             boolean;
+  error:               string | null;
+  slotDurationMinutes: number;
+}
+
+interface CreationState {
+  motivo:  string | null;
+  result:  AppointmentResponse | null;
+  loading: boolean;
+  error:   string | null;
+}
+
+interface QuickState {
+  proposal:  QuickProposalResponse | null;
+  countdown: number;
+  loading:   boolean;
+  error:     string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AppointmentStateService {
 
-  // --- Flow type ---
-  readonly flowType = signal<FlowType | null>(null);
+  private readonly _flow         = signal<FlowType | null>(null);
+  private readonly _specialty    = signal<SpecialtyState>({ catalog: [], selected: null, loading: false, error: null });
+  private readonly _doctor       = signal<DoctorState>({ list: [], selected: null, loading: false, error: null });
+  private readonly _availability = signal<AvailabilityState>({ times: [], selectedDate: null, selectedTime: null, loading: false, error: null, slotDurationMinutes: 30 });
+  private readonly _creation     = signal<CreationState>({ motivo: null, result: null, loading: false, error: null });
+  private readonly _quick        = signal<QuickState>({ proposal: null, countdown: 0, loading: false, error: null });
 
-  // --- Specialties signals ---
-  readonly specialties       = signal<SpecialtyCatalog[]>([]);
-  readonly loading           = signal<boolean>(false);
-  readonly error             = signal<string | null>(null);
-  readonly selectedSpecialty = signal<SpecialtyCatalog | null>(null);
+  // ─── Public read API ───────────────────────────────
 
-  // --- Doctors signals ---
-  readonly selectedDoctor = signal<SpecialtyDoctor | null>(null);
-  readonly doctors        = signal<SpecialtyDoctor[]>([]);
-  readonly doctorsLoading = signal<boolean>(false);
-  readonly doctorsError   = signal<string | null>(null);
+  readonly flowType            = computed(() => this._flow());
 
-  // --- Availability signals ---
-  readonly selectedDate        = signal<string | null>(null);
-  readonly selectedTime        = signal<string | null>(null);
-  readonly availability        = signal<string[]>([]);
-  readonly availabilityLoading = signal<boolean>(false);
-  readonly availabilityError   = signal<string | null>(null);
-  readonly slotDurationMinutes = signal<number>(30);
+  readonly specialties         = computed(() => this._specialty().catalog);
+  readonly loading             = computed(() => this._specialty().loading);
+  readonly error               = computed(() => this._specialty().error);
+  readonly selectedSpecialty   = computed(() => this._specialty().selected);
 
-  // --- Manual appointment creation ---
-  readonly motivo            = signal<string | null>(null);
-  readonly appointmentResult = signal<AppointmentResponse | null>(null);
-  readonly creating          = signal<boolean>(false);
-  readonly createError       = signal<string | null>(null);
+  readonly doctors             = computed(() => this._doctor().list);
+  readonly doctorsLoading      = computed(() => this._doctor().loading);
+  readonly doctorsError        = computed(() => this._doctor().error);
+  readonly selectedDoctor      = computed(() => this._doctor().selected);
 
-  // --- Quick appointment ---
-  readonly proposal          = signal<QuickProposalResponse | null>(null);
-  readonly proposalCountdown = signal<number>(0);
-  readonly proposalLoading   = signal<boolean>(false);
-  readonly proposalError     = signal<string | null>(null);
+  readonly selectedDate        = computed(() => this._availability().selectedDate);
+  readonly selectedTime        = computed(() => this._availability().selectedTime);
+  readonly availability        = computed(() => this._availability().times);
+  readonly availabilityLoading = computed(() => this._availability().loading);
+  readonly availabilityError   = computed(() => this._availability().error);
+  readonly slotDurationMinutes = computed(() => this._availability().slotDurationMinutes);
 
-  // ─── Flow type setter ─────────────────────────────
+  readonly motivo              = computed(() => this._creation().motivo);
+  readonly appointmentResult   = computed(() => this._creation().result);
+  readonly creating            = computed(() => this._creation().loading);
+  readonly createError         = computed(() => this._creation().error);
 
-  setFlowType(flow: FlowType | null): void {
-    this.flowType.set(flow);
-  }
+  readonly proposal            = computed(() => this._quick().proposal);
+  readonly proposalCountdown   = computed(() => this._quick().countdown);
+  readonly proposalLoading     = computed(() => this._quick().loading);
+  readonly proposalError       = computed(() => this._quick().error);
 
-  // ─── Specialties setters ──────────────────────────
+  // ─── Flow ──────────────────────────────────────────
 
-  setSpecialties(data: SpecialtyCatalog[]): void {
-    this.specialties.set(data);
-  }
-  setLoading(isLoading: boolean): void {
-    this.loading.set(isLoading);
-  }
-  setError(msg: string | null): void {
-    this.error.set(msg);
-  }
-  selectSpecialty(specialty: SpecialtyCatalog): void {
-    this.selectedSpecialty.set(specialty);
-  }
+  setFlowType(flow: FlowType | null): void { this._flow.set(flow); }
 
-  // ─── Doctors setters ──────────────────────────────
+  // ─── Specialty ─────────────────────────────────────
 
-  setDoctors(data: SpecialtyDoctor[]): void {
-    this.doctors.set(data);
-  }
-  setDoctorsLoading(isLoading: boolean): void {
-    this.doctorsLoading.set(isLoading);
-  }
-  setDoctorsError(msg: string | null): void {
-    this.doctorsError.set(msg);
-  }
-  selectDoctor(doctor: SpecialtyDoctor): void {
-    this.selectedDoctor.set(doctor);
-  }
+  setSpecialties(catalog: SpecialtyCatalog[]): void        { this._specialty.update(s => ({ ...s, catalog })); }
+  setLoading(loading: boolean): void                        { this._specialty.update(s => ({ ...s, loading })); }
+  setError(error: string | null): void                      { this._specialty.update(s => ({ ...s, error })); }
+  selectSpecialty(selected: SpecialtyCatalog): void         { this._specialty.update(s => ({ ...s, selected })); }
 
-  // ─── Availability setters ─────────────────────────
+  // ─── Doctor ────────────────────────────────────────
 
-  selectDate(date: string): void {
-    this.selectedDate.set(date);
-  }
-  selectTime(time: string | null): void {
-    this.selectedTime.set(time);
-  }
-  setAvailability(times: string[]): void {
-    this.availability.set(times);
-  }
-  setAvailabilityLoading(isLoading: boolean): void {
-    this.availabilityLoading.set(isLoading);
-  }
-  setAvailabilityError(msg: string | null): void {
-    this.availabilityError.set(msg);
-  }
-  setSlotDurationMinutes(minutes: number): void {
-    this.slotDurationMinutes.set(minutes);
-  }
+  setDoctors(list: SpecialtyDoctor[]): void                 { this._doctor.update(s => ({ ...s, list })); }
+  setDoctorsLoading(loading: boolean): void                 { this._doctor.update(s => ({ ...s, loading })); }
+  setDoctorsError(error: string | null): void               { this._doctor.update(s => ({ ...s, error })); }
+  selectDoctor(selected: SpecialtyDoctor): void             { this._doctor.update(s => ({ ...s, selected })); }
 
-  // ─── Manual creation setters ──────────────────────
+  // ─── Availability ──────────────────────────────────
 
-  setMotivo(motivo: string | null): void {
-    this.motivo.set(motivo);
-  }
-  setAppointmentResult(result: AppointmentResponse | null): void {
-    this.appointmentResult.set(result);
-  }
-  setCreating(isCreating: boolean): void {
-    this.creating.set(isCreating);
-  }
-  setCreateError(msg: string | null): void {
-    this.createError.set(msg);
-  }
+  selectDate(selectedDate: string): void                    { this._availability.update(s => ({ ...s, selectedDate })); }
+  selectTime(selectedTime: string | null): void             { this._availability.update(s => ({ ...s, selectedTime })); }
+  setAvailability(times: string[]): void                    { this._availability.update(s => ({ ...s, times })); }
+  setAvailabilityLoading(loading: boolean): void            { this._availability.update(s => ({ ...s, loading })); }
+  setAvailabilityError(error: string | null): void          { this._availability.update(s => ({ ...s, error })); }
+  setSlotDurationMinutes(slotDurationMinutes: number): void { this._availability.update(s => ({ ...s, slotDurationMinutes })); }
 
-  // ─── Quick appointment setters ────────────────────
+  // ─── Creation ──────────────────────────────────────
 
-  setProposal(proposal: QuickProposalResponse | null): void {
-    this.proposal.set(proposal);
-  }
-  setProposalCountdown(seconds: number): void {
-    this.proposalCountdown.set(seconds);
-  }
-  setProposalLoading(isLoading: boolean): void {
-    this.proposalLoading.set(isLoading);
-  }
-  setProposalError(msg: string | null): void {
-    this.proposalError.set(msg);
-  }
+  setMotivo(motivo: string | null): void                    { this._creation.update(s => ({ ...s, motivo })); }
+  setAppointmentResult(result: AppointmentResponse | null): void { this._creation.update(s => ({ ...s, result })); }
+  setCreating(loading: boolean): void                       { this._creation.update(s => ({ ...s, loading })); }
+  setCreateError(error: string | null): void                { this._creation.update(s => ({ ...s, error })); }
 
-  // ─── Clear everything ─────────────────────────────
+  // ─── Quick appointment ─────────────────────────────
+
+  setProposal(proposal: QuickProposalResponse | null): void { this._quick.update(s => ({ ...s, proposal })); }
+  setProposalCountdown(countdown: number): void             { this._quick.update(s => ({ ...s, countdown })); }
+  setProposalLoading(loading: boolean): void                { this._quick.update(s => ({ ...s, loading })); }
+  setProposalError(error: string | null): void              { this._quick.update(s => ({ ...s, error })); }
+
+  // ─── Reset ─────────────────────────────────────────
 
   clear(): void {
-    // Flow
-    this.flowType.set(null);
-
-    // Specialties
-    this.specialties.set([]);
-    this.selectedSpecialty.set(null);
-    this.error.set(null);
-    this.loading.set(false);
-
-    // Doctors
-    this.doctors.set([]);
-    this.selectedDoctor.set(null);
-    this.doctorsError.set(null);
-    this.doctorsLoading.set(false);
-
-    // Availability
-    this.selectedDate.set(null);
-    this.selectedTime.set(null);
-    this.availability.set([]);
-    this.availabilityLoading.set(false);
-    this.availabilityError.set(null);
-    this.slotDurationMinutes.set(30);
-
-    // Manual creation
-    this.motivo.set(null);
-    this.appointmentResult.set(null);
-    this.creating.set(false);
-    this.createError.set(null);
-
-    // Quick appointment
-    this.proposal.set(null);
-    this.proposalCountdown.set(0);
-    this.proposalLoading.set(false);
-    this.proposalError.set(null);
+    this._flow.set(null);
+    this._specialty.set({ catalog: [], selected: null, loading: false, error: null });
+    this._doctor.set({ list: [], selected: null, loading: false, error: null });
+    this._availability.set({ times: [], selectedDate: null, selectedTime: null, loading: false, error: null, slotDurationMinutes: 30 });
+    this._creation.set({ motivo: null, result: null, loading: false, error: null });
+    this._quick.set({ proposal: null, countdown: 0, loading: false, error: null });
   }
 }
