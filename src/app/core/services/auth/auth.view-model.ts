@@ -6,6 +6,7 @@ import { timeout } from 'rxjs';
 import { AuthService } from './auth';
 import { AuthStateService } from './auth.state';
 import { RegisterRequest } from '../../models/auth.model';
+import { Role } from '../../models/role.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthViewModel {
@@ -76,14 +77,16 @@ export class AuthViewModel {
     this._router.navigate(['/auth/login']);
   }
 
+  private readonly _roleRoutes: Record<Role, string> = {
+    [Role.Paciente]:      '/paciente',
+    [Role.Medico]:        '/medico',
+    [Role.Ejecutivo]:     '/ejecutivo',
+    [Role.Administrador]: '/admin',
+    [Role.Gerencia]:      '/gerencia',
+  };
+
   private _redirectByRole(role: string): void {
-    switch (role) {
-      case 'PACIENTE':      this._router.navigate(['/paciente']);   break;
-      case 'MEDICO':        this._router.navigate(['/medico']);     break;
-      case 'EJECUTIVO':     this._router.navigate(['/ejecutivo']); break;
-      case 'ADMINISTRADOR': this._router.navigate(['/admin']);     break;
-      case 'GERENCIA':      this._router.navigate(['/gerencia']);  break;
-      default:              this._router.navigate(['/auth/login']); break;
-    }
+    const route = this._roleRoutes[role as Role] ?? '/auth/login';
+    this._router.navigate([route]);
   }
 }
