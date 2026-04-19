@@ -11,6 +11,7 @@ import { MatchValidators } from '../../../../shared/validators/match.validator';
 import { PatternValidators } from '../../../../shared/validators/pattern.validator';
 import { Button } from '../../../../shared/components/button/button';
 import { Spinner } from '../../../../shared/components/spinner/spinner';
+import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
 
 @Component({
   selector: 'app-register',
@@ -32,14 +33,7 @@ export class Register {
   showConfirmPassword = false;
 
   days: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
-  months = [
-    { value: '01', name: 'Enero' },  { value: '02', name: 'Febrero' },
-    { value: '03', name: 'Marzo' },  { value: '04', name: 'Abril' },
-    { value: '05', name: 'Mayo' },   { value: '06', name: 'Junio' },
-    { value: '07', name: 'Julio' },  { value: '08', name: 'Agosto' },
-    { value: '09', name: 'Septiembre' }, { value: '10', name: 'Octubre' },
-    { value: '11', name: 'Noviembre' },  { value: '12', name: 'Diciembre' },
-  ];
+  readonly months = MONTHS_FULL;
   years: number[] = (() => {
     const current = new Date().getFullYear();
     return Array.from({ length: 101 }, (_, i) => current - i);

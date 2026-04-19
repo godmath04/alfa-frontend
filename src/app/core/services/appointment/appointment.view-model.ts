@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppointmentService } from './appointment';
 import { AppointmentStateService } from './appointment.state';
 import { Translate } from '../translate';
+import { ErrorMapperService } from '../error-mapper.service';
 import {
   SpecialtyCatalog,
   SpecialtyDoctor,
@@ -13,6 +14,7 @@ import {
   ConfirmQuickRequest
 } from '../../models/appointment.model';
 import { ApiError, toApiError } from '../../models/api-error.model';
+import { formatDateToISO, calculateEndTime } from '../../../shared/utils/date-time.utils';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentViewModel {
@@ -20,6 +22,7 @@ export class AppointmentViewModel {
   private readonly _appointmentService = inject(AppointmentService);
   private readonly _stateService       = inject(AppointmentStateService);
   private readonly _translate          = inject(Translate);
+  private readonly _errorMapper        = inject(ErrorMapperService);
   private readonly _destroyRef         = inject(DestroyRef);
   private _countdownInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -156,12 +159,7 @@ export class AppointmentViewModel {
           this._stateService.setDoctorsLoading(false);
         },
         error: (raw) => {
-          const err = toApiError(raw);
-          let msg = this._translate.get('paciente.appointments.errors.fetch-doctors');
-          if (err.status === 400 && err.error.message) {
-            msg = err.error.message;
-          }
-          this._stateService.setDoctorsError(msg);
+          this._stateService.setDoctorsError(this._errorMapper.map(toApiError(raw), 'paciente.appointments.errors.fetch-doctors'));
           this._stateService.setDoctorsLoading(false);
         }
       });
@@ -176,14 +174,7 @@ export class AppointmentViewModel {
   onDoctorSelected(doctor: SpecialtyDoctor): void {
     this._stateService.selectDoctor(doctor);
 
-    // Automatically select today's date
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    const formattedToday = `${yyyy}-${mm}-${dd}`;
-
-    this.onDateSelected(formattedToday);
+    this.onDateSelected(formatDateToISO(new Date()));
   }
 
   /**
@@ -221,19 +212,7 @@ export class AppointmentViewModel {
           this._stateService.setAvailabilityLoading(false);
         },
         error: (raw) => {
-          const err = toApiError(raw);
-          let msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
-          if (err.status === 400 && err.error.message) {
-            const detail = err.error.message.toLowerCase();
-            if (detail.includes('encontrado')) {
-              msg = this._translate.get('paciente.appointments.errors.doctor-not-found');
-            } else if (detail.includes('atiende')) {
-              msg = this._translate.get('paciente.appointments.errors.doctor-not-available');
-            } else {
-              msg = err.error.message;
-            }
-          }
-          this._stateService.setAvailabilityError(msg);
+          this._stateService.setAvailabilityError(this._errorMapper.mapAvailabilityError(toApiError(raw)));
           this._stateService.setAvailability([]);
           this._stateService.setAvailabilityLoading(false);
         }
@@ -283,7 +262,7 @@ export class AppointmentViewModel {
           onSuccess();
         },
         error: (raw) => {
-          const msg = this._mapCreateError(toApiError(raw));
+          const msg = this._errorMapper.mapCreateError(toApiError(raw));
           this._stateService.setCreateError(msg);
           this._stateService.setCreating(false);
         }
@@ -313,12 +292,7 @@ export class AppointmentViewModel {
           onSuccess();
         },
         error: (raw) => {
-          const err = toApiError(raw);
-          let msg = this._translate.get('paciente.appointments.errors.proposal-failed');
-          if (err.status === 400 && err.error.message) {
-            msg = err.error.message;
-          }
-          this._stateService.setProposalError(msg);
+          this._stateService.setProposalError(this._errorMapper.map(toApiError(raw), 'paciente.appointments.errors.proposal-failed'));
           this._stateService.setProposalLoading(false);
         }
       });
@@ -350,7 +324,7 @@ export class AppointmentViewModel {
           onSuccess();
         },
         error: (raw) => {
-          const msg = this._mapCreateError(toApiError(raw));
+          const msg = this._errorMapper.mapCreateError(toApiError(raw));
           this._stateService.setCreateError(msg);
           this._stateService.setCreating(false);
         }
@@ -389,14 +363,7 @@ export class AppointmentViewModel {
    * @example _calculateEndTime('09:00:00', 30) → '09:30:00'
    */
   private _calculateEndTime(startTime: string, durationMinutes: number): string {
-    const parts = startTime.split(':');
-    const d = new Date();
-    d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
-    d.setMinutes(d.getMinutes() + durationMinutes);
-
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mm = String(d.getMinutes()).padStart(2, '0');
-    return `${hh}:${mm}:00`;
+    return calculateEndTime(startTime, durationMinutes);
   }
 
   /**
@@ -449,13 +416,4 @@ export class AppointmentViewModel {
   /**
    * Maps HTTP error responses to user-friendly i18n messages.
    */
-  private _mapCreateError(err: ApiError): string {
-    if (err.status === 409) {
-      return this._translate.get('paciente.appointments.errors.slot-conflict');
-    }
-    if (err.status === 400 && err.error.message) {
-      return err.error.message;
-    }
-    return this._translate.get('paciente.appointments.errors.create-failed');
-  }
 }
