@@ -1,5 +1,3 @@
-// src/app/core/models/appointment.model.ts
-
 // --- Type aliases ---
 export type FlowType = 'manual' | 'quick';
 export type AppointmentStatus = 'PENDIENTE' | 'CONFIRMADA' | 'CANCELADA' | 'COMPLETADA';

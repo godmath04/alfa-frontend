@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
 import { roleGuard } from '../../core/guards/role/role-guard';
+import { Role } from '../../core/models/role.enum';
 
 export const PACIENTE_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () => import('./layout/layout').then(m => m.Layout),
     canActivate: [roleGuard],
-    data: { roles: ['PACIENTE'] },
+    data: { roles: [Role.Paciente] },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {

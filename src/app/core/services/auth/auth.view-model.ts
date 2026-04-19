@@ -1,11 +1,13 @@
 import { Injectable, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { timeout } from 'rxjs';
+import { timeout, timer } from 'rxjs';
 
 import { AuthService } from './auth';
 import { AuthStateService } from './auth.state';
 import { RegisterRequest } from '../../models/auth.model';
+import { Role } from '../../models/role.enum';
+import { toApiError } from '../../models/api-error.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthViewModel {
@@ -32,12 +34,13 @@ export class AuthViewModel {
           this.loading.set(false);
           this._redirectByRole(response.role);
         },
-        error: (err) => {
+        error: (raw) => {
+          const err = toApiError(raw);
           this.loading.set(false);
-          if (err.name === 'TimeoutError') {
+          if (raw.name === 'TimeoutError') {
             this.loginError.set('La solicitud tardó demasiado. Intenta nuevamente.');
           } else {
-            this.loginError.set(err.error?.message || 'Error al iniciar sesión');
+            this.loginError.set(err.error.message ?? 'Error al iniciar sesión');
           }
         }
       });
@@ -53,14 +56,17 @@ export class AuthViewModel {
         next: () => {
           this.loading.set(false);
           this.registerSuccess.set(true);
-          setTimeout(() => this._router.navigate(['/auth/login']), 2000);
+          timer(2000)
+            .pipe(takeUntilDestroyed(this._destroyRef))
+            .subscribe(() => this._router.navigate(['/auth/login']));
         },
-        error: (err) => {
+        error: (raw) => {
+          const err = toApiError(raw);
           this.loading.set(false);
-          if (err.name === 'TimeoutError') {
+          if (raw.name === 'TimeoutError') {
             this.registerErrors.set(['La solicitud tardó demasiado. Intenta nuevamente.']);
           } else {
-            this.registerErrors.set([err.error?.message || 'Error al crear la cuenta']);
+            this.registerErrors.set([err.error.message ?? 'Error al crear la cuenta']);
           }
         }
       });
@@ -76,14 +82,16 @@ export class AuthViewModel {
     this._router.navigate(['/auth/login']);
   }
 
+  private readonly _roleRoutes: Record<Role, string> = {
+    [Role.Paciente]:      '/paciente',
+    [Role.Medico]:        '/medico',
+    [Role.Ejecutivo]:     '/ejecutivo',
+    [Role.Administrador]: '/admin',
+    [Role.Gerencia]:      '/gerencia',
+  };
+
   private _redirectByRole(role: string): void {
-    switch (role) {
-      case 'PACIENTE':      this._router.navigate(['/paciente']);   break;
-      case 'MEDICO':        this._router.navigate(['/medico']);     break;
-      case 'EJECUTIVO':     this._router.navigate(['/ejecutivo']); break;
-      case 'ADMINISTRADOR': this._router.navigate(['/admin']);     break;
-      case 'GERENCIA':      this._router.navigate(['/gerencia']);  break;
-      default:              this._router.navigate(['/auth/login']); break;
-    }
+    const route = this._roleRoutes[role as Role] ?? '/auth/login';
+    this._router.navigate([route]);
   }
 }

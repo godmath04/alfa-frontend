@@ -23,9 +23,8 @@ export class Login {
   private readonly _fb = inject(FormBuilder);
 
   loginForm = this._fb.group({
-    email:      ['', [Validators.required, Validators.email]],
-    password:   ['', [Validators.required, Validators.minLength(8)]],
-    rememberMe: [false],
+    email:    ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   showPassword = false;
