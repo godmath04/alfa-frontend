@@ -118,24 +118,83 @@
     display: none;
   }
 
-  &__form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-
-    @media (max-width: 600px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
   &__actions {
     display: flex;
     justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  // Register-form layout inside the card
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
   }
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+// ── Error bubble (same as register) ──────────────────────────────────────────
+.field-error {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 10;
+  background-color: var(--color-error);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 14px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent var(--color-error) transparent;
+  }
+
+  // Variant for the date group (not absolute, always visible)
+  &--inline {
+    position: static;
+    display: inline-block;
+    margin-top: 4px;
+    opacity: 1;
+    pointer-events: auto;
+    &::before { display: none; }
+  }
+}
+
+// Show bubble on hover/focus-within
+.field-group,
+.field-row {
+  &:hover .field-error,
+  &:focus-within .field-error {
+    opacity: 1;
+  }
+}
+
+// ── Disabled field variants ───────────────────────────────────────────────────
+.field-input-wrapper--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  .field-input { cursor: not-allowed; }
+}
+
+.field-input-simple--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

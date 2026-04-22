@@ -170,7 +170,10 @@
     "photo": "Foto de Perfil",
     "changePhoto": "Cambiar foto",
     "successMessage": "Perfil actualizado correctamente.",
-    "errorMessage": "Ocurrió un error al actualizar el perfil."
+    "errorMessage": "Ocurrió un error al actualizar el perfil.",
+    "errors": {
+      "notPastDate": "La fecha de nacimiento debe ser anterior a hoy."
+    }
   },
   "paciente": {
     "sidebar": {

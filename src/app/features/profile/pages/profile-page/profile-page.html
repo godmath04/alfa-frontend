@@ -10,7 +10,7 @@
     </div>
   } @else {
     <div class="profile__content">
-      
+
       <!-- Photo Section -->
       <div class="profile__photo-section">
         <button type="button" class="profile__photo-wrapper" (click)="_triggerFileInput()">
@@ -32,76 +32,164 @@
             </div>
           }
         </button>
-        <input 
-          type="file" 
-          id="photoInput" 
-          class="profile__file-input" 
-          accept="image/*" 
-          (change)="_onFileSelected($event)" 
+        <input
+          type="file"
+          id="photoInput"
+          class="profile__file-input"
+          accept="image/*"
+          (change)="_onFileSelected($event)"
         />
       </div>
 
       <!-- Form Section -->
-      <form [formGroup]="profileForm" (ngSubmit)="_onSubmit()" class="profile__form">
-        <div class="profile__form-grid">
-          <app-input-field
-            label="{{ translate.get('profile.firstName') }}"
-            formControlName="firstName"
-          ></app-input-field>
+      <form [formGroup]="profileForm" (ngSubmit)="_onSubmit()" class="register-form" novalidate>
 
-          <app-input-field
-            label="{{ translate.get('profile.lastName') }}"
-            formControlName="lastName"
-          ></app-input-field>
+        <!-- Name & Last Name -->
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">
+              {{ translate.get('profile.firstName') }} <span class="field-required">*</span>
+            </label>
+            <input
+              type="text"
+              class="field-input-simple"
+              [class.field-input-simple--error]="getFieldError('firstName')"
+              formControlName="firstName"
+            />
+            @if (getFieldError('firstName') && getFieldError('firstName') !== true) {
+              <span class="field-error">{{ getFieldError('firstName') }}</span>
+            }
+          </div>
 
-          <app-input-field
-            label="{{ translate.get('profile.email') }}"
-            formControlName="email"
-            type="email"
-          ></app-input-field>
-
-          <app-input-field
-            label="{{ translate.get('profile.phone') }}"
-            formControlName="phone"
-          ></app-input-field>
-
-          <app-input-field
-            label="{{ translate.get('profile.idType') }}"
-            formControlName="idType"
-          ></app-input-field>
-
-          <app-input-field
-            label="{{ translate.get('profile.idNumber') }}"
-            formControlName="idNumber"
-          ></app-input-field>
-
-          <app-input-field
-            label="{{ translate.get('profile.gender') }}"
-            formControlName="gender"
-          ></app-input-field>
-
-          <app-input-field
-            label="{{ translate.get('profile.birthDate') }}"
-            formControlName="birthDate"
-            type="date"
-          ></app-input-field>
-
-          <app-input-field
-            label="{{ translate.get('profile.city') }}"
-            formControlName="city"
-          ></app-input-field>
+          <div class="field-group">
+            <label class="field-label">
+              {{ translate.get('profile.lastName') }} <span class="field-required">*</span>
+            </label>
+            <input
+              type="text"
+              class="field-input-simple"
+              [class.field-input-simple--error]="getFieldError('lastName')"
+              formControlName="lastName"
+            />
+            @if (getFieldError('lastName') && getFieldError('lastName') !== true) {
+              <span class="field-error">{{ getFieldError('lastName') }}</span>
+            }
+          </div>
         </div>
 
+        <!-- Email (read-only) & Phone -->
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">{{ translate.get('profile.email') }}</label>
+            <div class="field-input-wrapper field-input-wrapper--disabled">
+              <lucide-icon name="mail" [size]="18" class="field-icon"></lucide-icon>
+              <input type="email" class="field-input" formControlName="email" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              {{ translate.get('profile.phone') }} <span class="field-required">*</span>
+            </label>
+            <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('phone')">
+              <lucide-icon name="phone" [size]="18" class="field-icon"></lucide-icon>
+              <input type="tel" class="field-input" formControlName="phone" />
+            </div>
+            @if (getFieldError('phone') && getFieldError('phone') !== true) {
+              <span class="field-error">{{ getFieldError('phone') }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- ID Type (read-only) & ID Number (read-only) -->
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">{{ translate.get('profile.idType') }}</label>
+            <input type="text" class="field-input-simple field-input-simple--disabled" formControlName="idType" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">{{ translate.get('profile.idNumber') }}</label>
+            <div class="field-input-wrapper field-input-wrapper--disabled">
+              <lucide-icon name="id-card" [size]="18" class="field-icon"></lucide-icon>
+              <input type="text" class="field-input" formControlName="idNumber" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Gender & City -->
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">
+              {{ translate.get('profile.gender') }} <span class="field-required">*</span>
+            </label>
+            <select
+              class="field-select"
+              [class.field-select--error]="getFieldError('gender')"
+              formControlName="gender"
+            >
+              <option value="">{{ translate.get('auth.register.gender.placeholder') }}</option>
+              <option value="M">{{ translate.get('auth.register.gender.male') }}</option>
+              <option value="F">{{ translate.get('auth.register.gender.female') }}</option>
+              <option value="O">{{ translate.get('auth.register.gender.other') }}</option>
+            </select>
+            @if (getFieldError('gender') && getFieldError('gender') !== true) {
+              <span class="field-error">{{ getFieldError('gender') }}</span>
+            }
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              {{ translate.get('profile.city') }} <span class="field-required">*</span>
+            </label>
+            <select
+              class="field-select"
+              [class.field-select--error]="getFieldError('city')"
+              formControlName="city"
+            >
+              <option value="">{{ translate.get('auth.register.city.placeholder') }}</option>
+              @for (city of cities; track city) {
+                <option [value]="city">{{ city }}</option>
+              }
+              <option value="Otra">{{ translate.get('auth.register.city.other') }}</option>
+            </select>
+            @if (getFieldError('city') && getFieldError('city') !== true) {
+              <span class="field-error">{{ getFieldError('city') }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Birth date (3 selects, same as register) -->
+        <div class="field-group">
+          <label class="field-label">
+            {{ translate.get('profile.birthDate') }} <span class="field-required">*</span>
+          </label>
+          <div class="field-date-group">
+            <select class="field-select" formControlName="birthDay"   [class.field-select--error]="birthDateError">
+              <option value="">Día</option>
+              @for (day of days; track day) { <option [value]="day">{{ day }}</option> }
+            </select>
+            <select class="field-select" formControlName="birthMonth" [class.field-select--error]="birthDateError">
+              <option value="">Mes</option>
+              @for (month of months; track month.value) { <option [value]="month.value">{{ month.name }}</option> }
+            </select>
+            <select class="field-select" formControlName="birthYear"  [class.field-select--error]="birthDateError">
+              <option value="">Año</option>
+              @for (year of years; track year) { <option [value]="year">{{ year }}</option> }
+            </select>
+          </div>
+          @if (birthDateError && birthDateError !== true) {
+            <span class="field-error field-error--inline">{{ birthDateError }}</span>
+          }
+        </div>
+
+        <!-- Actions -->
         <div class="profile__actions">
-          <app-button
-            type="submit"
-            [disabled]="profileForm.invalid || vm.loading()"
-          >
+          <app-button type="submit" [disabled]="vm.loading()">
             {{ translate.get('common.buttons.save') }}
           </app-button>
         </div>
-      </form>
 
+      </form>
     </div>
   }
 </div>
