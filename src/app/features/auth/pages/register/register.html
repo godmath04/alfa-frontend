@@ -72,7 +72,7 @@
                 <label class="field-label">{{ translate.get('auth.register.first-name.label') }} <span
                     class="field-required">*</span></label>
                 <input type="text" class="field-input-simple" [class.field-input-simple--error]="getFieldError('firstName')"
-                  [placeholder]="translate.get('auth.register.first-name.placeholder')" formControlName="firstName" />
+                  formControlName="firstName" />
                 <!-- Error message -->
 
               </div>
@@ -84,7 +84,7 @@
                 <label class="field-label">{{ translate.get('auth.register.last-name.label') }} <span
                     class="field-required">*</span></label>
                 <input type="text" class="field-input-simple" [class.field-input-simple--error]="getFieldError('lastName')"
-                  [placeholder]="translate.get('auth.register.last-name.placeholder')" formControlName="lastName" />
+                  formControlName="lastName" />
                 <!-- Error message -->
 
               </div>
@@ -98,7 +98,7 @@
                   class="field-required">*</span></label>
               <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('email')">
                 <lucide-icon name="mail" [size]="18" class="field-icon"></lucide-icon>
-                <input type="email" class="field-input" [placeholder]="translate.get('auth.register.email.placeholder')"
+                <input type="email" class="field-input"
                   formControlName="email" />
               </div>
 
@@ -149,7 +149,7 @@
                   class="field-required">*</span></label>
               <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('phone')">
                 <lucide-icon name="phone" [size]="18" class="field-icon"></lucide-icon>
-                <input type="tel" class="field-input" placeholder="0987654321" formControlName="phone" />
+                <input type="tel" class="field-input" formControlName="phone" />
               </div>
               @if (getFieldError('phone') && getFieldError('phone') !== true) { <span class="field-error">{{ getFieldError('phone') }}</span> }
             </div>
@@ -170,7 +170,7 @@
                     class="field-required">*</span></label>
                 <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('idNumber')">
                   <lucide-icon name="id-card" [size]="18" class="field-icon"></lucide-icon>
-                  <input type="text" class="field-input" placeholder="0912345678" formControlName="idNumber" />
+                  <input type="text" class="field-input" formControlName="idNumber" />
                 </div>
                 @if (getFieldError('idNumber') && getFieldError('idNumber') !== true) { <span class="field-error">{{ getFieldError('idNumber') }}</span> }
               </div>

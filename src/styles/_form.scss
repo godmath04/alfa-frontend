@@ -52,6 +52,8 @@
 .field-icon {
   position: absolute;
   left: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--color-text-muted);
   pointer-events: none;
 }
