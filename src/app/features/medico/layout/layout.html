@@ -1,0 +1,55 @@
+<div class="shell">
+
+  <header class="topbar">
+    <span class="topbar__logo">Alfa Hospital</span>
+  </header>
+
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">Alfa Hospital</span>
+      <span class="sidebar__logo-sub">{{ _translate.get('medico.sidebar.subtitle') }}</span>
+    </div>
+
+    <nav class="sidebar__nav">
+      @for (item of _navItems; track item.route) {
+        <button
+          class="sidebar__item"
+          [class.sidebar__item--active]="_isActive(item.route)"
+          (click)="_navigate(item.route)"
+        >
+          <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
+          <span>{{ _translate.get(item.key) }}</span>
+        </button>
+      }
+    </nav>
+
+    <div class="sidebar__footer">
+      <button class="sidebar__logout" (click)="_logout()">
+        <lucide-icon name="log-out" [size]="18"></lucide-icon>
+        <span>{{ _translate.get('medico.nav.logout') }}</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <nav class="bottomnav">
+    @for (item of _navItems; track item.route) {
+      <button
+        class="bottomnav__item"
+        [class.bottomnav__item--active]="_isActive(item.route)"
+        (click)="_navigate(item.route)"
+      >
+        <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
+        <span>{{ _translate.get(item.key) }}</span>
+      </button>
+    }
+    <button class="bottomnav__item" (click)="_logout()">
+      <lucide-icon name="log-out" [size]="20"></lucide-icon>
+      <span>{{ _translate.get('medico.nav.logout') }}</span>
+    </button>
+  </nav>
+
+</div>
