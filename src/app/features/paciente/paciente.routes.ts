@@ -19,6 +19,10 @@ export const PACIENTE_ROUTES: Routes = [
         loadComponent: () => import('./book-appointment/book-appointment').then(m => m.BookAppointment)
       },
       {
+        path: 'appointment-history',
+        loadComponent: () => import('./appointment-history/appointment-history').then(m => m.AppointmentHistoryComponent)
+      },
+      {
         path: 'profile',
         loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
       }

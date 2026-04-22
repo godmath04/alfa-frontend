@@ -1,0 +1,140 @@
+<div class="apt-history">
+
+  <div class="apt-history__header">
+    <h1 class="apt-history__title">{{ translate.get('paciente.appointmentHistory.title') }}</h1>
+  </div>
+
+  <!-- Filters -->
+  <form [formGroup]="filterForm" (ngSubmit)="_onSearch()" class="apt-history__filters">
+    <div class="apt-history__filter-group">
+      <label class="apt-history__filter-label">
+        {{ translate.get('paciente.appointmentHistory.filters.status') }}
+      </label>
+      <select class="field-select" formControlName="estado">
+        <option value="">{{ translate.get('paciente.appointmentHistory.filters.allStatuses') }}</option>
+        <option value="PENDIENTE">{{ translate.get('paciente.appointmentHistory.statuses.PENDIENTE') }}</option>
+        <option value="CONFIRMADA">{{ translate.get('paciente.appointmentHistory.statuses.CONFIRMADA') }}</option>
+        <option value="COMPLETADA">{{ translate.get('paciente.appointmentHistory.statuses.COMPLETADA') }}</option>
+        <option value="CANCELADA">{{ translate.get('paciente.appointmentHistory.statuses.CANCELADA') }}</option>
+      </select>
+    </div>
+
+    <div class="apt-history__filter-group">
+      <label class="apt-history__filter-label">
+        {{ translate.get('paciente.appointmentHistory.filters.dateFrom') }}
+      </label>
+      <input type="date" class="field-input-simple" formControlName="fechaDesde" />
+    </div>
+
+    <div class="apt-history__filter-group">
+      <label class="apt-history__filter-label">
+        {{ translate.get('paciente.appointmentHistory.filters.dateTo') }}
+      </label>
+      <input type="date" class="field-input-simple" formControlName="fechaHasta" />
+    </div>
+
+    <div class="apt-history__filter-actions">
+      <app-button type="submit" variant="primary" [disabled]="vm.loading()">
+        <lucide-icon name="search" [size]="16"></lucide-icon>
+        {{ translate.get('paciente.appointmentHistory.filters.search') }}
+      </app-button>
+      <app-button type="button" variant="outline" [disabled]="vm.loading()" (clicked)="_onClearFilters()">
+        {{ translate.get('paciente.appointmentHistory.filters.clear') }}
+      </app-button>
+    </div>
+  </form>
+
+  <!-- Error banner (keeps previous data visible) -->
+  @if (vm.error()) {
+    <div class="apt-history__error-banner">
+      <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+      <span>{{ translate.get('paciente.appointmentHistory.errorLoading') }}</span>
+    </div>
+  }
+
+  <!-- Content area -->
+  <div class="apt-history__content">
+
+    @if (vm.loading()) {
+      <div class="apt-history__loader">
+        <app-spinner size="large"></app-spinner>
+      </div>
+    } @else if (vm.citas().length === 0) {
+      <div class="apt-history__empty">
+        <lucide-icon name="calendar-x" [size]="56"></lucide-icon>
+        <p>{{ translate.get('paciente.appointmentHistory.noResults') }}</p>
+      </div>
+    } @else {
+
+      <!-- Cards list -->
+      <div class="apt-history__list">
+        @for (cita of vm.citas(); track cita.citaId) {
+          <div class="apt-card apt-card--{{ cita.estado }}">
+            <div class="apt-card__accent"></div>
+
+            <div class="apt-card__body">
+              <div class="apt-card__left">
+                <div class="apt-card__date-block">
+                  <span class="apt-card__date">{{ cita.fecha | date:'dd MMM yyyy' }}</span>
+                  <span class="apt-card__time">
+                    <lucide-icon name="clock" [size]="14"></lucide-icon>
+                    {{ cita.horaInicio }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="apt-card__center">
+                <p class="apt-card__doctor">
+                  <lucide-icon name="stethoscope" [size]="16"></lucide-icon>
+                  {{ cita.medicoNombre }}
+                </p>
+                <p class="apt-card__specialty">{{ cita.especialidad }}</p>
+              </div>
+
+              <div class="apt-card__right">
+                <p class="apt-card__office">
+                  <lucide-icon name="map-pin" [size]="14"></lucide-icon>
+                  {{ cita.consultorio }}
+                </p>
+                <span class="apt-card__badge apt-card__badge--{{ cita.estado }}">
+                  {{ translate.get('paciente.appointmentHistory.statuses.' + cita.estado) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Pagination -->
+      <div class="apt-history__pagination">
+        <span class="apt-history__pagination-info">
+          {{ translate.get('paciente.appointmentHistory.pagination.page') }}
+          <strong>{{ vm.page() + 1 }}</strong>
+          {{ translate.get('paciente.appointmentHistory.pagination.of') }}
+          <strong>{{ vm.totalPages() }}</strong>
+          &nbsp;·&nbsp;
+          {{ vm.totalElements() }} {{ translate.get('paciente.appointmentHistory.pagination.appointments') }}
+        </span>
+
+        <div class="apt-history__pagination-actions">
+          <app-button
+            type="button"
+            variant="outline"
+            [disabled]="vm.page() === 0 || vm.loading()"
+            (clicked)="_prevPage()">
+            <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+            {{ translate.get('paciente.appointmentHistory.pagination.previous') }}
+          </app-button>
+          <app-button
+            type="button"
+            variant="outline"
+            [disabled]="vm.isLastPage() || vm.loading()"
+            (clicked)="_nextPage()">
+            {{ translate.get('paciente.appointmentHistory.pagination.next') }}
+            <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+          </app-button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -23,6 +23,7 @@ export class Layout {
   readonly _navItems = [
     { key: 'profile.title', icon: 'user', route: '/paciente/profile' },
     { key: 'paciente.nav.appointments', icon: 'calendar',  route: '/paciente/appointments' },
+    { key: 'paciente.nav.myAppointments', icon: 'file-text',  route: '/paciente/appointment-history' },
   ];
 
   _isActive(route: string): boolean {

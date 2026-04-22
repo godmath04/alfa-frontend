@@ -10,7 +10,10 @@ import {
   CreateAppointmentRequest,
   AppointmentResponse,
   QuickProposalResponse,
-  ConfirmQuickRequest
+  ConfirmQuickRequest,
+  MisCitaItem,
+  PageResponse,
+  MisCitasFiltros
 } from '../../models/appointment.model';
 
 // Backend response types for internal mapping (not exported)
@@ -152,6 +155,20 @@ export class AppointmentService {
 
   cancelQuickProposal(): Observable<void> {
     return this._http.delete<void>(`${this.baseUrl}/api/agendamiento/citas/rapida/propuesta`);
+  }
+
+  // ─── Appointment History (Mis Citas) ─────────────────
+
+  getMisCitas(filtros: MisCitasFiltros): Observable<PageResponse<MisCitaItem>> {
+    let params = new HttpParams();
+    
+    if (filtros.estado) params = params.set('estado', filtros.estado);
+    if (filtros.fechaDesde) params = params.set('fechaDesde', filtros.fechaDesde);
+    if (filtros.fechaHasta) params = params.set('fechaHasta', filtros.fechaHasta);
+    if (filtros.page !== undefined) params = params.set('page', filtros.page.toString());
+    if (filtros.size !== undefined) params = params.set('size', filtros.size.toString());
+
+    return this._http.get<PageResponse<MisCitaItem>>(`${this.baseUrl}/api/agendamiento/citas/mis-citas`, { params });
   }
 
   // ─── Shared mapping helper ─────────────────────────

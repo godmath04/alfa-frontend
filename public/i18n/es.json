@@ -182,12 +182,48 @@
     "nav": {
       "profile": "Mi Perfil",
       "appointments": "Agendar Cita",
+      "myAppointments": "Mis Citas",
       "lab": "Laboratorio",
       "logout": "Cerrar sesión"
     },
     "dashboard": {
       "title": "Mi Perfil",
       "welcome": "Bienvenido de nuevo"
+    },
+    "appointmentHistory": {
+      "title": "Historial de Citas",
+      "filters": {
+        "status": "Estado",
+        "allStatuses": "Todos los estados",
+        "dateFrom": "Fecha desde",
+        "dateTo": "Fecha hasta",
+        "search": "Buscar",
+        "clear": "Limpiar filtros"
+      },
+      "table": {
+        "date": "Fecha",
+        "time": "Hora",
+        "doctor": "Médico",
+        "specialty": "Especialidad",
+        "office": "Consultorio",
+        "status": "Estado"
+      },
+      "statuses": {
+        "PENDIENTE": "Pendiente",
+        "CONFIRMADA": "Confirmada",
+        "COMPLETADA": "Completada",
+        "CANCELADA": "Cancelada"
+      },
+      "noResults": "No se encontraron citas con los filtros seleccionados.",
+      "errorLoading": "Ocurrió un error al cargar las citas. Por favor intenta de nuevo.",
+      "pagination": {
+        "page": "Página",
+        "of": "de",
+        "total": "Total",
+        "appointments": "citas",
+        "previous": "Anterior",
+        "next": "Siguiente"
+      }
     },
     "appointments": {
       "title": "Agendar Cita Médica",
