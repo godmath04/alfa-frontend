@@ -154,6 +154,24 @@
       "invalid-phone": "Número de teléfono inválido"
     }
   },
+  "profile": {
+    "title": "Mi Perfil",
+    "subtitle": "Gestiona tu información personal",
+    "personalData": "Datos Personales",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "city": "Ciudad",
+    "birthDate": "Fecha de Nacimiento",
+    "idType": "Tipo de Documento",
+    "idNumber": "Número de Documento",
+    "gender": "Sexo",
+    "photo": "Foto de Perfil",
+    "changePhoto": "Cambiar foto",
+    "successMessage": "Perfil actualizado correctamente.",
+    "errorMessage": "Ocurrió un error al actualizar el perfil."
+  },
   "paciente": {
     "sidebar": {
       "subtitle": "Healthcare Management"

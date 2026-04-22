@@ -1,0 +1,107 @@
+<div class="profile">
+  <div class="profile__header">
+    <h1 class="profile__title">{{ translate.get('profile.title') }}</h1>
+    <p class="profile__subtitle">{{ translate.get('profile.subtitle') }}</p>
+  </div>
+
+  @if (vm.loading()) {
+    <div class="profile__loader">
+      <app-spinner></app-spinner>
+    </div>
+  } @else {
+    <div class="profile__content">
+      
+      <!-- Photo Section -->
+      <div class="profile__photo-section">
+        <button type="button" class="profile__photo-wrapper" (click)="_triggerFileInput()">
+          @if (vm.photoUrl()) {
+            <img [src]="vm.photoUrl()" alt="Profile Photo" class="profile__photo" />
+          } @else {
+            <div class="profile__photo-placeholder">
+              <lucide-icon name="user" [size]="48"></lucide-icon>
+            </div>
+          }
+          @if (vm.uploading()) {
+            <div class="profile__photo-uploading">
+              <lucide-icon name="loader-2" [size]="24"></lucide-icon>
+            </div>
+          } @else {
+            <div class="profile__photo-overlay">
+              <lucide-icon name="camera" [size]="22"></lucide-icon>
+              <span>{{ translate.get('profile.changePhoto') }}</span>
+            </div>
+          }
+        </button>
+        <input 
+          type="file" 
+          id="photoInput" 
+          class="profile__file-input" 
+          accept="image/*" 
+          (change)="_onFileSelected($event)" 
+        />
+      </div>
+
+      <!-- Form Section -->
+      <form [formGroup]="profileForm" (ngSubmit)="_onSubmit()" class="profile__form">
+        <div class="profile__form-grid">
+          <app-input-field
+            label="{{ translate.get('profile.firstName') }}"
+            formControlName="firstName"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.lastName') }}"
+            formControlName="lastName"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.email') }}"
+            formControlName="email"
+            type="email"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.phone') }}"
+            formControlName="phone"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.idType') }}"
+            formControlName="idType"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.idNumber') }}"
+            formControlName="idNumber"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.gender') }}"
+            formControlName="gender"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.birthDate') }}"
+            formControlName="birthDate"
+            type="date"
+          ></app-input-field>
+
+          <app-input-field
+            label="{{ translate.get('profile.city') }}"
+            formControlName="city"
+          ></app-input-field>
+        </div>
+
+        <div class="profile__actions">
+          <app-button
+            type="submit"
+            [disabled]="profileForm.invalid || vm.loading()"
+          >
+            {{ translate.get('common.buttons.save') }}
+          </app-button>
+        </div>
+      </form>
+
+    </div>
+  }
+</div>

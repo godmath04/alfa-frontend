@@ -21,6 +21,7 @@ export class Layout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
+    { key: 'profile.title', icon: 'user', route: '/paciente/profile' },
     { key: 'paciente.nav.appointments', icon: 'calendar',  route: '/paciente/appointments' },
   ];
 
