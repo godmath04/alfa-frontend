@@ -8,7 +8,7 @@ import {
   CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
   ArrowLeft, AlertCircle, Home, FileText, LogOut,
   ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
-  Search, CalendarX, ChevronLeft, ChevronRight
+  Search, CalendarX, ChevronLeft, ChevronRight, Trash2
 } from 'lucide-angular';
 
 import { APP_ROUTES } from './app.routes';
@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
         CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
         ArrowLeft, AlertCircle, Home, FileText, LogOut,
         ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
-        Search, CalendarX, ChevronLeft, ChevronRight
+        Search, CalendarX, ChevronLeft, ChevronRight, Trash2
       })
     ),
   ]

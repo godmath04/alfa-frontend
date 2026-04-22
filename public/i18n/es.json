@@ -223,6 +223,17 @@
         "appointments": "citas",
         "previous": "Anterior",
         "next": "Siguiente"
+      },
+      "cancel": {
+        "button": "Cancelar",
+        "confirmTitle": "Cancelar cita",
+        "confirmMessage": "¿Estás seguro de que deseas cancelar esta cita? Esta acción no se puede deshacer.",
+        "confirmDetails": "Detalles de la cita:",
+        "confirmButton": "Sí, cancelar cita",
+        "cancelButton": "Volver",
+        "cancelling": "Cancelando...",
+        "success": "La cita ha sido cancelada exitosamente.",
+        "errorGeneric": "Ocurrió un error al cancelar la cita. Intenta nuevamente."
       }
     },
     "appointments": {

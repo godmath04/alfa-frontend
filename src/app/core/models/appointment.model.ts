@@ -106,3 +106,9 @@ export interface MisCitasFiltros {
   page?: number;
   size?: number;
 }
+
+export interface CancelacionCitaResponse {
+  mensaje: string;
+  citaId: number;
+  estado: string;
+}

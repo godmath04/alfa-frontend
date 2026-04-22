@@ -23,6 +23,10 @@ export class AppointmentHistoryViewModel {
   private readonly _page         = signal<number>(0);
   private readonly _size         = signal<number>(20);
 
+  private readonly _cancelling   = signal<boolean>(false);
+  private readonly _cancelSuccess = signal<string | null>(null);
+  private readonly _cancelError   = signal<string | null>(null);
+
   // ── Public read-only signals ────────────────────────────────────────────
   readonly loading:       Signal<boolean>      = computed(() => this._loading());
   readonly error:         Signal<boolean>      = computed(() => this._error());
@@ -31,6 +35,10 @@ export class AppointmentHistoryViewModel {
   readonly totalPages:    Signal<number>       = computed(() => this._totalPages());
   readonly isLastPage:    Signal<boolean>      = computed(() => this._isLastPage());
   readonly page:          Signal<number>       = computed(() => this._page());
+
+  readonly cancelling:    Signal<boolean>      = computed(() => this._cancelling());
+  readonly cancelSuccess: Signal<string | null>= computed(() => this._cancelSuccess());
+  readonly cancelError:   Signal<string | null>= computed(() => this._cancelError());
 
   // ── Search trigger (Subject + switchMap = automatic cancellation) ───────
   // Must be in the constructor (injection context) so takeUntilDestroyed works
@@ -96,5 +104,33 @@ export class AppointmentHistoryViewModel {
     this._fechaHasta.set('');
     this._page.set(0);
     this.loadMisCitas();
+  }
+
+  cancelAppointment(citaId: number): void {
+    this._cancelling.set(true);
+    this._cancelSuccess.set(null);
+    this._cancelError.set(null);
+
+    this._service.cancelarCita(citaId)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (response) => {
+          this._cancelling.set(false);
+          this._cancelSuccess.set(response.mensaje);
+          this.loadMisCitas(); // Reload list
+        },
+        error: (err) => {
+          this._cancelling.set(false);
+          // Map backend error message from GlobalExceptionHandler
+          const message = err.error?.message || err.error?.mensaje || 'paciente.appointmentHistory.cancel.errorGeneric';
+          this._cancelError.set(message);
+          this.loadMisCitas(); // Reload anyway to sync state
+        }
+      });
+  }
+
+  clearFeedback(): void {
+    this._cancelSuccess.set(null);
+    this._cancelError.set(null);
   }
 }

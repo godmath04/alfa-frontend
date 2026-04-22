@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Translate } from '../../../core/services/translate';
@@ -6,11 +6,13 @@ import { Button } from '../../../shared/components/button/button';
 import { Spinner } from '../../../shared/components/spinner/spinner';
 import { AppointmentHistoryViewModel } from './appointment-history.view-model';
 import { DatePipe } from '@angular/common';
+import { CancelModalComponent } from './components/cancel-modal';
+import { MisCitaItem } from '../../../core/models/appointment.model';
 
 @Component({
   selector: 'app-appointment-history',
   standalone: true,
-  imports: [ReactiveFormsModule, LucideAngularModule, Button, Spinner, DatePipe],
+  imports: [ReactiveFormsModule, LucideAngularModule, Button, Spinner, DatePipe, CancelModalComponent],
   providers: [AppointmentHistoryViewModel],
   templateUrl: './appointment-history.html',
   styleUrl: './appointment-history.scss'
@@ -27,6 +29,35 @@ export class AppointmentHistoryComponent implements OnInit {
     fechaDesde: [''],
     fechaHasta: ['']
   });
+
+  // Estado del modal de cancelación
+  readonly citaParaCancelar = signal<MisCitaItem | null>(null);
+  readonly showSuccessToast = signal<boolean>(false);
+  readonly showErrorToast = signal<string | null>(null);
+
+  constructor() {
+    // Efecto para manejar el cierre del modal tras éxito/error y mostrar feedback
+    effect(() => {
+      const success = this.vm.cancelSuccess();
+      const error = this.vm.cancelError();
+
+      if (success || error) {
+        this.citaParaCancelar.set(null); // Cerrar modal
+        
+        if (success) {
+          this.showSuccessToast.set(true);
+          setTimeout(() => this.showSuccessToast.set(false), 5000);
+        }
+        
+        if (error) {
+          this.showErrorToast.set(error);
+          setTimeout(() => this.showErrorToast.set(null), 5000);
+        }
+
+        this.vm.clearFeedback();
+      }
+    });
+  }
 
   ngOnInit(): void {
     // Carga inicial (page=0, sin filtros)
@@ -63,5 +94,27 @@ export class AppointmentHistoryComponent implements OnInit {
 
   private _scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  _puedeSerCancelada(cita: MisCitaItem): boolean {
+    const fechaHoraCita = new Date(`${cita.fecha}T${cita.horaInicio}`);
+    const ahora = new Date();
+    const diferenciaMs = fechaHoraCita.getTime() - ahora.getTime();
+    const horasRestantes = diferenciaMs / (1000 * 60 * 60);
+    
+    const estadoCancelable = cita.estado === 'PENDIENTE' || cita.estado === 'CONFIRMADA';
+    return estadoCancelable && horasRestantes > 24;
+  }
+
+  _abrirModalCancelacion(cita: MisCitaItem): void {
+    this.citaParaCancelar.set(cita);
+  }
+
+  _cerrarModalCancelacion(): void {
+    this.citaParaCancelar.set(null);
+  }
+
+  _confirmarCancelacion(citaId: number): void {
+    this.vm.cancelAppointment(citaId);
   }
 }

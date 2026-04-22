@@ -91,6 +91,18 @@
                 <p class="apt-card__specialty">{{ cita.especialidad }}</p>
               </div>
 
+              @if (_puedeSerCancelada(cita)) {
+                <div class="apt-card__actions">
+                  <app-button 
+                    variant="destructive" 
+                    size="small"
+                    (clicked)="_abrirModalCancelacion(cita)">
+                    <lucide-icon name="trash-2" [size]="14" class="mr-2"></lucide-icon>
+                    {{ translate.get('paciente.appointmentHistory.cancel.button') }}
+                  </app-button>
+                </div>
+              }
+
               <div class="apt-card__right">
                 <p class="apt-card__office">
                   <lucide-icon name="map-pin" [size]="14"></lucide-icon>
@@ -137,4 +149,31 @@
       </div>
     }
   </div>
+</div>
+
+<!-- Modal de Cancelación -->
+@if (citaParaCancelar(); as cita) {
+  <app-cancel-modal
+    [cita]="cita"
+    [loading]="vm.cancelling()"
+    (confirm)="_confirmarCancelacion($event)"
+    (cancel)="_cerrarModalCancelacion()">
+  </app-cancel-modal>
+}
+
+<!-- Toasts de Feedback -->
+<div class="toasts-container">
+  @if (showSuccessToast()) {
+    <div class="toast toast--success">
+      <lucide-icon name="check-circle-2" [size]="18"></lucide-icon>
+      <span>{{ translate.get('paciente.appointmentHistory.cancel.success') }}</span>
+    </div>
+  }
+
+  @if (showErrorToast(); as error) {
+    <div class="toast toast--error">
+      <lucide-icon name="alert-circle" [size]="18"></lucide-icon>
+      <span>{{ error.includes('.') ? translate.get(error) : error }}</span>
+    </div>
+  }
 </div>

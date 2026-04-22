@@ -219,6 +219,27 @@
     align-items: flex-end;
     gap: var(--spacing-xs);
     flex-shrink: 0;
+    min-width: 100px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: var(--spacing-lg);
+    border-right: 1px solid var(--color-border);
+    margin-right: var(--spacing-sm);
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--color-border);
+      padding-right: 0;
+      padding-bottom: var(--spacing-sm);
+      margin-right: 0;
+      justify-content: flex-start;
+    }
   }
 
   &__office {
@@ -262,4 +283,48 @@
       border: 1px solid rgba(239, 68, 68, 0.3);
     }
   }
+}
+
+// ── Utilities ──────────────────────────────────────────────────────────────
+.mt-2 { margin-top: var(--spacing-sm); }
+.mr-2 { margin-right: var(--spacing-sm); }
+.ml-1 { margin-left: var(--spacing-xs); }
+.mr-1 { margin-right: var(--spacing-xs); }
+
+// ── Toasts ────────────────────────────────────────────────────────────────
+.toasts-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 2000;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  animation: toast-enter 0.3s ease-out;
+  min-width: 300px;
+
+  &--success {
+    background: var(--color-success);
+  }
+
+  &--error {
+    background: var(--color-error);
+  }
+}
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }

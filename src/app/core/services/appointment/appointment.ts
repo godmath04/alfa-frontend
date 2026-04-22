@@ -13,7 +13,8 @@ import {
   ConfirmQuickRequest,
   MisCitaItem,
   PageResponse,
-  MisCitasFiltros
+  MisCitasFiltros,
+  CancelacionCitaResponse
 } from '../../models/appointment.model';
 
 // Backend response types for internal mapping (not exported)
@@ -169,6 +170,10 @@ export class AppointmentService {
     if (filtros.size !== undefined) params = params.set('size', filtros.size.toString());
 
     return this._http.get<PageResponse<MisCitaItem>>(`${this.baseUrl}/api/agendamiento/citas/mis-citas`, { params });
+  }
+
+  cancelarCita(citaId: number): Observable<CancelacionCitaResponse> {
+    return this._http.put<CancelacionCitaResponse>(`${this.baseUrl}/api/agendamiento/citas/${citaId}/cancelar`, {});
   }
 
   // ─── Shared mapping helper ─────────────────────────
