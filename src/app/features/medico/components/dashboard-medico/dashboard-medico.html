@@ -1,0 +1,49 @@
+<div class="dash">
+
+  <div class="dash__card dash__card--blue">
+    <div class="dash__info">
+      <span class="dash__label">{{ t.get('medico.agenda.stats.total') }}</span>
+      <span class="dash__value">{{ total }}</span>
+    </div>
+    <div class="dash__icon dash__icon--blue">
+      <lucide-icon name="calendar" [size]="24"></lucide-icon>
+    </div>
+  </div>
+
+  <div class="dash__card dash__card--cyan">
+    <div class="dash__info">
+      <span class="dash__label">{{ t.get('medico.agenda.stats.confirmed') }}</span>
+      <span class="dash__value">{{ confirmed }}</span>
+    </div>
+    <div class="dash__icon dash__icon--cyan">
+      <lucide-icon name="user-check" [size]="24"></lucide-icon>
+    </div>
+  </div>
+
+  <div class="dash__card dash__card--orange">
+    <div class="dash__info">
+      <span class="dash__label">{{ t.get('medico.agenda.stats.pending') }}</span>
+      <span class="dash__value">{{ pending }}</span>
+    </div>
+    <div class="dash__icon dash__icon--orange">
+      <lucide-icon name="clock" [size]="24"></lucide-icon>
+    </div>
+  </div>
+
+  <div class="dash__card dash__card--green">
+    <div class="dash__info">
+      <span class="dash__label">{{ t.get('medico.agenda.stats.next') }}</span>
+      <span class="dash__value dash__value--sm">
+        @if (nextTime) {
+          {{ formatToAmPm(nextTime) }}
+        } @else {
+          {{ t.get('medico.agenda.stats.none') }}
+        }
+      </span>
+    </div>
+    <div class="dash__icon dash__icon--green">
+      <lucide-icon name="clock-3" [size]="24"></lucide-icon>
+    </div>
+  </div>
+
+</div>

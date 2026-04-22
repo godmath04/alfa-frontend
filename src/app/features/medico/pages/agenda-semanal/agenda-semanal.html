@@ -42,7 +42,7 @@
         </button>
       </div>
 
-      <!-- Date navigation -->
+      <!-- Date navigation (day view) -->
       @if (vm.activeView() === 'day') {
         <div class="agenda__date-nav">
           <button class="agenda__nav-btn" (click)="vm.navigateDate(-1)" [disabled]="vm.loading()">
@@ -94,265 +94,32 @@
   @if (!vm.loading() && !vm.error()) {
 
     <!-- ══════════════════════════════════════════════════
-         DAY VIEW
+         DAY VIEW  →  DashboardMedicoComponent + CitasDiaComponent
     ══════════════════════════════════════════════════════ -->
     @if (vm.activeView() === 'day') {
 
-      <!-- Stats cards -->
-      <div class="agenda__stats">
+      <app-dashboard-medico
+        [total]="vm.dayStats().total"
+        [confirmed]="vm.dayStats().confirmed"
+        [pending]="vm.dayStats().pending"
+        [nextTime]="vm.dayStats().nextTime"
+        class="agenda__dashboard"
+      />
 
-        <div class="agenda__stat-card agenda__stat-card--blue">
-          <div class="agenda__stat-info">
-            <span class="agenda__stat-label">{{ t.get('medico.agenda.stats.total') }}</span>
-            <span class="agenda__stat-value">{{ vm.dayStats().total }}</span>
-          </div>
-          <div class="agenda__stat-icon agenda__stat-icon--blue">
-            <lucide-icon name="calendar" [size]="24"></lucide-icon>
-          </div>
-        </div>
-
-        <div class="agenda__stat-card agenda__stat-card--cyan">
-          <div class="agenda__stat-info">
-            <span class="agenda__stat-label">{{ t.get('medico.agenda.stats.confirmed') }}</span>
-            <span class="agenda__stat-value">{{ vm.dayStats().confirmed }}</span>
-          </div>
-          <div class="agenda__stat-icon agenda__stat-icon--cyan">
-            <lucide-icon name="user-check" [size]="24"></lucide-icon>
-          </div>
-        </div>
-
-        <div class="agenda__stat-card agenda__stat-card--orange">
-          <div class="agenda__stat-info">
-            <span class="agenda__stat-label">{{ t.get('medico.agenda.stats.pending') }}</span>
-            <span class="agenda__stat-value">{{ vm.dayStats().pending }}</span>
-          </div>
-          <div class="agenda__stat-icon agenda__stat-icon--orange">
-            <lucide-icon name="clock" [size]="24"></lucide-icon>
-          </div>
-        </div>
-
-        <div class="agenda__stat-card agenda__stat-card--green">
-          <div class="agenda__stat-info">
-            <span class="agenda__stat-label">{{ t.get('medico.agenda.stats.next') }}</span>
-            <span class="agenda__stat-value agenda__stat-value--sm">
-              @if (vm.dayStats().nextTime) {
-                {{ formatToAmPm(vm.dayStats().nextTime!) }}
-              } @else {
-                {{ t.get('medico.agenda.stats.none') }}
-              }
-            </span>
-          </div>
-          <div class="agenda__stat-icon agenda__stat-icon--green">
-            <lucide-icon name="clock-3" [size]="24"></lucide-icon>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Search + filter toolbar -->
-      <div class="agenda__toolbar">
-        <div class="agenda__search">
-          <lucide-icon name="search" [size]="18" class="agenda__search-icon"></lucide-icon>
-          <input
-            type="text"
-            class="agenda__search-input"
-            [placeholder]="t.get('medico.agenda.search-placeholder')"
-            [value]="vm.searchQuery()"
-            (input)="_onSearchInput($event)"
-          />
-        </div>
-        <div class="agenda__filter">
-          <lucide-icon name="list-filter" [size]="18" class="agenda__filter-icon"></lucide-icon>
-          <select
-            class="agenda__filter-select"
-            [value]="vm.statusFilter()"
-            (change)="_onStatusFilter($event)"
-          >
-            <option value="ALL">{{ t.get('medico.agenda.filter.all') }}</option>
-            <option value="CONFIRMADA">{{ t.get('medico.agenda.filter.confirmed') }}</option>
-            <option value="PENDIENTE">{{ t.get('medico.agenda.filter.pending') }}</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Appointments table -->
-      <div class="agenda__table-wrapper">
-        <table class="agenda__table">
-
-          <thead>
-            <tr class="agenda__thead-row">
-              <th class="agenda__th">{{ t.get('medico.agenda.table.time') }}</th>
-              <th class="agenda__th">{{ t.get('medico.agenda.table.patient') }}</th>
-              <th class="agenda__th">{{ t.get('medico.agenda.table.office') }}</th>
-              <th class="agenda__th">{{ t.get('medico.agenda.table.reason') }}</th>
-              <th class="agenda__th">{{ t.get('medico.agenda.table.status') }}</th>
-              <th class="agenda__th">{{ t.get('medico.agenda.table.detail') }}</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (apt of vm.filteredAppointments(); track apt.id; let i = $index) {
-
-              <tr
-                class="agenda__row"
-                [class.agenda__row--alt]="i % 2 !== 0"
-                [class.agenda__row--active]="vm.expandedId() === apt.id"
-                (click)="vm.toggleExpanded(apt.id)"
-              >
-                <!-- Hora -->
-                <td class="agenda__cell">
-                  <div class="agenda__time">
-                    <lucide-icon name="clock" [size]="15" class="agenda__time-icon"></lucide-icon>
-                    <div>
-                      <span class="agenda__time-main">{{ formatToAmPm(apt.startTime) }}</span>
-                      <span class="agenda__time-sub">{{ t.get('medico.agenda.table.until') }} {{ formatToAmPm(apt.endTime) }}</span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- Paciente -->
-                <td class="agenda__cell">
-                  <div class="agenda__patient">
-                    <div class="agenda__avatar">{{ _getInitials(apt.patientName) }}</div>
-                    <div>
-                      <span class="agenda__patient-name">{{ apt.patientName }}</span>
-                      <span class="agenda__patient-sub">{{ apt.specialty }}</span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- Consultorio -->
-                <td class="agenda__cell">
-                  <div class="agenda__office">
-                    <lucide-icon name="map-pin" [size]="14" class="agenda__office-icon"></lucide-icon>
-                    {{ t.get('medico.agenda.office') }} {{ apt.officeNumber }}
-                  </div>
-                </td>
-
-                <!-- Motivo -->
-                <td class="agenda__cell agenda__cell--muted">{{ apt.reason }}</td>
-
-                <!-- Estado -->
-                <td class="agenda__cell">
-                  <span
-                    class="agenda__badge"
-                    [class.agenda__badge--confirmed]="apt.status === 'CONFIRMADA'"
-                  >
-                    {{ t.get('medico.agenda.status.' + apt.status) }}
-                  </span>
-                </td>
-
-                <!-- Expand icon -->
-                <td class="agenda__cell">
-                  <lucide-icon
-                    [name]="vm.expandedId() === apt.id ? 'chevron-down' : 'chevron-right'"
-                    [size]="20"
-                    class="agenda__expand-icon"
-                    [class.agenda__expand-icon--open]="vm.expandedId() === apt.id"
-                  ></lucide-icon>
-                </td>
-              </tr>
-
-              <!-- Expanded detail row -->
-              @if (vm.expandedId() === apt.id) {
-                <tr class="agenda__expanded-row">
-                  <td colspan="6" class="agenda__expanded-cell">
-                    <div class="agenda__expanded-grid">
-
-                      <!-- Información del paciente -->
-                      <div class="agenda__detail-card">
-                        <h4 class="agenda__detail-title">
-                          <lucide-icon name="user" [size]="16"></lucide-icon>
-                          {{ t.get('medico.agenda.detail.patient-info') }}
-                        </h4>
-                        <div class="agenda__detail-rows">
-                          <div class="agenda__detail-row">
-                            <lucide-icon name="stethoscope" [size]="13"></lucide-icon>
-                            <span class="agenda__detail-label">{{ t.get('medico.agenda.detail.specialty') }}:</span>
-                            <span class="agenda__detail-value">{{ apt.specialty }}</span>
-                          </div>
-                          <div class="agenda__detail-row">
-                            <lucide-icon name="map-pin" [size]="13"></lucide-icon>
-                            <span class="agenda__detail-label">{{ t.get('medico.agenda.detail.office') }}:</span>
-                            <span class="agenda__detail-value">{{ apt.officeNumber }}</span>
-                          </div>
-                          <div class="agenda__detail-row">
-                            <lucide-icon name="calendar" [size]="13"></lucide-icon>
-                            <span class="agenda__detail-label">{{ t.get('medico.agenda.detail.date') }}:</span>
-                            <span class="agenda__detail-value">{{ apt.date }}</span>
-                          </div>
-                          <div class="agenda__detail-row">
-                            <lucide-icon name="clock" [size]="13"></lucide-icon>
-                            <span class="agenda__detail-label">{{ t.get('medico.agenda.detail.schedule') }}:</span>
-                            <span class="agenda__detail-value">{{ formatToAmPm(apt.startTime) }} – {{ formatToAmPm(apt.endTime) }}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Acciones rápidas -->
-                      <div class="agenda__detail-card">
-                        <h4 class="agenda__detail-title">{{ t.get('medico.agenda.detail.quick-actions') }}</h4>
-                        <div class="agenda__quick-actions">
-                          <button class="agenda__action-btn agenda__action-btn--green" (click)="_stop($event)">
-                            <lucide-icon name="play" [size]="14"></lucide-icon>
-                            {{ t.get('medico.agenda.detail.start-consultation') }}
-                          </button>
-                          <button class="agenda__action-btn agenda__action-btn--blue" (click)="_stop($event)">
-                            <lucide-icon name="bell" [size]="14"></lucide-icon>
-                            {{ t.get('medico.agenda.detail.notify-patient') }}
-                          </button>
-                          <button class="agenda__action-btn agenda__action-btn--purple" (click)="_stop($event)">
-                            <lucide-icon name="file-text" [size]="14"></lucide-icon>
-                            {{ t.get('medico.agenda.detail.view-record') }}
-                          </button>
-                          <button class="agenda__action-btn agenda__action-btn--accent" (click)="_stop($event)">
-                            <lucide-icon name="check-circle-2" [size]="14"></lucide-icon>
-                            {{ t.get('medico.agenda.detail.mark-complete') }}
-                          </button>
-                        </div>
-                      </div>
-
-                      <!-- Notas de la cita -->
-                      <div class="agenda__detail-card">
-                        <h4 class="agenda__detail-title">{{ t.get('medico.agenda.detail.notes-title') }}</h4>
-                        <div class="agenda__notes">
-                          <div class="agenda__note">
-                            <span class="agenda__note-label">{{ t.get('medico.agenda.detail.notes-reason') }}</span>
-                            {{ apt.reason }}
-                          </div>
-                          <textarea
-                            class="agenda__textarea"
-                            [placeholder]="t.get('medico.agenda.detail.notes-placeholder')"
-                            rows="3"
-                            (click)="_stop($event)"
-                          ></textarea>
-                        </div>
-                      </div>
-
-                    </div>
-                  </td>
-                </tr>
-              }
-
-            } @empty {
-              <tr>
-                <td colspan="6" class="agenda__empty-cell">
-                  <div class="agenda__empty">
-                    <lucide-icon name="calendar-x" [size]="36"></lucide-icon>
-                    <span>{{ t.get('medico.agenda.table.empty') }}</span>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-
-        </table>
-      </div>
+      <app-citas-dia
+        [appointments]="vm.filteredAppointments()"
+        [expandedId]="vm.expandedId()"
+        [searchQuery]="vm.searchQuery()"
+        [statusFilter]="vm.statusFilter()"
+        (searchChange)="vm.setSearchQuery($event)"
+        (filterChange)="vm.setStatusFilter($event)"
+        (expand)="vm.toggleExpanded($event)"
+      />
 
     }
 
     <!-- ══════════════════════════════════════════════════
-         WEEK VIEW
+         WEEK VIEW  →  AgendaSemanalComponent (inline)
     ══════════════════════════════════════════════════════ -->
     @if (vm.activeView() === 'week') {
       <div class="agenda__week-list">
@@ -369,7 +136,8 @@
               <div>
                 <p class="agenda__week-day">{{ _formatDayHeader(day.date) }}</p>
                 <p class="agenda__week-count">
-                  {{ day.appointments.length }} {{ day.appointments.length === 1 ? t.get('medico.agenda.week.count-singular') : t.get('medico.agenda.week.count-plural') }}
+                  {{ day.appointments.length }}
+                  {{ day.appointments.length === 1 ? t.get('medico.agenda.week.count-singular') : t.get('medico.agenda.week.count-plural') }}
                 </p>
               </div>
             </div>

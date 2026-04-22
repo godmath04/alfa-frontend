@@ -1,9 +1,11 @@
-import { Component, inject, afterNextRender } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, afterNextRender } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
-import { AgendaViewModel }  from '../../../../core/services/medico/agenda.view-model';
-import { StatusFilter }     from '../../../../core/services/medico/agenda.state';
-import { Translate }        from '../../../../core/services/translate';
+import { AgendaViewModel }          from '../../../../core/services/medico/agenda.view-model';
+import { StatusFilter }             from '../../../../core/services/medico/agenda.state';
+import { Translate }                from '../../../../core/services/translate';
+import { DashboardMedicoComponent } from '../../components/dashboard-medico/dashboard-medico';
+import { CitasDiaComponent }        from '../../components/citas-dia/citas-dia';
 import { formatToAmPm, MONTHS_SHORT, MONTHS_FULL, WEEK_DAYS_SHORT } from '../../../../shared/utils/date-time.utils';
 
 const WEEK_DAYS_FULL = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'] as const;
@@ -11,15 +13,15 @@ const WEEK_DAYS_FULL = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'V
 @Component({
   selector: 'app-agenda-semanal',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, DashboardMedicoComponent, CitasDiaComponent],
   templateUrl: './agenda-semanal.html',
   styleUrl: './agenda-semanal.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgendaSemanal {
 
-  readonly vm           = inject(AgendaViewModel);
-  readonly t            = inject(Translate);
-  readonly formatToAmPm = formatToAmPm;
+  readonly vm = inject(AgendaViewModel);
+  readonly t  = inject(Translate);
 
   constructor() {
     afterNextRender(() => this.vm.loadWeek());
@@ -46,21 +48,5 @@ export class AgendaSemanal {
 
   _isToday(dateStr: string): boolean {
     return dateStr === new Date().toISOString().slice(0, 10);
-  }
-
-  _getInitials(name: string): string {
-    return name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
-  }
-
-  _onSearchInput(event: Event): void {
-    this.vm.setSearchQuery((event.target as HTMLInputElement).value);
-  }
-
-  _onStatusFilter(event: Event): void {
-    this.vm.setStatusFilter((event.target as HTMLSelectElement).value as StatusFilter);
-  }
-
-  _stop(event: Event): void {
-    event.stopPropagation();
   }
 }
