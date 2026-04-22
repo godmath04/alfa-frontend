@@ -1,8 +1,8 @@
-import { Injectable, inject, DestroyRef } from '@angular/core';
+import { Injectable, inject, DestroyRef, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProfileService } from './profile.service';
 import { ProfileStateService } from './profile.state';
-import { UpdateProfileRequest } from './profile.model';
+import { UpdateProfileRequest, ProfileResponse } from './profile.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileViewModel {
@@ -10,9 +10,11 @@ export class ProfileViewModel {
   private readonly _state = inject(ProfileStateService);
   private readonly _destroyRef = inject(DestroyRef);
 
-  readonly profile = this._state.profile;
-  readonly photoUrl = this._state.photoUrl;
-  readonly loading = this._state.loading;
+  // Explicit types so the Angular Language Service resolves them without deep inference
+  readonly profile:  Signal<ProfileResponse | null> = this._state.profile;
+  readonly photoUrl: Signal<string | null>          = this._state.photoUrl;
+  readonly loading:  Signal<boolean>                = this._state.loading;
+  readonly uploading: Signal<boolean>               = this._state.uploading;
 
   loadProfile(): void {
     this._state.setLoading(true);
@@ -56,8 +58,6 @@ export class ProfileViewModel {
         }
       });
   }
-
-  readonly uploading = this._state.uploading;
 
   uploadPhoto(file: File): void {
     // Instant local preview — no round-trip needed
