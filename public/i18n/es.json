@@ -111,6 +111,32 @@
           "desc": "Conéctate con profesionales de salud certificados"
         }
       }
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contraseña",
+      "subtitle": "Ingresa tu correo electrónico para recibir un enlace de recuperación",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "ejemplo@correo.com",
+      "submitButton": "Enviar Enlace de Recuperación",
+      "successMessage": "Si el correo está registrado, recibirás un enlace de recuperación en los próximos minutos.",
+      "backToLogin": "Volver a Iniciar Sesión",
+      "errorMessage": "Ocurrió un error. Intenta nuevamente."
+    },
+    "resetPassword": {
+      "title": "Restablecer Contraseña",
+      "subtitle": "Ingresa tu nueva contraseña",
+      "newPasswordLabel": "Nueva Contraseña",
+      "newPasswordPlaceholder": "Mínimo 8 caracteres",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Repite tu nueva contraseña",
+      "submitButton": "Restablecer Contraseña",
+      "successMessage": "Tu contraseña ha sido actualizada exitosamente.",
+      "goToLogin": "Ir a Iniciar Sesión",
+      "errorExpired": "El enlace ha expirado o ya fue utilizado.",
+      "errorMismatch": "Las contraseñas no coinciden.",
+      "errorMinLength": "La contraseña debe tener al menos 8 caracteres.",
+      "errorNoToken": "Enlace de recuperación inválido.",
+      "errorGeneric": "Ocurrió un error. Intenta nuevamente."
     }
   },
   "common": {
