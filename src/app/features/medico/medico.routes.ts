@@ -18,6 +18,10 @@ export const MEDICO_ROUTES: Routes = [
         path: 'calendario',
         loadComponent: () => import('./pages/week-calendar/week-calendar').then(m => m.WeekCalendarPage)
       },
+      {
+        path: 'profile',
+        loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
+      }
     ]
   }
 ];

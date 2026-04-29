@@ -1,0 +1,200 @@
+.profile {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    color: var(--primary-dark);
+    margin: 0 0 0.5rem 0;
+  }
+
+  &__subtitle {
+    color: var(--accent-blue-2);
+    margin: 0;
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+  }
+
+  &__content {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid var(--primary-medium);
+  }
+
+  &__photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  &__photo-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-blue-1);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      border-color: var(--primary-dark);
+      box-shadow: 0 4px 16px rgba(2, 48, 89, 0.25);
+
+      .profile__photo-overlay {
+        opacity: 1;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-blue-1);
+      outline-offset: 3px;
+    }
+  }
+
+  &__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__photo-placeholder {
+    color: var(--primary-medium);
+  }
+
+  &__photo-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(2, 48, 89, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: var(--white);
+
+    span {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  }
+
+  &__photo-uploading {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(2, 48, 89, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+
+    lucide-icon {
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  &__file-input {
+    display: none;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  // Register-form layout inside the card
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// ── Error bubble (same as register) ──────────────────────────────────────────
+.field-error {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 10;
+  background-color: var(--color-error);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 14px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent var(--color-error) transparent;
+  }
+
+  // Variant for the date group (not absolute, always visible)
+  &--inline {
+    position: static;
+    display: inline-block;
+    margin-top: 4px;
+    opacity: 1;
+    pointer-events: auto;
+    &::before { display: none; }
+  }
+}
+
+// Show bubble on hover/focus-within
+.field-group,
+.field-row {
+  &:hover .field-error,
+  &:focus-within .field-error {
+    opacity: 1;
+  }
+}
+
+// ── Disabled field variants ───────────────────────────────────────────────────
+.field-input-wrapper--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  .field-input { cursor: not-allowed; }
+}
+
+.field-input-simple--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

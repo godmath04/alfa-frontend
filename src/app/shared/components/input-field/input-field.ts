@@ -18,7 +18,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
 export class InputField implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() placeholder: string = '';
-  @Input() type: 'text' | 'email' | 'password' = 'text';
+  @Input() type: 'text' | 'email' | 'password' | 'date' = 'text';
   @Input() disabled: boolean = false;
   @Input() errorMessage: string = '';
 

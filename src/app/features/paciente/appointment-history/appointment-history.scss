@@ -1,0 +1,330 @@
+.apt-history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
+
+  // ── Header ──────────────────────────────────────────────────────────────
+  &__title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    margin: 0;
+  }
+
+  // ── Filters ─────────────────────────────────────────────────────────────
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    align-items: flex-end;
+    background: var(--color-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+  }
+
+  &__filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    flex: 1;
+    min-width: 140px;
+  }
+
+  &__filter-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  &__filter-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: flex-end;
+  }
+
+  // ── Error banner ────────────────────────────────────────────────────────
+  &__error-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+  }
+
+  // ── Content ─────────────────────────────────────────────────────────────
+  &__content {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem var(--spacing-lg);
+    gap: var(--spacing-md);
+    color: var(--color-text-muted);
+
+    p {
+      font-size: var(--font-size-base);
+      text-align: center;
+    }
+  }
+
+  // ── Cards list ──────────────────────────────────────────────────────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── Pagination ──────────────────────────────────────────────────────────
+  &__pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-background);
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+  }
+
+  &__pagination-info {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+
+    strong {
+      color: var(--color-primary-dark);
+    }
+  }
+
+  &__pagination-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+}
+
+// ── Appointment Card ─────────────────────────────────────────────────────────
+.apt-card {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--color-background);
+  }
+
+  // Colored left accent bar based on status
+  &__accent {
+    width: 4px;
+    flex-shrink: 0;
+  }
+
+  &--COMPLETADA .apt-card__accent  { background: var(--color-status-completed); }
+  &--PENDIENTE  .apt-card__accent  { background: var(--color-status-pending); }
+  &--CONFIRMADA .apt-card__accent  { background: var(--color-status-confirmed); }
+  &--CANCELADA  .apt-card__accent  { background: var(--color-status-cancelled); }
+
+  &__body {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  // Date + time block (left)
+  &__left {
+    flex-shrink: 0;
+    min-width: 110px;
+  }
+
+  &__date-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__date {
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    color: var(--color-primary-dark);
+    white-space: nowrap;
+  }
+
+  &__time {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  // Doctor + specialty (center, grows)
+  &__center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 160px;
+  }
+
+  &__doctor {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--color-primary-dark);
+  }
+
+  &__specialty {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-left: calc(16px + var(--spacing-xs));
+  }
+
+  // Office + badge (right)
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-xs);
+    flex-shrink: 0;
+    min-width: 100px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: var(--spacing-lg);
+    border-right: 1px solid var(--color-border);
+    margin-right: var(--spacing-sm);
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--color-border);
+      padding-right: 0;
+      padding-bottom: var(--spacing-sm);
+      margin-right: 0;
+      justify-content: flex-start;
+    }
+  }
+
+  &__office {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  // Status badge
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+
+    &--COMPLETADA {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--color-status-completed);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    &--PENDIENTE {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--color-status-pending);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    &--CONFIRMADA {
+      background: rgba(54, 171, 217, 0.12);
+      color: var(--color-status-confirmed);
+      border: 1px solid rgba(54, 171, 217, 0.3);
+    }
+    &--CANCELADA {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--color-status-cancelled);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+  }
+}
+
+// ── Utilities ──────────────────────────────────────────────────────────────
+.mt-2 { margin-top: var(--spacing-sm); }
+.mr-2 { margin-right: var(--spacing-sm); }
+.ml-1 { margin-left: var(--spacing-xs); }
+.mr-1 { margin-right: var(--spacing-xs); }
+
+// ── Toasts ────────────────────────────────────────────────────────────────
+.toasts-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 2000;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  animation: toast-enter 0.3s ease-out;
+  min-width: 300px;
+
+  &--success {
+    background: var(--color-success);
+  }
+
+  &--error {
+    background: var(--color-error);
+  }
+}
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}

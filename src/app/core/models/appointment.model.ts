@@ -78,3 +78,37 @@ export interface ConfirmQuickRequest {
   reservaId: string;
   motivo: string;
 }
+
+// --- Appointment History (Mis Citas) ---
+export interface MisCitaItem {
+  citaId: number;
+  fecha: string;
+  horaInicio: string;
+  medicoNombre: string;
+  especialidad: string;
+  consultorio: string;
+  estado: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}
+
+export interface MisCitasFiltros {
+  estado?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
+  page?: number;
+  size?: number;
+}
+
+export interface CancelacionCitaResponse {
+  mensaje: string;
+  citaId: number;
+  estado: string;
+}

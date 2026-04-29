@@ -4,12 +4,12 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import {
   LucideAngularModule,
-  Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
+  Mail, MailCheck, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
   CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
   ArrowLeft, AlertCircle, Home, FileText, LogOut,
-  ClipboardList, Zap, Loader2, Clock, TimerOff,
+  ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
   CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
-  CircleAlert, CalendarX, DoorOpen,
+  CircleAlert, CalendarX, DoorOpen, Trash2,
   List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
   UserX, XCircle
 } from 'lucide-angular';
@@ -29,12 +29,12 @@ export const appConfig: ApplicationConfig = {
     }),
     importProvidersFrom(
       LucideAngularModule.pick({
-        Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
+        Mail, MailCheck, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
         CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
         ArrowLeft, AlertCircle, Home, FileText, LogOut,
-        ClipboardList, Zap, Loader2, Clock, TimerOff,
+        ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
         CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
-        CircleAlert, CalendarX, DoorOpen,
+        CircleAlert, CalendarX, DoorOpen, Trash2,
         List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
         UserX, XCircle
       })
