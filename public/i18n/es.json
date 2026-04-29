@@ -154,6 +154,27 @@
       "invalid-phone": "Número de teléfono inválido"
     }
   },
+  "profile": {
+    "title": "Mi Perfil",
+    "subtitle": "Gestiona tu información personal",
+    "personalData": "Datos Personales",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "city": "Ciudad",
+    "birthDate": "Fecha de Nacimiento",
+    "idType": "Tipo de Documento",
+    "idNumber": "Número de Documento",
+    "gender": "Sexo",
+    "photo": "Foto de Perfil",
+    "changePhoto": "Cambiar foto",
+    "successMessage": "Perfil actualizado correctamente.",
+    "errorMessage": "Ocurrió un error al actualizar el perfil.",
+    "errors": {
+      "notPastDate": "La fecha de nacimiento debe ser anterior a hoy."
+    }
+  },
   "paciente": {
     "sidebar": {
       "subtitle": "Healthcare Management"
@@ -161,12 +182,59 @@
     "nav": {
       "profile": "Mi Perfil",
       "appointments": "Agendar Cita",
+      "myAppointments": "Mis Citas",
       "lab": "Laboratorio",
       "logout": "Cerrar sesión"
     },
     "dashboard": {
       "title": "Mi Perfil",
       "welcome": "Bienvenido de nuevo"
+    },
+    "appointmentHistory": {
+      "title": "Historial de Citas",
+      "filters": {
+        "status": "Estado",
+        "allStatuses": "Todos los estados",
+        "dateFrom": "Fecha desde",
+        "dateTo": "Fecha hasta",
+        "search": "Buscar",
+        "clear": "Limpiar filtros"
+      },
+      "table": {
+        "date": "Fecha",
+        "time": "Hora",
+        "doctor": "Médico",
+        "specialty": "Especialidad",
+        "office": "Consultorio",
+        "status": "Estado"
+      },
+      "statuses": {
+        "PENDIENTE": "Pendiente",
+        "CONFIRMADA": "Confirmada",
+        "COMPLETADA": "Completada",
+        "CANCELADA": "Cancelada"
+      },
+      "noResults": "No se encontraron citas con los filtros seleccionados.",
+      "errorLoading": "Ocurrió un error al cargar las citas. Por favor intenta de nuevo.",
+      "pagination": {
+        "page": "Página",
+        "of": "de",
+        "total": "Total",
+        "appointments": "citas",
+        "previous": "Anterior",
+        "next": "Siguiente"
+      },
+      "cancel": {
+        "button": "Cancelar",
+        "confirmTitle": "Cancelar cita",
+        "confirmMessage": "¿Estás seguro de que deseas cancelar esta cita? Esta acción no se puede deshacer.",
+        "confirmDetails": "Detalles de la cita:",
+        "confirmButton": "Sí, cancelar cita",
+        "cancelButton": "Volver",
+        "cancelling": "Cancelando...",
+        "success": "La cita ha sido cancelada exitosamente.",
+        "errorGeneric": "Ocurrió un error al cancelar la cita. Intenta nuevamente."
+      }
     },
     "appointments": {
       "title": "Agendar Cita Médica",

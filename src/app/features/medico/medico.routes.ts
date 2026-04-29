@@ -7,6 +7,11 @@ export const MEDICO_ROUTES: Routes = [
     path: '',
     canActivate: [roleGuard],
     data: { roles: [Role.Medico] },
-    children: []
+    children: [
+      {
+        path: 'profile',
+        loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
+      }
+    ]
   }
 ];
