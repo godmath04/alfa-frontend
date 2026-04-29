@@ -1,11 +1,12 @@
-import { Injectable, inject, DestroyRef, computed } from '@angular/core';
+import { Injectable, inject, DestroyRef, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { interval } from 'rxjs';
 
 import { MedicoService }              from './medico.service';
 import { AgendaStateService, StatusFilter, ActiveView } from './agenda.state';
 import { toApiError }                 from '../../models/api-error.model';
 import { formatDateToISO }            from '../../../shared/utils/date-time.utils';
-import { DoctorAppointment }          from '../../models/medico.model';
+import { DailyAgenda, DoctorAppointment } from '../../models/medico.model';
 
 @Injectable({ providedIn: 'root' })
 export class AgendaViewModel {
@@ -13,6 +14,23 @@ export class AgendaViewModel {
   private readonly _service    = inject(MedicoService);
   private readonly _state      = inject(AgendaStateService);
   private readonly _destroyRef = inject(DestroyRef);
+
+  // Independent data source for the next-appointment card.
+  // Always holds the current/upcoming week — never changes when the
+  // doctor navigates to past/future weeks in the calendar.
+  private readonly _upcomingData = signal<DailyAgenda[]>([]);
+
+  constructor() {
+    this._loadUpcomingData();
+
+    interval(60_000)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        const current = this._state.agenda();
+        if (current.length) this._autoCompleteExpired(current);
+        this._loadUpcomingData();
+      });
+  }
 
   readonly agenda       = this._state.agenda;
   readonly loading      = this._state.loading;
@@ -50,11 +68,36 @@ export class AgendaViewModel {
   });
 
   readonly dayStats = computed(() => {
-    const apts      = this.dayAppointments();
-    const confirmed = apts.filter(a => a.status === 'CONFIRMADA').length;
-    const pending   = apts.filter(a => a.status === 'PENDIENTE').length;
-    const nextTime  = [...apts].sort((a, b) => a.startTime.localeCompare(b.startTime))[0]?.startTime ?? null;
-    return { total: apts.length, confirmed, pending, nextTime };
+    const now  = new Date();
+    const apts = this.dayAppointments();
+
+    const effective = (apt: { status: string; date: string; endTime: string }) => {
+      if ((apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA') &&
+          new Date(`${apt.date}T${apt.endTime}`) < now) return 'COMPLETADA';
+      return apt.status;
+    };
+
+    return {
+      total:     apts.length,
+      confirmed: apts.filter(a => effective(a) === 'CONFIRMADA').length,
+      pending:   apts.filter(a => effective(a) === 'PENDIENTE').length,
+      completed: apts.filter(a => effective(a) === 'COMPLETADA').length,
+      cancelled: apts.filter(a => effective(a) === 'CANCELADA').length,
+    };
+  });
+
+  readonly globalNextAppointment = computed(() => {
+    const now = new Date();
+    return this._upcomingData()
+      .flatMap(day => day.appointments)
+      .filter(apt => {
+        if (apt.status !== 'PENDIENTE' && apt.status !== 'CONFIRMADA') return false;
+        const end = new Date(`${apt.date}T${apt.endTime}`);
+        return end > now;
+      })
+      .sort((a, b) =>
+        `${a.date}T${a.startTime}`.localeCompare(`${b.date}T${b.startTime}`)
+      )[0] ?? null;
   });
 
   loadWeek(date: Date = new Date()): void {
@@ -71,6 +114,7 @@ export class AgendaViewModel {
         next: (agenda) => {
           this._state.setAgenda(agenda);
           this._state.setLoading(false);
+          this._autoCompleteExpired(agenda);
         },
         error: (raw) => {
           const err = toApiError(raw);
@@ -109,6 +153,15 @@ export class AgendaViewModel {
     this._state.setSelectedDate(date);
   }
 
+  goToDate(date: string): void {
+    const d      = new Date(date + 'T00:00:00');
+    const monday = this._getMondayOf(d);
+    this._state.setSelectedDate(date);
+    if (formatDateToISO(monday) !== this._state.weekStart()) {
+      this.loadWeek(d);
+    }
+  }
+
   goToToday(): void {
     const today  = new Date();
     const monday = this._getMondayOf(today);
@@ -122,8 +175,64 @@ export class AgendaViewModel {
   setStatusFilter(f: StatusFilter): void   { this._state.setStatusFilter(f); }
   setView(view: ActiveView): void          { this._state.setActiveView(view); }
 
+  markAbsent(appointmentId: number): void {
+    this._service.cancelAppointment(appointmentId)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: () => {
+          this._state.setAgenda(
+            this._state.agenda().map(day => ({
+              ...day,
+              appointments: day.appointments.map(apt =>
+                apt.id === appointmentId ? { ...apt, status: 'CANCELADA' as const } : apt
+              ),
+            }))
+          );
+        },
+        error: () => {},
+      });
+  }
+
   toggleExpanded(id: number): void {
     this._state.setExpandedId(this._state.expandedId() === id ? null : id);
+  }
+
+  private _loadUpcomingData(): void {
+    const monday = formatDateToISO(this._getMondayOf(new Date()));
+    this._service.getWeeklyAgenda(monday)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: data => this._upcomingData.set(data),
+        error: () => {},
+      });
+  }
+
+  private _autoCompleteExpired(agenda: DailyAgenda[]): void {
+    const now     = new Date();
+    const expired = agenda
+      .flatMap(day => day.appointments)
+      .filter(apt =>
+        (apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA') &&
+        new Date(`${apt.date}T${apt.endTime}`) < now
+      );
+
+    expired.forEach(apt => {
+      this._service.completeAppointment(apt.id)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: () => {
+            this._state.setAgenda(
+              this._state.agenda().map(day => ({
+                ...day,
+                appointments: day.appointments.map(a =>
+                  a.id === apt.id ? { ...a, status: 'COMPLETADA' as const } : a
+                ),
+              }))
+            );
+          },
+          error: () => { /* silent — UI already shows effective status */ },
+        });
+    });
   }
 
   private _getMondayOf(date: Date): Date {

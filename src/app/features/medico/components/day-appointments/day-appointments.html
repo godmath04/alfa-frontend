@@ -46,6 +46,7 @@
           class="citas__row"
           [class.citas__row--alt]="i % 2 !== 0"
           [class.citas__row--active]="expandedId === apt.id"
+          [class.citas__row--past]="_getEffectiveStatus(apt) === 'COMPLETADA'"
           (click)="_toggleRow(apt.id)"
         >
           <!-- Hora -->
@@ -81,10 +82,15 @@
           <!-- Motivo -->
           <td class="citas__cell citas__cell--muted">{{ apt.reason }}</td>
 
-          <!-- Estado -->
+          <!-- Estado (auto-COMPLETADA si la hora ya pasó) -->
           <td class="citas__cell">
-            <span class="citas__badge" [class.citas__badge--confirmed]="apt.status === 'CONFIRMADA'">
-              {{ t.get('medico.agenda.status.' + apt.status) }}
+            <span
+              class="citas__badge"
+              [class.citas__badge--confirmed]="_getEffectiveStatus(apt) === 'CONFIRMADA'"
+              [class.citas__badge--completed]="_getEffectiveStatus(apt) === 'COMPLETADA'"
+              [class.citas__badge--cancelled]="_getEffectiveStatus(apt) === 'CANCELADA'"
+            >
+              {{ t.get('medico.agenda.status.' + _getEffectiveStatus(apt)) }}
             </span>
           </td>
 
@@ -139,21 +145,20 @@
                 <div class="citas__detail-card">
                   <h4 class="citas__detail-title">{{ t.get('medico.agenda.detail.quick-actions') }}</h4>
                   <div class="citas__quick-actions">
-                    <button class="citas__action-btn citas__action-btn--green" (click)="_stop($event)">
-                      <lucide-icon name="play" [size]="14"></lucide-icon>
-                      {{ t.get('medico.agenda.detail.start-consultation') }}
-                    </button>
-                    <button class="citas__action-btn citas__action-btn--blue" (click)="_stop($event)">
-                      <lucide-icon name="bell" [size]="14"></lucide-icon>
-                      {{ t.get('medico.agenda.detail.notify-patient') }}
+                    <button
+                      class="citas__action-btn citas__action-btn--red"
+                      (click)="_onMarkAbsent(apt.id, $event)"
+                      [disabled]="!_canMarkAbsent(apt)"
+                      [title]="!_canMarkAbsent(apt) && _getEffectiveStatus(apt) !== 'CANCELADA'
+                        ? 'Disponible desde ' + formatToAmPm(apt.startTime)
+                        : ''"
+                    >
+                      <lucide-icon name="user-x" [size]="14"></lucide-icon>
+                      {{ t.get('medico.agenda.detail.absent') }}
                     </button>
                     <button class="citas__action-btn citas__action-btn--purple" (click)="_stop($event)">
                       <lucide-icon name="file-text" [size]="14"></lucide-icon>
                       {{ t.get('medico.agenda.detail.view-record') }}
-                    </button>
-                    <button class="citas__action-btn citas__action-btn--accent" (click)="_stop($event)">
-                      <lucide-icon name="check-circle-2" [size]="14"></lucide-icon>
-                      {{ t.get('medico.agenda.detail.mark-complete') }}
                     </button>
                   </div>
                 </div>

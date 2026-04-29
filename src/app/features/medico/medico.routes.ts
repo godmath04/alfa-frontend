@@ -12,7 +12,11 @@ export const MEDICO_ROUTES: Routes = [
       { path: '', redirectTo: 'agenda', pathMatch: 'full' },
       {
         path: 'agenda',
-        loadComponent: () => import('./pages/agenda-semanal/agenda-semanal').then(m => m.AgendaSemanal)
+        loadComponent: () => import('./pages/daily-schedule/daily-schedule').then(m => m.DailySchedulePage)
+      },
+      {
+        path: 'calendario',
+        loadComponent: () => import('./pages/week-calendar/week-calendar').then(m => m.WeekCalendarPage)
       },
     ]
   }

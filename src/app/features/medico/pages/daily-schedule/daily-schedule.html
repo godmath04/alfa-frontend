@@ -1,0 +1,93 @@
+<div class="agenda">
+
+  <!-- ─── Header ─────────────────────────────────────── -->
+  <div class="agenda__header">
+    <div class="agenda__title-group">
+      <h1 class="agenda__title">{{ t.get('medico.agenda.title-day') }}</h1>
+    </div>
+    <div class="agenda__header-right">
+      <app-calendar-picker
+        [selectedDate]="vm.selectedDate()"
+        (dateChange)="vm.goToDate($event)"
+      />
+    </div>
+  </div>
+
+  <!-- ─── Loading ─────────────────────────────────────── -->
+  @if (vm.loading()) {
+    <div class="agenda__state">
+      <lucide-icon name="loader-circle" [size]="36" class="agenda__spinner"></lucide-icon>
+      <span>{{ t.get('medico.agenda.loading') }}</span>
+    </div>
+  }
+
+  <!-- ─── Error ───────────────────────────────────────── -->
+  @if (!vm.loading() && vm.error()) {
+    <div class="agenda__state agenda__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ vm.error() }}</span>
+    </div>
+  }
+
+  @if (!vm.loading() && !vm.error()) {
+
+    <!-- Stats: full width above the two-column zone -->
+    <app-doctor-dashboard
+      [total]="vm.dayStats().total"
+      [confirmed]="vm.dayStats().confirmed"
+      [pending]="vm.dayStats().pending"
+      [completed]="vm.dayStats().completed"
+      [cancelled]="vm.dayStats().cancelled"
+      class="agenda__dashboard"
+    />
+
+    <!-- Two-column: appointments list + next-appointment card -->
+    <div class="agenda__day-layout">
+
+      <app-day-appointments
+        [appointments]="vm.filteredAppointments()"
+        [expandedId]="vm.expandedId()"
+        [searchQuery]="vm.searchQuery()"
+        [statusFilter]="vm.statusFilter()"
+        (searchChange)="vm.setSearchQuery($event)"
+        (filterChange)="vm.setStatusFilter($event)"
+        (expand)="vm.toggleExpanded($event)"
+        (markAbsent)="vm.markAbsent($event)"
+        class="agenda__day-main"
+      />
+
+      <!-- Next appointment card — top aligned with the appointments toolbar -->
+      <div class="agenda__next-card">
+        <div class="agenda__next-header">
+          <lucide-icon name="clock-3" [size]="20" class="agenda__next-icon"></lucide-icon>
+          <span class="agenda__next-title">{{ t.get('medico.agenda.stats.next') }}</span>
+        </div>
+
+        @if (vm.globalNextAppointment()) {
+          <div class="agenda__next-body" (click)="vm.goToDate(vm.globalNextAppointment()!.date)">
+            <div class="agenda__next-avatar">
+              {{ _getInitials(vm.globalNextAppointment()!.patientName) }}
+            </div>
+            <p class="agenda__next-name">{{ vm.globalNextAppointment()!.patientName }}</p>
+            <p class="agenda__next-specialty">{{ vm.globalNextAppointment()!.specialty }}</p>
+            <div class="agenda__next-time">
+              <lucide-icon name="calendar" [size]="15"></lucide-icon>
+              <span>{{ _formatDayHeader(vm.globalNextAppointment()!.date) }}</span>
+            </div>
+            <div class="agenda__next-time">
+              <lucide-icon name="clock" [size]="15"></lucide-icon>
+              <span>{{ _formatToAmPm(vm.globalNextAppointment()!.startTime) }}</span>
+            </div>
+          </div>
+        } @else {
+          <div class="agenda__next-empty">
+            <lucide-icon name="calendar-x" [size]="40"></lucide-icon>
+            <span>{{ t.get('medico.agenda.stats.none') }}</span>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+
+</div>

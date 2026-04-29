@@ -28,13 +28,21 @@ interface RawDailyAgenda {
 export class MedicoService {
 
   private readonly _http    = inject(HttpClient);
-  private readonly _baseUrl = `${environment.apiUrl}/api/agendamiento/medico`;
+  private readonly _baseUrl = `${environment.apiUrl}/api/agendamiento`;
 
   getWeeklyAgenda(date: string): Observable<DailyAgenda[]> {
     const params = new HttpParams().set('fecha', date);
     return this._http
-      .get<RawDailyAgenda[]>(`${this._baseUrl}/agenda-semanal`, { params })
+      .get<RawDailyAgenda[]>(`${this._baseUrl}/medico/agenda-semanal`, { params })
       .pipe(map(raw => raw.map(this._mapDailyAgenda)));
+  }
+
+  completeAppointment(id: number): Observable<void> {
+    return this._http.patch<void>(`${this._baseUrl}/citas/${id}/completar`, {});
+  }
+
+  cancelAppointment(id: number): Observable<void> {
+    return this._http.put<void>(`${this._baseUrl}/citas/${id}/cancelar`, {});
   }
 
   private _mapDailyAgenda(raw: RawDailyAgenda): DailyAgenda {
@@ -50,7 +58,7 @@ export class MedicoService {
         startTime:    c.horaInicio,
         endTime:      c.horaFin,
         reason:       c.motivo,
-        status:       c.estado as 'PENDIENTE' | 'CONFIRMADA',
+        status:       c.estado as DoctorAppointment['status'],
       })),
     };
   }

@@ -1,0 +1,137 @@
+.cal {
+  position: relative;
+  display: inline-block;
+
+  // ─── Trigger ─────────────────────────────────────────
+  &__trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border: 2px solid var(--color-accent-1);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    color: var(--color-primary-dark);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+
+    lucide-icon { color: var(--color-accent-1); flex-shrink: 0; }
+
+    &:hover { background: rgba(54, 154, 217, 0.06); }
+  }
+
+  &__trigger-label { white-space: nowrap; }
+
+  &__chevron {
+    transition: transform 0.2s;
+    &--open { transform: rotate(180deg); }
+  }
+
+  // ─── Backdrop ────────────────────────────────────────
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+  }
+
+  // ─── Dropdown ────────────────────────────────────────
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 100;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+    padding: 16px;
+    width: 296px;
+  }
+
+  // ─── Month nav row ───────────────────────────────────
+  &__nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-accent-1);
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover { background: rgba(54, 154, 217, 0.1); }
+  }
+
+  &__month {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    text-transform: capitalize;
+  }
+
+  // ─── Grid ────────────────────────────────────────────
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  &__dow {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  // ─── Day button ──────────────────────────────────────
+  &__day {
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-size: 14px;
+    font-family: var(--font-family);
+    color: var(--color-primary-dark);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+
+    &:hover { background: rgba(54, 154, 217, 0.1); }
+
+    &--other {
+      color: var(--color-text-muted);
+      opacity: 0.5;
+    }
+
+    &--today {
+      font-weight: 700;
+      color: var(--color-accent-1);
+      border: 1.5px solid var(--color-accent-1);
+    }
+
+    &--selected {
+      background: var(--color-accent-1);
+      color: var(--color-white);
+      font-weight: 700;
+
+      &:hover { background: var(--color-primary-dark); }
+    }
+  }
+}

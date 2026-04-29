@@ -10,7 +10,8 @@ import {
   ClipboardList, Zap, Loader2, Clock, TimerOff,
   CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
   CircleAlert, CalendarX, DoorOpen,
-  List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash
+  List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
+  UserX, XCircle
 } from 'lucide-angular';
 
 import { APP_ROUTES } from './app.routes';
@@ -34,7 +35,8 @@ export const appConfig: ApplicationConfig = {
         ClipboardList, Zap, Loader2, Clock, TimerOff,
         CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
         CircleAlert, CalendarX, DoorOpen,
-        List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash
+        List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
+        UserX, XCircle
       })
     ),
   ]

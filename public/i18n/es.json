@@ -230,8 +230,9 @@
       "subtitle": "Portal Médico"
     },
     "nav": {
-      "agenda": "Mi Agenda",
-      "logout": "Cerrar sesión"
+      "agenda":     "Citas del Día",
+      "calendario": "Mi Calendario",
+      "logout":     "Cerrar sesión"
     },
     "agenda": {
       "title-day": "Citas del Día",
@@ -247,11 +248,13 @@
       "office": "Consultorio",
       "reason": "Motivo",
       "stats": {
-        "total": "Total del día",
+        "total":     "Total del día",
         "confirmed": "Confirmadas",
-        "pending": "Pendientes",
-        "next": "Próxima cita",
-        "none": "Ninguna"
+        "pending":   "Pendientes",
+        "completed": "Completadas",
+        "cancelled": "Canceladas",
+        "next":      "Próxima cita",
+        "none":      "Ninguna"
       },
       "search-placeholder": "Buscar por nombre de paciente...",
       "filter": {
@@ -276,10 +279,8 @@
         "date": "Fecha",
         "schedule": "Horario",
         "quick-actions": "Acciones Rápidas",
-        "start-consultation": "Iniciar consulta",
-        "notify-patient": "Notificar paciente",
+        "absent": "Paciente Ausente",
         "view-record": "Ver expediente",
-        "mark-complete": "Marcar completada",
         "notes-title": "Notas de la Cita",
         "notes-reason": "Motivo:",
         "notes-placeholder": "Agregar notas para esta cita..."
@@ -291,7 +292,9 @@
       },
       "status": {
         "PENDIENTE":  "Pendiente",
-        "CONFIRMADA": "Confirmada"
+        "CONFIRMADA": "Confirmada",
+        "COMPLETADA": "Completada",
+        "CANCELADA":  "Cancelada"
       }
     }
   }

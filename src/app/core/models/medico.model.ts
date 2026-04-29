@@ -8,7 +8,7 @@ export interface DoctorAppointment {
   startTime:      string;
   endTime:        string;
   reason:         string;
-  status:         'PENDIENTE' | 'CONFIRMADA';
+  status:         'PENDIENTE' | 'CONFIRMADA' | 'COMPLETADA' | 'CANCELADA';
 }
 
 export interface DailyAgenda {
