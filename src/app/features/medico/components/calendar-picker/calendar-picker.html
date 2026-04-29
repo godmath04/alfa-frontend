@@ -1,0 +1,54 @@
+<div class="cal">
+
+  <!-- Trigger -->
+  <button class="cal__trigger" (click)="toggle()">
+    <lucide-icon name="calendar-days" [size]="18"></lucide-icon>
+    <span class="cal__trigger-label">{{ displayLabel() }}</span>
+    <lucide-icon name="chevron-down" [size]="15" class="cal__chevron" [class.cal__chevron--open]="open()"></lucide-icon>
+  </button>
+
+  @if (open()) {
+
+    <!-- Backdrop para cerrar al click fuera -->
+    <div class="cal__backdrop" (click)="close()"></div>
+
+    <!-- Dropdown -->
+    <div class="cal__dropdown">
+
+      <!-- Mes / Año + navegación -->
+      <div class="cal__nav-row">
+        <button class="cal__nav-btn" (click)="prevMonth()">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+        </button>
+        <span class="cal__month">{{ monthLabel() }}</span>
+        <button class="cal__nav-btn" (click)="nextMonth()">
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Grid -->
+      <div class="cal__grid">
+
+        <!-- Encabezados de días -->
+        @for (d of DOW; track d) {
+          <div class="cal__dow">{{ d }}</div>
+        }
+
+        <!-- Días -->
+        @for (day of calendarDays(); track day.date) {
+          <button
+            class="cal__day"
+            [class.cal__day--other]="!day.isCurrentMonth"
+            [class.cal__day--today]="day.isToday && !day.isSelected"
+            [class.cal__day--selected]="day.isSelected"
+            (click)="selectDay(day)"
+          >
+            {{ day.day }}
+          </button>
+        }
+
+      </div>
+    </div>
+  }
+
+</div>

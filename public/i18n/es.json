@@ -308,6 +308,7 @@
         "proposal-expired": "Tu reserva expiró. Solicita una nueva propuesta."
       },
       "doctorSingular": "médico",
+
       "doctorPlural": "médicos",
       "loadingDoctors": "Buscando médicos disponibles...",
       "experienceYears": "años de experiencia",
@@ -316,6 +317,79 @@
       "selectDateTitle": "Elegir Fecha",
       "selectTimeTitle": "Horarios Disponibles",
       "noAvailableTimes": "No hay disponibilidad para el día seleccionado."
+    }
+  },
+  "medico": {
+    "sidebar": {
+      "subtitle": "Portal Médico"
+    },
+    "nav": {
+      "agenda":     "Citas del Día",
+      "calendario": "Mi Calendario",
+      "logout":     "Cerrar sesión"
+    },
+    "agenda": {
+      "title-day": "Citas del Día",
+      "title-week": "Mi Agenda Semanal",
+      "subtitle-day": "Agenda para",
+      "subtitle-week": "Resumen semanal de citas",
+      "view-day": "Día",
+      "view-week": "Semana",
+      "today": "Hoy",
+      "prevWeek": "Semana anterior",
+      "nextWeek": "Semana siguiente",
+      "loading": "Cargando agenda...",
+      "office": "Consultorio",
+      "reason": "Motivo",
+      "stats": {
+        "total":     "Total del día",
+        "confirmed": "Confirmadas",
+        "pending":   "Pendientes",
+        "completed": "Completadas",
+        "cancelled": "Canceladas",
+        "next":      "Próxima cita",
+        "none":      "Ninguna"
+      },
+      "search-placeholder": "Buscar por nombre de paciente...",
+      "filter": {
+        "all": "Todos los estados",
+        "confirmed": "Confirmadas",
+        "pending": "Pendientes"
+      },
+      "table": {
+        "time": "Hora",
+        "patient": "Paciente",
+        "office": "Consultorio",
+        "reason": "Motivo",
+        "status": "Estado",
+        "detail": "Detalle",
+        "until": "hasta",
+        "empty": "No hay citas para este día"
+      },
+      "detail": {
+        "patient-info": "Información del Paciente",
+        "specialty": "Especialidad",
+        "office": "Consultorio",
+        "date": "Fecha",
+        "schedule": "Horario",
+        "quick-actions": "Acciones Rápidas",
+        "absent": "Paciente Ausente",
+        "view-record": "Ver expediente",
+        "notes-title": "Notas de la Cita",
+        "notes-reason": "Motivo:",
+        "notes-placeholder": "Agregar notas para esta cita..."
+      },
+      "week": {
+        "empty": "Sin citas esta semana",
+        "count-singular": "cita programada",
+        "count-plural": "citas programadas"
+      },
+      "status": {
+        "PENDIENTE":  "Pendiente",
+        "CONFIRMADA": "Confirmada",
+        "COMPLETADA": "Completada",
+        "CANCELADA":  "Cancelada"
+      }
     }
   }
 }
