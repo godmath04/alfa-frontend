@@ -11,7 +11,7 @@ interface RawAppointment {
   pacienteId:        number;
   pacienteNombre:    string;
   especialidad:      string;
-  consultorioNumero: number;
+  consultorioNumero: string;
   fecha:             string;
   horaInicio:        string;
   horaFin:           string;

@@ -21,7 +21,7 @@ export interface SpecialtyDoctor {
   yearsOfExperience: number;
   careType: 'INTERNO' | 'EXTERNO';
   assignedOfficeId: number | null;
-  assignedOfficeNumber: number | null;
+  assignedOfficeNumber: string | null;
 }
 
 export interface DoctorAvailability {
@@ -49,7 +49,7 @@ export interface AppointmentResponse {
   patientName: string;
   doctorName: string;
   specialty: string;
-  officeNumber: number;
+  officeNumber: string;
   date: string;
   startTime: string;
   endTime: string;
@@ -65,7 +65,7 @@ export interface QuickProposalResponse {
   specialtyId: number;
   specialtyName: string;
   officeId: number;
-  officeNumber: number;
+  officeNumber: string;
   date: string;
   startTime: string;
   endTime: string;

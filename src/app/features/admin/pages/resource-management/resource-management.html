@@ -1,0 +1,432 @@
+<div class="res-page">
+
+  <!-- ─── Header ──────────────────────────────────────── -->
+  <div class="res-page__header">
+    <div class="res-page__title-group">
+      <h1 class="res-page__title">{{ t.get('admin.resources.title') }}</h1>
+      <p class="res-page__subtitle">{{ t.get('admin.resources.subtitle') }}</p>
+    </div>
+    @if (!_formVisible()) {
+      <button class="res-page__add-btn" (click)="_openCreate()">
+        <lucide-icon name="plus" [size]="18"></lucide-icon>
+        {{ t.get('admin.resources.add') }}
+      </button>
+    }
+  </div>
+
+  <!-- ─── Tabs ─────────────────────────────────────────── -->
+  <div class="res-page__tabs">
+    <button
+      class="res-page__tab"
+      [class.res-page__tab--active]="_activeTab() === 'specialties'"
+      (click)="_switchTab('specialties')"
+    >
+      <lucide-icon name="stethoscope" [size]="18"></lucide-icon>
+      {{ t.get('admin.nav.specialties') }}
+    </button>
+    <button
+      class="res-page__tab"
+      [class.res-page__tab--active]="_activeTab() === 'offices'"
+      (click)="_switchTab('offices')"
+    >
+      <lucide-icon name="building" [size]="18"></lucide-icon>
+      {{ t.get('admin.nav.offices') }}
+    </button>
+    <button
+      class="res-page__tab"
+      [class.res-page__tab--active]="_activeTab() === 'schedules'"
+      (click)="_switchTab('schedules')"
+    >
+      <lucide-icon name="clock" [size]="18"></lucide-icon>
+      {{ t.get('admin.nav.schedules') }}
+    </button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════
+       FORM CARD (create / edit — shared across all tabs)
+       ════════════════════════════════════════════════════ -->
+  @if (_formVisible()) {
+    <div class="res-page__form-card">
+
+      <h3 class="res-page__form-title">
+        {{ _editingId() !== null ? t.get('admin.resources.edit') : t.get('admin.resources.new') }}
+      </h3>
+
+      <!-- ── Specialty form ── -->
+      @if (_activeTab() === 'specialties') {
+        <div class="res-page__form-grid res-page__form-grid--4">
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.specialties.fields.name') }} *</label>
+            <input class="res-page__input" type="text"
+              [value]="_sfName()" (input)="_sfName.set($any($event.target).value)"
+              [placeholder]="t.get('admin.specialties.fields.name-placeholder')" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.specialties.fields.icon') }}</label>
+            <div class="res-page__icon-field">
+              <input class="res-page__input" type="text"
+                [value]="_sfIcon()" (input)="_sfIcon.set($any($event.target).value)"
+                [placeholder]="t.get('admin.specialties.fields.icon-placeholder')" />
+              @if (_sfIcon()) {
+                <lucide-icon [name]="_sfIcon()" [size]="22" class="res-page__icon-preview"></lucide-icon>
+              }
+            </div>
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.specialties.fields.description') }}</label>
+            <input class="res-page__input" type="text"
+              [value]="_sfDescription()" (input)="_sfDescription.set($any($event.target).value)"
+              [placeholder]="t.get('admin.specialties.fields.description-placeholder')" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.specialties.fields.duration') }} *</label>
+            <input class="res-page__input" type="number" min="5" max="480"
+              [value]="_sfDuration() ?? ''"
+              (input)="_sfDuration.set(+$any($event.target).value || null)"
+              [placeholder]="t.get('admin.specialties.fields.duration-placeholder')" />
+          </div>
+        </div>
+      }
+
+      <!-- ── Office form ── -->
+      @if (_activeTab() === 'offices') {
+        <div class="res-page__form-grid res-page__form-grid--3">
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.offices.fields.number') }} *</label>
+            <input class="res-page__input" type="text"
+              [value]="_ofNumber()" (input)="_ofNumber.set($any($event.target).value)"
+              [placeholder]="t.get('admin.offices.fields.number-placeholder')" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.offices.fields.floor') }}</label>
+            <input class="res-page__input" type="text"
+              [value]="_ofFloor()" (input)="_ofFloor.set($any($event.target).value)"
+              [placeholder]="t.get('admin.offices.fields.floor-placeholder')" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.offices.fields.type') }}</label>
+            <select class="res-page__input res-page__select"
+              [value]="_ofType()" (change)="_ofType.set($any($event.target).value)">
+              <option value="INTERNAL">{{ t.get('admin.offices.types.internal') }}</option>
+              <option value="EXTERNAL">{{ t.get('admin.offices.types.external') }}</option>
+            </select>
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.offices.fields.status') }}</label>
+            <select class="res-page__input res-page__select"
+              [value]="_ofStatus()" (change)="_ofStatus.set($any($event.target).value)">
+              <option value="AVAILABLE">{{ t.get('admin.offices.statuses.available') }}</option>
+              <option value="OCCUPIED">{{ t.get('admin.offices.statuses.occupied') }}</option>
+              <option value="MAINTENANCE">{{ t.get('admin.offices.statuses.maintenance') }}</option>
+            </select>
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.offices.fields.specialty') }}</label>
+            <select class="res-page__input res-page__select"
+              [value]="_ofSpecialtyId() ?? ''"
+              (change)="_ofSpecialtyId.set(+$any($event.target).value || null)">
+              <option value="">{{ t.get('admin.offices.fields.specialty-none') }}</option>
+              @for (s of specialtyVm.specialties(); track s.id) {
+                <option [value]="s.id">{{ s.name }}</option>
+              }
+            </select>
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.offices.fields.equipment') }}</label>
+            <input class="res-page__input" type="text"
+              [value]="_ofEquipment()" (input)="_ofEquipment.set($any($event.target).value)"
+              [placeholder]="t.get('admin.offices.fields.equipment-placeholder')" />
+          </div>
+        </div>
+      }
+
+      <!-- ── Schedule form ── -->
+      @if (_activeTab() === 'schedules') {
+        <div class="res-page__form-grid res-page__form-grid--4">
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.schedules.fields.category') }} *</label>
+            <input class="res-page__input" type="text"
+              [value]="_shCategory()" (input)="_shCategory.set($any($event.target).value)"
+              [placeholder]="t.get('admin.schedules.fields.category-placeholder')" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.schedules.fields.start') }} *</label>
+            <input class="res-page__input" type="time"
+              [value]="_shStartTime()" (input)="_shStartTime.set($any($event.target).value)" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.schedules.fields.end') }} *</label>
+            <input class="res-page__input" type="time"
+              [value]="_shEndTime()" (input)="_shEndTime.set($any($event.target).value)" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('admin.schedules.fields.max') }} *</label>
+            <input class="res-page__input" type="number" min="1" max="500"
+              [value]="_shMaxAppointments() ?? ''"
+              (input)="_shMaxAppointments.set(+$any($event.target).value || null)"
+              [placeholder]="t.get('admin.schedules.fields.max-placeholder')" />
+          </div>
+        </div>
+        <div class="res-page__days-group">
+          <label class="res-page__label">{{ t.get('admin.schedules.fields.days') }} *</label>
+          <div class="res-page__days">
+            @for (day of _WEEK_DAYS; track day.value) {
+              <button
+                type="button"
+                class="res-page__day-btn"
+                [class.res-page__day-btn--selected]="_isDaySelected(day.value)"
+                (click)="_toggleDay(day.value)"
+              >
+                {{ t.get(day.key + '-short') }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      @if (_formError()) {
+        <p class="res-page__form-error">{{ _formError() }}</p>
+      }
+
+      <div class="res-page__form-actions">
+        <button class="res-page__btn res-page__btn--ghost" (click)="_cancel()">
+          <lucide-icon name="x" [size]="16"></lucide-icon>
+          {{ t.get('common.buttons.cancel') }}
+        </button>
+        <button class="res-page__btn res-page__btn--primary" (click)="_save()"
+          [disabled]="specialtyVm.saving() || officeVm.saving() || scheduleVm.saving()">
+          @if (specialtyVm.saving() || officeVm.saving() || scheduleVm.saving()) {
+            <lucide-icon name="loader-circle" [size]="16" class="res-page__spinner"></lucide-icon>
+          }
+          {{ t.get('common.buttons.save') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ════════════════════════════════════════════════════
+       TAB: SPECIALTIES
+       ════════════════════════════════════════════════════ -->
+  @if (_activeTab() === 'specialties') {
+    @if (specialtyVm.loading()) {
+      <div class="res-page__state">
+        <lucide-icon name="loader-circle" [size]="36" class="res-page__spinner"></lucide-icon>
+        <span>{{ t.get('admin.specialties.loading') }}</span>
+      </div>
+    } @else if (specialtyVm.error()) {
+      <div class="res-page__state res-page__state--error">
+        <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+        <span>{{ t.get(specialtyVm.error()!) }}</span>
+      </div>
+    } @else {
+      <div class="res-page__card">
+        @if (specialtyVm.specialties().length === 0) {
+          <div class="res-page__state">
+            <lucide-icon name="stethoscope" [size]="40"></lucide-icon>
+            <span>{{ t.get('admin.specialties.empty') }}</span>
+          </div>
+        } @else {
+          <table class="res-page__table">
+            <thead class="res-page__thead">
+              <tr>
+                <th class="res-page__th">{{ t.get('admin.specialties.table.icon') }}</th>
+                <th class="res-page__th">{{ t.get('admin.specialties.table.name') }}</th>
+                <th class="res-page__th">{{ t.get('admin.specialties.table.description') }}</th>
+                <th class="res-page__th">{{ t.get('admin.specialties.table.duration') }}</th>
+                <th class="res-page__th">{{ t.get('admin.specialties.table.status') }}</th>
+                <th class="res-page__th">{{ t.get('admin.specialties.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of specialtyVm.specialties(); track s.id) {
+                <tr class="res-page__row" [class.res-page__row--inactive]="!s.active">
+                  <td class="res-page__td">
+                    <lucide-icon [name]="s.icon || 'stethoscope'" [size]="22" class="res-page__row-icon"></lucide-icon>
+                  </td>
+                  <td class="res-page__td res-page__td--name">{{ s.name }}</td>
+                  <td class="res-page__td res-page__td--muted">{{ s.description }}</td>
+                  <td class="res-page__td">{{ s.appointmentDuration }} {{ t.get('admin.specialties.fields.duration-unit') }}</td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge" [class.res-page__badge--active]="s.active" [class.res-page__badge--inactive]="!s.active">
+                      {{ s.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <div class="res-page__actions">
+                      <button class="res-page__action-btn res-page__action-btn--edit" (click)="_openEditSpecialty(s)" [title]="t.get('admin.specialties.actions.edit')">
+                        <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                      </button>
+                      @if (s.active) {
+                        <button class="res-page__action-btn res-page__action-btn--deactivate" (click)="specialtyVm.deactivate(s.id)" [title]="t.get('admin.specialties.actions.deactivate')">
+                          <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                        </button>
+                      } @else {
+                        <button class="res-page__action-btn res-page__action-btn--reactivate" (click)="specialtyVm.reactivate(s.id)" [title]="t.get('admin.specialties.actions.reactivate')">
+                          <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+  }
+
+  <!-- ════════════════════════════════════════════════════
+       TAB: OFFICES
+       ════════════════════════════════════════════════════ -->
+  @if (_activeTab() === 'offices') {
+    @if (officeVm.loading()) {
+      <div class="res-page__state">
+        <lucide-icon name="loader-circle" [size]="36" class="res-page__spinner"></lucide-icon>
+        <span>{{ t.get('admin.offices.loading') }}</span>
+      </div>
+    } @else if (officeVm.error()) {
+      <div class="res-page__state res-page__state--error">
+        <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+        <span>{{ t.get(officeVm.error()!) }}</span>
+      </div>
+    } @else {
+      <div class="res-page__card">
+        @if (officeVm.offices().length === 0) {
+          <div class="res-page__state">
+            <lucide-icon name="building" [size]="40"></lucide-icon>
+            <span>{{ t.get('admin.offices.empty') }}</span>
+          </div>
+        } @else {
+          <table class="res-page__table">
+            <thead class="res-page__thead">
+              <tr>
+                <th class="res-page__th">{{ t.get('admin.offices.table.number') }}</th>
+                <th class="res-page__th">{{ t.get('admin.offices.table.floor') }}</th>
+                <th class="res-page__th">{{ t.get('admin.offices.table.type') }}</th>
+                <th class="res-page__th">{{ t.get('admin.offices.table.status') }}</th>
+                <th class="res-page__th">{{ t.get('admin.offices.table.specialty') }}</th>
+                <th class="res-page__th">{{ t.get('admin.offices.table.active') }}</th>
+                <th class="res-page__th">{{ t.get('admin.offices.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (o of officeVm.offices(); track o.id) {
+                <tr class="res-page__row" [class.res-page__row--inactive]="!o.active">
+                  <td class="res-page__td res-page__td--name">{{ o.number }}</td>
+                  <td class="res-page__td res-page__td--muted">{{ o.floor }}</td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge res-page__badge--neutral">
+                      {{ o.type === 'INTERNAL' ? t.get('admin.offices.types.internal') : t.get('admin.offices.types.external') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge"
+                      [class.res-page__badge--available]="o.status === 'AVAILABLE'"
+                      [class.res-page__badge--occupied]="o.status === 'OCCUPIED'"
+                      [class.res-page__badge--maintenance]="o.status === 'MAINTENANCE'">
+                      {{ t.get('admin.offices.statuses.' + o.status.toLowerCase()) }}
+                    </span>
+                  </td>
+                  <td class="res-page__td res-page__td--muted">{{ o.specialtyName ?? '—' }}</td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge" [class.res-page__badge--active]="o.active" [class.res-page__badge--inactive]="!o.active">
+                      {{ o.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <div class="res-page__actions">
+                      <button class="res-page__action-btn res-page__action-btn--edit" (click)="_openEditOffice(o)" [title]="t.get('admin.offices.actions.edit')">
+                        <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                      </button>
+                      @if (o.active) {
+                        <button class="res-page__action-btn res-page__action-btn--deactivate" (click)="officeVm.deactivate(o.id)" [title]="t.get('admin.offices.actions.deactivate')">
+                          <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                        </button>
+                      } @else {
+                        <button class="res-page__action-btn res-page__action-btn--reactivate" (click)="officeVm.reactivate(o.id)" [title]="t.get('admin.offices.actions.reactivate')">
+                          <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+  }
+
+  <!-- ════════════════════════════════════════════════════
+       TAB: SCHEDULES
+       ════════════════════════════════════════════════════ -->
+  @if (_activeTab() === 'schedules') {
+    @if (scheduleVm.loading()) {
+      <div class="res-page__state">
+        <lucide-icon name="loader-circle" [size]="36" class="res-page__spinner"></lucide-icon>
+        <span>{{ t.get('admin.schedules.loading') }}</span>
+      </div>
+    } @else if (scheduleVm.error()) {
+      <div class="res-page__state res-page__state--error">
+        <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+        <span>{{ t.get(scheduleVm.error()!) }}</span>
+      </div>
+    } @else {
+      <div class="res-page__card">
+        @if (scheduleVm.schedules().length === 0) {
+          <div class="res-page__state">
+            <lucide-icon name="clock" [size]="40"></lucide-icon>
+            <span>{{ t.get('admin.schedules.empty') }}</span>
+          </div>
+        } @else {
+          <table class="res-page__table">
+            <thead class="res-page__thead">
+              <tr>
+                <th class="res-page__th">{{ t.get('admin.schedules.table.category') }}</th>
+                <th class="res-page__th">{{ t.get('admin.schedules.table.days') }}</th>
+                <th class="res-page__th">{{ t.get('admin.schedules.table.hours') }}</th>
+                <th class="res-page__th">{{ t.get('admin.schedules.table.max') }}</th>
+                <th class="res-page__th">{{ t.get('admin.schedules.table.status') }}</th>
+                <th class="res-page__th">{{ t.get('admin.schedules.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of scheduleVm.schedules(); track s.id) {
+                <tr class="res-page__row" [class.res-page__row--inactive]="!s.active">
+                  <td class="res-page__td res-page__td--name">{{ s.category }}</td>
+                  <td class="res-page__td res-page__td--muted">{{ _formatDays(s.days) }}</td>
+                  <td class="res-page__td">{{ s.startTime.slice(0,5) }} – {{ s.endTime.slice(0,5) }}</td>
+                  <td class="res-page__td">{{ s.maxAppointments }}</td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge" [class.res-page__badge--active]="s.active" [class.res-page__badge--inactive]="!s.active">
+                      {{ s.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <div class="res-page__actions">
+                      <button class="res-page__action-btn res-page__action-btn--edit" (click)="_openEditSchedule(s)" [title]="t.get('admin.schedules.actions.edit')">
+                        <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                      </button>
+                      @if (s.active) {
+                        <button class="res-page__action-btn res-page__action-btn--deactivate" (click)="scheduleVm.deactivate(s.id)" [title]="t.get('admin.schedules.actions.deactivate')">
+                          <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                        </button>
+                      } @else {
+                        <button class="res-page__action-btn res-page__action-btn--reactivate" (click)="scheduleVm.reactivate(s.id)" [title]="t.get('admin.schedules.actions.reactivate')">
+                          <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+  }
+
+</div>

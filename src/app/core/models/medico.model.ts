@@ -3,7 +3,7 @@ export interface DoctorAppointment {
   patientId:      number;
   patientName:    string;
   specialty:      string;
-  officeNumber:   number;
+  officeNumber:   string;
   date:           string;
   startTime:      string;
   endTime:        string;

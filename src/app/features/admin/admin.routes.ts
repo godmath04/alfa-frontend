@@ -9,10 +9,18 @@ export const ADMIN_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [Role.Administrador] },
     children: [
-      { path: '', redirectTo: 'specialties', pathMatch: 'full' },
+      { path: '', redirectTo: 'resources', pathMatch: 'full' },
       {
-        path: 'specialties',
-        loadComponent: () => import('./pages/specialties/specialties').then(m => m.SpecialtiesPage),
+        path: 'resources',
+        loadComponent: () => import('./pages/resource-management/resource-management').then(m => m.ResourceManagementPage),
+      },
+      {
+        path: 'doctors',
+        loadComponent: () => import('./pages/doctors/doctors').then(m => m.DoctorsPage),
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./pages/users/users').then(m => m.UsersPage),
       },
     ],
   },

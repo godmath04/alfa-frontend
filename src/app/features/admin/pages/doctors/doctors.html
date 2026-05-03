@@ -1,0 +1,195 @@
+<div class="doc-page">
+
+  <!-- ─── Header ──────────────────────────────────────── -->
+  <div class="doc-page__header">
+    <div class="doc-page__title-group">
+      <h1 class="doc-page__title">{{ t.get('admin.doctors.title') }}</h1>
+      <p class="doc-page__subtitle">{{ t.get('admin.doctors.subtitle') }}</p>
+    </div>
+    @if (!_formVisible()) {
+      <button class="doc-page__add-btn" (click)="_openCreate()">
+        <lucide-icon name="plus" [size]="18"></lucide-icon>
+        {{ t.get('admin.doctors.add') }}
+      </button>
+    }
+  </div>
+
+  <!-- ─── Form ─────────────────────────────────────────── -->
+  @if (_formVisible()) {
+    <div class="doc-page__form-card">
+      <h3 class="doc-page__form-title">
+        {{ _isEditing() ? t.get('admin.doctors.edit') : t.get('admin.doctors.new') }}
+      </h3>
+
+      <div class="doc-page__form-grid">
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.user') }} *</label>
+          <select class="doc-page__input doc-page__select"
+            [value]="_fUserId() ?? ''"
+            (change)="_fUserId.set(+$any($event.target).value || null)"
+            [disabled]="_isEditing()">
+            <option value="">{{ t.get('admin.doctors.fields.user-placeholder') }}</option>
+            @for (u of userVm.users(); track u.id) {
+              <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.first-name') }} *</label>
+          <input class="doc-page__input" type="text"
+            [value]="_fFirstName()" (input)="_fFirstName.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.first-name-placeholder')" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.last-name') }} *</label>
+          <input class="doc-page__input" type="text"
+            [value]="_fLastName()" (input)="_fLastName.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.last-name-placeholder')" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-number') }} *</label>
+          <input class="doc-page__input" type="text"
+            [value]="_fIdNumber()" (input)="_fIdNumber.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.id-number-placeholder')" />
+        </div>
+      </div>
+
+      <div class="doc-page__field doc-page__field--full">
+        <label class="doc-page__label">{{ t.get('admin.doctors.fields.photo') }}</label>
+        <input class="doc-page__input" type="text"
+          [value]="_fPhoto()" (input)="_fPhoto.set($any($event.target).value)"
+          [placeholder]="t.get('admin.doctors.fields.photo-placeholder')" />
+      </div>
+
+      <div class="doc-page__specialties-group">
+        <label class="doc-page__label">{{ t.get('admin.doctors.fields.specialties') }}</label>
+        <div class="doc-page__specialties">
+          @for (s of specialtyVm.specialties(); track s.id) {
+            @if (s.active) {
+              <label class="doc-page__chip" [class.doc-page__chip--selected]="_isSpecialtySelected(s.id)">
+                <input type="checkbox" class="doc-page__checkbox-hidden"
+                  [checked]="_isSpecialtySelected(s.id)"
+                  (change)="_toggleSpecialty(s.id)" />
+                @if (s.icon) { <lucide-icon [name]="s.icon" [size]="14"></lucide-icon> }
+                {{ s.name }}
+              </label>
+            }
+          }
+        </div>
+      </div>
+
+      @if (_formError()) {
+        <p class="doc-page__form-error">{{ _formError() }}</p>
+      }
+
+      <div class="doc-page__form-actions">
+        <button class="doc-page__btn doc-page__btn--ghost" (click)="_cancel()">
+          <lucide-icon name="x" [size]="16"></lucide-icon>
+          {{ t.get('common.buttons.cancel') }}
+        </button>
+        <button class="doc-page__btn doc-page__btn--primary" (click)="_save()"
+          [disabled]="doctorVm.saving()">
+          @if (doctorVm.saving()) {
+            <lucide-icon name="loader-circle" [size]="16" class="doc-page__spinner"></lucide-icon>
+          }
+          {{ t.get('common.buttons.save') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ─── Loading ─────────────────────────────────────── -->
+  @if (doctorVm.loading()) {
+    <div class="doc-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="doc-page__spinner"></lucide-icon>
+      <span>{{ t.get('admin.doctors.loading') }}</span>
+    </div>
+  }
+
+  <!-- ─── Error ───────────────────────────────────────── -->
+  @if (!doctorVm.loading() && doctorVm.error()) {
+    <div class="doc-page__state doc-page__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ t.get(doctorVm.error()!) }}</span>
+    </div>
+  }
+
+  <!-- ─── Table ───────────────────────────────────────── -->
+  @if (!doctorVm.loading() && !doctorVm.error()) {
+    <div class="doc-page__card">
+      @if (doctorVm.doctors().length === 0) {
+        <div class="doc-page__state">
+          <lucide-icon name="user-check" [size]="40"></lucide-icon>
+          <span>{{ t.get('admin.doctors.empty') }}</span>
+        </div>
+      } @else {
+        <table class="doc-page__table">
+          <thead class="doc-page__thead">
+            <tr>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.name') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.id-number') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.specialties') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.status') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.actions') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (d of doctorVm.doctors(); track d.id) {
+              <tr class="doc-page__row" [class.doc-page__row--inactive]="!d.active">
+                <td class="doc-page__td">
+                  <div class="doc-page__avatar-cell">
+                    <div class="doc-page__avatar">{{ d.firstName[0] }}{{ d.lastName[0] }}</div>
+                    <div>
+                      <p class="doc-page__name">{{ d.fullName }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="doc-page__td doc-page__td--muted">{{ d.idNumber }}</td>
+                <td class="doc-page__td">
+                  <div class="doc-page__tags">
+                    @for (s of d.specialties; track s.id) {
+                      <span class="doc-page__tag">{{ s.name }}</span>
+                    }
+                    @if (d.specialties.length === 0) {
+                      <span class="doc-page__td--muted">—</span>
+                    }
+                  </div>
+                </td>
+                <td class="doc-page__td">
+                  <span class="doc-page__badge"
+                    [class.doc-page__badge--active]="d.active"
+                    [class.doc-page__badge--inactive]="!d.active">
+                    {{ d.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                  </span>
+                </td>
+                <td class="doc-page__td">
+                  <div class="doc-page__actions">
+                    <button class="doc-page__action-btn doc-page__action-btn--edit"
+                      (click)="_openEdit(d)" [title]="t.get('admin.doctors.actions.edit')">
+                      <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                    </button>
+                    @if (d.active) {
+                      <button class="doc-page__action-btn doc-page__action-btn--deactivate"
+                        (click)="doctorVm.deactivate(d.id)" [title]="t.get('admin.doctors.actions.deactivate')">
+                        <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                      </button>
+                    } @else {
+                      <button class="doc-page__action-btn doc-page__action-btn--reactivate"
+                        (click)="doctorVm.reactivate(d.id)" [title]="t.get('admin.doctors.actions.reactivate')">
+                        <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+
+</div>
