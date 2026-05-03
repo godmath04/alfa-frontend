@@ -177,6 +177,7 @@
   },
   "paciente": {
     "sidebar": {
+      "brand":    "Alfa Hospital",
       "subtitle": "Healthcare Management"
     },
     "nav": {
@@ -319,8 +320,62 @@
       "noAvailableTimes": "No hay disponibilidad para el día seleccionado."
     }
   },
+  "admin": {
+    "sidebar": {
+      "brand":    "Alfa Hospital",
+      "subtitle": "Panel Administrador"
+    },
+    "nav": {
+      "specialties": "Especialidades",
+      "logout":      "Cerrar sesión"
+    },
+    "specialties": {
+      "title":    "Gestión de Especialidades",
+      "subtitle": "Administra el catálogo de especialidades médicas del sistema",
+      "add":      "Nueva Especialidad",
+      "new":      "Nueva Especialidad",
+      "edit":     "Editar Especialidad",
+      "loading":  "Cargando especialidades...",
+      "empty":    "No hay especialidades registradas",
+      "error":    "Error al cargar las especialidades. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "fields": {
+        "name":                 "Nombre",
+        "name-placeholder":     "Ej: Cardiología",
+        "icon":                 "Ícono (Lucide)",
+        "icon-placeholder":     "Ej: heart, brain, eye...",
+        "description":          "Descripción",
+        "description-placeholder": "Descripción breve de la especialidad",
+        "duration":             "Duración (min)",
+        "duration-unit":        "min",
+        "duration-placeholder": "Ej: 30"
+      },
+      "table": {
+        "icon":        "Ícono",
+        "name":        "Nombre",
+        "description": "Descripción",
+        "duration":    "Duración",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "status": {
+        "active":   "Activa",
+        "inactive": "Inactiva"
+      },
+      "actions": {
+        "edit":       "Editar especialidad",
+        "deactivate": "Desactivar especialidad",
+        "reactivate": "Reactivar especialidad"
+      },
+      "validation": {
+        "name-required":     "El nombre es obligatorio",
+        "duration-required": "La duración mínima es 5 minutos"
+      }
+    }
+  },
   "medico": {
     "sidebar": {
+      "brand":    "Alfa Hospital",
       "subtitle": "Portal Médico"
     },
     "nav": {
