@@ -20,8 +20,9 @@ export class MedicoLayout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'medico.nav.agenda',      icon: 'clipboard-list', route: '/medico/agenda'      },
-    { key: 'medico.nav.calendario',  icon: 'calendar',       route: '/medico/calendario'  },
+    { key: 'medico.nav.agenda',     icon: 'clipboard-list', route: '/medico/agenda'    },
+    { key: 'medico.nav.calendario', icon: 'calendar',       route: '/medico/calendario' },
+    { key: 'medico.nav.horarios',   icon: 'clock',          route: '/medico/horarios'  },
   ];
 
   _isActive(route: string): boolean {

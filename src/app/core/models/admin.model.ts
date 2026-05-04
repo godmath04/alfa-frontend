@@ -64,13 +64,18 @@ export interface AttentionScheduleRequest {
 
 // ─── Doctor profile ───────────────────────────────────────────────────────────
 
+export type DoctorType = 'INTERNO' | 'EXTERNO';
+
 export interface DoctorProfile {
   id:           number;
   userId:       number;
+  email:        string;
   firstName:    string;
   lastName:     string;
   fullName:     string;
   idNumber:     string;
+  type:         DoctorType;
+  officeId:     number | null;
   profilePhoto: string | null;
   specialties:  Specialty[];
   active:       boolean;
@@ -78,12 +83,46 @@ export interface DoctorProfile {
 }
 
 export interface DoctorProfileRequest {
-  userId:       number;
-  firstName:    string;
-  lastName:     string;
-  idNumber:     string;
+  userId:        number;
+  email:         string;
+  firstName:     string;
+  lastName:      string;
+  idNumber:      string;
+  type:          DoctorType;
+  officeId?:     number;
   profilePhoto?: string;
-  specialtyIds: number[];
+  specialtyIds:  number[];
+}
+
+// ─── Horario ──────────────────────────────────────────────────────────────────
+
+export interface Horario {
+  id:         number;
+  diaSemana:  number;
+  horaInicio: string;
+  horaFin:    string;
+}
+
+export interface HorarioRequest {
+  diaSemana:  number;
+  horaInicio: string;
+  horaFin:    string;
+}
+
+// ─── System configuration ─────────────────────────────────────────────────────
+
+export interface SystemConfig {
+  id:          number;
+  key:         string;
+  value:       string;
+  description: string;
+  active:      boolean;
+}
+
+export interface SystemConfigRequest {
+  key:          string;
+  value:        string;
+  description?: string;
 }
 
 // ─── User ─────────────────────────────────────────────────────────────────────

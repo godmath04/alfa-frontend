@@ -22,6 +22,10 @@ export const ADMIN_ROUTES: Routes = [
         path: 'users',
         loadComponent: () => import('./pages/users/users').then(m => m.UsersPage),
       },
+      {
+        path: 'config',
+        loadComponent: () => import('./pages/config/config').then(m => m.ConfigPage),
+      },
     ],
   },
 ];

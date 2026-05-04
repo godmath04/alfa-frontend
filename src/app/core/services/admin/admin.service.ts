@@ -8,6 +8,7 @@ import {
   DoctorProfile, DoctorProfileRequest,
   Office, OfficeRequest,
   Specialty, SpecialtyRequest,
+  SystemConfig, SystemConfigRequest,
   UserProfile,
 } from '../../models/admin.model';
 
@@ -115,5 +116,27 @@ export class AdminService {
     return this._http.patch<UserProfile>(`${this._baseUrl}/users/${id}/role`, null, {
       params: { role },
     });
+  }
+
+  // ─── System configuration ─────────────────────────────────────────────────
+
+  getConfigs(): Observable<SystemConfig[]> {
+    return this._http.get<SystemConfig[]>(`${this._baseUrl}/config/all`);
+  }
+
+  createConfig(request: SystemConfigRequest): Observable<SystemConfig> {
+    return this._http.post<SystemConfig>(`${this._baseUrl}/config`, request);
+  }
+
+  updateConfig(id: number, request: SystemConfigRequest): Observable<SystemConfig> {
+    return this._http.put<SystemConfig>(`${this._baseUrl}/config/${id}`, request);
+  }
+
+  deactivateConfig(id: number): Observable<void> {
+    return this._http.patch<void>(`${this._baseUrl}/config/${id}/deactivate`, {});
+  }
+
+  reactivateConfig(id: number): Observable<void> {
+    return this._http.patch<void>(`${this._baseUrl}/config/${id}/reactivate`, {});
   }
 }

@@ -348,7 +348,43 @@
       "schedules":   "Horarios de Atención",
       "doctors":     "Perfiles de Médicos",
       "users":       "Usuarios",
+      "config":      "Configuración",
       "logout":      "Cerrar sesión"
+    },
+    "config": {
+      "title":    "Configuración del Sistema",
+      "subtitle": "Parámetros globales del sistema hospitalario",
+      "add":      "Nueva Configuración",
+      "new":      "Nueva Configuración",
+      "edit":     "Editar Configuración",
+      "loading":  "Cargando configuraciones...",
+      "empty":    "No hay configuraciones registradas",
+      "error":    "Error al cargar las configuraciones. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "fields": {
+        "key":                  "Clave",
+        "key-placeholder":      "Ej: appointment.max_days_ahead",
+        "value":                "Valor",
+        "value-placeholder":    "Ej: 30",
+        "description":          "Descripción",
+        "description-placeholder": "Descripción del parámetro"
+      },
+      "table": {
+        "key":         "Clave",
+        "value":       "Valor",
+        "description": "Descripción",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "actions": {
+        "edit":       "Editar configuración",
+        "deactivate": "Desactivar",
+        "reactivate": "Reactivar"
+      },
+      "validation": {
+        "key-required":   "La clave es obligatoria",
+        "value-required": "El valor es obligatorio"
+      }
     },
     "resources": {
       "title":    "Gestión de Recursos",
@@ -411,15 +447,24 @@
       "empty":    "No hay perfiles de médicos registrados",
       "error":    "Error al cargar los médicos. Intenta de nuevo.",
       "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "types": {
+        "interno": "Interno",
+        "externo": "Externo"
+      },
       "fields": {
         "user":                  "Usuario del Sistema",
         "user-placeholder":      "Selecciona un usuario...",
+        "type":                  "Tipo de Atención",
+        "email":                 "Correo Electrónico",
+        "email-placeholder":     "correo@ejemplo.com",
         "first-name":            "Nombre",
         "first-name-placeholder":"Ej: Juan",
         "last-name":             "Apellido",
         "last-name-placeholder": "Ej: Pérez",
         "id-number":             "Cédula / Pasaporte",
         "id-number-placeholder": "Ej: 1234567890",
+        "office":                "Consultorio Asignado",
+        "office-none":           "Sin consultorio asignado",
         "photo":                 "Foto de Perfil (URL)",
         "photo-placeholder":     "https://...",
         "specialties":           "Especialidades"
@@ -427,6 +472,7 @@
       "table": {
         "name":        "Médico",
         "id-number":   "Cédula",
+        "type":        "Tipo",
         "specialties": "Especialidades",
         "status":      "Estado",
         "actions":     "Acciones"
@@ -434,10 +480,16 @@
       "actions": {
         "edit":       "Editar perfil",
         "deactivate": "Desactivar médico",
-        "reactivate": "Reactivar médico"
+        "reactivate": "Reactivar médico",
+        "schedules":  "Ver horarios de atención"
+      },
+      "schedules": {
+        "title": "Horarios de Atención",
+        "none":  "Sin horario asignado"
       },
       "validation": {
         "user-required":  "Debes seleccionar un usuario del sistema",
+        "email-required": "El correo electrónico es obligatorio",
         "first-required": "El nombre es obligatorio",
         "last-required":  "El apellido es obligatorio",
         "id-required":    "La cédula es obligatoria"
@@ -554,7 +606,19 @@
     "nav": {
       "agenda":     "Citas del Día",
       "calendario": "Mi Calendario",
+      "horarios":   "Mis Horarios",
       "logout":     "Cerrar sesión"
+    },
+    "horarios": {
+      "title":         "Mis Horarios de Atención",
+      "subtitle":      "Configura los días y horas en que atiendes pacientes",
+      "card-title":    "Horario semanal",
+      "loading":       "Cargando horarios...",
+      "profile-error": "No se encontró tu perfil en el sistema. Contacta al administrador.",
+      "none":          "Sin horario asignado",
+      "add":           "Agregar",
+      "edit":          "Editar",
+      "save":          "Guardar"
     },
     "agenda": {
       "title-day": "Citas del Día",
