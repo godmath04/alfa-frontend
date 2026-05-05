@@ -279,7 +279,7 @@
                   <lucide-icon name="check" [size]="14"></lucide-icon>
                 </button>
                 <button class="doc-page__sched-btn doc-page__sched-btn--cancel"
-                  (click)="_editingDayStart.update(m => { const n={...m}; delete n[day.value]; return n; }); _editingDayEnd.update(m => { const n={...m}; delete n[day.value]; return n; })">
+                  (click)="_cancelDay(day.value)">
                   <lucide-icon name="x" [size]="14"></lucide-icon>
                 </button>
               } @else if (_getHorario(day.value)) {

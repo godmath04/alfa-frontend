@@ -185,4 +185,9 @@ export class DoctorsPage {
   _isEditingDay(diaSemana: number): boolean {
     return diaSemana in this._editingDayStart();
   }
+
+  _cancelDay(diaSemana: number): void {
+    this._editingDayStart.update(m => { const n = { ...m }; delete n[diaSemana]; return n; });
+    this._editingDayEnd.update(m =>   { const n = { ...m }; delete n[diaSemana]; return n; });
+  }
 }
