@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 
 import { AdminService } from './admin.service';
 import { UserStateService } from './user.state';
@@ -10,6 +10,7 @@ export class UserViewModel {
   private readonly _state   = inject(UserStateService);
 
   readonly users   = this._state.items;
+  readonly medicos = computed(() => this._state.items().filter(u => u.role === 'MEDICO'));
   readonly loading = this._state.loading;
   readonly error   = this._state.error;
   readonly saving  = this._state.saving;

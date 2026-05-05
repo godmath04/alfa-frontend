@@ -30,7 +30,7 @@
             (change)="_onUserChange(+$any($event.target).value)"
             [disabled]="_isEditing()">
             <option value="">{{ t.get('admin.doctors.fields.user-placeholder') }}</option>
-            @for (u of userVm.users(); track u.id) {
+            @for (u of userVm.medicos(); track u.id) {
               <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
             }
           </select>
