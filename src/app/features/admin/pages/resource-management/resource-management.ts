@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, ChangeDetectorRef, ApplicationRef } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../../core/services/translate';
@@ -19,6 +19,7 @@ type ActiveTab = 'specialties' | 'offices' | 'schedules';
   imports: [LucideAngularModule],
   templateUrl: './resource-management.html',
   styleUrl: './resource-management.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResourceManagementPage {
 
@@ -26,6 +27,8 @@ export class ResourceManagementPage {
   readonly specialtyVm = inject(SpecialtyViewModel);
   readonly officeVm    = inject(OfficeViewModel);
   readonly scheduleVm  = inject(ScheduleViewModel);
+  readonly cdr         = inject(ChangeDetectorRef);
+  readonly appRef      = inject(ApplicationRef);
 
   // ─── Tab ───────────────────────────────────────────────────────────────────
   readonly _activeTab = signal<ActiveTab>('specialties');
@@ -67,10 +70,15 @@ export class ResourceManagementPage {
   ];
 
   constructor() {
-    afterNextRender(() => {
-      this.specialtyVm.loadAll();
-      this.officeVm.loadAll();
-      this.scheduleVm.loadAll();
+    this.specialtyVm.loadAll();
+    this.officeVm.loadAll();
+    this.scheduleVm.loadAll();
+
+    // Force change detection after async operations complete
+    this.appRef.isStable.subscribe(isStable => {
+      if (isStable) {
+        this.cdr.markForCheck();
+      }
     });
   }
 
@@ -78,6 +86,7 @@ export class ResourceManagementPage {
   _switchTab(tab: ActiveTab): void {
     this._activeTab.set(tab);
     this._closeForm();
+    this.cdr.markForCheck();
   }
 
   // ─── Form open ─────────────────────────────────────────────────────────────
@@ -86,6 +95,7 @@ export class ResourceManagementPage {
     this._formError.set(null);
     this._resetForms();
     this._formVisible.set(true);
+    this.cdr.markForCheck();
   }
 
   _openEditSpecialty(s: Specialty): void {
@@ -96,6 +106,7 @@ export class ResourceManagementPage {
     this._sfDuration.set(s.appointmentDuration);
     this._formError.set(null);
     this._formVisible.set(true);
+    this.cdr.markForCheck();
   }
 
   _openEditOffice(o: Office): void {
@@ -108,6 +119,7 @@ export class ResourceManagementPage {
     this._ofEquipment.set(o.equipment.join(', '));
     this._formError.set(null);
     this._formVisible.set(true);
+    this.cdr.markForCheck();
   }
 
   _openEditSchedule(s: AttentionSchedule): void {
@@ -119,9 +131,13 @@ export class ResourceManagementPage {
     this._shMaxAppointments.set(s.maxAppointments);
     this._formError.set(null);
     this._formVisible.set(true);
+    this.cdr.markForCheck();
   }
 
-  _cancel(): void { this._closeForm(); }
+  _cancel(): void { 
+    this._closeForm(); 
+    this.cdr.markForCheck();
+  }
 
   // ─── Save ──────────────────────────────────────────────────────────────────
   _save(): void {
@@ -134,8 +150,8 @@ export class ResourceManagementPage {
   private _saveSpecialty(): void {
     const name     = this._sfName().trim();
     const duration = this._sfDuration();
-    if (!name)              { this._formError.set(this.t.get('admin.specialties.validation.name-required')); return; }
-    if (!duration || duration < 5) { this._formError.set(this.t.get('admin.specialties.validation.duration-required')); return; }
+    if (!name)              { this._formError.set(this.t.get('admin.specialties.validation.name-required')); this.cdr.markForCheck(); return; }
+    if (!duration || duration < 5) { this._formError.set(this.t.get('admin.specialties.validation.duration-required')); this.cdr.markForCheck(); return; }
 
     const request: SpecialtyRequest = {
       name, icon: this._sfIcon().trim() || undefined,
@@ -144,12 +160,15 @@ export class ResourceManagementPage {
     };
     const id = this._editingId();
     const action$ = id !== null ? this.specialtyVm.update(id, request) : this.specialtyVm.create(request);
-    action$.subscribe({ next: () => this._closeForm(), error: () => this._formError.set(this.t.get('admin.specialties.save-error')) });
+    action$.subscribe({ 
+      next: () => { this._closeForm(); this.cdr.markForCheck(); }, 
+      error: () => { this._formError.set(this.t.get('admin.specialties.save-error')); this.cdr.markForCheck(); }
+    });
   }
 
   private _saveOffice(): void {
     const number = this._ofNumber().trim();
-    if (!number) { this._formError.set(this.t.get('admin.offices.validation.number-required')); return; }
+    if (!number) { this._formError.set(this.t.get('admin.offices.validation.number-required')); this.cdr.markForCheck(); return; }
 
     const request: OfficeRequest = {
       number,
@@ -161,7 +180,10 @@ export class ResourceManagementPage {
     };
     const id = this._editingId();
     const action$ = id !== null ? this.officeVm.update(id, request) : this.officeVm.create(request);
-    action$.subscribe({ next: () => this._closeForm(), error: () => this._formError.set(this.t.get('admin.offices.save-error')) });
+    action$.subscribe({ 
+      next: () => { this._closeForm(); this.cdr.markForCheck(); }, 
+      error: () => { this._formError.set(this.t.get('admin.offices.save-error')); this.cdr.markForCheck(); }
+    });
   }
 
   private _saveSchedule(): void {
@@ -171,10 +193,10 @@ export class ResourceManagementPage {
     const end      = this._shEndTime();
     const max      = this._shMaxAppointments();
 
-    if (!category)      { this._formError.set(this.t.get('admin.schedules.validation.category-required')); return; }
-    if (!days.length)   { this._formError.set(this.t.get('admin.schedules.validation.days-required')); return; }
-    if (!start || !end) { this._formError.set(this.t.get('admin.schedules.validation.time-required')); return; }
-    if (!max || max < 1){ this._formError.set(this.t.get('admin.schedules.validation.max-required')); return; }
+    if (!category)      { this._formError.set(this.t.get('admin.schedules.validation.category-required')); this.cdr.markForCheck(); return; }
+    if (!days.length)   { this._formError.set(this.t.get('admin.schedules.validation.days-required')); this.cdr.markForCheck(); return; }
+    if (!start || !end) { this._formError.set(this.t.get('admin.schedules.validation.time-required')); this.cdr.markForCheck(); return; }
+    if (!max || max < 1){ this._formError.set(this.t.get('admin.schedules.validation.max-required')); this.cdr.markForCheck(); return; }
 
     const request: AttentionScheduleRequest = {
       category, days,
@@ -184,7 +206,10 @@ export class ResourceManagementPage {
     };
     const id = this._editingId();
     const action$ = id !== null ? this.scheduleVm.update(id, request) : this.scheduleVm.create(request);
-    action$.subscribe({ next: () => this._closeForm(), error: () => this._formError.set(this.t.get('admin.schedules.save-error')) });
+    action$.subscribe({ 
+      next: () => { this._closeForm(); this.cdr.markForCheck(); }, 
+      error: () => { this._formError.set(this.t.get('admin.schedules.save-error')); this.cdr.markForCheck(); }
+    });
   }
 
   // ─── Days toggle ───────────────────────────────────────────────────────────
@@ -193,6 +218,7 @@ export class ResourceManagementPage {
     this._shDays.set(
       current.includes(day) ? current.filter(d => d !== day) : [...current, day]
     );
+    this.cdr.markForCheck();
   }
 
   _isDaySelected(day: string): boolean {
@@ -209,6 +235,7 @@ export class ResourceManagementPage {
     this._formVisible.set(false);
     this._editingId.set(null);
     this._formError.set(null);
+    this.cdr.markForCheck();
   }
 
   private _resetForms(): void {
