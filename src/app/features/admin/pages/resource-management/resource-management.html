@@ -54,7 +54,7 @@
 
       <!-- ── Specialty form ── -->
       @if (_activeTab() === 'specialties') {
-        <div class="res-page__form-grid res-page__form-grid--4">
+        <div class="res-page__form-grid res-page__form-grid--specialty">
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.specialties.fields.name') }} *</label>
             <input class="res-page__input" type="text"
@@ -63,12 +63,29 @@
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.specialties.fields.icon') }}</label>
-            <div class="res-page__icon-field">
-              <input class="res-page__input" type="text"
-                [value]="_sfIcon()" (input)="_sfIcon.set($any($event.target).value)"
-                [placeholder]="t.get('admin.specialties.fields.icon-placeholder')" />
-              @if (_sfIcon()) {
-                <lucide-icon [name]="_sfIcon()" [size]="22" class="res-page__icon-preview"></lucide-icon>
+            <div class="res-page__icon-dropdown-container">
+              <button type="button" class="res-page__input res-page__icon-toggle" (click)="_toggleIconDropdown($event)">
+                <span class="res-page__icon-toggle-content">
+                  @if (_sfIcon()) {
+                    <lucide-icon [name]="_sfIcon()" [size]="20"></lucide-icon>
+                  } @else {
+                    <lucide-icon name="ban" [size]="20" class="res-page__icon-none"></lucide-icon>
+                  }
+                </span>
+                <lucide-icon name="chevron-down" [size]="16" class="res-page__icon-chevron" [class.res-page__icon-chevron--open]="_iconDropdownOpen()"></lucide-icon>
+              </button>
+              
+              @if (_iconDropdownOpen()) {
+                <div class="res-page__icon-menu">
+                  <button type="button" class="res-page__icon-option" [title]="t.get('admin.specialties.fields.icon-none')" [class.res-page__icon-option--selected]="!_sfIcon()" (click)="_selectIcon('', $event)">
+                    <lucide-icon name="ban" [size]="20" class="res-page__icon-none"></lucide-icon>
+                  </button>
+                  @for (icon of _AVAILABLE_ICONS; track icon.name) {
+                    <button type="button" class="res-page__icon-option" [title]="icon.label" [class.res-page__icon-option--selected]="_sfIcon() === icon.name" (click)="_selectIcon(icon.name, $event)">
+                      <lucide-icon [name]="icon.name" [size]="20"></lucide-icon>
+                    </button>
+                  }
+                </div>
               }
             </div>
           </div>

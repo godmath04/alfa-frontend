@@ -11,7 +11,9 @@ import {
   CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
   CircleAlert, CalendarX, DoorOpen, Trash2,
   List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
-  UserX, XCircle, Plus, Pencil, X, Building, Users, Settings
+  UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
+  Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
+  Wind, Footprints, Ban
 } from 'lucide-angular';
 
 import { APP_ROUTES } from './app.routes';
@@ -36,7 +38,9 @@ export const appConfig: ApplicationConfig = {
         CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
         CircleAlert, CalendarX, DoorOpen, Trash2,
         List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
-        UserX, XCircle, Plus, Pencil, X, Building, Users, Settings
+        UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
+        Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
+        Wind, Footprints, Ban
       })
     ),
   ]

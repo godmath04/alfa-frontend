@@ -109,6 +109,12 @@ $bp-mobile: 768px;
       @media (max-width: $bp-mobile) { grid-template-columns: 1fr; }
     }
 
+    &--specialty {
+      grid-template-columns: 1.5fr 75px 3fr 1fr;
+      @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+      @media (max-width: $bp-mobile) { grid-template-columns: 1fr; }
+    }
+
     &--3 {
       grid-template-columns: repeat(3, 1fr);
       @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
@@ -140,9 +146,90 @@ $bp-mobile: 768px;
 
   &__select { background: var(--color-white); cursor: pointer; }
 
-  &__icon-field { display: flex; align-items: center; gap: 8px; }
+  &__icon-dropdown-container {
+    position: relative;
+    width: 60px;
+  }
 
-  &__icon-preview { color: var(--color-accent-1); flex-shrink: 0; }
+  &__icon-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    padding: 8px;
+    height: 40px;
+    width: 60px;
+    transition: border-color 0.15s;
+
+    &:focus { outline: none; border-color: var(--color-accent-1); }
+  }
+
+  &__icon-toggle-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+  }
+
+  &__icon-chevron {
+    color: var(--color-text-muted);
+    transition: transform 0.2s;
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__icon-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 220px; /* fixed width for the grid */
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+    gap: 6px;
+    padding: 8px;
+  }
+
+  &__icon-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+
+    &:hover {
+      background: rgba(54, 154, 217, 0.08);
+      color: var(--color-accent-1);
+      transform: scale(1.1);
+    }
+
+    &--selected {
+      background: rgba(54, 154, 217, 0.15);
+      color: var(--color-primary-dark);
+    }
+  }
+
+  &__icon-none {
+    color: var(--color-text-muted);
+    opacity: 0.5;
+  }
 
   // ─── Days ─────────────────────────────────────────────
   &__days-group { margin-bottom: 16px; }

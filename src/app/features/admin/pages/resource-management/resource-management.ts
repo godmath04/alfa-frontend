@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy, ChangeDetectorRef, ApplicationRef } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, ChangeDetectorRef, ApplicationRef, HostListener } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../../core/services/translate';
@@ -43,6 +43,7 @@ export class ResourceManagementPage {
   readonly _sfIcon        = signal('');
   readonly _sfDescription = signal('');
   readonly _sfDuration    = signal<number | null>(null);
+  readonly _iconDropdownOpen = signal(false);
 
   // ─── Office form ───────────────────────────────────────────────────────────
   readonly _ofNumber      = signal('');
@@ -67,6 +68,24 @@ export class ResourceManagementPage {
     { value: 'FRIDAY',    key: 'common.days.friday' },
     { value: 'SATURDAY',  key: 'common.days.saturday' },
     { value: 'SUNDAY',    key: 'common.days.sunday' },
+  ];
+
+  readonly _AVAILABLE_ICONS = [
+    { name: 'stethoscope', label: 'Estetoscopio' },
+    { name: 'heart', label: 'Corazón - Cardiología' },
+    { name: 'baby', label: 'Bebé - Pediatría' },
+    { name: 'brain', label: 'Cerebro - Neurología' },
+    { name: 'eye', label: 'Ojo - Oftalmología' },
+    { name: 'bone', label: 'Hueso - Traumatología' },
+    { name: 'wind', label: 'Pulmones - Neumología' },
+    { name: 'activity', label: 'Actividad - Medicina Deportiva' },
+    { name: 'ear', label: 'Oído - Otorrinolaringología' },
+    { name: 'hand', label: 'Mano - Cirugía Plástica' },
+    { name: 'footprints', label: 'Pie - Podología' },
+    { name: 'pill', label: 'Pastilla - Farmacología' },
+    { name: 'syringe', label: 'Jeringa - Vacunas' },
+    { name: 'thermometer', label: 'Termómetro - Infectología' },
+    { name: 'microscope', label: 'Microscopio - Laboratorio' },
   ];
 
   constructor() {
@@ -228,6 +247,34 @@ export class ResourceManagementPage {
   // ─── Day display helper ────────────────────────────────────────────────────
   _formatDays(days: string[]): string {
     return days.map(d => this.t.get(`common.days.${d.toLowerCase()}-short`)).join(', ');
+  }
+
+  // ─── Icon dropdown ─────────────────────────────────────────────────────────
+  _getIconLabel(name: string): string {
+    if (!name) return this.t.get('admin.specialties.fields.icon-none');
+    const icon = this._AVAILABLE_ICONS.find(i => i.name === name);
+    return icon ? icon.label : name;
+  }
+
+  _selectIcon(name: string, event?: Event): void {
+    if (event) event.stopPropagation();
+    this._sfIcon.set(name);
+    this._iconDropdownOpen.set(false);
+    this.cdr.markForCheck();
+  }
+
+  _toggleIconDropdown(event: Event): void {
+    event.stopPropagation();
+    this._iconDropdownOpen.set(!this._iconDropdownOpen());
+    this.cdr.markForCheck();
+  }
+
+  @HostListener('document:click')
+  _onDocumentClick(): void {
+    if (this._iconDropdownOpen()) {
+      this._iconDropdownOpen.set(false);
+      this.cdr.markForCheck();
+    }
   }
 
   // ─── Private ───────────────────────────────────────────────────────────────

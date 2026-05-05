@@ -567,7 +567,8 @@
       "fields": {
         "name":                 "Nombre",
         "name-placeholder":     "Ej: Cardiología",
-        "icon":                 "Ícono (Lucide)",
+        "icon":                 "Ícono",
+        "icon-none":            "Sin ícono",
         "icon-placeholder":     "Ej: heart, brain, eye...",
         "description":          "Descripción",
         "description-placeholder": "Descripción breve de la especialidad",
