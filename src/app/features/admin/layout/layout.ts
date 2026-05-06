@@ -6,13 +6,13 @@ import { AuthViewModel } from '../../../core/services/auth/auth.view-model';
 import { Translate } from '../../../core/services/translate';
 
 @Component({
-  selector: 'app-medico-layout',
+  selector: 'app-admin-layout',
   standalone: true,
   imports: [RouterOutlet, LucideAngularModule],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
 })
-export class MedicoLayout {
+export class AdminLayout {
 
   readonly _translate = inject(Translate);
 
@@ -20,9 +20,10 @@ export class MedicoLayout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'medico.nav.agenda',     icon: 'clipboard-list', route: '/medico/agenda'    },
-    { key: 'medico.nav.calendario', icon: 'calendar',       route: '/medico/calendario' },
-    { key: 'medico.nav.horarios',   icon: 'clock',          route: '/medico/horarios'  },
+    { key: 'admin.nav.resources', icon: 'stethoscope', route: '/admin/resources' },
+    { key: 'admin.nav.doctors',   icon: 'user-check',  route: '/admin/doctors'   },
+    { key: 'admin.nav.users',     icon: 'users',        route: '/admin/users'     },
+    { key: 'admin.nav.config',    icon: 'settings',     route: '/admin/config'    },
   ];
 
   _isActive(route: string): boolean {

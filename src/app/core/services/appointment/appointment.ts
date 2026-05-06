@@ -27,7 +27,7 @@ interface MedicoResponse {
   experienciaAnios: number;
   tipoAtencion: 'INTERNO' | 'EXTERNO';
   consultorioIdAsignado: number | null;
-  consultorioNumeroAsignado: number | null;
+  consultorioNumeroAsignado: string | null;
 }
 
 interface DisponibilidadResponse {
@@ -44,7 +44,7 @@ interface CitaResponse {
   pacienteNombre: string;
   medicoNombre: string;
   especialidad: string;
-  consultorioNumero: number;
+  consultorioNumero: string;
   fecha: string;
   horaInicio: string;
   horaFin: string;
@@ -59,7 +59,7 @@ interface PropuestaResponse {
   especialidadId: number;
   especialidadNombre: string;
   consultorioId: number;
-  consultorioNumero: number;
+  consultorioNumero: string;
   fecha: string;
   horaInicio: string;
   horaFin: string;

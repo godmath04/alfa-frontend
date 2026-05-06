@@ -1,33 +1,32 @@
 <div class="shell">
 
-  <!-- Mobile top bar (hidden on desktop) -->
   <header class="topbar">
-    <span class="topbar__logo">{{ _translate.get('paciente.sidebar.brand') }}</span>
+    <span class="topbar__logo">{{ _translate.get('admin.sidebar.brand') }}</span>
   </header>
 
   <aside class="sidebar">
     <div class="sidebar__logo">
-      <span class="sidebar__logo-text">{{ _translate.get('paciente.sidebar.brand') }}</span>
-      <span class="sidebar__logo-sub">{{ _translate.get('paciente.sidebar.subtitle') }}</span>
+      <span class="sidebar__logo-text">{{ _translate.get('admin.sidebar.brand') }}</span>
+      <span class="sidebar__logo-sub">{{ _translate.get('admin.sidebar.subtitle') }}</span>
     </div>
 
     <nav class="sidebar__nav">
       @for (item of _navItems; track item.route) {
-      <button
-        class="sidebar__item"
-        [class.sidebar__item--active]="_isActive(item.route)"
-        (click)="_navigate(item.route)"
-      >
-        <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
-        <span>{{ _translate.get(item.key) }}</span>
-      </button>
+        <button
+          class="sidebar__item"
+          [class.sidebar__item--active]="_isActive(item.route)"
+          (click)="_navigate(item.route)"
+        >
+          <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
+          <span>{{ _translate.get(item.key) }}</span>
+        </button>
       }
     </nav>
 
     <div class="sidebar__footer">
       <button class="sidebar__logout" (click)="_logout()">
         <lucide-icon name="log-out" [size]="18"></lucide-icon>
-        <span>{{ _translate.get('paciente.nav.logout') }}</span>
+        <span>{{ _translate.get('admin.nav.logout') }}</span>
       </button>
     </div>
   </aside>
@@ -36,7 +35,6 @@
     <router-outlet></router-outlet>
   </main>
 
-  <!-- Mobile bottom nav (hidden on desktop) -->
   <nav class="bottomnav">
     @for (item of _navItems; track item.route) {
       <button
@@ -50,7 +48,7 @@
     }
     <button class="bottomnav__item" (click)="_logout()">
       <lucide-icon name="log-out" [size]="20"></lucide-icon>
-      <span>{{ _translate.get('paciente.nav.logout') }}</span>
+      <span>{{ _translate.get('admin.nav.logout') }}</span>
     </button>
   </nav>
 
