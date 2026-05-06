@@ -44,6 +44,15 @@ export class DoctorsPage {
     this.userVm.users().find(u => u.id === this._fUserId())
   );
 
+  readonly _availableOffices = computed(() => {
+    const takenByInterno = new Set(
+      this.doctorVm.doctors()
+        .filter(d => d.type === 'INTERNO' && d.officeId !== null && d.id !== this._editingId())
+        .map(d => d.officeId)
+    );
+    return this.officeVm.offices().filter(o => o.active && !takenByInterno.has(o.id));
+  });
+
   readonly _availableMedicos = computed(() => {
     const assignedIds = new Set(this.doctorVm.doctors().map(d => d.userId));
     return this.userVm.medicos().filter(u => !assignedIds.has(u.id));
@@ -105,13 +114,12 @@ export class DoctorsPage {
   _save(): void {
     const userId = this._fUserId(), email = this._fEmail().trim();
     const firstName = this._fFirstName().trim(), lastName = this._fLastName().trim();
-    const idNumber = this._fIdNumber().trim();
+    const idNumber = this._selectedUser()?.idNumber?.trim() || this._fIdNumber().trim();
 
     if (!userId)    { this._formError.set(this.t.get('admin.doctors.validation.user-required'));  return; }
     if (!email)     { this._formError.set(this.t.get('admin.doctors.validation.email-required')); return; }
     if (!firstName) { this._formError.set(this.t.get('admin.doctors.validation.first-required')); return; }
     if (!lastName)  { this._formError.set(this.t.get('admin.doctors.validation.last-required'));  return; }
-    if (!idNumber)  { this._formError.set(this.t.get('admin.doctors.validation.id-required'));    return; }
 
     const request: DoctorProfileRequest = {
       userId, email, firstName, lastName, idNumber,
@@ -148,6 +156,11 @@ export class DoctorsPage {
 
   _userOf(userId: number): UserProfile | undefined {
     return this.userVm.users().find(u => u.id === userId);
+  }
+
+  _officeNumberOf(officeId: number | null): string {
+    if (!officeId) return '—';
+    return this.officeVm.offices().find(o => o.id === officeId)?.number ?? '—';
   }
 
   // ─── Schedule panel actions ────────────────────────────────────────────────

@@ -60,6 +60,8 @@ export class ResourceManagementPage {
   readonly _shEndTime         = signal('');
   readonly _shMaxAppointments = signal<number | null>(null);
 
+  readonly _FLOORS = ['PB', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
   readonly _WEEK_DAYS = [
     { value: 'MONDAY',    key: 'common.days.monday' },
     { value: 'TUESDAY',   key: 'common.days.tuesday' },

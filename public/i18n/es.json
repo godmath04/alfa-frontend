@@ -402,7 +402,7 @@
         "number":              "Número",
         "number-placeholder":  "Ej: 101",
         "floor":               "Piso",
-        "floor-placeholder":   "Ej: Piso 1",
+        "floor-none":          "Sin piso asignado",
         "type":                "Tipo",
         "status":              "Estado",
         "specialty":           "Especialidad",
@@ -478,6 +478,7 @@
         "name":        "Médico",
         "id-number":   "Cédula",
         "type":        "Tipo",
+        "office":      "Consultorio",
         "specialties": "Especialidades",
         "status":      "Estado",
         "actions":     "Acciones"
@@ -497,6 +498,7 @@
         "email-required": "El correo electrónico es obligatorio",
         "first-required": "El nombre es obligatorio",
         "last-required":  "El apellido es obligatorio",
+        "office-taken":            "El consultorio ya está asignado a un médico interno",
         "id-required":             "El número de documento es obligatorio",
         "id-cedula-invalid":       "La cédula debe tener exactamente 10 dígitos numéricos",
         "id-pasaporte-invalid":    "El pasaporte solo permite letras y números, máximo 15 caracteres"

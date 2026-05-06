@@ -85,17 +85,14 @@
         <div class="doc-page__field">
           <label class="doc-page__label">{{ t.get('admin.doctors.fields.office') }}</label>
           <select class="doc-page__input doc-page__select"
-            [value]="_fOfficeId() ?? ''"
             (change)="_fOfficeId.set(+$any($event.target).value || null)">
-            <option value="">{{ t.get('admin.doctors.fields.office-none') }}</option>
-            @for (o of officeVm.offices(); track o.id) {
-              @if (o.active) {
-                <option [value]="o.id">
-                  {{ t.get('admin.offices.table.number') }} {{ o.number }}
-                  @if (o.floor) { — {{ o.floor }} }
-                  @if (o.specialtyName) { ({{ o.specialtyName }}) }
-                </option>
-              }
+            <option value="" [selected]="_fOfficeId() === null">{{ t.get('admin.doctors.fields.office-none') }}</option>
+            @for (o of _availableOffices(); track o.id) {
+              <option [value]="o.id" [selected]="o.id === _fOfficeId()">
+                {{ t.get('admin.offices.table.number') }} {{ o.number }}
+                @if (o.floor) { — {{ o.floor }} }
+                @if (o.specialtyName) { ({{ o.specialtyName }}) }
+              </option>
             }
           </select>
         </div>
@@ -177,6 +174,7 @@
               <th class="doc-page__th">{{ t.get('admin.doctors.table.name') }}</th>
               <th class="doc-page__th">{{ t.get('admin.doctors.table.id-number') }}</th>
               <th class="doc-page__th">{{ t.get('admin.doctors.table.type') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.office') }}</th>
               <th class="doc-page__th">{{ t.get('admin.doctors.table.specialties') }}</th>
               <th class="doc-page__th">{{ t.get('admin.doctors.table.status') }}</th>
               <th class="doc-page__th">{{ t.get('admin.doctors.table.actions') }}</th>
@@ -202,6 +200,7 @@
                     {{ d.type === 'INTERNO' ? t.get('admin.doctors.types.interno') : t.get('admin.doctors.types.externo') }}
                   </span>
                 </td>
+                <td class="doc-page__td doc-page__td--muted">{{ _officeNumberOf(d.officeId) }}</td>
                 <td class="doc-page__td">
                   <div class="doc-page__tags">
                     @for (s of d.specialties; track s.id) {

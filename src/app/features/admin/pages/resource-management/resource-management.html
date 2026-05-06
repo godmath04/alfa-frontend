@@ -116,9 +116,13 @@
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.floor') }}</label>
-            <input class="res-page__input" type="text"
-              [value]="_ofFloor()" (input)="_ofFloor.set($any($event.target).value)"
-              [placeholder]="t.get('admin.offices.fields.floor-placeholder')" />
+            <select class="res-page__input res-page__select"
+              (change)="_ofFloor.set($any($event.target).value)">
+              <option value="" [selected]="!_ofFloor()">{{ t.get('admin.offices.fields.floor-none') }}</option>
+              @for (f of _FLOORS; track f) {
+                <option [value]="f" [selected]="f === _ofFloor()">{{ f }}</option>
+              }
+            </select>
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.type') }}</label>
@@ -140,11 +144,10 @@
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.specialty') }}</label>
             <select class="res-page__input res-page__select"
-              [value]="_ofSpecialtyId() ?? ''"
               (change)="_ofSpecialtyId.set(+$any($event.target).value || null)">
-              <option value="">{{ t.get('admin.offices.fields.specialty-none') }}</option>
+              <option value="" [selected]="_ofSpecialtyId() === null">{{ t.get('admin.offices.fields.specialty-none') }}</option>
               @for (s of specialtyVm.specialties(); track s.id) {
-                <option [value]="s.id">{{ s.name }}</option>
+                <option [value]="s.id" [selected]="s.id === _ofSpecialtyId()">{{ s.name }}</option>
               }
             </select>
           </div>
