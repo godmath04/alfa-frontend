@@ -461,8 +461,13 @@
         "first-name-placeholder":"Ej: Juan",
         "last-name":             "Apellido",
         "last-name-placeholder": "Ej: Pérez",
-        "id-number":             "Cédula / Pasaporte",
-        "id-number-placeholder": "Ej: 1234567890",
+        "id-type":                       "Tipo de Documento",
+        "id-type-cedula":                "Cédula",
+        "id-type-pasaporte":             "Pasaporte",
+        "id-type-unknown":               "No especificado",
+        "id-number":                     "Número de Documento",
+        "id-number-placeholder-cedula":  "10 dígitos numéricos",
+        "id-number-placeholder-pasaporte": "Hasta 15 caracteres alfanuméricos",
         "office":                "Consultorio Asignado",
         "office-none":           "Sin consultorio asignado",
         "photo":                 "Foto de Perfil (URL)",
@@ -492,7 +497,9 @@
         "email-required": "El correo electrónico es obligatorio",
         "first-required": "El nombre es obligatorio",
         "last-required":  "El apellido es obligatorio",
-        "id-required":    "La cédula es obligatoria"
+        "id-required":             "El número de documento es obligatorio",
+        "id-cedula-invalid":       "La cédula debe tener exactamente 10 dígitos numéricos",
+        "id-pasaporte-invalid":    "El pasaporte solo permite letras y números, máximo 15 caracteres"
       }
     },
     "users": {

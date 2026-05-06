@@ -30,7 +30,7 @@
             (change)="_onUserChange(+$any($event.target).value)"
             [disabled]="_isEditing()">
             <option value="">{{ t.get('admin.doctors.fields.user-placeholder') }}</option>
-            @for (u of userVm.medicos(); track u.id) {
+            @for (u of (_isEditing() ? userVm.medicos() : _availableMedicos()); track u.id) {
               <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
             }
           </select>
@@ -71,10 +71,15 @@
         </div>
 
         <div class="doc-page__field">
-          <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-number') }} *</label>
-          <input class="doc-page__input" type="text"
-            [value]="_fIdNumber()" (input)="_fIdNumber.set($any($event.target).value)"
-            [placeholder]="t.get('admin.doctors.fields.id-number-placeholder')" />
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-type') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="text" readonly
+            [value]="_selectedUser()?.idType === 'CEDULA' ? t.get('admin.doctors.fields.id-type-cedula') : _selectedUser()?.idType === 'PASAPORTE' ? t.get('admin.doctors.fields.id-type-pasaporte') : t.get('admin.doctors.fields.id-type-unknown')" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-number') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="text" readonly
+            [value]="_selectedUser()?.idNumber ?? '—'" />
         </div>
 
         <div class="doc-page__field">
@@ -189,7 +194,7 @@
                     </div>
                   </div>
                 </td>
-                <td class="doc-page__td doc-page__td--muted">{{ d.idNumber }}</td>
+                <td class="doc-page__td doc-page__td--muted">{{ _userOf(d.userId)?.idNumber ?? d.idNumber }}</td>
                 <td class="doc-page__td">
                   <span class="doc-page__badge"
                     [class.doc-page__badge--interno]="d.type === 'INTERNO'"

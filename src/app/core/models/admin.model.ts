@@ -133,4 +133,6 @@ export interface UserProfile {
   firstName: string;
   lastName:  string;
   role:      string;
+  idType:    string | null;
+  idNumber:  string | null;
 }

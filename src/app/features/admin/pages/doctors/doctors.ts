@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, signal } from '@angular/core';
+import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../../core/services/translate';
@@ -7,7 +7,7 @@ import { OfficeViewModel } from '../../../../core/services/admin/office.view-mod
 import { SpecialtyViewModel } from '../../../../core/services/admin/specialty.view-model';
 import { UserViewModel } from '../../../../core/services/admin/user.view-model';
 import { HorarioViewModel } from '../../../../core/services/admin/horario.view-model';
-import { DoctorProfile, DoctorProfileRequest, DoctorType } from '../../../../core/models/admin.model';
+import { DoctorProfile, DoctorProfileRequest, DoctorType, UserProfile } from '../../../../core/models/admin.model';
 
 @Component({
   selector: 'app-doctors',
@@ -39,6 +39,15 @@ export class DoctorsPage {
   readonly _fOfficeId    = signal<number | null>(null);
   readonly _fPhoto       = signal('');
   readonly _fSpecialties = signal<number[]>([]);
+
+  readonly _selectedUser = computed<UserProfile | undefined>(() =>
+    this.userVm.users().find(u => u.id === this._fUserId())
+  );
+
+  readonly _availableMedicos = computed(() => {
+    const assignedIds = new Set(this.doctorVm.doctors().map(d => d.userId));
+    return this.userVm.medicos().filter(u => !assignedIds.has(u.id));
+  });
 
   // ─── Schedule panel ────────────────────────────────────────────────────────
   readonly _scheduleDoctor = signal<DoctorProfile | null>(null);
@@ -123,7 +132,10 @@ export class DoctorsPage {
   _onUserChange(userId: number): void {
     this._fUserId.set(userId);
     const user = this.userVm.users().find(u => u.id === userId);
-    if (user) this._fEmail.set(user.email);
+    if (user) {
+      this._fEmail.set(user.email);
+      if (user.idNumber) this._fIdNumber.set(user.idNumber);
+    }
   }
 
   _toggleSpecialty(id: number): void {
@@ -133,6 +145,10 @@ export class DoctorsPage {
 
   _isSpecialtySelected(id: number): boolean { return this._fSpecialties().includes(id); }
   _isEditing(): boolean { return this._editingId() !== null; }
+
+  _userOf(userId: number): UserProfile | undefined {
+    return this.userVm.users().find(u => u.id === userId);
+  }
 
   // ─── Schedule panel actions ────────────────────────────────────────────────
 
