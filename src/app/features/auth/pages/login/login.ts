@@ -16,30 +16,41 @@ import { Spinner } from '../../../../shared/components/spinner/spinner';
   styleUrl: './login.scss',
 })
 export class Login {
-
-  readonly vm        = inject(AuthViewModel);
+  readonly vm = inject(AuthViewModel);
   readonly translate = inject(Translate);
 
   private readonly _fb = inject(FormBuilder);
 
   loginForm = this._fb.group({
-    email:    ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   showPassword = false;
 
   features = [
-    { icon: 'user',        titleKey: 'auth.login.feature.patient.title', descKey: 'auth.login.feature.patient.desc' },
-    { icon: 'stethoscope', titleKey: 'auth.login.feature.doctor.title',  descKey: 'auth.login.feature.doctor.desc'  },
-    { icon: 'bar-chart-3', titleKey: 'auth.login.feature.admin.title',   descKey: 'auth.login.feature.admin.desc'   },
+    {
+      icon: 'user',
+      titleKey: 'auth.login.feature.patient.title',
+      descKey: 'auth.login.feature.patient.desc',
+    },
+    {
+      icon: 'stethoscope',
+      titleKey: 'auth.login.feature.doctor.title',
+      descKey: 'auth.login.feature.doctor.desc',
+    },
+    {
+      icon: 'bar-chart-3',
+      titleKey: 'auth.login.feature.admin.title',
+      descKey: 'auth.login.feature.admin.desc',
+    },
   ];
 
   get emailError(): string {
     const control = this.loginForm.get('email');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return this.translate.get('common.errors.required');
-      if (control.errors['email'])    return this.translate.get('common.errors.invalid-email');
+      if (control.errors['email']) return this.translate.get('common.errors.invalid-email');
     }
     return '';
   }
@@ -47,7 +58,7 @@ export class Login {
   get passwordError(): string {
     const control = this.loginForm.get('password');
     if (control?.touched && control?.errors) {
-      if (control.errors['required'])  return this.translate.get('common.errors.required');
+      if (control.errors['required']) return this.translate.get('common.errors.required');
       if (control.errors['minlength']) return this.translate.get('common.errors.min-password');
     }
     return '';

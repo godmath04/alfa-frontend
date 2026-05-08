@@ -1,5 +1,4 @@
 <div class="shell">
-
   <!-- Mobile top bar (hidden on desktop) -->
   <header class="topbar">
     <span class="topbar__logo">{{ _translate.get('paciente.sidebar.brand') }}</span>
@@ -13,14 +12,14 @@
 
     <nav class="sidebar__nav">
       @for (item of _navItems; track item.route) {
-      <button
-        class="sidebar__item"
-        [class.sidebar__item--active]="_isActive(item.route)"
-        (click)="_navigate(item.route)"
-      >
-        <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
-        <span>{{ _translate.get(item.key) }}</span>
-      </button>
+        <button
+          class="sidebar__item"
+          [class.sidebar__item--active]="_isActive(item.route)"
+          (click)="_navigate(item.route)"
+        >
+          <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
+          <span>{{ _translate.get(item.key) }}</span>
+        </button>
       }
     </nav>
 
@@ -53,5 +52,4 @@
       <span>{{ _translate.get('paciente.nav.logout') }}</span>
     </button>
   </nav>
-
 </div>

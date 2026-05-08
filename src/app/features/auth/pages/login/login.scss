@@ -4,9 +4,16 @@
   display: flex;
   justify-content: center;
   gap: 6rem;
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary-medium) 60%, var(--color-accent-1) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    var(--color-primary-medium) 60%,
+    var(--color-accent-1) 100%
+  );
 
-  @media (max-width: 1024px) { gap: 2rem; }
+  @media (max-width: 1024px) {
+    gap: 2rem;
+  }
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -119,7 +126,7 @@
   cursor: pointer;
   color: var(--color-text-muted);
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     accent-color: var(--color-accent-1);
     width: 16px;
     height: 16px;
@@ -131,7 +138,9 @@
   text-decoration: none;
   font-weight: 500;
 
-  &:hover { color: var(--color-primary-dark); }
+  &:hover {
+    color: var(--color-primary-dark);
+  }
 }
 
 // ── Footer ─────────────────────────────���─────
@@ -145,6 +154,8 @@
     text-decoration: none;
     font-weight: 500;
 
-    &:hover { color: var(--color-primary-dark); }
+    &:hover {
+      color: var(--color-primary-dark);
+    }
   }
 }

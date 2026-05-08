@@ -1,11 +1,10 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class DocumentValidators {
-  
   // Defined as a static method so it can be used anywhere without instantiating the class
   static cedula(control: AbstractControl): ValidationErrors | null {
     const cedula = control.value;
-    
+
     if (!cedula) return null; // If empty, Validators.required will handle it
 
     // 1. Validate length and ensure it only contains numbers
@@ -57,7 +56,7 @@ export class DocumentValidators {
     // Rule: Alphanumeric, between 6 and 15 characters
     const passportRegex = /^[a-zA-Z0-9]{6,15}$/;
     const valid = passportRegex.test(value);
-    
+
     return valid ? null : { invalidPassport: true };
   }
 }

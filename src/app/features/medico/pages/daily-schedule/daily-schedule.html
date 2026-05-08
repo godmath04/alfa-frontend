@@ -1,15 +1,11 @@
 <div class="agenda">
-
   <!-- ─── Header ─────────────────────────────────────── -->
   <div class="agenda__header">
     <div class="agenda__title-group">
       <h1 class="agenda__title">{{ t.get('medico.agenda.title-day') }}</h1>
     </div>
     <div class="agenda__header-right">
-      <app-calendar-picker
-        [selectedDate]="vm.selectedDate()"
-        (dateChange)="vm.goToDate($event)"
-      />
+      <app-calendar-picker [selectedDate]="vm.selectedDate()" (dateChange)="vm.goToDate($event)" />
     </div>
   </div>
 
@@ -30,7 +26,6 @@
   }
 
   @if (!vm.loading() && !vm.error()) {
-
     <!-- Stats: full width above the two-column zone -->
     <app-doctor-dashboard
       [total]="vm.dayStats().total"
@@ -43,7 +38,6 @@
 
     <!-- Two-column: appointments list + next-appointment card -->
     <div class="agenda__day-layout">
-
       <app-day-appointments
         [appointments]="vm.filteredAppointments()"
         [expandedId]="vm.expandedId()"
@@ -86,8 +80,6 @@
           </div>
         }
       </div>
-
     </div>
   }
-
 </div>

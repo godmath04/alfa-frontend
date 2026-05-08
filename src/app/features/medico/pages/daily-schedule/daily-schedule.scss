@@ -19,7 +19,11 @@ $bp-mobile: 768px;
     }
   }
 
-  &__title-group { display: flex; flex-direction: column; gap: 4px; }
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
   &__title {
     font-size: 32px;
@@ -60,14 +64,25 @@ $bp-mobile: 768px;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
 
-    &--active { background: var(--color-accent-1); color: var(--color-white); }
-    &:not(&--active):hover { background: rgba(54, 154, 217, 0.08); }
+    &--active {
+      background: var(--color-accent-1);
+      color: var(--color-white);
+    }
+    &:not(&--active):hover {
+      background: rgba(54, 154, 217, 0.08);
+    }
   }
 
   // ─── Date navigation ─────────────────────────────────
-  &__date-nav { display: flex; align-items: center; gap: 8px; }
+  &__date-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
   &__nav-btn {
     display: flex;
@@ -80,10 +95,18 @@ $bp-mobile: 768px;
     background: var(--color-white);
     color: var(--color-accent-1);
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
 
-    &:hover:not(:disabled) { background: var(--color-accent-1); color: var(--color-white); }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:hover:not(:disabled) {
+      background: var(--color-accent-1);
+      color: var(--color-white);
+    }
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   }
 
   &__today-btn {
@@ -97,12 +120,22 @@ $bp-mobile: 768px;
     cursor: pointer;
     transition: background 0.15s;
 
-    &:hover:not(:disabled) { background: var(--color-primary-dark); }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:hover:not(:disabled) {
+      background: var(--color-primary-dark);
+    }
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   }
 
   // ─── Week navigation ──────────────────────────────────
-  &__week-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  &__week-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 
   &__week-nav-btn {
     display: flex;
@@ -116,10 +149,18 @@ $bp-mobile: 768px;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
 
-    &:hover:not(:disabled) { background: var(--color-accent-1); color: var(--color-white); }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:hover:not(:disabled) {
+      background: var(--color-accent-1);
+      color: var(--color-white);
+    }
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   }
 
   &__week-badge {
@@ -133,7 +174,10 @@ $bp-mobile: 768px;
   }
 
   // ─── Dashboard full-width above the two columns ──────
-  &__dashboard { display: block; margin-bottom: 20px; }
+  &__dashboard {
+    display: block;
+    margin-bottom: 20px;
+  }
 
   // ─── Two-column layout: appointments | next-card ─────
   &__day-layout {
@@ -141,7 +185,9 @@ $bp-mobile: 768px;
     gap: 20px;
     align-items: flex-start;
 
-    @media (max-width: $bp-mobile) { flex-direction: column; }
+    @media (max-width: $bp-mobile) {
+      flex-direction: column;
+    }
   }
 
   &__day-main {
@@ -161,7 +207,10 @@ $bp-mobile: 768px;
     position: sticky;
     top: 20px;
 
-    @media (max-width: $bp-mobile) { width: 100%; position: static; }
+    @media (max-width: $bp-mobile) {
+      width: 100%;
+      position: static;
+    }
   }
 
   &__next-header {
@@ -172,7 +221,10 @@ $bp-mobile: 768px;
     border-bottom: 1px solid var(--color-background);
   }
 
-  &__next-icon { color: var(--color-success); flex-shrink: 0; }
+  &__next-icon {
+    color: var(--color-success);
+    flex-shrink: 0;
+  }
 
   &__next-title {
     font-size: 15px;
@@ -191,7 +243,9 @@ $bp-mobile: 768px;
     transition: background 0.15s;
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 
-    &:hover { background: rgba(34, 197, 94, 0.05); }
+    &:hover {
+      background: rgba(34, 197, 94, 0.05);
+    }
   }
 
   &__next-avatar {
@@ -228,7 +282,9 @@ $bp-mobile: 768px;
     font-size: 14px;
     color: var(--color-text-muted);
 
-    lucide-icon { color: var(--color-accent-1); }
+    lucide-icon {
+      color: var(--color-accent-1);
+    }
   }
 
   &__next-empty {
@@ -240,7 +296,10 @@ $bp-mobile: 768px;
     color: var(--color-text-muted);
     font-size: 14px;
 
-    lucide-icon { color: var(--color-text-muted); opacity: 0.5; }
+    lucide-icon {
+      color: var(--color-text-muted);
+      opacity: 0.5;
+    }
   }
 
   // ─── States ──────────────────────────────────────────
@@ -253,14 +312,22 @@ $bp-mobile: 768px;
     color: var(--color-text-muted);
     font-size: 15px;
 
-    &--error { color: var(--color-error); }
+    &--error {
+      color: var(--color-error);
+    }
   }
 
-  &__spinner { animation: spin 1s linear infinite; }
+  &__spinner {
+    animation: spin 1s linear infinite;
+  }
 
   @keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   // ─── Week list view ───────────────────────────────────
@@ -282,13 +349,25 @@ $bp-mobile: 768px;
     border: 2px solid var(--color-background);
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
 
-    &:hover { border-color: var(--color-accent-2); background: rgba(54, 171, 217, 0.04); }
-    &--today { border-color: var(--color-accent-1); background: rgba(54, 154, 217, 0.04); }
+    &:hover {
+      border-color: var(--color-accent-2);
+      background: rgba(54, 171, 217, 0.04);
+    }
+    &--today {
+      border-color: var(--color-accent-1);
+      background: rgba(54, 154, 217, 0.04);
+    }
   }
 
-  &__week-left { display: flex; align-items: center; gap: 14px; }
+  &__week-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
 
   &__week-icon {
     width: 46px;
@@ -301,7 +380,9 @@ $bp-mobile: 768px;
     justify-content: center;
     flex-shrink: 0;
 
-    &--today { background: var(--color-primary-dark); }
+    &--today {
+      background: var(--color-primary-dark);
+    }
   }
 
   &__week-day {
@@ -318,5 +399,7 @@ $bp-mobile: 768px;
     margin: 0;
   }
 
-  &__week-arrow { color: var(--color-accent-1); }
+  &__week-arrow {
+    color: var(--color-accent-1);
+  }
 }

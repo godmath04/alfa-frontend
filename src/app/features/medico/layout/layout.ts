@@ -13,16 +13,15 @@ import { Translate } from '../../../core/services/translate';
   styleUrl: './layout.scss',
 })
 export class MedicoLayout {
-
   readonly _translate = inject(Translate);
 
-  private readonly _vm     = inject(AuthViewModel);
+  private readonly _vm = inject(AuthViewModel);
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'medico.nav.agenda',     icon: 'clipboard-list', route: '/medico/agenda'    },
-    { key: 'medico.nav.calendario', icon: 'calendar',       route: '/medico/calendario' },
-    { key: 'medico.nav.horarios',   icon: 'clock',          route: '/medico/horarios'  },
+    { key: 'medico.nav.agenda', icon: 'clipboard-list', route: '/medico/agenda' },
+    { key: 'medico.nav.calendario', icon: 'calendar', route: '/medico/calendario' },
+    { key: 'medico.nav.horarios', icon: 'clock', route: '/medico/horarios' },
   ];
 
   _isActive(route: string): boolean {

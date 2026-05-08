@@ -17,8 +17,7 @@ import { Spinner } from '../../../../shared/components/spinner/spinner';
   styleUrl: './forgot-password.scss',
 })
 export class ForgotPassword {
-
-  readonly vm        = inject(ForgotPasswordViewModel);
+  readonly vm = inject(ForgotPasswordViewModel);
   readonly translate = inject(Translate);
 
   private readonly _fb = inject(FormBuilder);
@@ -31,7 +30,7 @@ export class ForgotPassword {
     const control = this.forgotForm.get('email');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return this.translate.get('common.errors.required');
-      if (control.errors['email'])    return this.translate.get('common.errors.invalid-email');
+      if (control.errors['email']) return this.translate.get('common.errors.invalid-email');
     }
     return '';
   }

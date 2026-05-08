@@ -12,13 +12,19 @@ import { MisCitaItem } from '../../../core/models/appointment.model';
 @Component({
   selector: 'app-appointment-history',
   standalone: true,
-  imports: [ReactiveFormsModule, LucideAngularModule, Button, Spinner, DatePipe, CancelModalComponent],
+  imports: [
+    ReactiveFormsModule,
+    LucideAngularModule,
+    Button,
+    Spinner,
+    DatePipe,
+    CancelModalComponent,
+  ],
   providers: [AppointmentHistoryViewModel],
   templateUrl: './appointment-history.html',
-  styleUrl: './appointment-history.scss'
+  styleUrl: './appointment-history.scss',
 })
 export class AppointmentHistoryComponent implements OnInit {
-
   readonly vm = inject(AppointmentHistoryViewModel);
   readonly translate = inject(Translate);
   private readonly _fb = inject(FormBuilder);
@@ -27,7 +33,7 @@ export class AppointmentHistoryComponent implements OnInit {
   readonly filterForm = this._fb.group({
     estado: [''],
     fechaDesde: [''],
-    fechaHasta: ['']
+    fechaHasta: [''],
   });
 
   // Estado del modal de cancelación
@@ -43,12 +49,12 @@ export class AppointmentHistoryComponent implements OnInit {
 
       if (success || error) {
         this.citaParaCancelar.set(null); // Cerrar modal
-        
+
         if (success) {
           this.showSuccessToast.set(true);
           setTimeout(() => this.showSuccessToast.set(false), 5000);
         }
-        
+
         if (error) {
           this.showErrorToast.set(error);
           setTimeout(() => this.showErrorToast.set(null), 5000);
@@ -73,7 +79,7 @@ export class AppointmentHistoryComponent implements OnInit {
     this.filterForm.reset({
       estado: '',
       fechaDesde: '',
-      fechaHasta: ''
+      fechaHasta: '',
     });
     this.vm.clearFilters();
   }
@@ -101,7 +107,7 @@ export class AppointmentHistoryComponent implements OnInit {
     const ahora = new Date();
     const diferenciaMs = fechaHoraCita.getTime() - ahora.getTime();
     const horasRestantes = diferenciaMs / (1000 * 60 * 60);
-    
+
     const estadoCancelable = cita.estado === 'PENDIENTE' || cita.estado === 'CONFIRMADA';
     return estadoCancelable && horasRestantes > 24;
   }

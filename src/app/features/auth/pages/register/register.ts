@@ -21,11 +21,10 @@ import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
   styleUrl: './register.scss',
 })
 export class Register {
-
-  readonly vm        = inject(AuthViewModel);
+  readonly vm = inject(AuthViewModel);
   readonly translate = inject(Translate);
 
-  private readonly _fb         = inject(FormBuilder);
+  private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
 
   isSubmitted = false;
@@ -42,32 +41,51 @@ export class Register {
   cities = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
 
   features = [
-    { icon: 'check-circle-2', titleKey: 'auth.register.feature.secure.title', descKey: 'auth.register.feature.secure.desc' },
-    { icon: 'check-circle-2', titleKey: 'auth.register.feature.access.title', descKey: 'auth.register.feature.access.desc' },
-    { icon: 'check-circle-2', titleKey: 'auth.register.feature.care.title',   descKey: 'auth.register.feature.care.desc'   },
+    {
+      icon: 'check-circle-2',
+      titleKey: 'auth.register.feature.secure.title',
+      descKey: 'auth.register.feature.secure.desc',
+    },
+    {
+      icon: 'check-circle-2',
+      titleKey: 'auth.register.feature.access.title',
+      descKey: 'auth.register.feature.access.desc',
+    },
+    {
+      icon: 'check-circle-2',
+      titleKey: 'auth.register.feature.care.title',
+      descKey: 'auth.register.feature.care.desc',
+    },
   ];
 
-  registerForm = this._fb.group({
-    firstName:       ['', Validators.required],
-    lastName:        ['', Validators.required],
-    email:           ['', [Validators.required, Validators.email]],
-    password:        ['', [Validators.required, Validators.minLength(8), PatternValidators.strongPassword]],
-    confirmPassword: ['', Validators.required],
-    phone:           ['', [Validators.required, PatternValidators.phoneEcuador]],
-    idType:          ['', Validators.required],
-    idNumber:        ['', Validators.required],
-    birthDay:        ['', Validators.required],
-    birthMonth:      ['', Validators.required],
-    birthYear:       ['', Validators.required],
-    city:            ['', Validators.required],
-    gender:          ['', Validators.required],
-    acceptTerms:     [false, Validators.requiredTrue],
-    acceptData:      [false, Validators.requiredTrue],
-  }, { validators: [MatchValidators.password('password', 'confirmPassword')] });
+  registerForm = this._fb.group(
+    {
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(8), PatternValidators.strongPassword],
+      ],
+      confirmPassword: ['', Validators.required],
+      phone: ['', [Validators.required, PatternValidators.phoneEcuador]],
+      idType: ['', Validators.required],
+      idNumber: ['', Validators.required],
+      birthDay: ['', Validators.required],
+      birthMonth: ['', Validators.required],
+      birthYear: ['', Validators.required],
+      city: ['', Validators.required],
+      gender: ['', Validators.required],
+      acceptTerms: [false, Validators.requiredTrue],
+      acceptData: [false, Validators.requiredTrue],
+    },
+    { validators: [MatchValidators.password('password', 'confirmPassword')] },
+  );
 
   constructor() {
-    this.registerForm.get('idType')?.valueChanges
-      .pipe(takeUntilDestroyed(this._destroyRef))
+    this.registerForm
+      .get('idType')
+      ?.valueChanges.pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((type) => {
         const idControl = this.registerForm.get('idNumber');
         idControl?.setValue('');
@@ -82,12 +100,14 @@ export class Register {
         idControl?.updateValueAndValidity();
       });
 
-    this.registerForm.get('birthMonth')?.valueChanges
-      .pipe(takeUntilDestroyed(this._destroyRef))
+    this.registerForm
+      .get('birthMonth')
+      ?.valueChanges.pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => this._updateDaysInMonth());
 
-    this.registerForm.get('birthYear')?.valueChanges
-      .pipe(takeUntilDestroyed(this._destroyRef))
+    this.registerForm
+      .get('birthYear')
+      ?.valueChanges.pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => this._updateDaysInMonth());
   }
 
@@ -96,13 +116,13 @@ export class Register {
     if (!this.isSubmitted || !control?.errors) return false;
 
     const errorTranslations: Record<string, string> = {
-      email:                  'common.errors.invalid-email',
-      minlength:              'common.errors.min-password',
+      email: 'common.errors.invalid-email',
+      minlength: 'common.errors.min-password',
       invalidPasswordPattern: 'common.errors.invalid-password',
-      passwordMismatch:       'auth.register.errors.password-mismatch',
-      invalidPhonePattern:    'common.errors.invalid-phone',
-      invalidCedula:          'auth.register.errors.invalid-cedula',
-      invalidPassport:        'auth.register.errors.invalid-passport',
+      passwordMismatch: 'auth.register.errors.password-mismatch',
+      invalidPhonePattern: 'common.errors.invalid-phone',
+      invalidCedula: 'auth.register.errors.invalid-cedula',
+      invalidPassport: 'auth.register.errors.invalid-passport',
     };
 
     const firstErrorKey = Object.keys(control.errors)[0];
@@ -112,8 +132,12 @@ export class Register {
     return true;
   }
 
-  _togglePassword(): void        { this.showPassword = !this.showPassword; }
-  _toggleConfirmPassword(): void { this.showConfirmPassword = !this.showConfirmPassword; }
+  _togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+  _toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   _onSubmit(): void {
     this.isSubmitted = true;
@@ -122,20 +146,39 @@ export class Register {
       return;
     }
 
-    const { firstName, lastName, email, password, phone, idType, idNumber,
-            birthDay, birthMonth, birthYear, city, gender } = this.registerForm.value;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      idType,
+      idNumber,
+      birthDay,
+      birthMonth,
+      birthYear,
+      city,
+      gender,
+    } = this.registerForm.value;
 
     const birthDate = `${birthYear}-${birthMonth}-${birthDay!.toString().padStart(2, '0')}`;
 
     this.vm.register({
-      firstName: firstName!, lastName: lastName!, email: email!,
-      password: password!, phone: phone!, idType: idType!,
-      idNumber: idNumber!, birthDate, city: city!, gender: gender!,
+      firstName: firstName!,
+      lastName: lastName!,
+      email: email!,
+      password: password!,
+      phone: phone!,
+      idType: idType!,
+      idNumber: idNumber!,
+      birthDate,
+      city: city!,
+      gender: gender!,
     });
   }
 
   private _updateDaysInMonth(): void {
-    const year  = this.registerForm.get('birthYear')?.value;
+    const year = this.registerForm.get('birthYear')?.value;
     const month = this.registerForm.get('birthMonth')?.value;
     if (year && month) {
       const daysCount = new Date(parseInt(year), parseInt(month), 0).getDate();

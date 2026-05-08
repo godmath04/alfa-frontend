@@ -141,20 +141,20 @@
   },
   "common": {
     "days": {
-      "monday":         "Lunes",
-      "tuesday":        "Martes",
-      "wednesday":      "Miércoles",
-      "thursday":       "Jueves",
-      "friday":         "Viernes",
-      "saturday":       "Sábado",
-      "sunday":         "Domingo",
-      "monday-short":   "Lun",
-      "tuesday-short":  "Mar",
-      "wednesday-short":"Mié",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo",
+      "monday-short": "Lun",
+      "tuesday-short": "Mar",
+      "wednesday-short": "Mié",
       "thursday-short": "Jue",
-      "friday-short":   "Vie",
+      "friday-short": "Vie",
       "saturday-short": "Sáb",
-      "sunday-short":   "Dom"
+      "sunday-short": "Dom"
     },
     "buttons": {
       "save": "Guardar",
@@ -193,7 +193,7 @@
   },
   "paciente": {
     "sidebar": {
-      "brand":    "Alfa Hospital",
+      "brand": "Alfa Hospital",
       "subtitle": "Healthcare Management"
     },
     "nav": {
@@ -338,76 +338,76 @@
   },
   "admin": {
     "sidebar": {
-      "brand":    "Alfa Hospital",
+      "brand": "Alfa Hospital",
       "subtitle": "Panel Administrador"
     },
     "nav": {
-      "resources":   "Gestión de Recursos",
+      "resources": "Gestión de Recursos",
       "specialties": "Especialidades",
-      "offices":     "Consultorios",
-      "schedules":   "Horarios de Atención",
-      "doctors":     "Perfiles de Médicos",
-      "users":       "Usuarios",
-      "config":      "Configuración",
-      "logout":      "Cerrar sesión"
+      "offices": "Consultorios",
+      "schedules": "Horarios de Atención",
+      "doctors": "Perfiles de Médicos",
+      "users": "Usuarios",
+      "config": "Configuración",
+      "logout": "Cerrar sesión"
     },
     "config": {
-      "title":    "Configuración del Sistema",
+      "title": "Configuración del Sistema",
       "subtitle": "Parámetros globales del sistema hospitalario",
-      "add":      "Nueva Configuración",
-      "new":      "Nueva Configuración",
-      "edit":     "Editar Configuración",
-      "loading":  "Cargando configuraciones...",
-      "empty":    "No hay configuraciones registradas",
-      "error":    "Error al cargar las configuraciones. Intenta de nuevo.",
+      "add": "Nueva Configuración",
+      "new": "Nueva Configuración",
+      "edit": "Editar Configuración",
+      "loading": "Cargando configuraciones...",
+      "empty": "No hay configuraciones registradas",
+      "error": "Error al cargar las configuraciones. Intenta de nuevo.",
       "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
       "fields": {
-        "key":                  "Clave",
-        "key-placeholder":      "Ej: appointment.max_days_ahead",
-        "value":                "Valor",
-        "value-placeholder":    "Ej: 30",
-        "description":          "Descripción",
+        "key": "Clave",
+        "key-placeholder": "Ej: appointment.max_days_ahead",
+        "value": "Valor",
+        "value-placeholder": "Ej: 30",
+        "description": "Descripción",
         "description-placeholder": "Descripción del parámetro"
       },
       "table": {
-        "key":         "Clave",
-        "value":       "Valor",
+        "key": "Clave",
+        "value": "Valor",
         "description": "Descripción",
-        "status":      "Estado",
-        "actions":     "Acciones"
+        "status": "Estado",
+        "actions": "Acciones"
       },
       "actions": {
-        "edit":       "Editar configuración",
+        "edit": "Editar configuración",
         "deactivate": "Desactivar",
         "reactivate": "Reactivar"
       },
       "validation": {
-        "key-required":   "La clave es obligatoria",
+        "key-required": "La clave es obligatoria",
         "value-required": "El valor es obligatorio"
       }
     },
     "resources": {
-      "title":    "Gestión de Recursos",
+      "title": "Gestión de Recursos",
       "subtitle": "Administra especialidades, consultorios y horarios del sistema",
-      "add":      "Agregar",
-      "new":      "Nuevo Registro",
-      "edit":     "Editar Registro"
+      "add": "Agregar",
+      "new": "Nuevo Registro",
+      "edit": "Editar Registro"
     },
     "offices": {
-      "loading":    "Cargando consultorios...",
-      "empty":      "No hay consultorios registrados",
-      "error":      "Error al cargar los consultorios. Intenta de nuevo.",
+      "loading": "Cargando consultorios...",
+      "empty": "No hay consultorios registrados",
+      "error": "Error al cargar los consultorios. Intenta de nuevo.",
       "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
       "fields": {
-        "number":              "Número",
-        "number-placeholder":  "Ej: 101",
-        "floor":               "Piso",
-        "floor-none":          "Sin piso asignado",
-        "type":                "Tipo",
-        "status":              "Estado",
-        "specialty":           "Especialidad",
-        "specialty-none":      "Sin especialidad",
-        "equipment":           "Equipamiento",
+        "number": "Número",
+        "number-placeholder": "Ej: 101",
+        "floor": "Piso",
+        "floor-none": "Sin piso asignado",
+        "type": "Tipo",
+        "status": "Estado",
+        "specialty": "Especialidad",
+        "specialty-none": "Sin especialidad",
+        "equipment": "Equipamiento",
         "equipment-placeholder": "Ej: ECG, Monitor de Presión, Desfibrilador"
       },
       "types": {
@@ -415,21 +415,21 @@
         "external": "Externo"
       },
       "statuses": {
-        "available":   "Disponible",
-        "occupied":    "Ocupado",
+        "available": "Disponible",
+        "occupied": "Ocupado",
         "maintenance": "Mantenimiento"
       },
       "table": {
-        "number":   "Número",
-        "floor":    "Piso",
-        "type":     "Tipo",
-        "status":   "Estado",
+        "number": "Número",
+        "floor": "Piso",
+        "type": "Tipo",
+        "status": "Estado",
         "specialty": "Especialidad",
-        "active":   "Activo",
-        "actions":  "Acciones"
+        "active": "Activo",
+        "actions": "Acciones"
       },
       "actions": {
-        "edit":       "Editar consultorio",
+        "edit": "Editar consultorio",
         "deactivate": "Desactivar consultorio",
         "reactivate": "Reactivar consultorio"
       },
@@ -438,197 +438,197 @@
       }
     },
     "doctors": {
-      "title":    "Perfiles de Médicos",
+      "title": "Perfiles de Médicos",
       "subtitle": "Administra los perfiles del personal médico del hospital",
-      "add":      "Nuevo Médico",
-      "new":      "Nuevo Perfil de Médico",
-      "edit":     "Editar Perfil de Médico",
-      "loading":  "Cargando médicos...",
-      "empty":    "No hay perfiles de médicos registrados",
-      "error":    "Error al cargar los médicos. Intenta de nuevo.",
+      "add": "Nuevo Médico",
+      "new": "Nuevo Perfil de Médico",
+      "edit": "Editar Perfil de Médico",
+      "loading": "Cargando médicos...",
+      "empty": "No hay perfiles de médicos registrados",
+      "error": "Error al cargar los médicos. Intenta de nuevo.",
       "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
       "types": {
         "interno": "Interno",
         "externo": "Externo"
       },
       "fields": {
-        "user":                  "Usuario del Sistema",
-        "user-placeholder":      "Selecciona un usuario...",
-        "type":                  "Tipo de Atención",
-        "email":                 "Correo Electrónico",
-        "email-placeholder":     "correo@ejemplo.com",
-        "first-name":            "Nombre",
-        "first-name-placeholder":"Ej: Juan",
-        "last-name":             "Apellido",
+        "user": "Usuario del Sistema",
+        "user-placeholder": "Selecciona un usuario...",
+        "type": "Tipo de Atención",
+        "email": "Correo Electrónico",
+        "email-placeholder": "correo@ejemplo.com",
+        "first-name": "Nombre",
+        "first-name-placeholder": "Ej: Juan",
+        "last-name": "Apellido",
         "last-name-placeholder": "Ej: Pérez",
-        "id-type":                       "Tipo de Documento",
-        "id-type-cedula":                "Cédula",
-        "id-type-pasaporte":             "Pasaporte",
-        "id-type-unknown":               "No especificado",
-        "id-number":                     "Número de Documento",
-        "id-number-placeholder-cedula":  "10 dígitos numéricos",
+        "id-type": "Tipo de Documento",
+        "id-type-cedula": "Cédula",
+        "id-type-pasaporte": "Pasaporte",
+        "id-type-unknown": "No especificado",
+        "id-number": "Número de Documento",
+        "id-number-placeholder-cedula": "10 dígitos numéricos",
         "id-number-placeholder-pasaporte": "Hasta 15 caracteres alfanuméricos",
-        "office":                "Consultorio Asignado",
-        "office-none":           "Sin consultorio asignado",
-        "photo":                 "Foto de Perfil (URL)",
-        "photo-placeholder":     "https://...",
-        "specialties":           "Especialidades"
+        "office": "Consultorio Asignado",
+        "office-none": "Sin consultorio asignado",
+        "photo": "Foto de Perfil (URL)",
+        "photo-placeholder": "https://...",
+        "specialties": "Especialidades"
       },
       "table": {
-        "name":        "Médico",
-        "id-number":   "Cédula",
-        "type":        "Tipo",
-        "office":      "Consultorio",
+        "name": "Médico",
+        "id-number": "Cédula",
+        "type": "Tipo",
+        "office": "Consultorio",
         "specialties": "Especialidades",
-        "status":      "Estado",
-        "actions":     "Acciones"
+        "status": "Estado",
+        "actions": "Acciones"
       },
       "actions": {
-        "edit":       "Editar perfil",
+        "edit": "Editar perfil",
         "deactivate": "Desactivar médico",
         "reactivate": "Reactivar médico",
-        "schedules":  "Ver horarios de atención"
+        "schedules": "Ver horarios de atención"
       },
       "schedules": {
         "title": "Horarios de Atención",
-        "none":  "Sin horario asignado"
+        "none": "Sin horario asignado"
       },
       "validation": {
-        "user-required":  "Debes seleccionar un usuario del sistema",
+        "user-required": "Debes seleccionar un usuario del sistema",
         "email-required": "El correo electrónico es obligatorio",
         "first-required": "El nombre es obligatorio",
-        "last-required":  "El apellido es obligatorio",
-        "office-taken":            "El consultorio ya está asignado a un médico interno",
-        "id-required":             "El número de documento es obligatorio",
-        "id-cedula-invalid":       "La cédula debe tener exactamente 10 dígitos numéricos",
-        "id-pasaporte-invalid":    "El pasaporte solo permite letras y números, máximo 15 caracteres"
+        "last-required": "El apellido es obligatorio",
+        "office-taken": "El consultorio ya está asignado a un médico interno",
+        "id-required": "El número de documento es obligatorio",
+        "id-cedula-invalid": "La cédula debe tener exactamente 10 dígitos numéricos",
+        "id-pasaporte-invalid": "El pasaporte solo permite letras y números, máximo 15 caracteres"
       }
     },
     "users": {
-      "title":    "Gestión de Usuarios",
+      "title": "Gestión de Usuarios",
       "subtitle": "Consulta y administra los roles de todos los usuarios del sistema",
-      "loading":  "Cargando usuarios...",
-      "empty":    "No hay usuarios registrados",
-      "error":    "Error al cargar los usuarios. Intenta de nuevo.",
+      "loading": "Cargando usuarios...",
+      "empty": "No hay usuarios registrados",
+      "error": "Error al cargar los usuarios. Intenta de nuevo.",
       "table": {
-        "name":    "Usuario",
-        "email":   "Correo Electrónico",
-        "role":    "Rol",
+        "name": "Usuario",
+        "email": "Correo Electrónico",
+        "role": "Rol",
         "actions": "Acciones"
       },
       "roles": {
-        "paciente":      "Paciente",
-        "medico":        "Médico",
-        "ejecutivo":     "Ejecutivo",
+        "paciente": "Paciente",
+        "medico": "Médico",
+        "ejecutivo": "Ejecutivo",
         "administrador": "Administrador",
-        "gerencia":      "Gerencia"
+        "gerencia": "Gerencia"
       },
       "actions": {
         "change-role": "Cambiar rol",
-        "save":        "Guardar rol",
-        "cancel":      "Cancelar"
+        "save": "Guardar rol",
+        "cancel": "Cancelar"
       }
     },
     "schedules": {
-      "loading":    "Cargando horarios...",
-      "empty":      "No hay horarios registrados",
-      "error":      "Error al cargar los horarios. Intenta de nuevo.",
+      "loading": "Cargando horarios...",
+      "empty": "No hay horarios registrados",
+      "error": "Error al cargar los horarios. Intenta de nuevo.",
       "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
       "fields": {
-        "category":             "Categoría",
+        "category": "Categoría",
         "category-placeholder": "Ej: Consulta General",
-        "days":                 "Días de Atención",
-        "start":                "Hora de Inicio",
-        "end":                  "Hora de Fin",
-        "max":                  "Máx. Citas por Día",
-        "max-placeholder":      "Ej: 20"
+        "days": "Días de Atención",
+        "start": "Hora de Inicio",
+        "end": "Hora de Fin",
+        "max": "Máx. Citas por Día",
+        "max-placeholder": "Ej: 20"
       },
       "table": {
         "category": "Categoría",
-        "days":     "Días",
-        "hours":    "Horario",
-        "max":      "Máx. Citas",
-        "status":   "Estado",
-        "actions":  "Acciones"
+        "days": "Días",
+        "hours": "Horario",
+        "max": "Máx. Citas",
+        "status": "Estado",
+        "actions": "Acciones"
       },
       "actions": {
-        "edit":       "Editar horario",
+        "edit": "Editar horario",
         "deactivate": "Desactivar horario",
         "reactivate": "Reactivar horario"
       },
       "validation": {
         "category-required": "La categoría es obligatoria",
-        "days-required":     "Selecciona al menos un día",
-        "time-required":     "La hora de inicio y fin son obligatorias",
-        "max-required":      "El máximo de citas debe ser al menos 1"
+        "days-required": "Selecciona al menos un día",
+        "time-required": "La hora de inicio y fin son obligatorias",
+        "max-required": "El máximo de citas debe ser al menos 1"
       }
     },
     "specialties": {
-      "title":    "Gestión de Especialidades",
+      "title": "Gestión de Especialidades",
       "subtitle": "Administra el catálogo de especialidades médicas del sistema",
-      "add":      "Nueva Especialidad",
-      "new":      "Nueva Especialidad",
-      "edit":     "Editar Especialidad",
-      "loading":  "Cargando especialidades...",
-      "empty":    "No hay especialidades registradas",
-      "error":    "Error al cargar las especialidades. Intenta de nuevo.",
+      "add": "Nueva Especialidad",
+      "new": "Nueva Especialidad",
+      "edit": "Editar Especialidad",
+      "loading": "Cargando especialidades...",
+      "empty": "No hay especialidades registradas",
+      "error": "Error al cargar las especialidades. Intenta de nuevo.",
       "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
       "fields": {
-        "name":                 "Nombre",
-        "name-placeholder":     "Ej: Cardiología",
-        "icon":                 "Ícono",
-        "icon-none":            "Sin ícono",
-        "icon-placeholder":     "Ej: heart, brain, eye...",
-        "description":          "Descripción",
+        "name": "Nombre",
+        "name-placeholder": "Ej: Cardiología",
+        "icon": "Ícono",
+        "icon-none": "Sin ícono",
+        "icon-placeholder": "Ej: heart, brain, eye...",
+        "description": "Descripción",
         "description-placeholder": "Descripción breve de la especialidad",
-        "duration":             "Duración (min)",
-        "duration-unit":        "min",
+        "duration": "Duración (min)",
+        "duration-unit": "min",
         "duration-placeholder": "Ej: 30"
       },
       "table": {
-        "icon":        "Ícono",
-        "name":        "Nombre",
+        "icon": "Ícono",
+        "name": "Nombre",
         "description": "Descripción",
-        "duration":    "Duración",
-        "status":      "Estado",
-        "actions":     "Acciones"
+        "duration": "Duración",
+        "status": "Estado",
+        "actions": "Acciones"
       },
       "status": {
-        "active":   "Activa",
+        "active": "Activa",
         "inactive": "Inactiva"
       },
       "actions": {
-        "edit":       "Editar especialidad",
+        "edit": "Editar especialidad",
         "deactivate": "Desactivar especialidad",
         "reactivate": "Reactivar especialidad"
       },
       "validation": {
-        "name-required":     "El nombre es obligatorio",
+        "name-required": "El nombre es obligatorio",
         "duration-required": "La duración mínima es 5 minutos"
       }
     }
   },
   "medico": {
     "sidebar": {
-      "brand":    "Alfa Hospital",
+      "brand": "Alfa Hospital",
       "subtitle": "Portal Médico"
     },
     "nav": {
-      "agenda":     "Citas del Día",
+      "agenda": "Citas del Día",
       "calendario": "Mi Calendario",
-      "horarios":   "Mis Horarios",
-      "logout":     "Cerrar sesión"
+      "horarios": "Mis Horarios",
+      "logout": "Cerrar sesión"
     },
     "horarios": {
-      "title":         "Mis Horarios de Atención",
-      "subtitle":      "Configura los días y horas en que atiendes pacientes",
-      "card-title":    "Horario semanal",
-      "loading":       "Cargando horarios...",
+      "title": "Mis Horarios de Atención",
+      "subtitle": "Configura los días y horas en que atiendes pacientes",
+      "card-title": "Horario semanal",
+      "loading": "Cargando horarios...",
       "profile-error": "No se encontró tu perfil en el sistema. Contacta al administrador.",
-      "none":          "Sin horario asignado",
-      "add":           "Agregar",
-      "edit":          "Editar",
-      "save":          "Guardar"
+      "none": "Sin horario asignado",
+      "add": "Agregar",
+      "edit": "Editar",
+      "save": "Guardar"
     },
     "agenda": {
       "title-day": "Citas del Día",
@@ -644,13 +644,13 @@
       "office": "Consultorio",
       "reason": "Motivo",
       "stats": {
-        "total":     "Total del día",
+        "total": "Total del día",
         "confirmed": "Confirmadas",
-        "pending":   "Pendientes",
+        "pending": "Pendientes",
         "completed": "Completadas",
         "cancelled": "Canceladas",
-        "next":      "Próxima cita",
-        "none":      "Ninguna"
+        "next": "Próxima cita",
+        "none": "Ninguna"
       },
       "search-placeholder": "Buscar por nombre de paciente...",
       "filter": {
@@ -687,10 +687,10 @@
         "count-plural": "citas programadas"
       },
       "status": {
-        "PENDIENTE":  "Pendiente",
+        "PENDIENTE": "Pendiente",
         "CONFIRMADA": "Confirmada",
         "COMPLETADA": "Completada",
-        "CANCELADA":  "Cancelada"
+        "CANCELADA": "Cancelada"
       }
     }
   }

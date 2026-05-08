@@ -11,9 +11,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputField),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class InputField implements ControlValueAccessor {
   @Input() label: string = '';

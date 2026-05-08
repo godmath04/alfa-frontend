@@ -7,8 +7,7 @@ import { Horario, HorarioRequest } from '../../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class HorarioService {
-
-  private readonly _http    = inject(HttpClient);
+  private readonly _http = inject(HttpClient);
   private readonly _baseUrl = `${environment.apiUrl}/api/agendamiento/medico`;
 
   getByMedico(medicoId: number): Observable<Horario[]> {

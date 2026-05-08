@@ -2,17 +2,16 @@ import { Injectable, inject, DestroyRef, computed, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { interval } from 'rxjs';
 
-import { MedicoService }              from './medico.service';
+import { MedicoService } from './medico.service';
 import { AgendaStateService, StatusFilter, ActiveView } from './agenda.state';
-import { toApiError }                 from '../../models/api-error.model';
-import { formatDateToISO }            from '../../../shared/utils/date-time.utils';
+import { toApiError } from '../../models/api-error.model';
+import { formatDateToISO } from '../../../shared/utils/date-time.utils';
 import { DailyAgenda, DoctorAppointment } from '../../models/medico.model';
 
 @Injectable({ providedIn: 'root' })
 export class AgendaViewModel {
-
-  private readonly _service    = inject(MedicoService);
-  private readonly _state      = inject(AgendaStateService);
+  private readonly _service = inject(MedicoService);
+  private readonly _state = inject(AgendaStateService);
   private readonly _destroyRef = inject(DestroyRef);
 
   // Independent data source for the next-appointment card.
@@ -32,15 +31,15 @@ export class AgendaViewModel {
       });
   }
 
-  readonly agenda       = this._state.agenda;
-  readonly loading      = this._state.loading;
-  readonly error        = this._state.error;
-  readonly weekStart    = this._state.weekStart;
+  readonly agenda = this._state.agenda;
+  readonly loading = this._state.loading;
+  readonly error = this._state.error;
+  readonly weekStart = this._state.weekStart;
   readonly selectedDate = this._state.selectedDate;
-  readonly searchQuery  = this._state.searchQuery;
+  readonly searchQuery = this._state.searchQuery;
   readonly statusFilter = this._state.statusFilter;
-  readonly expandedId   = this._state.expandedId;
-  readonly activeView   = this._state.activeView;
+  readonly expandedId = this._state.expandedId;
+  readonly activeView = this._state.activeView;
 
   readonly isEmpty = computed(() => !this._state.loading() && this._state.agenda().length === 0);
 
@@ -53,14 +52,14 @@ export class AgendaViewModel {
   });
 
   readonly dayAppointments = computed<DoctorAppointment[]>(() => {
-    const day = this._state.agenda().find(d => d.date === this._state.selectedDate());
+    const day = this._state.agenda().find((d) => d.date === this._state.selectedDate());
     return day?.appointments ?? [];
   });
 
   readonly filteredAppointments = computed<DoctorAppointment[]>(() => {
-    const query  = this._state.searchQuery().toLowerCase().trim();
+    const query = this._state.searchQuery().toLowerCase().trim();
     const filter = this._state.statusFilter();
-    return this.dayAppointments().filter(apt => {
+    return this.dayAppointments().filter((apt) => {
       const matchesSearch = !query || apt.patientName.toLowerCase().includes(query);
       const matchesStatus = filter === 'ALL' || apt.status === filter;
       return matchesSearch && matchesStatus;
@@ -68,47 +67,52 @@ export class AgendaViewModel {
   });
 
   readonly dayStats = computed(() => {
-    const now  = new Date();
+    const now = new Date();
     const apts = this.dayAppointments();
 
     const effective = (apt: { status: string; date: string; endTime: string }) => {
-      if ((apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA') &&
-          new Date(`${apt.date}T${apt.endTime}`) < now) return 'COMPLETADA';
+      if (
+        (apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA') &&
+        new Date(`${apt.date}T${apt.endTime}`) < now
+      )
+        return 'COMPLETADA';
       return apt.status;
     };
 
     return {
-      total:     apts.length,
-      confirmed: apts.filter(a => effective(a) === 'CONFIRMADA').length,
-      pending:   apts.filter(a => effective(a) === 'PENDIENTE').length,
-      completed: apts.filter(a => effective(a) === 'COMPLETADA').length,
-      cancelled: apts.filter(a => effective(a) === 'CANCELADA').length,
+      total: apts.length,
+      confirmed: apts.filter((a) => effective(a) === 'CONFIRMADA').length,
+      pending: apts.filter((a) => effective(a) === 'PENDIENTE').length,
+      completed: apts.filter((a) => effective(a) === 'COMPLETADA').length,
+      cancelled: apts.filter((a) => effective(a) === 'CANCELADA').length,
     };
   });
 
   readonly globalNextAppointment = computed(() => {
     const now = new Date();
-    return this._upcomingData()
-      .flatMap(day => day.appointments)
-      .filter(apt => {
-        if (apt.status !== 'PENDIENTE' && apt.status !== 'CONFIRMADA') return false;
-        const end = new Date(`${apt.date}T${apt.endTime}`);
-        return end > now;
-      })
-      .sort((a, b) =>
-        `${a.date}T${a.startTime}`.localeCompare(`${b.date}T${b.startTime}`)
-      )[0] ?? null;
+    return (
+      this._upcomingData()
+        .flatMap((day) => day.appointments)
+        .filter((apt) => {
+          if (apt.status !== 'PENDIENTE' && apt.status !== 'CONFIRMADA') return false;
+          const end = new Date(`${apt.date}T${apt.endTime}`);
+          return end > now;
+        })
+        .sort((a, b) => `${a.date}T${a.startTime}`.localeCompare(`${b.date}T${b.startTime}`))[0] ??
+      null
+    );
   });
 
   loadWeek(date: Date = new Date()): void {
-    const monday  = this._getMondayOf(date);
+    const monday = this._getMondayOf(date);
     const dateStr = formatDateToISO(monday);
 
     this._state.setWeekStart(dateStr);
     this._state.setLoading(true);
     this._state.setError(null);
 
-    this._service.getWeeklyAgenda(dateStr)
+    this._service
+      .getWeeklyAgenda(dateStr)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (agenda) => {
@@ -118,9 +122,10 @@ export class AgendaViewModel {
         },
         error: (raw) => {
           const err = toApiError(raw);
-          const msg = err.status === 404
-            ? 'No se encontró perfil médico para este usuario.'
-            : 'No se pudo cargar la agenda. Intenta de nuevo.';
+          const msg =
+            err.status === 404
+              ? 'No se encontró perfil médico para este usuario.'
+              : 'No se pudo cargar la agenda. Intenta de nuevo.';
           this._state.setError(msg);
           this._state.setLoading(false);
         },
@@ -154,7 +159,7 @@ export class AgendaViewModel {
   }
 
   goToDate(date: string): void {
-    const d      = new Date(date + 'T00:00:00');
+    const d = new Date(date + 'T00:00:00');
     const monday = this._getMondayOf(d);
     this._state.setSelectedDate(date);
     if (formatDateToISO(monday) !== this._state.weekStart()) {
@@ -163,7 +168,7 @@ export class AgendaViewModel {
   }
 
   goToToday(): void {
-    const today  = new Date();
+    const today = new Date();
     const monday = this._getMondayOf(today);
     this._state.setSelectedDate(formatDateToISO(today));
     if (formatDateToISO(monday) !== this._state.weekStart()) {
@@ -171,22 +176,29 @@ export class AgendaViewModel {
     }
   }
 
-  setSearchQuery(q: string): void          { this._state.setSearchQuery(q); }
-  setStatusFilter(f: StatusFilter): void   { this._state.setStatusFilter(f); }
-  setView(view: ActiveView): void          { this._state.setActiveView(view); }
+  setSearchQuery(q: string): void {
+    this._state.setSearchQuery(q);
+  }
+  setStatusFilter(f: StatusFilter): void {
+    this._state.setStatusFilter(f);
+  }
+  setView(view: ActiveView): void {
+    this._state.setActiveView(view);
+  }
 
   markAbsent(appointmentId: number): void {
-    this._service.cancelAppointment(appointmentId)
+    this._service
+      .cancelAppointment(appointmentId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
           this._state.setAgenda(
-            this._state.agenda().map(day => ({
+            this._state.agenda().map((day) => ({
               ...day,
-              appointments: day.appointments.map(apt =>
-                apt.id === appointmentId ? { ...apt, status: 'CANCELADA' as const } : apt
+              appointments: day.appointments.map((apt) =>
+                apt.id === appointmentId ? { ...apt, status: 'CANCELADA' as const } : apt,
               ),
-            }))
+            })),
           );
         },
         error: () => {},
@@ -199,44 +211,49 @@ export class AgendaViewModel {
 
   private _loadUpcomingData(): void {
     const monday = formatDateToISO(this._getMondayOf(new Date()));
-    this._service.getWeeklyAgenda(monday)
+    this._service
+      .getWeeklyAgenda(monday)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
-        next: data => this._upcomingData.set(data),
+        next: (data) => this._upcomingData.set(data),
         error: () => {},
       });
   }
 
   private _autoCompleteExpired(agenda: DailyAgenda[]): void {
-    const now     = new Date();
+    const now = new Date();
     const expired = agenda
-      .flatMap(day => day.appointments)
-      .filter(apt =>
-        (apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA') &&
-        new Date(`${apt.date}T${apt.endTime}`) < now
+      .flatMap((day) => day.appointments)
+      .filter(
+        (apt) =>
+          (apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA') &&
+          new Date(`${apt.date}T${apt.endTime}`) < now,
       );
 
-    expired.forEach(apt => {
-      this._service.completeAppointment(apt.id)
+    expired.forEach((apt) => {
+      this._service
+        .completeAppointment(apt.id)
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: () => {
             this._state.setAgenda(
-              this._state.agenda().map(day => ({
+              this._state.agenda().map((day) => ({
                 ...day,
-                appointments: day.appointments.map(a =>
-                  a.id === apt.id ? { ...a, status: 'COMPLETADA' as const } : a
+                appointments: day.appointments.map((a) =>
+                  a.id === apt.id ? { ...a, status: 'COMPLETADA' as const } : a,
                 ),
-              }))
+              })),
             );
           },
-          error: () => { /* silent — UI already shows effective status */ },
+          error: () => {
+            /* silent — UI already shows effective status */
+          },
         });
     });
   }
 
   private _getMondayOf(date: Date): Date {
-    const d   = new Date(date);
+    const d = new Date(date);
     const day = d.getDay();
     d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day));
     d.setHours(0, 0, 0, 0);

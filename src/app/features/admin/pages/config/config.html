@@ -1,5 +1,4 @@
 <div class="cfg-page">
-
   <!-- ─── Header ──────────────────────────────────────── -->
   <div class="cfg-page__header">
     <div class="cfg-page__title-group">
@@ -24,22 +23,34 @@
       <div class="cfg-page__form-grid">
         <div class="cfg-page__field">
           <label class="cfg-page__label">{{ t.get('admin.config.fields.key') }} *</label>
-          <input class="cfg-page__input" type="text"
-            [value]="_fKey()" (input)="_fKey.set($any($event.target).value)"
+          <input
+            class="cfg-page__input"
+            type="text"
+            [value]="_fKey()"
+            (input)="_fKey.set($any($event.target).value)"
             [placeholder]="t.get('admin.config.fields.key-placeholder')"
-            [disabled]="_isEditing()" />
+            [disabled]="_isEditing()"
+          />
         </div>
         <div class="cfg-page__field">
           <label class="cfg-page__label">{{ t.get('admin.config.fields.value') }} *</label>
-          <input class="cfg-page__input" type="text"
-            [value]="_fValue()" (input)="_fValue.set($any($event.target).value)"
-            [placeholder]="t.get('admin.config.fields.value-placeholder')" />
+          <input
+            class="cfg-page__input"
+            type="text"
+            [value]="_fValue()"
+            (input)="_fValue.set($any($event.target).value)"
+            [placeholder]="t.get('admin.config.fields.value-placeholder')"
+          />
         </div>
         <div class="cfg-page__field cfg-page__field--full">
           <label class="cfg-page__label">{{ t.get('admin.config.fields.description') }}</label>
-          <input class="cfg-page__input" type="text"
-            [value]="_fDescription()" (input)="_fDescription.set($any($event.target).value)"
-            [placeholder]="t.get('admin.config.fields.description-placeholder')" />
+          <input
+            class="cfg-page__input"
+            type="text"
+            [value]="_fDescription()"
+            (input)="_fDescription.set($any($event.target).value)"
+            [placeholder]="t.get('admin.config.fields.description-placeholder')"
+          />
         </div>
       </div>
 
@@ -52,8 +63,11 @@
           <lucide-icon name="x" [size]="16"></lucide-icon>
           {{ t.get('common.buttons.cancel') }}
         </button>
-        <button class="cfg-page__btn cfg-page__btn--primary" (click)="_save()"
-          [disabled]="configVm.saving()">
+        <button
+          class="cfg-page__btn cfg-page__btn--primary"
+          (click)="_save()"
+          [disabled]="configVm.saving()"
+        >
           @if (configVm.saving()) {
             <lucide-icon name="loader-circle" [size]="16" class="cfg-page__spinner"></lucide-icon>
           }
@@ -105,26 +119,41 @@
                 <td class="cfg-page__td cfg-page__td--value">{{ c.value }}</td>
                 <td class="cfg-page__td cfg-page__td--muted">{{ c.description }}</td>
                 <td class="cfg-page__td">
-                  <span class="cfg-page__badge"
+                  <span
+                    class="cfg-page__badge"
                     [class.cfg-page__badge--active]="c.active"
-                    [class.cfg-page__badge--inactive]="!c.active">
-                    {{ c.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    [class.cfg-page__badge--inactive]="!c.active"
+                  >
+                    {{
+                      c.active
+                        ? t.get('admin.specialties.status.active')
+                        : t.get('admin.specialties.status.inactive')
+                    }}
                   </span>
                 </td>
                 <td class="cfg-page__td">
                   <div class="cfg-page__actions">
-                    <button class="cfg-page__action-btn cfg-page__action-btn--edit"
-                      (click)="_openEdit(c)" [title]="t.get('admin.config.actions.edit')">
+                    <button
+                      class="cfg-page__action-btn cfg-page__action-btn--edit"
+                      (click)="_openEdit(c)"
+                      [title]="t.get('admin.config.actions.edit')"
+                    >
                       <lucide-icon name="pencil" [size]="15"></lucide-icon>
                     </button>
                     @if (c.active) {
-                      <button class="cfg-page__action-btn cfg-page__action-btn--deactivate"
-                        (click)="configVm.deactivate(c.id)" [title]="t.get('admin.config.actions.deactivate')">
+                      <button
+                        class="cfg-page__action-btn cfg-page__action-btn--deactivate"
+                        (click)="configVm.deactivate(c.id)"
+                        [title]="t.get('admin.config.actions.deactivate')"
+                      >
                         <lucide-icon name="x-circle" [size]="15"></lucide-icon>
                       </button>
                     } @else {
-                      <button class="cfg-page__action-btn cfg-page__action-btn--reactivate"
-                        (click)="configVm.reactivate(c.id)" [title]="t.get('admin.config.actions.reactivate')">
+                      <button
+                        class="cfg-page__action-btn cfg-page__action-btn--reactivate"
+                        (click)="configVm.reactivate(c.id)"
+                        [title]="t.get('admin.config.actions.reactivate')"
+                      >
                         <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
                       </button>
                     }
@@ -137,5 +166,4 @@
       }
     </div>
   }
-
 </div>

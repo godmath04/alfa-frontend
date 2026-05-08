@@ -12,8 +12,12 @@ $bp-mobile: 600px;
     grid-template-columns: repeat(5, 1fr);
     gap: 16px;
 
-    @media (max-width: $bp-tablet) { grid-template-columns: repeat(3, 1fr); }
-    @media (max-width: $bp-mobile) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: $bp-tablet) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: $bp-mobile) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   &__card {
@@ -25,16 +29,33 @@ $bp-mobile: 600px;
     border-left: 4px solid transparent;
     background: var(--color-background);
 
-    &--blue   { border-left-color: var(--color-accent-1); }
-    &--cyan   { border-left-color: var(--color-accent-2); }
-    &--orange { border-left-color: #f97316; }
-    &--green  { border-left-color: var(--color-success); }
-    &--red    { border-left-color: #ef4444; }
+    &--blue {
+      border-left-color: var(--color-accent-1);
+    }
+    &--cyan {
+      border-left-color: var(--color-accent-2);
+    }
+    &--orange {
+      border-left-color: #f97316;
+    }
+    &--green {
+      border-left-color: var(--color-success);
+    }
+    &--red {
+      border-left-color: #ef4444;
+    }
   }
 
-  &__info { display: flex; flex-direction: column; gap: 4px; }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
-  &__label { font-size: 13px; color: var(--color-text-muted); }
+  &__label {
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
 
   &__value {
     font-size: 32px;
@@ -51,10 +72,25 @@ $bp-mobile: 600px;
     justify-content: center;
     flex-shrink: 0;
 
-    &--blue   { background: rgba(54, 154, 217, 0.12); color: var(--color-accent-1); }
-    &--cyan   { background: rgba(54, 171, 217, 0.12); color: var(--color-accent-2); }
-    &--orange { background: rgba(249, 115, 22,  0.12); color: #f97316; }
-    &--green  { background: rgba(34, 197, 94,  0.12); color: var(--color-success); }
-    &--red    { background: rgba(239, 68, 68,  0.12); color: #ef4444; }
+    &--blue {
+      background: rgba(54, 154, 217, 0.12);
+      color: var(--color-accent-1);
+    }
+    &--cyan {
+      background: rgba(54, 171, 217, 0.12);
+      color: var(--color-accent-2);
+    }
+    &--orange {
+      background: rgba(249, 115, 22, 0.12);
+      color: #f97316;
+    }
+    &--green {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--color-success);
+    }
+    &--red {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+    }
   }
 }

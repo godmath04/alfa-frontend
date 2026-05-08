@@ -3,13 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { LoginRequest, LoginResponse, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest } from '../../models/auth.model';
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+} from '../../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   private readonly _http = inject(HttpClient);
-  private get baseUrl() { return environment.apiUrl; }
+  private get baseUrl() {
+    return environment.apiUrl;
+  }
 
   login(email: string, password: string): Observable<LoginResponse> {
     const body: LoginRequest = { email, password };

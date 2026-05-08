@@ -1,5 +1,4 @@
 <div class="res-page">
-
   <!-- ─── Header ──────────────────────────────────────── -->
   <div class="res-page__header">
     <div class="res-page__title-group">
@@ -47,7 +46,6 @@
        ════════════════════════════════════════════════════ -->
   @if (_formVisible()) {
     <div class="res-page__form-card">
-
       <h3 class="res-page__form-title">
         {{ _editingId() !== null ? t.get('admin.resources.edit') : t.get('admin.resources.new') }}
       </h3>
@@ -57,14 +55,22 @@
         <div class="res-page__form-grid res-page__form-grid--specialty">
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.specialties.fields.name') }} *</label>
-            <input class="res-page__input" type="text"
-              [value]="_sfName()" (input)="_sfName.set($any($event.target).value)"
-              [placeholder]="t.get('admin.specialties.fields.name-placeholder')" />
+            <input
+              class="res-page__input"
+              type="text"
+              [value]="_sfName()"
+              (input)="_sfName.set($any($event.target).value)"
+              [placeholder]="t.get('admin.specialties.fields.name-placeholder')"
+            />
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.specialties.fields.icon') }}</label>
             <div class="res-page__icon-dropdown-container">
-              <button type="button" class="res-page__input res-page__icon-toggle" (click)="_toggleIconDropdown($event)">
+              <button
+                type="button"
+                class="res-page__input res-page__icon-toggle"
+                (click)="_toggleIconDropdown($event)"
+              >
                 <span class="res-page__icon-toggle-content">
                   @if (_sfIcon()) {
                     <lucide-icon [name]="_sfIcon()" [size]="20"></lucide-icon>
@@ -72,16 +78,33 @@
                     <lucide-icon name="ban" [size]="20" class="res-page__icon-none"></lucide-icon>
                   }
                 </span>
-                <lucide-icon name="chevron-down" [size]="16" class="res-page__icon-chevron" [class.res-page__icon-chevron--open]="_iconDropdownOpen()"></lucide-icon>
+                <lucide-icon
+                  name="chevron-down"
+                  [size]="16"
+                  class="res-page__icon-chevron"
+                  [class.res-page__icon-chevron--open]="_iconDropdownOpen()"
+                ></lucide-icon>
               </button>
-              
+
               @if (_iconDropdownOpen()) {
                 <div class="res-page__icon-menu">
-                  <button type="button" class="res-page__icon-option" [title]="t.get('admin.specialties.fields.icon-none')" [class.res-page__icon-option--selected]="!_sfIcon()" (click)="_selectIcon('', $event)">
+                  <button
+                    type="button"
+                    class="res-page__icon-option"
+                    [title]="t.get('admin.specialties.fields.icon-none')"
+                    [class.res-page__icon-option--selected]="!_sfIcon()"
+                    (click)="_selectIcon('', $event)"
+                  >
                     <lucide-icon name="ban" [size]="20" class="res-page__icon-none"></lucide-icon>
                   </button>
                   @for (icon of _AVAILABLE_ICONS; track icon.name) {
-                    <button type="button" class="res-page__icon-option" [title]="icon.label" [class.res-page__icon-option--selected]="_sfIcon() === icon.name" (click)="_selectIcon(icon.name, $event)">
+                    <button
+                      type="button"
+                      class="res-page__icon-option"
+                      [title]="icon.label"
+                      [class.res-page__icon-option--selected]="_sfIcon() === icon.name"
+                      (click)="_selectIcon(icon.name, $event)"
+                    >
                       <lucide-icon [name]="icon.name" [size]="20"></lucide-icon>
                     </button>
                   }
@@ -90,17 +113,30 @@
             </div>
           </div>
           <div class="res-page__field">
-            <label class="res-page__label">{{ t.get('admin.specialties.fields.description') }}</label>
-            <input class="res-page__input" type="text"
-              [value]="_sfDescription()" (input)="_sfDescription.set($any($event.target).value)"
-              [placeholder]="t.get('admin.specialties.fields.description-placeholder')" />
+            <label class="res-page__label">{{
+              t.get('admin.specialties.fields.description')
+            }}</label>
+            <input
+              class="res-page__input"
+              type="text"
+              [value]="_sfDescription()"
+              (input)="_sfDescription.set($any($event.target).value)"
+              [placeholder]="t.get('admin.specialties.fields.description-placeholder')"
+            />
           </div>
           <div class="res-page__field">
-            <label class="res-page__label">{{ t.get('admin.specialties.fields.duration') }} *</label>
-            <input class="res-page__input" type="number" min="5" max="480"
+            <label class="res-page__label"
+              >{{ t.get('admin.specialties.fields.duration') }} *</label
+            >
+            <input
+              class="res-page__input"
+              type="number"
+              min="5"
+              max="480"
               [value]="_sfDuration() ?? ''"
               (input)="_sfDuration.set(+$any($event.target).value || null)"
-              [placeholder]="t.get('admin.specialties.fields.duration-placeholder')" />
+              [placeholder]="t.get('admin.specialties.fields.duration-placeholder')"
+            />
           </div>
         </div>
       }
@@ -110,15 +146,23 @@
         <div class="res-page__form-grid res-page__form-grid--3">
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.number') }} *</label>
-            <input class="res-page__input" type="text"
-              [value]="_ofNumber()" (input)="_ofNumber.set($any($event.target).value)"
-              [placeholder]="t.get('admin.offices.fields.number-placeholder')" />
+            <input
+              class="res-page__input"
+              type="text"
+              [value]="_ofNumber()"
+              (input)="_ofNumber.set($any($event.target).value)"
+              [placeholder]="t.get('admin.offices.fields.number-placeholder')"
+            />
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.floor') }}</label>
-            <select class="res-page__input res-page__select"
-              (change)="_ofFloor.set($any($event.target).value)">
-              <option value="" [selected]="!_ofFloor()">{{ t.get('admin.offices.fields.floor-none') }}</option>
+            <select
+              class="res-page__input res-page__select"
+              (change)="_ofFloor.set($any($event.target).value)"
+            >
+              <option value="" [selected]="!_ofFloor()">
+                {{ t.get('admin.offices.fields.floor-none') }}
+              </option>
               @for (f of _FLOORS; track f) {
                 <option [value]="f" [selected]="f === _ofFloor()">{{ f }}</option>
               }
@@ -126,16 +170,22 @@
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.type') }}</label>
-            <select class="res-page__input res-page__select"
-              [value]="_ofType()" (change)="_ofType.set($any($event.target).value)">
+            <select
+              class="res-page__input res-page__select"
+              [value]="_ofType()"
+              (change)="_ofType.set($any($event.target).value)"
+            >
               <option value="INTERNAL">{{ t.get('admin.offices.types.internal') }}</option>
               <option value="EXTERNAL">{{ t.get('admin.offices.types.external') }}</option>
             </select>
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.status') }}</label>
-            <select class="res-page__input res-page__select"
-              [value]="_ofStatus()" (change)="_ofStatus.set($any($event.target).value)">
+            <select
+              class="res-page__input res-page__select"
+              [value]="_ofStatus()"
+              (change)="_ofStatus.set($any($event.target).value)"
+            >
               <option value="AVAILABLE">{{ t.get('admin.offices.statuses.available') }}</option>
               <option value="OCCUPIED">{{ t.get('admin.offices.statuses.occupied') }}</option>
               <option value="MAINTENANCE">{{ t.get('admin.offices.statuses.maintenance') }}</option>
@@ -143,9 +193,13 @@
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.specialty') }}</label>
-            <select class="res-page__input res-page__select"
-              (change)="_ofSpecialtyId.set(+$any($event.target).value || null)">
-              <option value="" [selected]="_ofSpecialtyId() === null">{{ t.get('admin.offices.fields.specialty-none') }}</option>
+            <select
+              class="res-page__input res-page__select"
+              (change)="_ofSpecialtyId.set(+$any($event.target).value || null)"
+            >
+              <option value="" [selected]="_ofSpecialtyId() === null">
+                {{ t.get('admin.offices.fields.specialty-none') }}
+              </option>
               @for (s of specialtyVm.specialties(); track s.id) {
                 <option [value]="s.id" [selected]="s.id === _ofSpecialtyId()">{{ s.name }}</option>
               }
@@ -153,9 +207,13 @@
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.equipment') }}</label>
-            <input class="res-page__input" type="text"
-              [value]="_ofEquipment()" (input)="_ofEquipment.set($any($event.target).value)"
-              [placeholder]="t.get('admin.offices.fields.equipment-placeholder')" />
+            <input
+              class="res-page__input"
+              type="text"
+              [value]="_ofEquipment()"
+              (input)="_ofEquipment.set($any($event.target).value)"
+              [placeholder]="t.get('admin.offices.fields.equipment-placeholder')"
+            />
           </div>
         </div>
       }
@@ -165,26 +223,43 @@
         <div class="res-page__form-grid res-page__form-grid--4">
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.schedules.fields.category') }} *</label>
-            <input class="res-page__input" type="text"
-              [value]="_shCategory()" (input)="_shCategory.set($any($event.target).value)"
-              [placeholder]="t.get('admin.schedules.fields.category-placeholder')" />
+            <input
+              class="res-page__input"
+              type="text"
+              [value]="_shCategory()"
+              (input)="_shCategory.set($any($event.target).value)"
+              [placeholder]="t.get('admin.schedules.fields.category-placeholder')"
+            />
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.schedules.fields.start') }} *</label>
-            <input class="res-page__input" type="time"
-              [value]="_shStartTime()" (input)="_shStartTime.set($any($event.target).value)" />
+            <input
+              class="res-page__input"
+              type="time"
+              [value]="_shStartTime()"
+              (input)="_shStartTime.set($any($event.target).value)"
+            />
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.schedules.fields.end') }} *</label>
-            <input class="res-page__input" type="time"
-              [value]="_shEndTime()" (input)="_shEndTime.set($any($event.target).value)" />
+            <input
+              class="res-page__input"
+              type="time"
+              [value]="_shEndTime()"
+              (input)="_shEndTime.set($any($event.target).value)"
+            />
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.schedules.fields.max') }} *</label>
-            <input class="res-page__input" type="number" min="1" max="500"
+            <input
+              class="res-page__input"
+              type="number"
+              min="1"
+              max="500"
               [value]="_shMaxAppointments() ?? ''"
               (input)="_shMaxAppointments.set(+$any($event.target).value || null)"
-              [placeholder]="t.get('admin.schedules.fields.max-placeholder')" />
+              [placeholder]="t.get('admin.schedules.fields.max-placeholder')"
+            />
           </div>
         </div>
         <div class="res-page__days-group">
@@ -213,8 +288,11 @@
           <lucide-icon name="x" [size]="16"></lucide-icon>
           {{ t.get('common.buttons.cancel') }}
         </button>
-        <button class="res-page__btn res-page__btn--primary" (click)="_save()"
-          [disabled]="specialtyVm.saving() || officeVm.saving() || scheduleVm.saving()">
+        <button
+          class="res-page__btn res-page__btn--primary"
+          (click)="_save()"
+          [disabled]="specialtyVm.saving() || officeVm.saving() || scheduleVm.saving()"
+        >
           @if (specialtyVm.saving() || officeVm.saving() || scheduleVm.saving()) {
             <lucide-icon name="loader-circle" [size]="16" class="res-page__spinner"></lucide-icon>
           }
@@ -261,27 +339,54 @@
               @for (s of specialtyVm.specialties(); track s.id) {
                 <tr class="res-page__row" [class.res-page__row--inactive]="!s.active">
                   <td class="res-page__td">
-                    <lucide-icon [name]="s.icon || 'stethoscope'" [size]="22" class="res-page__row-icon"></lucide-icon>
+                    <lucide-icon
+                      [name]="s.icon || 'stethoscope'"
+                      [size]="22"
+                      class="res-page__row-icon"
+                    ></lucide-icon>
                   </td>
                   <td class="res-page__td res-page__td--name">{{ s.name }}</td>
                   <td class="res-page__td res-page__td--muted">{{ s.description }}</td>
-                  <td class="res-page__td">{{ s.appointmentDuration }} {{ t.get('admin.specialties.fields.duration-unit') }}</td>
                   <td class="res-page__td">
-                    <span class="res-page__badge" [class.res-page__badge--active]="s.active" [class.res-page__badge--inactive]="!s.active">
-                      {{ s.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    {{ s.appointmentDuration }}
+                    {{ t.get('admin.specialties.fields.duration-unit') }}
+                  </td>
+                  <td class="res-page__td">
+                    <span
+                      class="res-page__badge"
+                      [class.res-page__badge--active]="s.active"
+                      [class.res-page__badge--inactive]="!s.active"
+                    >
+                      {{
+                        s.active
+                          ? t.get('admin.specialties.status.active')
+                          : t.get('admin.specialties.status.inactive')
+                      }}
                     </span>
                   </td>
                   <td class="res-page__td">
                     <div class="res-page__actions">
-                      <button class="res-page__action-btn res-page__action-btn--edit" (click)="_openEditSpecialty(s)" [title]="t.get('admin.specialties.actions.edit')">
+                      <button
+                        class="res-page__action-btn res-page__action-btn--edit"
+                        (click)="_openEditSpecialty(s)"
+                        [title]="t.get('admin.specialties.actions.edit')"
+                      >
                         <lucide-icon name="pencil" [size]="15"></lucide-icon>
                       </button>
                       @if (s.active) {
-                        <button class="res-page__action-btn res-page__action-btn--deactivate" (click)="specialtyVm.deactivate(s.id)" [title]="t.get('admin.specialties.actions.deactivate')">
+                        <button
+                          class="res-page__action-btn res-page__action-btn--deactivate"
+                          (click)="specialtyVm.deactivate(s.id)"
+                          [title]="t.get('admin.specialties.actions.deactivate')"
+                        >
                           <lucide-icon name="x-circle" [size]="15"></lucide-icon>
                         </button>
                       } @else {
-                        <button class="res-page__action-btn res-page__action-btn--reactivate" (click)="specialtyVm.reactivate(s.id)" [title]="t.get('admin.specialties.actions.reactivate')">
+                        <button
+                          class="res-page__action-btn res-page__action-btn--reactivate"
+                          (click)="specialtyVm.reactivate(s.id)"
+                          [title]="t.get('admin.specialties.actions.reactivate')"
+                        >
                           <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
                         </button>
                       }
@@ -337,34 +442,60 @@
                   <td class="res-page__td res-page__td--muted">{{ o.floor }}</td>
                   <td class="res-page__td">
                     <span class="res-page__badge res-page__badge--neutral">
-                      {{ o.type === 'INTERNAL' ? t.get('admin.offices.types.internal') : t.get('admin.offices.types.external') }}
+                      {{
+                        o.type === 'INTERNAL'
+                          ? t.get('admin.offices.types.internal')
+                          : t.get('admin.offices.types.external')
+                      }}
                     </span>
                   </td>
                   <td class="res-page__td">
-                    <span class="res-page__badge"
+                    <span
+                      class="res-page__badge"
                       [class.res-page__badge--available]="o.status === 'AVAILABLE'"
                       [class.res-page__badge--occupied]="o.status === 'OCCUPIED'"
-                      [class.res-page__badge--maintenance]="o.status === 'MAINTENANCE'">
+                      [class.res-page__badge--maintenance]="o.status === 'MAINTENANCE'"
+                    >
                       {{ t.get('admin.offices.statuses.' + o.status.toLowerCase()) }}
                     </span>
                   </td>
                   <td class="res-page__td res-page__td--muted">{{ o.specialtyName ?? '—' }}</td>
                   <td class="res-page__td">
-                    <span class="res-page__badge" [class.res-page__badge--active]="o.active" [class.res-page__badge--inactive]="!o.active">
-                      {{ o.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    <span
+                      class="res-page__badge"
+                      [class.res-page__badge--active]="o.active"
+                      [class.res-page__badge--inactive]="!o.active"
+                    >
+                      {{
+                        o.active
+                          ? t.get('admin.specialties.status.active')
+                          : t.get('admin.specialties.status.inactive')
+                      }}
                     </span>
                   </td>
                   <td class="res-page__td">
                     <div class="res-page__actions">
-                      <button class="res-page__action-btn res-page__action-btn--edit" (click)="_openEditOffice(o)" [title]="t.get('admin.offices.actions.edit')">
+                      <button
+                        class="res-page__action-btn res-page__action-btn--edit"
+                        (click)="_openEditOffice(o)"
+                        [title]="t.get('admin.offices.actions.edit')"
+                      >
                         <lucide-icon name="pencil" [size]="15"></lucide-icon>
                       </button>
                       @if (o.active) {
-                        <button class="res-page__action-btn res-page__action-btn--deactivate" (click)="officeVm.deactivate(o.id)" [title]="t.get('admin.offices.actions.deactivate')">
+                        <button
+                          class="res-page__action-btn res-page__action-btn--deactivate"
+                          (click)="officeVm.deactivate(o.id)"
+                          [title]="t.get('admin.offices.actions.deactivate')"
+                        >
                           <lucide-icon name="x-circle" [size]="15"></lucide-icon>
                         </button>
                       } @else {
-                        <button class="res-page__action-btn res-page__action-btn--reactivate" (click)="officeVm.reactivate(o.id)" [title]="t.get('admin.offices.actions.reactivate')">
+                        <button
+                          class="res-page__action-btn res-page__action-btn--reactivate"
+                          (click)="officeVm.reactivate(o.id)"
+                          [title]="t.get('admin.offices.actions.reactivate')"
+                        >
                           <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
                         </button>
                       }
@@ -417,24 +548,46 @@
                 <tr class="res-page__row" [class.res-page__row--inactive]="!s.active">
                   <td class="res-page__td res-page__td--name">{{ s.category }}</td>
                   <td class="res-page__td res-page__td--muted">{{ _formatDays(s.days) }}</td>
-                  <td class="res-page__td">{{ s.startTime.slice(0,5) }} – {{ s.endTime.slice(0,5) }}</td>
+                  <td class="res-page__td">
+                    {{ s.startTime.slice(0, 5) }} – {{ s.endTime.slice(0, 5) }}
+                  </td>
                   <td class="res-page__td">{{ s.maxAppointments }}</td>
                   <td class="res-page__td">
-                    <span class="res-page__badge" [class.res-page__badge--active]="s.active" [class.res-page__badge--inactive]="!s.active">
-                      {{ s.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                    <span
+                      class="res-page__badge"
+                      [class.res-page__badge--active]="s.active"
+                      [class.res-page__badge--inactive]="!s.active"
+                    >
+                      {{
+                        s.active
+                          ? t.get('admin.specialties.status.active')
+                          : t.get('admin.specialties.status.inactive')
+                      }}
                     </span>
                   </td>
                   <td class="res-page__td">
                     <div class="res-page__actions">
-                      <button class="res-page__action-btn res-page__action-btn--edit" (click)="_openEditSchedule(s)" [title]="t.get('admin.schedules.actions.edit')">
+                      <button
+                        class="res-page__action-btn res-page__action-btn--edit"
+                        (click)="_openEditSchedule(s)"
+                        [title]="t.get('admin.schedules.actions.edit')"
+                      >
                         <lucide-icon name="pencil" [size]="15"></lucide-icon>
                       </button>
                       @if (s.active) {
-                        <button class="res-page__action-btn res-page__action-btn--deactivate" (click)="scheduleVm.deactivate(s.id)" [title]="t.get('admin.schedules.actions.deactivate')">
+                        <button
+                          class="res-page__action-btn res-page__action-btn--deactivate"
+                          (click)="scheduleVm.deactivate(s.id)"
+                          [title]="t.get('admin.schedules.actions.deactivate')"
+                        >
                           <lucide-icon name="x-circle" [size]="15"></lucide-icon>
                         </button>
                       } @else {
-                        <button class="res-page__action-btn res-page__action-btn--reactivate" (click)="scheduleVm.reactivate(s.id)" [title]="t.get('admin.schedules.actions.reactivate')">
+                        <button
+                          class="res-page__action-btn res-page__action-btn--reactivate"
+                          (click)="scheduleVm.reactivate(s.id)"
+                          [title]="t.get('admin.schedules.actions.reactivate')"
+                        >
                           <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
                         </button>
                       }
@@ -448,5 +601,4 @@
       </div>
     }
   }
-
 </div>

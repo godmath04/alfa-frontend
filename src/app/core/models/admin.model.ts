@@ -1,64 +1,64 @@
 // ─── Specialty ────────────────────────────────────────────────────────────────
 
 export interface Specialty {
-  id:                  number;
-  name:                string;
-  icon:                string;
-  description:         string;
+  id: number;
+  name: string;
+  icon: string;
+  description: string;
   appointmentDuration: number;
-  active:              boolean;
+  active: boolean;
 }
 
 export interface SpecialtyRequest {
-  name:                string;
-  icon?:               string;
-  description?:        string;
+  name: string;
+  icon?: string;
+  description?: string;
   appointmentDuration: number;
 }
 
 // ─── Office ───────────────────────────────────────────────────────────────────
 
-export type OfficeType   = 'INTERNAL' | 'EXTERNAL';
+export type OfficeType = 'INTERNAL' | 'EXTERNAL';
 export type OfficeStatus = 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE';
 
 export interface Office {
-  id:           number;
-  number:       string;
-  floor:        string;
-  type:         OfficeType;
-  status:       OfficeStatus;
-  specialtyId:  number | null;
+  id: number;
+  number: string;
+  floor: string;
+  type: OfficeType;
+  status: OfficeStatus;
+  specialtyId: number | null;
   specialtyName: string | null;
-  equipment:    string[];
-  active:       boolean;
+  equipment: string[];
+  active: boolean;
 }
 
 export interface OfficeRequest {
-  number:      string;
-  floor?:      string;
-  type:        OfficeType;
-  status:      OfficeStatus;
+  number: string;
+  floor?: string;
+  type: OfficeType;
+  status: OfficeStatus;
   specialtyId?: number;
-  equipment:   string[];
+  equipment: string[];
 }
 
 // ─── Attention schedule ───────────────────────────────────────────────────────
 
 export interface AttentionSchedule {
-  id:              number;
-  category:        string;
-  days:            string[];
-  startTime:       string;
-  endTime:         string;
+  id: number;
+  category: string;
+  days: string[];
+  startTime: string;
+  endTime: string;
   maxAppointments: number;
-  active:          boolean;
+  active: boolean;
 }
 
 export interface AttentionScheduleRequest {
-  category:        string;
-  days:            string[];
-  startTime:       string;
-  endTime:         string;
+  category: string;
+  days: string[];
+  startTime: string;
+  endTime: string;
   maxAppointments: number;
 }
 
@@ -67,72 +67,72 @@ export interface AttentionScheduleRequest {
 export type DoctorType = 'INTERNO' | 'EXTERNO';
 
 export interface DoctorProfile {
-  id:           number;
-  userId:       number;
-  email:        string;
-  firstName:    string;
-  lastName:     string;
-  fullName:     string;
-  idNumber:     string;
-  type:         DoctorType;
-  officeId:     number | null;
+  id: number;
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  idNumber: string;
+  type: DoctorType;
+  officeId: number | null;
   profilePhoto: string | null;
-  specialties:  Specialty[];
-  active:       boolean;
-  createdAt:    string;
+  specialties: Specialty[];
+  active: boolean;
+  createdAt: string;
 }
 
 export interface DoctorProfileRequest {
-  userId:        number;
-  email:         string;
-  firstName:     string;
-  lastName:      string;
-  idNumber:      string;
-  type:          DoctorType;
-  officeId?:     number;
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  idNumber: string;
+  type: DoctorType;
+  officeId?: number;
   profilePhoto?: string;
-  specialtyIds:  number[];
+  specialtyIds: number[];
 }
 
 // ─── Horario ──────────────────────────────────────────────────────────────────
 
 export interface Horario {
-  id:         number;
-  diaSemana:  number;
+  id: number;
+  diaSemana: number;
   horaInicio: string;
-  horaFin:    string;
+  horaFin: string;
 }
 
 export interface HorarioRequest {
-  diaSemana:  number;
+  diaSemana: number;
   horaInicio: string;
-  horaFin:    string;
+  horaFin: string;
 }
 
 // ─── System configuration ─────────────────────────────────────────────────────
 
 export interface SystemConfig {
-  id:          number;
-  key:         string;
-  value:       string;
+  id: number;
+  key: string;
+  value: string;
   description: string;
-  active:      boolean;
+  active: boolean;
 }
 
 export interface SystemConfigRequest {
-  key:          string;
-  value:        string;
+  key: string;
+  value: string;
   description?: string;
 }
 
 // ─── User ─────────────────────────────────────────────────────────────────────
 
 export interface UserProfile {
-  id:        number;
-  email:     string;
+  id: number;
+  email: string;
   firstName: string;
-  lastName:  string;
-  role:      string;
-  idType:    string | null;
-  idNumber:  string | null;
+  lastName: string;
+  role: string;
+  idType: string | null;
+  idNumber: string | null;
 }

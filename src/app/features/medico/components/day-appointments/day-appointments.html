@@ -12,11 +12,7 @@
   </div>
   <div class="citas__filter">
     <lucide-icon name="list-filter" [size]="18" class="citas__filter-icon"></lucide-icon>
-    <select
-      class="citas__filter-select"
-      [value]="statusFilter"
-      (change)="_onFilter($event)"
-    >
+    <select class="citas__filter-select" [value]="statusFilter" (change)="_onFilter($event)">
       <option value="ALL">{{ t.get('medico.agenda.filter.all') }}</option>
       <option value="CONFIRMADA">{{ t.get('medico.agenda.filter.confirmed') }}</option>
       <option value="PENDIENTE">{{ t.get('medico.agenda.filter.pending') }}</option>
@@ -27,7 +23,6 @@
 <!-- Appointments table -->
 <div class="citas__table-wrapper">
   <table class="citas__table">
-
     <thead>
       <tr class="citas__thead-row">
         <th class="citas__th">{{ t.get('medico.agenda.table.time') }}</th>
@@ -41,7 +36,6 @@
 
     <tbody>
       @for (apt of appointments; track apt.id; let i = $index) {
-
         <tr
           class="citas__row"
           [class.citas__row--alt]="i % 2 !== 0"
@@ -55,7 +49,9 @@
               <lucide-icon name="clock" [size]="15" class="citas__time-icon"></lucide-icon>
               <div>
                 <span class="citas__time-main">{{ formatToAmPm(apt.startTime) }}</span>
-                <span class="citas__time-sub">{{ t.get('medico.agenda.table.until') }} {{ formatToAmPm(apt.endTime) }}</span>
+                <span class="citas__time-sub"
+                  >{{ t.get('medico.agenda.table.until') }} {{ formatToAmPm(apt.endTime) }}</span
+                >
               </div>
             </div>
           </td>
@@ -110,7 +106,6 @@
           <tr class="citas__expanded-row">
             <td colspan="6" class="citas__expanded-cell">
               <div class="citas__expanded-grid">
-
                 <!-- Información del paciente -->
                 <div class="citas__detail-card">
                   <h4 class="citas__detail-title">
@@ -120,43 +115,60 @@
                   <div class="citas__detail-rows">
                     <div class="citas__detail-row">
                       <lucide-icon name="stethoscope" [size]="13"></lucide-icon>
-                      <span class="citas__detail-label">{{ t.get('medico.agenda.detail.specialty') }}:</span>
+                      <span class="citas__detail-label"
+                        >{{ t.get('medico.agenda.detail.specialty') }}:</span
+                      >
                       <span class="citas__detail-value">{{ apt.specialty }}</span>
                     </div>
                     <div class="citas__detail-row">
                       <lucide-icon name="map-pin" [size]="13"></lucide-icon>
-                      <span class="citas__detail-label">{{ t.get('medico.agenda.detail.office') }}:</span>
+                      <span class="citas__detail-label"
+                        >{{ t.get('medico.agenda.detail.office') }}:</span
+                      >
                       <span class="citas__detail-value">{{ apt.officeNumber }}</span>
                     </div>
                     <div class="citas__detail-row">
                       <lucide-icon name="calendar" [size]="13"></lucide-icon>
-                      <span class="citas__detail-label">{{ t.get('medico.agenda.detail.date') }}:</span>
+                      <span class="citas__detail-label"
+                        >{{ t.get('medico.agenda.detail.date') }}:</span
+                      >
                       <span class="citas__detail-value">{{ apt.date }}</span>
                     </div>
                     <div class="citas__detail-row">
                       <lucide-icon name="clock" [size]="13"></lucide-icon>
-                      <span class="citas__detail-label">{{ t.get('medico.agenda.detail.schedule') }}:</span>
-                      <span class="citas__detail-value">{{ formatToAmPm(apt.startTime) }} – {{ formatToAmPm(apt.endTime) }}</span>
+                      <span class="citas__detail-label"
+                        >{{ t.get('medico.agenda.detail.schedule') }}:</span
+                      >
+                      <span class="citas__detail-value"
+                        >{{ formatToAmPm(apt.startTime) }} – {{ formatToAmPm(apt.endTime) }}</span
+                      >
                     </div>
                   </div>
                 </div>
 
                 <!-- Acciones rápidas -->
                 <div class="citas__detail-card">
-                  <h4 class="citas__detail-title">{{ t.get('medico.agenda.detail.quick-actions') }}</h4>
+                  <h4 class="citas__detail-title">
+                    {{ t.get('medico.agenda.detail.quick-actions') }}
+                  </h4>
                   <div class="citas__quick-actions">
                     <button
                       class="citas__action-btn citas__action-btn--red"
                       (click)="_onMarkAbsent(apt.id, $event)"
                       [disabled]="!_canMarkAbsent(apt)"
-                      [title]="!_canMarkAbsent(apt) && _getEffectiveStatus(apt) !== 'CANCELADA'
-                        ? 'Disponible desde ' + formatToAmPm(apt.startTime)
-                        : ''"
+                      [title]="
+                        !_canMarkAbsent(apt) && _getEffectiveStatus(apt) !== 'CANCELADA'
+                          ? 'Disponible desde ' + formatToAmPm(apt.startTime)
+                          : ''
+                      "
                     >
                       <lucide-icon name="user-x" [size]="14"></lucide-icon>
                       {{ t.get('medico.agenda.detail.absent') }}
                     </button>
-                    <button class="citas__action-btn citas__action-btn--purple" (click)="_stop($event)">
+                    <button
+                      class="citas__action-btn citas__action-btn--purple"
+                      (click)="_stop($event)"
+                    >
                       <lucide-icon name="file-text" [size]="14"></lucide-icon>
                       {{ t.get('medico.agenda.detail.view-record') }}
                     </button>
@@ -165,10 +177,14 @@
 
                 <!-- Notas de la cita -->
                 <div class="citas__detail-card">
-                  <h4 class="citas__detail-title">{{ t.get('medico.agenda.detail.notes-title') }}</h4>
+                  <h4 class="citas__detail-title">
+                    {{ t.get('medico.agenda.detail.notes-title') }}
+                  </h4>
                   <div class="citas__notes">
                     <div class="citas__note">
-                      <span class="citas__note-label">{{ t.get('medico.agenda.detail.notes-reason') }}</span>
+                      <span class="citas__note-label">{{
+                        t.get('medico.agenda.detail.notes-reason')
+                      }}</span>
                       {{ apt.reason }}
                     </div>
                     <textarea
@@ -179,12 +195,10 @@
                     ></textarea>
                   </div>
                 </div>
-
               </div>
             </td>
           </tr>
         }
-
       } @empty {
         <tr>
           <td colspan="6" class="citas__empty-cell">
@@ -196,6 +210,5 @@
         </tr>
       }
     </tbody>
-
   </table>
 </div>

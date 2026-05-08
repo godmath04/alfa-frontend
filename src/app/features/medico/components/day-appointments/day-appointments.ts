@@ -1,10 +1,17 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
-import { Translate }         from '../../../../core/services/translate';
-import { StatusFilter }      from '../../../../core/services/medico/agenda.state';
+import { Translate } from '../../../../core/services/translate';
+import { StatusFilter } from '../../../../core/services/medico/agenda.state';
 import { DoctorAppointment } from '../../../../core/models/medico.model';
-import { formatToAmPm }      from '../../../../shared/utils/date-time.utils';
+import { formatToAmPm } from '../../../../shared/utils/date-time.utils';
 
 @Component({
   selector: 'app-day-appointments',
@@ -16,20 +23,25 @@ import { formatToAmPm }      from '../../../../shared/utils/date-time.utils';
 })
 export class DayAppointmentsComponent {
   @Input() appointments: DoctorAppointment[] = [];
-  @Input() expandedId:   number | null       = null;
-  @Input() searchQuery:  string              = '';
-  @Input() statusFilter: StatusFilter        = 'ALL';
+  @Input() expandedId: number | null = null;
+  @Input() searchQuery: string = '';
+  @Input() statusFilter: StatusFilter = 'ALL';
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() filterChange = new EventEmitter<StatusFilter>();
-  @Output() expand       = new EventEmitter<number>();
-  @Output() markAbsent   = new EventEmitter<number>();
+  @Output() expand = new EventEmitter<number>();
+  @Output() markAbsent = new EventEmitter<number>();
 
-  readonly t            = inject(Translate);
+  readonly t = inject(Translate);
   readonly formatToAmPm = formatToAmPm;
 
   _getInitials(name: string): string {
-    return name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
+    return name
+      .split(' ')
+      .slice(0, 2)
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
   }
 
   _getEffectiveStatus(apt: DoctorAppointment): string {

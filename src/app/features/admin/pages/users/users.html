@@ -1,5 +1,4 @@
 <div class="usr-page">
-
   <!-- ─── Header ──────────────────────────────────────── -->
   <div class="usr-page__header">
     <div class="usr-page__title-group">
@@ -54,9 +53,11 @@
                 <td class="usr-page__td usr-page__td--muted">{{ u.email }}</td>
                 <td class="usr-page__td">
                   @if (_isEditing(u.id)) {
-                    <select class="usr-page__role-select"
+                    <select
+                      class="usr-page__role-select"
                       [value]="_selectedRole()"
-                      (change)="_selectedRole.set($any($event.target).value)">
+                      (change)="_selectedRole.set($any($event.target).value)"
+                    >
                       @for (role of _ROLES; track role) {
                         <option [value]="role">{{ _roleLabel(role) }}</option>
                       }
@@ -70,18 +71,27 @@
                 <td class="usr-page__td">
                   <div class="usr-page__actions">
                     @if (_isEditing(u.id)) {
-                      <button class="usr-page__action-btn usr-page__action-btn--save"
-                        (click)="_saveRole(u.id)" [disabled]="userVm.saving()"
-                        [title]="t.get('admin.users.actions.save')">
+                      <button
+                        class="usr-page__action-btn usr-page__action-btn--save"
+                        (click)="_saveRole(u.id)"
+                        [disabled]="userVm.saving()"
+                        [title]="t.get('admin.users.actions.save')"
+                      >
                         <lucide-icon name="check" [size]="15"></lucide-icon>
                       </button>
-                      <button class="usr-page__action-btn usr-page__action-btn--cancel"
-                        (click)="_cancelEdit()" [title]="t.get('admin.users.actions.cancel')">
+                      <button
+                        class="usr-page__action-btn usr-page__action-btn--cancel"
+                        (click)="_cancelEdit()"
+                        [title]="t.get('admin.users.actions.cancel')"
+                      >
                         <lucide-icon name="x" [size]="15"></lucide-icon>
                       </button>
                     } @else {
-                      <button class="usr-page__action-btn usr-page__action-btn--edit"
-                        (click)="_startEdit(u.id, u.role)" [title]="t.get('admin.users.actions.change-role')">
+                      <button
+                        class="usr-page__action-btn usr-page__action-btn--edit"
+                        (click)="_startEdit(u.id, u.role)"
+                        [title]="t.get('admin.users.actions.change-role')"
+                      >
                         <lucide-icon name="pencil" [size]="15"></lucide-icon>
                       </button>
                     }
@@ -94,5 +104,4 @@
       }
     </div>
   }
-
 </div>

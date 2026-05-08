@@ -7,38 +7,38 @@ import { MisCitaItem, MisCitasFiltros, PageResponse } from '../../../core/models
 
 @Injectable()
 export class AppointmentHistoryViewModel {
-  private readonly _service    = inject(AppointmentService);
+  private readonly _service = inject(AppointmentService);
   private readonly _destroyRef = inject(DestroyRef);
 
   // ── Private state signals ───────────────────────────────────────────────
-  private readonly _loading      = signal<boolean>(false);
-  private readonly _error        = signal<boolean>(false);
-  private readonly _citas        = signal<MisCitaItem[]>([]);
+  private readonly _loading = signal<boolean>(false);
+  private readonly _error = signal<boolean>(false);
+  private readonly _citas = signal<MisCitaItem[]>([]);
   private readonly _totalElements = signal<number>(0);
-  private readonly _totalPages   = signal<number>(0);
-  private readonly _isLastPage   = signal<boolean>(false);
-  private readonly _estado       = signal<string>('');
-  private readonly _fechaDesde   = signal<string>('');
-  private readonly _fechaHasta   = signal<string>('');
-  private readonly _page         = signal<number>(0);
-  private readonly _size         = signal<number>(20);
+  private readonly _totalPages = signal<number>(0);
+  private readonly _isLastPage = signal<boolean>(false);
+  private readonly _estado = signal<string>('');
+  private readonly _fechaDesde = signal<string>('');
+  private readonly _fechaHasta = signal<string>('');
+  private readonly _page = signal<number>(0);
+  private readonly _size = signal<number>(20);
 
-  private readonly _cancelling   = signal<boolean>(false);
+  private readonly _cancelling = signal<boolean>(false);
   private readonly _cancelSuccess = signal<string | null>(null);
-  private readonly _cancelError   = signal<string | null>(null);
+  private readonly _cancelError = signal<string | null>(null);
 
   // ── Public read-only signals ────────────────────────────────────────────
-  readonly loading:       Signal<boolean>      = computed(() => this._loading());
-  readonly error:         Signal<boolean>      = computed(() => this._error());
-  readonly citas:         Signal<MisCitaItem[]>= computed(() => this._citas());
-  readonly totalElements: Signal<number>       = computed(() => this._totalElements());
-  readonly totalPages:    Signal<number>       = computed(() => this._totalPages());
-  readonly isLastPage:    Signal<boolean>      = computed(() => this._isLastPage());
-  readonly page:          Signal<number>       = computed(() => this._page());
+  readonly loading: Signal<boolean> = computed(() => this._loading());
+  readonly error: Signal<boolean> = computed(() => this._error());
+  readonly citas: Signal<MisCitaItem[]> = computed(() => this._citas());
+  readonly totalElements: Signal<number> = computed(() => this._totalElements());
+  readonly totalPages: Signal<number> = computed(() => this._totalPages());
+  readonly isLastPage: Signal<boolean> = computed(() => this._isLastPage());
+  readonly page: Signal<number> = computed(() => this._page());
 
-  readonly cancelling:    Signal<boolean>      = computed(() => this._cancelling());
-  readonly cancelSuccess: Signal<string | null>= computed(() => this._cancelSuccess());
-  readonly cancelError:   Signal<string | null>= computed(() => this._cancelError());
+  readonly cancelling: Signal<boolean> = computed(() => this._cancelling());
+  readonly cancelSuccess: Signal<string | null> = computed(() => this._cancelSuccess());
+  readonly cancelError: Signal<string | null> = computed(() => this._cancelError());
 
   // ── Search trigger (Subject + switchMap = automatic cancellation) ───────
   // Must be in the constructor (injection context) so takeUntilDestroyed works
@@ -47,7 +47,7 @@ export class AppointmentHistoryViewModel {
   constructor() {
     this._search$
       .pipe(
-        switchMap(filtros => {
+        switchMap((filtros) => {
           this._loading.set(true);
           this._error.set(false);
           return this._service.getMisCitas(filtros).pipe(
@@ -56,10 +56,10 @@ export class AppointmentHistoryViewModel {
               this._error.set(true);
               this._loading.set(false);
               return EMPTY;
-            })
+            }),
           );
         }),
-        takeUntilDestroyed(this._destroyRef)
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: (response: PageResponse<MisCitaItem>) => {
@@ -69,7 +69,7 @@ export class AppointmentHistoryViewModel {
           this._totalPages.set(response.totalPages);
           this._isLastPage.set(response.last);
           this._loading.set(false);
-        }
+        },
       });
   }
 
@@ -77,7 +77,7 @@ export class AppointmentHistoryViewModel {
 
   loadMisCitas(): void {
     const filtros: MisCitasFiltros = { page: this._page(), size: this._size() };
-    if (this._estado())    filtros.estado     = this._estado();
+    if (this._estado()) filtros.estado = this._estado();
     if (this._fechaDesde()) filtros.fechaDesde = this._fechaDesde();
     if (this._fechaHasta()) filtros.fechaHasta = this._fechaHasta();
     this._search$.next(filtros);
@@ -111,7 +111,8 @@ export class AppointmentHistoryViewModel {
     this._cancelSuccess.set(null);
     this._cancelError.set(null);
 
-    this._service.cancelarCita(citaId)
+    this._service
+      .cancelarCita(citaId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (response) => {
@@ -122,10 +123,13 @@ export class AppointmentHistoryViewModel {
         error: (err) => {
           this._cancelling.set(false);
           // Map backend error message from GlobalExceptionHandler
-          const message = err.error?.message || err.error?.mensaje || 'paciente.appointmentHistory.cancel.errorGeneric';
+          const message =
+            err.error?.message ||
+            err.error?.mensaje ||
+            'paciente.appointmentHistory.cancel.errorGeneric';
           this._cancelError.set(message);
           this.loadMisCitas(); // Reload anyway to sync state
-        }
+        },
       });
   }
 

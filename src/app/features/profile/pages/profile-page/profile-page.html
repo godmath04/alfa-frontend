@@ -10,7 +10,6 @@
     </div>
   } @else {
     <div class="profile__content">
-
       <!-- Photo Section -->
       <div class="profile__photo-section">
         <button type="button" class="profile__photo-wrapper" (click)="_triggerFileInput()">
@@ -43,7 +42,6 @@
 
       <!-- Form Section -->
       <form [formGroup]="profileForm" (ngSubmit)="_onSubmit()" class="register-form" novalidate>
-
         <!-- Name & Last Name -->
         <div class="field-row">
           <div class="field-group">
@@ -91,7 +89,10 @@
             <label class="field-label">
               {{ translate.get('profile.phone') }} <span class="field-required">*</span>
             </label>
-            <div class="field-input-wrapper" [class.field-input-wrapper--error]="getFieldError('phone')">
+            <div
+              class="field-input-wrapper"
+              [class.field-input-wrapper--error]="getFieldError('phone')"
+            >
               <lucide-icon name="phone" [size]="18" class="field-icon"></lucide-icon>
               <input type="tel" class="field-input" formControlName="phone" />
             </div>
@@ -105,7 +106,11 @@
         <div class="field-row">
           <div class="field-group">
             <label class="field-label">{{ translate.get('profile.idType') }}</label>
-            <input type="text" class="field-input-simple field-input-simple--disabled" formControlName="idType" />
+            <input
+              type="text"
+              class="field-input-simple field-input-simple--disabled"
+              formControlName="idType"
+            />
           </div>
           <div class="field-group">
             <label class="field-label">{{ translate.get('profile.idNumber') }}</label>
@@ -164,17 +169,35 @@
             {{ translate.get('profile.birthDate') }} <span class="field-required">*</span>
           </label>
           <div class="field-date-group">
-            <select class="field-select" formControlName="birthDay"   [class.field-select--error]="birthDateError">
+            <select
+              class="field-select"
+              formControlName="birthDay"
+              [class.field-select--error]="birthDateError"
+            >
               <option value="">Día</option>
-              @for (day of days; track day) { <option [value]="day">{{ day }}</option> }
+              @for (day of days; track day) {
+                <option [value]="day">{{ day }}</option>
+              }
             </select>
-            <select class="field-select" formControlName="birthMonth" [class.field-select--error]="birthDateError">
+            <select
+              class="field-select"
+              formControlName="birthMonth"
+              [class.field-select--error]="birthDateError"
+            >
               <option value="">Mes</option>
-              @for (month of months; track month.value) { <option [value]="month.value">{{ month.name }}</option> }
+              @for (month of months; track month.value) {
+                <option [value]="month.value">{{ month.name }}</option>
+              }
             </select>
-            <select class="field-select" formControlName="birthYear"  [class.field-select--error]="birthDateError">
+            <select
+              class="field-select"
+              formControlName="birthYear"
+              [class.field-select--error]="birthDateError"
+            >
               <option value="">Año</option>
-              @for (year of years; track year) { <option [value]="year">{{ year }}</option> }
+              @for (year of years; track year) {
+                <option [value]="year">{{ year }}</option>
+              }
             </select>
           </div>
           @if (birthDateError && birthDateError !== true) {
@@ -188,7 +211,6 @@
             {{ translate.get('common.buttons.save') }}
           </app-button>
         </div>
-
       </form>
     </div>
   }

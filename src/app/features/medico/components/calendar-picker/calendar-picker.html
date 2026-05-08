@@ -1,20 +1,22 @@
 <div class="cal">
-
   <!-- Trigger -->
   <button class="cal__trigger" (click)="toggle()">
     <lucide-icon name="calendar-days" [size]="18"></lucide-icon>
     <span class="cal__trigger-label">{{ displayLabel() }}</span>
-    <lucide-icon name="chevron-down" [size]="15" class="cal__chevron" [class.cal__chevron--open]="open()"></lucide-icon>
+    <lucide-icon
+      name="chevron-down"
+      [size]="15"
+      class="cal__chevron"
+      [class.cal__chevron--open]="open()"
+    ></lucide-icon>
   </button>
 
   @if (open()) {
-
     <!-- Backdrop para cerrar al click fuera -->
     <div class="cal__backdrop" (click)="close()"></div>
 
     <!-- Dropdown -->
     <div class="cal__dropdown">
-
       <!-- Mes / Año + navegación -->
       <div class="cal__nav-row">
         <button class="cal__nav-btn" (click)="prevMonth()">
@@ -28,7 +30,6 @@
 
       <!-- Grid -->
       <div class="cal__grid">
-
         <!-- Encabezados de días -->
         @for (d of DOW; track d) {
           <div class="cal__dow">{{ d }}</div>
@@ -46,9 +47,7 @@
             {{ day.day }}
           </button>
         }
-
       </div>
     </div>
   }
-
 </div>

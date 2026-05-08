@@ -7,22 +7,27 @@ import { Specialty, SpecialtyRequest } from '../../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class SpecialtyViewModel {
-
   private readonly _service = inject(AdminService);
-  private readonly _state   = inject(SpecialtyStateService);
+  private readonly _state = inject(SpecialtyStateService);
 
   readonly specialties = this._state.items;
-  readonly loading     = this._state.loading;
-  readonly error       = this._state.error;
-  readonly saving      = this._state.saving;
-  readonly saveError   = this._state.saveError;
+  readonly loading = this._state.loading;
+  readonly error = this._state.error;
+  readonly saving = this._state.saving;
+  readonly saveError = this._state.saveError;
 
   loadAll(): void {
     this._state.setLoading(true);
     this._state.setError(null);
     this._service.getSpecialties().subscribe({
-      next:  items => { this._state.setItems(items); this._state.setLoading(false); },
-      error: ()    => { this._state.setError('admin.specialties.error'); this._state.setLoading(false); },
+      next: (items) => {
+        this._state.setItems(items);
+        this._state.setLoading(false);
+      },
+      error: () => {
+        this._state.setError('admin.specialties.error');
+        this._state.setLoading(false);
+      },
     });
   }
 
@@ -30,8 +35,11 @@ export class SpecialtyViewModel {
     this._state.setSaving(true);
     this._state.setSaveError(null);
     return this._service.createSpecialty(request).pipe(
-      tap(specialty => { this._state.upsert(specialty); this._state.setSaving(false); }),
-      catchError(err => {
+      tap((specialty) => {
+        this._state.upsert(specialty);
+        this._state.setSaving(false);
+      }),
+      catchError((err) => {
         this._state.setSaveError('admin.specialties.save-error');
         this._state.setSaving(false);
         return throwError(() => err);
@@ -43,8 +51,11 @@ export class SpecialtyViewModel {
     this._state.setSaving(true);
     this._state.setSaveError(null);
     return this._service.updateSpecialty(id, request).pipe(
-      tap(specialty => { this._state.upsert(specialty); this._state.setSaving(false); }),
-      catchError(err => {
+      tap((specialty) => {
+        this._state.upsert(specialty);
+        this._state.setSaving(false);
+      }),
+      catchError((err) => {
         this._state.setSaveError('admin.specialties.save-error');
         this._state.setSaving(false);
         return throwError(() => err);
@@ -54,14 +65,14 @@ export class SpecialtyViewModel {
 
   deactivate(id: number): void {
     this._service.deactivateSpecialty(id).subscribe({
-      next:  () => this._state.setActive(id, false),
+      next: () => this._state.setActive(id, false),
       error: () => {},
     });
   }
 
   reactivate(id: number): void {
     this._service.reactivateSpecialty(id).subscribe({
-      next:  () => this._state.setActive(id, true),
+      next: () => this._state.setActive(id, true),
       error: () => {},
     });
   }

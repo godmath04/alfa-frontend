@@ -4,11 +4,22 @@
   border-top-color: var(--color-accent-1);
   animation: spin 0.8s linear infinite;
 
-  &--small   { width: 16px; height: 16px; }
-  &--default { width: 24px; height: 24px; }
-  &--large   { width: 40px; height: 40px; }
+  &--small {
+    width: 16px;
+    height: 16px;
+  }
+  &--default {
+    width: 24px;
+    height: 24px;
+  }
+  &--large {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
