@@ -33,19 +33,27 @@ pipeline {
     }
     stage("Install") {
       steps {
-        nodeUtils.install()
+        script {
+          nodeUtils.install()
+        }
       }
     }
     stage("Quality") {
       parallel {
         stage("Lint (Prettier)") {
-          steps { nodeUtils.lint() }
+          steps {
+            script { nodeUtils.lint() }
+          }
         }
         stage("Test") {
-          steps { nodeUtils.test() }
+          steps {
+            script { nodeUtils.test() }
+          }
         }
         stage("Audit") {
-          steps { nodeUtils.audit() }
+          steps {
+            script { nodeUtils.audit() }
+          }
         }
       }
     }
@@ -54,7 +62,9 @@ pipeline {
         expression { shouldBuildAndArchive() }
       }
       steps {
-        buildAngular()
+        script {
+          buildAngular()
+        }
       }
     }
   }
