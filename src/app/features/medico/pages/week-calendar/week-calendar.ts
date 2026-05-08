@@ -3,10 +3,18 @@ import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { AgendaViewModel } from '../../../../core/services/medico/agenda.view-model';
-import { Translate }        from '../../../../core/services/translate';
-import { MONTHS_SHORT }     from '../../../../shared/utils/date-time.utils';
+import { Translate } from '../../../../core/services/translate';
+import { MONTHS_SHORT } from '../../../../shared/utils/date-time.utils';
 
-const WEEK_DAYS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'] as const;
+const WEEK_DAYS = [
+  'Domingo',
+  'Lunes',
+  'Martes',
+  'Miércoles',
+  'Jueves',
+  'Viernes',
+  'Sábado',
+] as const;
 
 @Component({
   selector: 'app-week-calendar',
@@ -17,9 +25,8 @@ const WEEK_DAYS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Vierne
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeekCalendarPage {
-
   readonly vm = inject(AgendaViewModel);
-  readonly t  = inject(Translate);
+  readonly t = inject(Translate);
 
   private readonly _router = inject(Router);
 
@@ -29,10 +36,10 @@ export class WeekCalendarPage {
 
   _formatWeekRange(): string {
     const start = this.vm.weekStart();
-    const end   = this.vm.weekEnd();
+    const end = this.vm.weekEnd();
     if (!start || !end) return '';
     const s = new Date(start + 'T00:00:00');
-    const e = new Date(end   + 'T00:00:00');
+    const e = new Date(end + 'T00:00:00');
     return `${s.getDate()} ${MONTHS_SHORT[s.getMonth()]} – ${e.getDate()} ${MONTHS_SHORT[e.getMonth()]} ${e.getFullYear()}`;
   }
 

@@ -14,7 +14,11 @@ $bp-mobile: 768px;
     flex-wrap: wrap;
   }
 
-  &__title-group { display: flex; flex-direction: column; gap: 4px; }
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
   &__title {
     font-size: 32px;
@@ -24,7 +28,12 @@ $bp-mobile: 768px;
   }
 
   // ─── Week navigation (reutiliza mismo estilo que agenda) ─
-  &__week-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  &__week-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 
   &__nav-btn {
     display: flex;
@@ -43,21 +52,35 @@ $bp-mobile: 768px;
     font-family: var(--font-family);
     white-space: nowrap;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
     box-sizing: border-box;
 
     &--prev {
       position: relative;
-      lucide-icon { position: absolute; left: 14px; }
+      lucide-icon {
+        position: absolute;
+        left: 14px;
+      }
     }
 
     &--next {
       position: relative;
-      lucide-icon { position: absolute; right: 14px; }
+      lucide-icon {
+        position: absolute;
+        right: 14px;
+      }
     }
 
-    &:hover:not(:disabled) { background: var(--color-accent-1); color: var(--color-white); }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:hover:not(:disabled) {
+      background: var(--color-accent-1);
+      color: var(--color-white);
+    }
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   }
 
   &__week-badge {
@@ -88,14 +111,22 @@ $bp-mobile: 768px;
     color: var(--color-text-muted);
     font-size: 15px;
 
-    &--error { color: var(--color-error); }
+    &--error {
+      color: var(--color-error);
+    }
   }
 
-  &__spinner { animation: spin 1s linear infinite; }
+  &__spinner {
+    animation: spin 1s linear infinite;
+  }
 
   @keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   // ─── Week list ───────────────────────────────────────
@@ -117,13 +148,25 @@ $bp-mobile: 768px;
     border: 2px solid var(--color-background);
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
 
-    &:hover { border-color: var(--color-accent-2); background: rgba(54, 171, 217, 0.04); }
-    &--today { border-color: var(--color-accent-1); background: rgba(54, 154, 217, 0.04); }
+    &:hover {
+      border-color: var(--color-accent-2);
+      background: rgba(54, 171, 217, 0.04);
+    }
+    &--today {
+      border-color: var(--color-accent-1);
+      background: rgba(54, 154, 217, 0.04);
+    }
   }
 
-  &__week-left { display: flex; align-items: center; gap: 16px; }
+  &__week-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
 
   &__week-icon {
     width: 50px;
@@ -136,7 +179,9 @@ $bp-mobile: 768px;
     justify-content: center;
     flex-shrink: 0;
 
-    &--today { background: var(--color-primary-dark); }
+    &--today {
+      background: var(--color-primary-dark);
+    }
   }
 
   &__week-day {
@@ -153,5 +198,7 @@ $bp-mobile: 768px;
     margin: 0;
   }
 
-  &__week-arrow { color: var(--color-accent-1); }
+  &__week-arrow {
+    color: var(--color-accent-1);
+  }
 }

@@ -25,7 +25,9 @@
   margin-bottom: var(--spacing-md);
   padding: 0;
 
-  &:hover { color: var(--color-accent-2); }
+  &:hover {
+    color: var(--color-accent-2);
+  }
 }
 
 .register-layout {
@@ -168,7 +170,9 @@
     margin-left: var(--spacing-lg);
     font-size: var(--font-size-sm);
 
-    li { margin-bottom: var(--spacing-xs); }
+    li {
+      margin-bottom: var(--spacing-xs);
+    }
   }
 }
 
@@ -180,7 +184,9 @@
 }
 
 .register-submit {
-  app-button button { width: 100%; }
+  app-button button {
+    width: 100%;
+  }
 }
 
 // ── Floating bubble field error (register style)

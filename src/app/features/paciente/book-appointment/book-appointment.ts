@@ -7,7 +7,11 @@ import { Translate } from '../../../core/services/translate';
 import { AppointmentViewModel } from '../../../core/services/appointment/appointment.view-model';
 import { Button } from '../../../shared/components/button/button';
 import { FlowType } from '../../../core/models/appointment.model';
-import { formatToAmPm, formatCountdown, generateNextDays } from '../../../shared/utils/date-time.utils';
+import {
+  formatToAmPm,
+  formatCountdown,
+  generateNextDays,
+} from '../../../shared/utils/date-time.utils';
 
 @Component({
   selector: 'app-book-appointment',
@@ -17,7 +21,6 @@ import { formatToAmPm, formatCountdown, generateNextDays } from '../../../shared
   styleUrl: './book-appointment.scss',
 })
 export class BookAppointment implements OnInit {
-
   readonly _translate = inject(Translate);
   readonly vm = inject(AppointmentViewModel);
   private readonly _router = inject(Router);
@@ -35,7 +38,7 @@ export class BookAppointment implements OnInit {
       return [
         this._translate.get('paciente.appointments.steps.quickSpecialtyDate'),
         this._translate.get('paciente.appointments.steps.quickConfirm'),
-        this._translate.get('paciente.appointments.steps.voucher')
+        this._translate.get('paciente.appointments.steps.voucher'),
       ];
     }
     return [
@@ -43,14 +46,16 @@ export class BookAppointment implements OnInit {
       this._translate.get('paciente.appointments.steps.doctor'),
       this._translate.get('paciente.appointments.steps.datetime'),
       this._translate.get('paciente.appointments.steps.confirmation'),
-      this._translate.get('paciente.appointments.steps.voucher')
+      this._translate.get('paciente.appointments.steps.voucher'),
     ];
   }
 
   // Helper to check if current step is the voucher
   get _isVoucherStep(): boolean {
-    return (this.vm.flowType() === 'manual' && this._currentStep === 5) ||
-           (this.vm.flowType() === 'quick' && this._currentStep === 3);
+    return (
+      (this.vm.flowType() === 'manual' && this._currentStep === 5) ||
+      (this.vm.flowType() === 'quick' && this._currentStep === 3)
+    );
   }
 
   ngOnInit(): void {
@@ -93,7 +98,9 @@ export class BookAppointment implements OnInit {
 
   // ─── Specialty click handler ───────────────────────
 
-  _onSpecialtyClick(specialty: import('../../../core/models/appointment.model').SpecialtyCatalog): void {
+  _onSpecialtyClick(
+    specialty: import('../../../core/models/appointment.model').SpecialtyCatalog,
+  ): void {
     this.vm.onSpecialtySelected(specialty);
     // In manual flow, auto-advance to step 2
     if (this.vm.flowType() === 'manual') {
@@ -162,6 +169,6 @@ export class BookAppointment implements OnInit {
 
   readonly availableDates = generateNextDays(14);
 
-  readonly formatToAmPm   = formatToAmPm;
+  readonly formatToAmPm = formatToAmPm;
   readonly formatCountdown = formatCountdown;
 }

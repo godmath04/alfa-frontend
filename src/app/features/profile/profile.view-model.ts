@@ -11,14 +11,15 @@ export class ProfileViewModel {
   private readonly _destroyRef = inject(DestroyRef);
 
   // Explicit types so the Angular Language Service resolves them without deep inference
-  readonly profile:  Signal<ProfileResponse | null> = this._state.profile;
-  readonly photoUrl: Signal<string | null>          = this._state.photoUrl;
-  readonly loading:  Signal<boolean>                = this._state.loading;
-  readonly uploading: Signal<boolean>               = this._state.uploading;
+  readonly profile: Signal<ProfileResponse | null> = this._state.profile;
+  readonly photoUrl: Signal<string | null> = this._state.photoUrl;
+  readonly loading: Signal<boolean> = this._state.loading;
+  readonly uploading: Signal<boolean> = this._state.uploading;
 
   loadProfile(): void {
     this._state.setLoading(true);
-    this._service.getProfile()
+    this._service
+      .getProfile()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (data) => {
@@ -26,25 +27,27 @@ export class ProfileViewModel {
           this._state.setLoading(false);
           this.loadPhoto();
         },
-        error: () => this._state.setLoading(false)
+        error: () => this._state.setLoading(false),
       });
   }
 
   loadPhoto(): void {
-    this._service.getPhoto()
+    this._service
+      .getPhoto()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (blob) => {
           const url = URL.createObjectURL(blob);
           this._state.setPhotoUrl(url);
         },
-        error: () => {} // If no photo exists or error, do nothing
+        error: () => {}, // If no photo exists or error, do nothing
       });
   }
 
   updateProfile(data: UpdateProfileRequest, onSuccess: () => void, onError: () => void): void {
     this._state.setLoading(true);
-    this._service.updateProfile(data)
+    this._service
+      .updateProfile(data)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
@@ -55,7 +58,7 @@ export class ProfileViewModel {
         error: () => {
           this._state.setLoading(false);
           onError();
-        }
+        },
       });
   }
 
@@ -66,7 +69,8 @@ export class ProfileViewModel {
 
     // Upload in background with localized spinner
     this._state.setUploading(true);
-    this._service.uploadPhoto(file)
+    this._service
+      .uploadPhoto(file)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
@@ -76,7 +80,7 @@ export class ProfileViewModel {
           this._state.setUploading(false);
           // Revert to server photo on failure
           this.loadPhoto();
-        }
+        },
       });
   }
 

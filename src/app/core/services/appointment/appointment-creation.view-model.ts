@@ -10,16 +10,15 @@ import { calculateEndTime } from '../../../shared/utils/date-time.utils';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentCreationViewModel {
-
   private readonly _appointmentService = inject(AppointmentService);
-  private readonly _stateService       = inject(AppointmentStateService);
-  private readonly _errorMapper        = inject(ErrorMapperService);
-  private readonly _destroyRef         = inject(DestroyRef);
+  private readonly _stateService = inject(AppointmentStateService);
+  private readonly _errorMapper = inject(ErrorMapperService);
+  private readonly _destroyRef = inject(DestroyRef);
 
-  readonly motivo            = computed(() => this._stateService.motivo());
+  readonly motivo = computed(() => this._stateService.motivo());
   readonly appointmentResult = computed(() => this._stateService.appointmentResult());
-  readonly creating          = computed(() => this._stateService.creating());
-  readonly createError       = computed(() => this._stateService.createError());
+  readonly creating = computed(() => this._stateService.creating());
+  readonly createError = computed(() => this._stateService.createError());
 
   setMotivo(motivo: string): void {
     this._stateService.setMotivo(motivo);
@@ -27,25 +26,26 @@ export class AppointmentCreationViewModel {
 
   confirmManualAppointment(onSuccess: () => void): void {
     const doctor = this._stateService.selectedDoctor();
-    const date   = this._stateService.selectedDate();
-    const time   = this._stateService.selectedTime();
+    const date = this._stateService.selectedDate();
+    const time = this._stateService.selectedTime();
     const motivo = this._stateService.motivo();
 
     if (!doctor || !date || !time || !motivo) return;
 
     const request: CreateAppointmentRequest = {
-      medicoId:      doctor.id,
+      medicoId: doctor.id,
       consultorioId: null,
-      fecha:         date,
-      horaInicio:    time,
-      horaFin:       calculateEndTime(time, this._stateService.slotDurationMinutes()),
-      motivo:        motivo.trim(),
+      fecha: date,
+      horaInicio: time,
+      horaFin: calculateEndTime(time, this._stateService.slotDurationMinutes()),
+      motivo: motivo.trim(),
     };
 
     this._stateService.setCreating(true);
     this._stateService.setCreateError(null);
 
-    this._appointmentService.createAppointment(request)
+    this._appointmentService
+      .createAppointment(request)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (result) => {
@@ -56,24 +56,25 @@ export class AppointmentCreationViewModel {
         error: (raw) => {
           this._stateService.setCreateError(this._errorMapper.mapCreateError(toApiError(raw)));
           this._stateService.setCreating(false);
-        }
+        },
       });
   }
 
   confirmQuickAppointment(onSuccess: () => void, onClearCountdown: () => void): void {
     const proposal = this._stateService.proposal();
-    const motivo   = this._stateService.motivo();
+    const motivo = this._stateService.motivo();
     if (!proposal || !motivo) return;
 
     const request: ConfirmQuickRequest = {
       reservaId: proposal.reservationId,
-      motivo:    motivo.trim(),
+      motivo: motivo.trim(),
     };
 
     this._stateService.setCreating(true);
     this._stateService.setCreateError(null);
 
-    this._appointmentService.confirmQuickAppointment(request)
+    this._appointmentService
+      .confirmQuickAppointment(request)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (result) => {
@@ -85,7 +86,7 @@ export class AppointmentCreationViewModel {
         error: (raw) => {
           this._stateService.setCreateError(this._errorMapper.mapCreateError(toApiError(raw)));
           this._stateService.setCreating(false);
-        }
+        },
       });
   }
 }

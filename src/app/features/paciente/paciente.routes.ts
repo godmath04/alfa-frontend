@@ -5,27 +5,31 @@ import { Role } from '../../core/models/role.enum';
 export const PACIENTE_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./layout/layout').then(m => m.Layout),
+    loadComponent: () => import('./layout/layout').then((m) => m.Layout),
     canActivate: [roleGuard],
     data: { roles: [Role.Paciente] },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-        loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard)
+        loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
         path: 'appointments',
-        loadComponent: () => import('./book-appointment/book-appointment').then(m => m.BookAppointment)
+        loadComponent: () =>
+          import('./book-appointment/book-appointment').then((m) => m.BookAppointment),
       },
       {
         path: 'appointment-history',
-        loadComponent: () => import('./appointment-history/appointment-history').then(m => m.AppointmentHistoryComponent)
+        loadComponent: () =>
+          import('./appointment-history/appointment-history').then(
+            (m) => m.AppointmentHistoryComponent,
+          ),
       },
       {
         path: 'profile',
-        loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
-      }
-    ]
-  }
+        loadChildren: () => import('../profile/profile.routes').then((m) => m.PROFILE_ROUTES),
+      },
+    ],
+  },
 ];

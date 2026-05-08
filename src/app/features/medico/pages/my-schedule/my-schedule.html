@@ -1,5 +1,4 @@
 <div class="my-sched">
-
   <!-- ─── Header ──────────────────────────────────────── -->
   <div class="my-sched__header">
     <div class="my-sched__title-group">
@@ -43,28 +42,38 @@
               <span class="my-sched__day-name">{{ t.get(day.key) }}</span>
 
               @if (_isEditingDay(day.value)) {
-                <input class="my-sched__time-input" type="time"
+                <input
+                  class="my-sched__time-input"
+                  type="time"
                   [value]="_editingDayStart()[day.value]"
-                  (input)="_setDayTime(day.value, 'start', $any($event.target).value)" />
+                  (input)="_setDayTime(day.value, 'start', $any($event.target).value)"
+                />
                 <span class="my-sched__sep">–</span>
-                <input class="my-sched__time-input" type="time"
+                <input
+                  class="my-sched__time-input"
+                  type="time"
                   [value]="_editingDayEnd()[day.value]"
-                  (input)="_setDayTime(day.value, 'end', $any($event.target).value)" />
-                <button class="my-sched__btn my-sched__btn--save"
-                  (click)="_saveDay(day.value)" [disabled]="horarioVm.saving()">
+                  (input)="_setDayTime(day.value, 'end', $any($event.target).value)"
+                />
+                <button
+                  class="my-sched__btn my-sched__btn--save"
+                  (click)="_saveDay(day.value)"
+                  [disabled]="horarioVm.saving()"
+                >
                   <lucide-icon name="check" [size]="16"></lucide-icon>
                   {{ t.get('medico.horarios.save') }}
                 </button>
-                <button class="my-sched__btn my-sched__btn--cancel"
-                  (click)="_cancelEdit(day.value)">
+                <button
+                  class="my-sched__btn my-sched__btn--cancel"
+                  (click)="_cancelEdit(day.value)"
+                >
                   <lucide-icon name="x" [size]="16"></lucide-icon>
                 </button>
-
               } @else if (_getHorario(day.value)) {
                 <span class="my-sched__time-display">
-                  {{ _getHorario(day.value)!.horaInicio.slice(0,5) }}
+                  {{ _getHorario(day.value)!.horaInicio.slice(0, 5) }}
                   –
-                  {{ _getHorario(day.value)!.horaFin.slice(0,5) }}
+                  {{ _getHorario(day.value)!.horaFin.slice(0, 5) }}
                 </span>
                 <button class="my-sched__btn my-sched__btn--edit" (click)="_editDay(day.value)">
                   <lucide-icon name="pencil" [size]="15"></lucide-icon>
@@ -73,11 +82,14 @@
                 <button class="my-sched__btn my-sched__btn--delete" (click)="_deleteDay(day.value)">
                   <lucide-icon name="x-circle" [size]="15"></lucide-icon>
                 </button>
-
               } @else {
                 <span class="my-sched__no-schedule">{{ t.get('medico.horarios.none') }}</span>
-                <button class="my-sched__btn my-sched__btn--add"
-                  (click)="_setDayTime(day.value, 'start', '08:00'); _setDayTime(day.value, 'end', '17:00')">
+                <button
+                  class="my-sched__btn my-sched__btn--add"
+                  (click)="
+                    _setDayTime(day.value, 'start', '08:00'); _setDayTime(day.value, 'end', '17:00')
+                  "
+                >
                   <lucide-icon name="plus" [size]="15"></lucide-icon>
                   {{ t.get('medico.horarios.add') }}
                 </button>
@@ -88,5 +100,4 @@
       }
     </div>
   }
-
 </div>

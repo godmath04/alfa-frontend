@@ -6,7 +6,9 @@ $bp-mobile: 768px;
   overflow: hidden;
   background-color: var(--color-background);
 
-  @media (max-width: $bp-mobile) { flex-direction: column; }
+  @media (max-width: $bp-mobile) {
+    flex-direction: column;
+  }
 }
 
 .topbar {
@@ -33,7 +35,9 @@ $bp-mobile: 768px;
   display: flex;
   flex-direction: column;
 
-  @media (max-width: $bp-mobile) { display: none; }
+  @media (max-width: $bp-mobile) {
+    display: none;
+  }
 
   &__logo {
     padding: 24px 20px;
@@ -76,10 +80,18 @@ $bp-mobile: 768px;
     cursor: pointer;
     width: 100%;
     text-align: left;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
 
-    &:hover    { background: rgba(255, 255, 255, 0.08); color: #fff; }
-    &--active  { background: var(--color-accent-1); color: #fff; }
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    &--active {
+      background: var(--color-accent-1);
+      color: #fff;
+    }
   }
 
   &__footer {
@@ -99,9 +111,14 @@ $bp-mobile: 768px;
     font-size: 14px;
     cursor: pointer;
     width: 100%;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
 
-    &:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
   }
 }
 
@@ -148,5 +165,7 @@ $bp-mobile: 768px;
   cursor: pointer;
   transition: color 0.15s;
 
-  &--active { color: var(--color-accent-2); }
+  &--active {
+    color: var(--color-accent-2);
+  }
 }

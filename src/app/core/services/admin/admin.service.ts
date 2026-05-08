@@ -4,18 +4,22 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import {
-  AttentionSchedule, AttentionScheduleRequest,
-  DoctorProfile, DoctorProfileRequest,
-  Office, OfficeRequest,
-  Specialty, SpecialtyRequest,
-  SystemConfig, SystemConfigRequest,
+  AttentionSchedule,
+  AttentionScheduleRequest,
+  DoctorProfile,
+  DoctorProfileRequest,
+  Office,
+  OfficeRequest,
+  Specialty,
+  SpecialtyRequest,
+  SystemConfig,
+  SystemConfigRequest,
   UserProfile,
 } from '../../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-
-  private readonly _http    = inject(HttpClient);
+  private readonly _http = inject(HttpClient);
   private readonly _baseUrl = `${environment.apiUrl}/api/admin`;
 
   // ─── Specialties ───────────────────────────────────────────────────────────

@@ -11,22 +11,22 @@ import { toApiError } from '../../models/api-error.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthViewModel {
-
   private readonly _authService = inject(AuthService);
-  private readonly _authState   = inject(AuthStateService);
-  private readonly _router      = inject(Router);
-  private readonly _destroyRef  = inject(DestroyRef);
+  private readonly _authState = inject(AuthStateService);
+  private readonly _router = inject(Router);
+  private readonly _destroyRef = inject(DestroyRef);
 
-  readonly loading         = signal<boolean>(false);
-  readonly loginError      = signal<string | null>(null);
-  readonly registerErrors  = signal<string[]>([]);
+  readonly loading = signal<boolean>(false);
+  readonly loginError = signal<string | null>(null);
+  readonly registerErrors = signal<string[]>([]);
   readonly registerSuccess = signal<boolean>(false);
 
   login(email: string, password: string): void {
     this.loading.set(true);
     this.loginError.set(null);
 
-    this._authService.login(email, password)
+    this._authService
+      .login(email, password)
       .pipe(timeout(10000), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (response) => {
@@ -42,7 +42,7 @@ export class AuthViewModel {
           } else {
             this.loginError.set(err.error.message ?? 'Error al iniciar sesión');
           }
-        }
+        },
       });
   }
 
@@ -50,7 +50,8 @@ export class AuthViewModel {
     this.loading.set(true);
     this.registerErrors.set([]);
 
-    this._authService.register(data)
+    this._authService
+      .register(data)
       .pipe(timeout(10000), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
@@ -68,26 +69,27 @@ export class AuthViewModel {
           } else {
             this.registerErrors.set([err.error.message ?? 'Error al crear la cuenta']);
           }
-        }
+        },
       });
   }
 
   logout(): void {
-    this._authService.logout()
+    this._authService
+      .logout()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
-        next:  () => this._authState.clearSession(),
-        error: () => this._authState.clearSession()
+        next: () => this._authState.clearSession(),
+        error: () => this._authState.clearSession(),
       });
     this._router.navigate(['/auth/login']);
   }
 
   private readonly _roleRoutes: Record<Role, string> = {
-    [Role.Paciente]:      '/paciente',
-    [Role.Medico]:        '/medico',
-    [Role.Ejecutivo]:     '/ejecutivo',
+    [Role.Paciente]: '/paciente',
+    [Role.Medico]: '/medico',
+    [Role.Ejecutivo]: '/ejecutivo',
     [Role.Administrador]: '/admin',
-    [Role.Gerencia]:      '/gerencia',
+    [Role.Gerencia]: '/gerencia',
   };
 
   private _redirectByRole(role: string): void {

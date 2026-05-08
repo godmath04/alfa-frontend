@@ -14,16 +14,19 @@ import { Router } from '@angular/router';
   styleUrl: './layout.scss',
 })
 export class Layout {
-
   readonly _translate = inject(Translate);
 
-  private readonly _vm     = inject(AuthViewModel);
+  private readonly _vm = inject(AuthViewModel);
   private readonly _router = inject(Router);
 
   readonly _navItems = [
     { key: 'profile.title', icon: 'user', route: '/paciente/profile' },
-    { key: 'paciente.nav.appointments', icon: 'calendar',  route: '/paciente/appointments' },
-    { key: 'paciente.nav.myAppointments', icon: 'file-text',  route: '/paciente/appointment-history' },
+    { key: 'paciente.nav.appointments', icon: 'calendar', route: '/paciente/appointments' },
+    {
+      key: 'paciente.nav.myAppointments',
+      icon: 'file-text',
+      route: '/paciente/appointment-history',
+    },
   ];
 
   _isActive(route: string): boolean {

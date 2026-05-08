@@ -1,5 +1,4 @@
 <div class="wizard">
-
   <!-- ══ HEADER (hidden on step 0) ══════════════════════════ -->
   @if (_currentStep > 0) {
     <div class="wizard__header">
@@ -25,7 +24,10 @@
             <span class="wizard__step-label">{{ label }}</span>
           </div>
           @if (i < _stepLabels.length - 1) {
-            <div class="wizard__step-line" [class.wizard__step-line--done]="_currentStep > i + 1"></div>
+            <div
+              class="wizard__step-line"
+              [class.wizard__step-line--done]="_currentStep > i + 1"
+            ></div>
           }
         }
       </div>
@@ -33,20 +35,24 @@
   }
 
   <div class="wizard__body">
-
     <!-- ══ STEP 0: Flow Selector ══════════════════════════ -->
     @if (_currentStep === 0) {
       <div class="flow-selector">
-        <h2 class="flow-selector__title">{{ _translate.get('paciente.appointments.flowSelector.title') }}</h2>
+        <h2 class="flow-selector__title">
+          {{ _translate.get('paciente.appointments.flowSelector.title') }}
+        </h2>
         <div class="flow-selector__cards">
-
           <!-- Manual flow card -->
           <div class="flow-card flow-card--manual" (click)="_selectFlow('manual')">
             <div class="flow-card__icon">
               <lucide-icon name="clipboard-list" [size]="40"></lucide-icon>
             </div>
-            <h3 class="flow-card__title">{{ _translate.get('paciente.appointments.flowSelector.manual.title') }}</h3>
-            <p class="flow-card__desc">{{ _translate.get('paciente.appointments.flowSelector.manual.description') }}</p>
+            <h3 class="flow-card__title">
+              {{ _translate.get('paciente.appointments.flowSelector.manual.title') }}
+            </h3>
+            <p class="flow-card__desc">
+              {{ _translate.get('paciente.appointments.flowSelector.manual.description') }}
+            </p>
           </div>
 
           <!-- Quick flow card -->
@@ -54,10 +60,13 @@
             <div class="flow-card__icon">
               <lucide-icon name="zap" [size]="40"></lucide-icon>
             </div>
-            <h3 class="flow-card__title">{{ _translate.get('paciente.appointments.flowSelector.quick.title') }}</h3>
-            <p class="flow-card__desc">{{ _translate.get('paciente.appointments.flowSelector.quick.description') }}</p>
+            <h3 class="flow-card__title">
+              {{ _translate.get('paciente.appointments.flowSelector.quick.title') }}
+            </h3>
+            <p class="flow-card__desc">
+              {{ _translate.get('paciente.appointments.flowSelector.quick.description') }}
+            </p>
           </div>
-
         </div>
       </div>
     }
@@ -66,7 +75,6 @@
     <!-- ══ MANUAL FLOW ══════════════════════════════════════ -->
     <!-- ══════════════════════════════════════════════════════ -->
     @if (vm.flowType() === 'manual') {
-
       <!-- ── STEP 1: Select Specialty ───────────────────── -->
       @if (_currentStep === 1) {
         <div class="specialties-container">
@@ -75,23 +83,25 @@
               <lucide-icon name="loader-2" class="animate-spin" [size]="32"></lucide-icon>
               <p>Loading catalog...</p>
             </div>
-          }
-          @else if (vm.error()) {
+          } @else if (vm.error()) {
             <div class="error-state">
               <lucide-icon name="alert-circle" [size]="32" color="red"></lucide-icon>
               <p>{{ vm.error() }}</p>
             </div>
-          }
-          @else {
+          } @else {
             <div class="specialties-grid">
               @for (specialty of vm.specialties(); track specialty.id) {
                 <div class="specialty-card" (click)="_onSpecialtyClick(specialty)">
-                  <img [src]="specialty.icono && specialty.iconoMimeType
-                                ? 'data:' + specialty.iconoMimeType + ';base64,' + specialty.icono
-                                : '/images/LOGO.svg'"
-                       (error)="onImageError($event)"
-                       [alt]="specialty.nombre"
-                       class="specialty-icon">
+                  <img
+                    [src]="
+                      specialty.icono && specialty.iconoMimeType
+                        ? 'data:' + specialty.iconoMimeType + ';base64,' + specialty.icono
+                        : '/images/LOGO.svg'
+                    "
+                    (error)="onImageError($event)"
+                    [alt]="specialty.nombre"
+                    class="specialty-icon"
+                  />
                   <div class="specialty-info">
                     <h3>{{ specialty.nombre }}</h3>
                     @if (specialty.descripcion) {
@@ -99,7 +109,8 @@
                     }
                     <span class="specialty-badge">
                       {{ specialty.cantidadMedicos }}
-                      {{ specialty.cantidadMedicos === 1
+                      {{
+                        specialty.cantidadMedicos === 1
                           ? _translate.get('paciente.appointments.doctorSingular')
                           : _translate.get('paciente.appointments.doctorPlural')
                       }}
@@ -108,7 +119,22 @@
                 </div>
               } @empty {
                 <div class="empty-state">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="opacity: 0.5"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
                   <p>{{ _translate.get('paciente.appointments.noSpecialties') }}</p>
                 </div>
               }
@@ -125,37 +151,72 @@
               <lucide-icon name="loader-2" class="animate-spin" [size]="32"></lucide-icon>
               <p>{{ _translate.get('paciente.appointments.loadingDoctors') }}</p>
             </div>
-          }
-          @else if (vm.doctorsError()) {
+          } @else if (vm.doctorsError()) {
             <div class="error-state">
               <lucide-icon name="alert-circle" [size]="32" color="red"></lucide-icon>
               <p>{{ vm.doctorsError() }}</p>
             </div>
-          }
-          @else {
+          } @else {
             <div class="doctors-grid">
               @for (doctor of vm.doctors(); track doctor.id) {
                 <div class="doctor-card" (click)="_onDoctorClick(doctor)">
-                  <img [src]="doctor.profilePicture ? doctor.profilePicture : '/images/person-icon.jpg'"
-                       (error)="onImageError($event)"
-                       [alt]="doctor.firstName"
-                       class="doctor-avatar">
+                  <img
+                    [src]="
+                      doctor.profilePicture ? doctor.profilePicture : '/images/person-icon.jpg'
+                    "
+                    (error)="onImageError($event)"
+                    [alt]="doctor.firstName"
+                    class="doctor-avatar"
+                  />
                   <div class="doctor-info">
                     <h3>{{ doctor.firstName }} {{ doctor.lastName || '' }}</h3>
                     @if (doctor.rating != null) {
                       <span class="doctor-rating">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        {{ doctor.rating | number:'1.1-2' }}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="#f59e0b"
+                          stroke="#f59e0b"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                          />
+                        </svg>
+                        {{ doctor.rating | number: '1.1-2' }}
                       </span>
                     }
                     @if (doctor.yearsOfExperience != null) {
-                      <p class="doctor-exp">{{ doctor.yearsOfExperience }} {{ _translate.get('paciente.appointments.experienceYears') }}</p>
+                      <p class="doctor-exp">
+                        {{ doctor.yearsOfExperience }}
+                        {{ _translate.get('paciente.appointments.experienceYears') }}
+                      </p>
                     }
                   </div>
                 </div>
               } @empty {
                 <div class="empty-state">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="opacity: 0.5"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <line x1="19" y1="8" x2="19" y2="14" />
+                    <line x1="22" y1="11" x2="16" y2="11" />
+                  </svg>
                   <p>{{ _translate.get('paciente.appointments.noDoctors') }}</p>
                 </div>
               }
@@ -170,20 +231,30 @@
           <!-- Doctor info banner -->
           <div class="selected-doctor-banner">
             @if (vm.selectedDoctor()) {
-              <img [src]="vm.selectedDoctor()!.profilePicture ? vm.selectedDoctor()!.profilePicture : '/images/person-icon.jpg'"
-                   (error)="onImageError($event)"
-                   class="doctor-avatar-small">
+              <img
+                [src]="
+                  vm.selectedDoctor()!.profilePicture
+                    ? vm.selectedDoctor()!.profilePicture
+                    : '/images/person-icon.jpg'
+                "
+                (error)="onImageError($event)"
+                class="doctor-avatar-small"
+              />
               <div>
-                <h4>{{ vm.selectedDoctor()!.firstName }} {{ vm.selectedDoctor()!.lastName || '' }}</h4>
+                <h4>
+                  {{ vm.selectedDoctor()!.firstName }} {{ vm.selectedDoctor()!.lastName || '' }}
+                </h4>
                 <p class="doctor-specialty-subtitle">{{ vm.selectedSpecialty()?.nombre }}</p>
               </div>
             }
           </div>
 
-          <hr class="divider">
+          <hr class="divider" />
 
           <!-- Date selection -->
-          <h3 class="section-title">{{ _translate.get('paciente.appointments.selectDateTitle') }}</h3>
+          <h3 class="section-title">
+            {{ _translate.get('paciente.appointments.selectDateTitle') }}
+          </h3>
 
           <div class="dates-carousel">
             @for (d of availableDates; track d.value) {
@@ -200,7 +271,9 @@
           </div>
 
           <!-- Time selection -->
-          <h3 class="section-title">{{ _translate.get('paciente.appointments.selectTimeTitle') }}</h3>
+          <h3 class="section-title">
+            {{ _translate.get('paciente.appointments.selectTimeTitle') }}
+          </h3>
 
           @if (vm.availabilityLoading()) {
             <div class="loading-state">
@@ -209,7 +282,24 @@
             </div>
           } @else if (vm.availabilityError()) {
             <div class="error-state">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><line x1="10" x2="14" y1="14" y2="18"/><line x1="14" x2="10" y1="14" y2="18"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                <line x1="16" x2="16" y1="2" y2="6" />
+                <line x1="8" x2="8" y1="2" y2="6" />
+                <line x1="3" x2="21" y1="10" y2="10" />
+                <line x1="10" x2="14" y1="14" y2="18" />
+                <line x1="14" x2="10" y1="14" y2="18" />
+              </svg>
               <p>{{ vm.availabilityError() }}</p>
             </div>
           } @else {
@@ -224,7 +314,21 @@
                 </button>
               } @empty {
                 <div class="empty-state">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="opacity: 0.5"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
                   <p>{{ _translate.get('paciente.appointments.noAvailableTimes') }}</p>
                 </div>
               }
@@ -236,31 +340,47 @@
       <!-- ── STEP 4: Confirmation ───────────────────────── -->
       @if (_currentStep === 4) {
         <div class="confirmation-container">
-          <h2 class="confirmation__title">{{ _translate.get('paciente.appointments.confirmation.title') }}</h2>
-          <p class="confirmation__subtitle">{{ _translate.get('paciente.appointments.confirmation.subtitle') }}</p>
+          <h2 class="confirmation__title">
+            {{ _translate.get('paciente.appointments.confirmation.title') }}
+          </h2>
+          <p class="confirmation__subtitle">
+            {{ _translate.get('paciente.appointments.confirmation.subtitle') }}
+          </p>
 
           <div class="summary-card">
             <div class="summary-row">
-              <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.specialtyLabel') }}</span>
+              <span class="summary-row__label">{{
+                _translate.get('paciente.appointments.confirmation.specialtyLabel')
+              }}</span>
               <span class="summary-row__value">{{ vm.selectedSpecialty()?.nombre }}</span>
             </div>
             <div class="summary-row">
-              <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.doctorLabel') }}</span>
-              <span class="summary-row__value">{{ vm.selectedDoctor()?.firstName }} {{ vm.selectedDoctor()?.lastName }}</span>
+              <span class="summary-row__label">{{
+                _translate.get('paciente.appointments.confirmation.doctorLabel')
+              }}</span>
+              <span class="summary-row__value"
+                >{{ vm.selectedDoctor()?.firstName }} {{ vm.selectedDoctor()?.lastName }}</span
+              >
             </div>
             <div class="summary-row">
-              <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.dateLabel') }}</span>
+              <span class="summary-row__label">{{
+                _translate.get('paciente.appointments.confirmation.dateLabel')
+              }}</span>
               <span class="summary-row__value">{{ vm.selectedDate() }}</span>
             </div>
             <div class="summary-row">
-              <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.timeLabel') }}</span>
+              <span class="summary-row__label">{{
+                _translate.get('paciente.appointments.confirmation.timeLabel')
+              }}</span>
               <span class="summary-row__value">{{ formatToAmPm(vm.selectedTime() ?? '') }}</span>
             </div>
           </div>
 
           <!-- Motivo textarea -->
           <div class="motivo-container">
-            <label class="motivo-label">{{ _translate.get('paciente.appointments.confirmation.motivoLabel') }} *</label>
+            <label class="motivo-label"
+              >{{ _translate.get('paciente.appointments.confirmation.motivoLabel') }} *</label
+            >
             <textarea
               class="motivo-field"
               [class.motivo-field--error]="vm.motivo() !== null && vm.motivo()!.trim().length === 0"
@@ -287,59 +407,89 @@
           <div class="voucher-success-icon">
             <lucide-icon name="check-circle-2" [size]="64"></lucide-icon>
           </div>
-          <h2 class="voucher__title">{{ _translate.get('paciente.appointments.voucher.title') }}</h2>
-          <p class="voucher__subtitle">{{ _translate.get('paciente.appointments.voucher.subtitle') }}</p>
+          <h2 class="voucher__title">
+            {{ _translate.get('paciente.appointments.voucher.title') }}
+          </h2>
+          <p class="voucher__subtitle">
+            {{ _translate.get('paciente.appointments.voucher.subtitle') }}
+          </p>
 
           @if (vm.appointmentResult()) {
             <div class="voucher-details">
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.voucher.appointmentId') }}</span>
-                <span class="summary-row__value summary-row__value--highlight">{{ vm.appointmentResult()!.id }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.voucher.appointmentId')
+                }}</span>
+                <span class="summary-row__value summary-row__value--highlight">{{
+                  vm.appointmentResult()!.id
+                }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.voucher.patient') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.voucher.patient')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.patientName }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.specialtyLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.specialtyLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.specialty }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.doctorLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.doctorLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.doctorName }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.officeLabel') }}</span>
-                <span class="summary-row__value">Consultorio {{ vm.appointmentResult()!.officeNumber }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.officeLabel')
+                }}</span>
+                <span class="summary-row__value"
+                  >Consultorio {{ vm.appointmentResult()!.officeNumber }}</span
+                >
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.dateLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.dateLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.date }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.timeLabel') }}</span>
-                <span class="summary-row__value">{{ formatToAmPm(vm.appointmentResult()!.startTime) }} - {{ formatToAmPm(vm.appointmentResult()!.endTime) }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.timeLabel')
+                }}</span>
+                <span class="summary-row__value"
+                  >{{ formatToAmPm(vm.appointmentResult()!.startTime) }} -
+                  {{ formatToAmPm(vm.appointmentResult()!.endTime) }}</span
+                >
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.motivoLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.motivoLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.reason }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.voucher.status') }}</span>
-                <span class="summary-row__value summary-row__value--status">{{ vm.appointmentResult()!.status }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.voucher.status')
+                }}</span>
+                <span class="summary-row__value summary-row__value--status">{{
+                  vm.appointmentResult()!.status
+                }}</span>
               </div>
             </div>
           }
         </div>
       }
-
-    } <!-- end manual flow -->
+    }
+    <!-- end manual flow -->
 
     <!-- ══════════════════════════════════════════════════════ -->
     <!-- ══ QUICK FLOW ═══════════════════════════════════════ -->
     <!-- ══════════════════════════════════════════════════════ -->
     @if (vm.flowType() === 'quick') {
-
       <!-- ── STEP 1: Select Specialty + Date ────────────── -->
       @if (_currentStep === 1) {
         <div class="specialties-container">
@@ -348,14 +498,12 @@
               <lucide-icon name="loader-2" class="animate-spin" [size]="32"></lucide-icon>
               <p>Loading catalog...</p>
             </div>
-          }
-          @else if (vm.error()) {
+          } @else if (vm.error()) {
             <div class="error-state">
               <lucide-icon name="alert-circle" [size]="32" color="red"></lucide-icon>
               <p>{{ vm.error() }}</p>
             </div>
-          }
-          @else {
+          } @else {
             <div class="specialties-grid">
               @for (specialty of vm.specialties(); track specialty.id) {
                 <div
@@ -363,12 +511,16 @@
                   [class.specialty-card--selected]="vm.selectedSpecialty()?.id === specialty.id"
                   (click)="_onSpecialtyClick(specialty)"
                 >
-                  <img [src]="specialty.icono && specialty.iconoMimeType
-                                ? 'data:' + specialty.iconoMimeType + ';base64,' + specialty.icono
-                                : '/images/LOGO.svg'"
-                       (error)="onImageError($event)"
-                       [alt]="specialty.nombre"
-                       class="specialty-icon">
+                  <img
+                    [src]="
+                      specialty.icono && specialty.iconoMimeType
+                        ? 'data:' + specialty.iconoMimeType + ';base64,' + specialty.icono
+                        : '/images/LOGO.svg'
+                    "
+                    (error)="onImageError($event)"
+                    [alt]="specialty.nombre"
+                    class="specialty-icon"
+                  />
                   <div class="specialty-info">
                     <h3>{{ specialty.nombre }}</h3>
                     @if (specialty.descripcion) {
@@ -376,7 +528,8 @@
                     }
                     <span class="specialty-badge">
                       {{ specialty.cantidadMedicos }}
-                      {{ specialty.cantidadMedicos === 1
+                      {{
+                        specialty.cantidadMedicos === 1
                           ? _translate.get('paciente.appointments.doctorSingular')
                           : _translate.get('paciente.appointments.doctorPlural')
                       }}
@@ -385,7 +538,22 @@
                 </div>
               } @empty {
                 <div class="empty-state">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="opacity: 0.5"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
                   <p>{{ _translate.get('paciente.appointments.noSpecialties') }}</p>
                 </div>
               }
@@ -393,8 +561,10 @@
 
             <!-- Date carousel (appears after selecting a specialty) -->
             @if (vm.selectedSpecialty()) {
-              <hr class="divider">
-              <h3 class="section-title">{{ _translate.get('paciente.appointments.selectDateTitle') }}</h3>
+              <hr class="divider" />
+              <h3 class="section-title">
+                {{ _translate.get('paciente.appointments.selectDateTitle') }}
+              </h3>
               <div class="dates-carousel">
                 @for (d of availableDates; track d.value) {
                   <div
@@ -425,44 +595,71 @@
       @if (_currentStep === 2) {
         <div class="proposal-container">
           @if (vm.proposal()) {
-            <h2 class="proposal__title">{{ _translate.get('paciente.appointments.quick.proposalTitle') }}</h2>
+            <h2 class="proposal__title">
+              {{ _translate.get('paciente.appointments.quick.proposalTitle') }}
+            </h2>
 
             <!-- Countdown timer -->
-            <div class="countdown-timer" [class.countdown-timer--urgent]="vm.proposalCountdown() < 60">
+            <div
+              class="countdown-timer"
+              [class.countdown-timer--urgent]="vm.proposalCountdown() < 60"
+            >
               <lucide-icon name="clock" [size]="20"></lucide-icon>
-              <span>{{ _translate.get('paciente.appointments.quick.expiresIn') }}: {{ formatCountdown(vm.proposalCountdown()) }}</span>
+              <span
+                >{{ _translate.get('paciente.appointments.quick.expiresIn') }}:
+                {{ formatCountdown(vm.proposalCountdown()) }}</span
+              >
             </div>
 
             <!-- Proposal details -->
             <div class="summary-card">
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.specialtyLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.specialtyLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.proposal()!.specialtyName }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.doctorLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.doctorLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.proposal()!.doctorName }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.officeLabel') }}</span>
-                <span class="summary-row__value">Consultorio {{ vm.proposal()!.officeNumber }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.officeLabel')
+                }}</span>
+                <span class="summary-row__value"
+                  >Consultorio {{ vm.proposal()!.officeNumber }}</span
+                >
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.dateLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.dateLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.proposal()!.date }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.timeLabel') }}</span>
-                <span class="summary-row__value">{{ formatToAmPm(vm.proposal()!.startTime) }} - {{ formatToAmPm(vm.proposal()!.endTime) }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.timeLabel')
+                }}</span>
+                <span class="summary-row__value"
+                  >{{ formatToAmPm(vm.proposal()!.startTime) }} -
+                  {{ formatToAmPm(vm.proposal()!.endTime) }}</span
+                >
               </div>
             </div>
 
             <!-- Motivo textarea -->
             <div class="motivo-container">
-              <label class="motivo-label">{{ _translate.get('paciente.appointments.confirmation.motivoLabel') }} *</label>
+              <label class="motivo-label"
+                >{{ _translate.get('paciente.appointments.confirmation.motivoLabel') }} *</label
+              >
               <textarea
                 class="motivo-field"
-                [placeholder]="_translate.get('paciente.appointments.confirmation.motivoPlaceholder')"
+                [placeholder]="
+                  _translate.get('paciente.appointments.confirmation.motivoPlaceholder')
+                "
                 [value]="vm.motivo() ?? ''"
                 (input)="_onMotivoInput($event)"
                 rows="3"
@@ -494,60 +691,89 @@
           <div class="voucher-success-icon">
             <lucide-icon name="check-circle-2" [size]="64"></lucide-icon>
           </div>
-          <h2 class="voucher__title">{{ _translate.get('paciente.appointments.voucher.title') }}</h2>
-          <p class="voucher__subtitle">{{ _translate.get('paciente.appointments.voucher.subtitle') }}</p>
+          <h2 class="voucher__title">
+            {{ _translate.get('paciente.appointments.voucher.title') }}
+          </h2>
+          <p class="voucher__subtitle">
+            {{ _translate.get('paciente.appointments.voucher.subtitle') }}
+          </p>
 
           @if (vm.appointmentResult()) {
             <div class="voucher-details">
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.voucher.appointmentId') }}</span>
-                <span class="summary-row__value summary-row__value--highlight">{{ vm.appointmentResult()!.id }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.voucher.appointmentId')
+                }}</span>
+                <span class="summary-row__value summary-row__value--highlight">{{
+                  vm.appointmentResult()!.id
+                }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.voucher.patient') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.voucher.patient')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.patientName }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.specialtyLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.specialtyLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.specialty }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.doctorLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.doctorLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.doctorName }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.officeLabel') }}</span>
-                <span class="summary-row__value">Consultorio {{ vm.appointmentResult()!.officeNumber }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.officeLabel')
+                }}</span>
+                <span class="summary-row__value"
+                  >Consultorio {{ vm.appointmentResult()!.officeNumber }}</span
+                >
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.dateLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.dateLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.date }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.timeLabel') }}</span>
-                <span class="summary-row__value">{{ formatToAmPm(vm.appointmentResult()!.startTime) }} - {{ formatToAmPm(vm.appointmentResult()!.endTime) }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.timeLabel')
+                }}</span>
+                <span class="summary-row__value"
+                  >{{ formatToAmPm(vm.appointmentResult()!.startTime) }} -
+                  {{ formatToAmPm(vm.appointmentResult()!.endTime) }}</span
+                >
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.confirmation.motivoLabel') }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.confirmation.motivoLabel')
+                }}</span>
                 <span class="summary-row__value">{{ vm.appointmentResult()!.reason }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-row__label">{{ _translate.get('paciente.appointments.voucher.status') }}</span>
-                <span class="summary-row__value summary-row__value--status">{{ vm.appointmentResult()!.status }}</span>
+                <span class="summary-row__label">{{
+                  _translate.get('paciente.appointments.voucher.status')
+                }}</span>
+                <span class="summary-row__value summary-row__value--status">{{
+                  vm.appointmentResult()!.status
+                }}</span>
               </div>
             </div>
           }
         </div>
       }
-
-    } <!-- end quick flow -->
-
+    }
+    <!-- end quick flow -->
   </div>
 
   <!-- ══ FOOTER ═══════════════════════════════════════════ -->
   @if (_currentStep > 0) {
     <div class="wizard__footer">
-
       <!-- Back button (all steps except voucher) -->
       @if (!_isVoucherStep) {
         <app-button variant="outline" (clicked)="_back()">
@@ -563,10 +789,16 @@
           </app-button>
         }
         @if (_currentStep === 4) {
-          <app-button variant="primary" [disabled]="!vm.canConfirmManual()" (clicked)="_confirmManual()">
-            {{ vm.creating()
+          <app-button
+            variant="primary"
+            [disabled]="!vm.canConfirmManual()"
+            (clicked)="_confirmManual()"
+          >
+            {{
+              vm.creating()
                 ? _translate.get('paciente.appointments.confirmation.creating')
-                : _translate.get('paciente.appointments.confirmation.confirmButton') }}
+                : _translate.get('paciente.appointments.confirmation.confirmButton')
+            }}
           </app-button>
         }
       }
@@ -574,22 +806,32 @@
       <!-- ── Quick flow buttons ── -->
       @if (vm.flowType() === 'quick') {
         @if (_currentStep === 1) {
-          <app-button variant="primary"
-                      [disabled]="!vm.selectedSpecialty() || !vm.selectedDate() || vm.proposalLoading()"
-                      (clicked)="_requestQuickProposal()">
-            {{ vm.proposalLoading()
+          <app-button
+            variant="primary"
+            [disabled]="!vm.selectedSpecialty() || !vm.selectedDate() || vm.proposalLoading()"
+            (clicked)="_requestQuickProposal()"
+          >
+            {{
+              vm.proposalLoading()
                 ? _translate.get('paciente.appointments.quick.searching')
-                : _translate.get('paciente.appointments.quick.searchButton') }}
+                : _translate.get('paciente.appointments.quick.searchButton')
+            }}
           </app-button>
         }
         @if (_currentStep === 2) {
           <app-button variant="outline" (clicked)="_cancelQuickAndGoBack()">
             {{ _translate.get('paciente.appointments.quick.cancelProposal') }}
           </app-button>
-          <app-button variant="primary" [disabled]="!vm.canConfirmQuick()" (clicked)="_confirmQuick()">
-            {{ vm.creating()
+          <app-button
+            variant="primary"
+            [disabled]="!vm.canConfirmQuick()"
+            (clicked)="_confirmQuick()"
+          >
+            {{
+              vm.creating()
                 ? _translate.get('paciente.appointments.confirmation.creating')
-                : _translate.get('paciente.appointments.confirmation.confirmButton') }}
+                : _translate.get('paciente.appointments.confirmation.confirmButton')
+            }}
           </app-button>
         }
       }
@@ -603,8 +845,6 @@
           {{ _translate.get('paciente.appointments.voucher.goToDashboard') }}
         </app-button>
       }
-
     </div>
   }
-
 </div>

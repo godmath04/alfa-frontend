@@ -4,14 +4,11 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class Translate {
-
   private readonly _http = inject(HttpClient);
   private _translations: Record<string, unknown> = {};
 
   load(): Promise<void> {
-    return lastValueFrom(
-      this._http.get<Record<string, unknown>>('/i18n/es.json')
-    ).then(data => {
+    return lastValueFrom(this._http.get<Record<string, unknown>>('/i18n/es.json')).then((data) => {
       this._translations = data || {};
     });
   }

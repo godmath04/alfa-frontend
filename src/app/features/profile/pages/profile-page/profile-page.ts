@@ -1,5 +1,11 @@
 import { Component, OnInit, inject, effect, DestroyRef } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -12,9 +18,9 @@ import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
 
 /** Group-level validator: assembled birth date must be strictly before today. */
 function birthDateNotFutureValidator(group: AbstractControl): ValidationErrors | null {
-  const day   = group.get('birthDay')?.value;
+  const day = group.get('birthDay')?.value;
   const month = group.get('birthMonth')?.value;
-  const year  = group.get('birthYear')?.value;
+  const year = group.get('birthYear')?.value;
   if (!day || !month || !year) return null; // Validators.required handles missing fields
   const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   const today = new Date();
@@ -27,12 +33,12 @@ function birthDateNotFutureValidator(group: AbstractControl): ValidationErrors |
   standalone: true,
   imports: [ReactiveFormsModule, LucideAngularModule, Button, Spinner],
   templateUrl: './profile-page.html',
-  styleUrl: './profile-page.scss'
+  styleUrl: './profile-page.scss',
 })
 export class ProfilePage implements OnInit {
-  private readonly _fb         = inject(FormBuilder);
+  private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
-  readonly vm        = inject(ProfileViewModel);
+  readonly vm = inject(ProfileViewModel);
   readonly translate = inject(Translate);
 
   // ── Form state ────────────────────────────────────────────────────────────
@@ -47,33 +53,38 @@ export class ProfilePage implements OnInit {
   cities = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
 
   // ── Form definition ────────────────────────────────────────────────────────
-  readonly profileForm = this._fb.group({
-    // Read-only fields (disabled — not submitted)
-    email:    [{ value: '', disabled: true }],
-    idType:   [{ value: '', disabled: true }],
-    idNumber: [{ value: '', disabled: true }],
+  readonly profileForm = this._fb.group(
+    {
+      // Read-only fields (disabled — not submitted)
+      email: [{ value: '', disabled: true }],
+      idType: [{ value: '', disabled: true }],
+      idNumber: [{ value: '', disabled: true }],
 
-    // Editable required fields
-    firstName: ['', Validators.required],
-    lastName:  ['', Validators.required],
-    phone:     ['', [Validators.required, PatternValidators.phoneEcuador]],
-    gender:    ['', Validators.required],
-    city:      ['', Validators.required],
+      // Editable required fields
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      phone: ['', [Validators.required, PatternValidators.phoneEcuador]],
+      gender: ['', Validators.required],
+      city: ['', Validators.required],
 
-    // Birth date as three separate selects (same UX as register)
-    birthDay:   ['', Validators.required],
-    birthMonth: ['', Validators.required],
-    birthYear:  ['', Validators.required],
-  }, { validators: [birthDateNotFutureValidator] });
+      // Birth date as three separate selects (same UX as register)
+      birthDay: ['', Validators.required],
+      birthMonth: ['', Validators.required],
+      birthYear: ['', Validators.required],
+    },
+    { validators: [birthDateNotFutureValidator] },
+  );
 
   constructor() {
     // Sync days-in-month when month/year change
-    this.profileForm.get('birthMonth')?.valueChanges
-      .pipe(takeUntilDestroyed(this._destroyRef))
+    this.profileForm
+      .get('birthMonth')
+      ?.valueChanges.pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => this._updateDaysInMonth());
 
-    this.profileForm.get('birthYear')?.valueChanges
-      .pipe(takeUntilDestroyed(this._destroyRef))
+    this.profileForm
+      .get('birthYear')
+      ?.valueChanges.pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => this._updateDaysInMonth());
 
     // Populate form when profile data arrives from the ViewModel
@@ -82,7 +93,9 @@ export class ProfilePage implements OnInit {
       if (!profile) return;
 
       // Parse 'YYYY-MM-DD' or 'DD/MM/YYYY' from backend
-      let day = '', month = '', year = '';
+      let day = '',
+        month = '',
+        year = '';
       if (profile.birthDate) {
         // Support both ISO (YYYY-MM-DD) and display (DD/MM/YYYY) formats
         const iso = profile.birthDate.includes('-')
@@ -90,24 +103,24 @@ export class ProfilePage implements OnInit {
           : profile.birthDate.split('/').reverse().join('-');
         const parts = iso.split('-');
         if (parts.length === 3) {
-          year  = parts[0];
+          year = parts[0];
           month = parts[1].padStart(2, '0');
-          day   = String(parseInt(parts[2], 10)); // remove leading zero for select match
+          day = String(parseInt(parts[2], 10)); // remove leading zero for select match
         }
       }
 
       this.profileForm.patchValue({
-        email:      profile.email,
-        idType:     profile.idType,
-        idNumber:   profile.idNumber,
-        firstName:  profile.firstName,
-        lastName:   profile.lastName,
-        phone:      profile.phone,
-        gender:     profile.gender,
-        city:       profile.city,
-        birthYear:  year,
+        email: profile.email,
+        idType: profile.idType,
+        idNumber: profile.idNumber,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        phone: profile.phone,
+        gender: profile.gender,
+        city: profile.city,
+        birthYear: year,
         birthMonth: month,
-        birthDay:   day,
+        birthDay: day,
       });
     });
   }
@@ -123,15 +136,13 @@ export class ProfilePage implements OnInit {
     if (!this.isSubmitted || !control?.errors) return false;
 
     const errorMap: Record<string, string> = {
-      required:           'common.errors.required',
-      invalidPhonePattern:'common.errors.invalid-phone',
-      notPastDate:        'profile.errors.notPastDate',
+      required: 'common.errors.required',
+      invalidPhonePattern: 'common.errors.invalid-phone',
+      notPastDate: 'profile.errors.notPastDate',
     };
 
     const firstKey = Object.keys(control.errors)[0];
-    return errorMap[firstKey]
-      ? this.translate.get(errorMap[firstKey])
-      : true;
+    return errorMap[firstKey] ? this.translate.get(errorMap[firstKey]) : true;
   }
 
   /** Returns error for the birth date section (required fields OR future date). */
@@ -152,7 +163,7 @@ export class ProfilePage implements OnInit {
 
   // ── Actions ────────────────────────────────────────────────────────────────
   _onSubmit(): void {
-    this.isSubmitted = true;           // Reveal all validation errors
+    this.isSubmitted = true; // Reveal all validation errors
     this.profileForm.markAllAsTouched();
     if (this.profileForm.invalid) return;
 
@@ -161,14 +172,14 @@ export class ProfilePage implements OnInit {
     this.vm.updateProfile(
       {
         firstName: v.firstName!,
-        lastName:  v.lastName!,
-        phone:     v.phone!,
-        city:      v.city!,
-        gender:    v.gender!,
-        birthDate
+        lastName: v.lastName!,
+        phone: v.phone!,
+        city: v.city!,
+        gender: v.gender!,
+        birthDate,
       },
       () => alert(this.translate.get('profile.successMessage')),
-      () => alert(this.translate.get('profile.errorMessage'))
+      () => alert(this.translate.get('profile.errorMessage')),
     );
   }
 
@@ -184,7 +195,7 @@ export class ProfilePage implements OnInit {
   }
 
   private _updateDaysInMonth(): void {
-    const year  = this.profileForm.get('birthYear')?.value;
+    const year = this.profileForm.get('birthYear')?.value;
     const month = this.profileForm.get('birthMonth')?.value;
     if (year && month) {
       const daysCount = new Date(parseInt(year), parseInt(month), 0).getDate();

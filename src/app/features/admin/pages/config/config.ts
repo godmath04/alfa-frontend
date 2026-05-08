@@ -13,16 +13,15 @@ import { SystemConfig, SystemConfigRequest } from '../../../../core/models/admin
   styleUrl: './config.scss',
 })
 export class ConfigPage {
-
-  readonly t        = inject(Translate);
+  readonly t = inject(Translate);
   readonly configVm = inject(ConfigViewModel);
 
   readonly _formVisible = signal(false);
-  readonly _editingId   = signal<number | null>(null);
-  readonly _formError   = signal<string | null>(null);
+  readonly _editingId = signal<number | null>(null);
+  readonly _formError = signal<string | null>(null);
 
-  readonly _fKey         = signal('');
-  readonly _fValue       = signal('');
+  readonly _fKey = signal('');
+  readonly _fValue = signal('');
   readonly _fDescription = signal('');
 
   constructor() {
@@ -31,7 +30,9 @@ export class ConfigPage {
 
   _openCreate(): void {
     this._editingId.set(null);
-    this._fKey.set(''); this._fValue.set(''); this._fDescription.set('');
+    this._fKey.set('');
+    this._fValue.set('');
+    this._fDescription.set('');
     this._formError.set(null);
     this._formVisible.set(true);
   }
@@ -52,11 +53,17 @@ export class ConfigPage {
   }
 
   _save(): void {
-    const key   = this._fKey().trim();
+    const key = this._fKey().trim();
     const value = this._fValue().trim();
 
-    if (!key)   { this._formError.set(this.t.get('admin.config.validation.key-required'));   return; }
-    if (!value) { this._formError.set(this.t.get('admin.config.validation.value-required')); return; }
+    if (!key) {
+      this._formError.set(this.t.get('admin.config.validation.key-required'));
+      return;
+    }
+    if (!value) {
+      this._formError.set(this.t.get('admin.config.validation.value-required'));
+      return;
+    }
 
     const request: SystemConfigRequest = {
       key,
@@ -68,10 +75,12 @@ export class ConfigPage {
     const action$ = id !== null ? this.configVm.update(id, request) : this.configVm.create(request);
 
     action$.subscribe({
-      next:  () => this._cancel(),
+      next: () => this._cancel(),
       error: () => this._formError.set(this.t.get('admin.config.save-error')),
     });
   }
 
-  _isEditing(): boolean { return this._editingId() !== null; }
+  _isEditing(): boolean {
+    return this._editingId() !== null;
+  }
 }

@@ -4,19 +4,50 @@ $bp-mobile: 768px;
   max-width: 700px;
   margin: 0 auto;
 
-  &__header { margin-bottom: 24px; }
-  &__title-group { display: flex; flex-direction: column; gap: 4px; }
-  &__title { font-size: 32px; font-weight: 700; color: var(--color-primary-dark); margin: 0; }
-  &__subtitle { font-size: 15px; color: var(--color-text-muted); margin: 0; }
-
-  &__state {
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-    padding: 48px 32px; color: var(--color-text-muted); font-size: 15px;
-    &--error { color: var(--color-error); }
+  &__header {
+    margin-bottom: 24px;
+  }
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  &__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    margin: 0;
+  }
+  &__subtitle {
+    font-size: 15px;
+    color: var(--color-text-muted);
+    margin: 0;
   }
 
-  &__spinner { animation: spin 1s linear infinite; }
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  &__state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 32px;
+    color: var(--color-text-muted);
+    font-size: 15px;
+    &--error {
+      color: var(--color-error);
+    }
+  }
+
+  &__spinner {
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
   &__card {
     background: var(--color-white);
@@ -36,9 +67,16 @@ $bp-mobile: 768px;
     color: var(--color-primary-dark);
   }
 
-  &__clock-icon { color: var(--color-accent-1); }
+  &__clock-icon {
+    color: var(--color-accent-1);
+  }
 
-  &__grid { padding: 12px 24px; display: flex; flex-direction: column; gap: 4px; }
+  &__grid {
+    padding: 12px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
   &__row {
     display: flex;
@@ -47,9 +85,14 @@ $bp-mobile: 768px;
     padding: 12px 0;
     border-bottom: 1px solid var(--color-background);
     flex-wrap: wrap;
-    &:last-child { border-bottom: none; }
+    &:last-child {
+      border-bottom: none;
+    }
 
-    @media (max-width: $bp-mobile) { flex-direction: column; align-items: flex-start; }
+    @media (max-width: $bp-mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   &__day-name {
@@ -67,10 +110,16 @@ $bp-mobile: 768px;
     font-size: 14px;
     font-family: var(--font-family);
     width: 120px;
-    &:focus { outline: none; border-color: var(--color-accent-1); }
+    &:focus {
+      outline: none;
+      border-color: var(--color-accent-1);
+    }
   }
 
-  &__sep { color: var(--color-text-muted); font-size: 14px; }
+  &__sep {
+    color: var(--color-text-muted);
+    font-size: 14px;
+  }
 
   &__time-display {
     font-size: 14px;
@@ -100,12 +149,51 @@ $bp-mobile: 768px;
     font-weight: 500;
     font-family: var(--font-family);
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
 
-    &--save   { background: var(--color-success);    color: var(--color-white); &:hover:not(:disabled) { filter: brightness(0.9); } &:disabled { opacity: 0.5; cursor: not-allowed; } }
-    &--cancel { background: var(--color-background); color: var(--color-text-muted); &:hover { background: var(--color-border); } }
-    &--edit   { background: rgba(54, 154, 217, 0.1); color: var(--color-accent-1);  &:hover { background: var(--color-accent-1); color: var(--color-white); } }
-    &--delete { background: rgba(239, 68, 68, 0.1);  color: var(--color-error);      &:hover { background: var(--color-error);    color: var(--color-white); } }
-    &--add    { background: rgba(54, 154, 217, 0.1); color: var(--color-accent-1);  &:hover { background: var(--color-accent-1); color: var(--color-white); } }
+    &--save {
+      background: var(--color-success);
+      color: var(--color-white);
+      &:hover:not(:disabled) {
+        filter: brightness(0.9);
+      }
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+    &--cancel {
+      background: var(--color-background);
+      color: var(--color-text-muted);
+      &:hover {
+        background: var(--color-border);
+      }
+    }
+    &--edit {
+      background: rgba(54, 154, 217, 0.1);
+      color: var(--color-accent-1);
+      &:hover {
+        background: var(--color-accent-1);
+        color: var(--color-white);
+      }
+    }
+    &--delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--color-error);
+      &:hover {
+        background: var(--color-error);
+        color: var(--color-white);
+      }
+    }
+    &--add {
+      background: rgba(54, 154, 217, 0.1);
+      color: var(--color-accent-1);
+      &:hover {
+        background: var(--color-accent-1);
+        color: var(--color-white);
+      }
+    }
   }
 }

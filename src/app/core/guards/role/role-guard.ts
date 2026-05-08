@@ -4,7 +4,7 @@ import { AuthStateService } from '../../services/auth/auth.state';
 
 export const roleGuard: CanActivateFn = (route) => {
   const authState = inject(AuthStateService);
-  const router    = inject(Router);
+  const router = inject(Router);
 
   if (!authState.isAuthenticated()) {
     router.navigate(['/auth/login']);

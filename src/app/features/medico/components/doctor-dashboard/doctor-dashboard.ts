@@ -11,9 +11,9 @@ import { Translate } from '../../../../core/services/translate';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DoctorDashboardComponent {
-  @Input() total:     number = 0;
+  @Input() total: number = 0;
   @Input() confirmed: number = 0;
-  @Input() pending:   number = 0;
+  @Input() pending: number = 0;
   @Input() completed: number = 0;
   @Input() cancelled: number = 0;
 

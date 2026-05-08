@@ -12,20 +12,13 @@ import { UserViewModel } from '../../../../core/services/admin/user.view-model';
   styleUrl: './users.scss',
 })
 export class UsersPage {
-
-  readonly t      = inject(Translate);
+  readonly t = inject(Translate);
   readonly userVm = inject(UserViewModel);
 
-  readonly _editingUserId  = signal<number | null>(null);
-  readonly _selectedRole   = signal('');
+  readonly _editingUserId = signal<number | null>(null);
+  readonly _selectedRole = signal('');
 
-  readonly _ROLES = [
-    'PACIENTE',
-    'MEDICO',
-    'EJECUTIVO',
-    'ADMINISTRADOR',
-    'GERENCIA',
-  ];
+  readonly _ROLES = ['PACIENTE', 'MEDICO', 'EJECUTIVO', 'ADMINISTRADOR', 'GERENCIA'];
 
   constructor() {
     afterNextRender(() => this.userVm.loadAll());
@@ -58,11 +51,11 @@ export class UsersPage {
 
   _roleBadgeClass(role: string): string {
     const map: Record<string, string> = {
-      PACIENTE:      'usr-page__badge--paciente',
-      MEDICO:        'usr-page__badge--medico',
-      EJECUTIVO:     'usr-page__badge--ejecutivo',
+      PACIENTE: 'usr-page__badge--paciente',
+      MEDICO: 'usr-page__badge--medico',
+      EJECUTIVO: 'usr-page__badge--ejecutivo',
       ADMINISTRADOR: 'usr-page__badge--admin',
-      GERENCIA:      'usr-page__badge--gerencia',
+      GERENCIA: 'usr-page__badge--gerencia',
     };
     return map[role] ?? '';
   }

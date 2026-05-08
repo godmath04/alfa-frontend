@@ -1,5 +1,4 @@
 <div class="login-page">
-
   <!-- Left panel -->
   <div class="login-left">
     <div class="auth-brand">
@@ -25,7 +24,6 @@
   <!-- Right panel -->
   <div class="login-right">
     <div class="login-card">
-
       <div class="login-header">
         <h2 class="login-title">{{ translate.get('auth.login.title') }}</h2>
         <p class="login-subtitle">{{ translate.get('auth.login.subtitle') }}</p>
@@ -40,7 +38,6 @@
       }
 
       <form [formGroup]="loginForm" (ngSubmit)="_onSubmit()" class="login-form">
-
         <!-- Email -->
         <div class="field-group">
           <label class="field-label">{{ translate.get('auth.login.email.label') }}</label>
@@ -86,11 +83,7 @@
         </div>
 
         <!-- Submit -->
-        <app-button
-          type="submit"
-          variant="primary"
-          size="large"
-          [disabled]="vm.loading()">
+        <app-button type="submit" variant="primary" size="large" [disabled]="vm.loading()">
           @if (vm.loading()) {
             <app-spinner size="small"></app-spinner>
           }
@@ -98,14 +91,11 @@
             <span>{{ translate.get('auth.login.button') }}</span>
           }
         </app-button>
-
       </form>
 
       <div class="login-footer">
         <a routerLink="/auth/register">{{ translate.get('auth.login.register') }}</a>
       </div>
-
     </div>
   </div>
-
 </div>

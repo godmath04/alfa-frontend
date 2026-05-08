@@ -7,6 +7,6 @@ export const EJECUTIVO_ROUTES: Routes = [
     path: '',
     canActivate: [roleGuard],
     data: { roles: [Role.Ejecutivo] },
-    children: []
-  }
+    children: [],
+  },
 ];

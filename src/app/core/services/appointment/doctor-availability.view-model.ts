@@ -10,28 +10,28 @@ import { formatDateToISO } from '../../../shared/utils/date-time.utils';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorAvailabilityViewModel {
-
   private readonly _appointmentService = inject(AppointmentService);
-  private readonly _stateService       = inject(AppointmentStateService);
-  private readonly _errorMapper        = inject(ErrorMapperService);
-  private readonly _destroyRef         = inject(DestroyRef);
+  private readonly _stateService = inject(AppointmentStateService);
+  private readonly _errorMapper = inject(ErrorMapperService);
+  private readonly _destroyRef = inject(DestroyRef);
 
-  readonly doctors             = computed(() => this._stateService.doctors());
-  readonly doctorsLoading      = computed(() => this._stateService.doctorsLoading());
-  readonly doctorsError        = computed(() => this._stateService.doctorsError());
-  readonly selectedDoctor      = computed(() => this._stateService.selectedDoctor());
-  readonly selectedDate        = computed(() => this._stateService.selectedDate());
-  readonly selectedTime        = computed(() => this._stateService.selectedTime());
-  readonly availability        = computed(() => this._stateService.availability());
+  readonly doctors = computed(() => this._stateService.doctors());
+  readonly doctorsLoading = computed(() => this._stateService.doctorsLoading());
+  readonly doctorsError = computed(() => this._stateService.doctorsError());
+  readonly selectedDoctor = computed(() => this._stateService.selectedDoctor());
+  readonly selectedDate = computed(() => this._stateService.selectedDate());
+  readonly selectedTime = computed(() => this._stateService.selectedTime());
+  readonly availability = computed(() => this._stateService.availability());
   readonly availabilityLoading = computed(() => this._stateService.availabilityLoading());
-  readonly availabilityError   = computed(() => this._stateService.availabilityError());
+  readonly availabilityError = computed(() => this._stateService.availabilityError());
   readonly slotDurationMinutes = computed(() => this._stateService.slotDurationMinutes());
 
   loadDoctors(specialtyId: number): void {
     this._stateService.setDoctorsLoading(true);
     this._stateService.setDoctorsError(null);
 
-    this._appointmentService.getDoctorsBySpecialty(specialtyId)
+    this._appointmentService
+      .getDoctorsBySpecialty(specialtyId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (data) => {
@@ -39,9 +39,11 @@ export class DoctorAvailabilityViewModel {
           this._stateService.setDoctorsLoading(false);
         },
         error: (raw) => {
-          this._stateService.setDoctorsError(this._errorMapper.map(toApiError(raw), 'paciente.appointments.errors.fetch-doctors'));
+          this._stateService.setDoctorsError(
+            this._errorMapper.map(toApiError(raw), 'paciente.appointments.errors.fetch-doctors'),
+          );
           this._stateService.setDoctorsLoading(false);
-        }
+        },
       });
   }
 
@@ -67,7 +69,8 @@ export class DoctorAvailabilityViewModel {
     this._stateService.setAvailabilityLoading(true);
     this._stateService.setAvailabilityError(null);
 
-    this._appointmentService.getAvailability(doctor.id, date)
+    this._appointmentService
+      .getAvailability(doctor.id, date)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (data) => {
@@ -76,10 +79,12 @@ export class DoctorAvailabilityViewModel {
           this._stateService.setAvailabilityLoading(false);
         },
         error: (raw) => {
-          this._stateService.setAvailabilityError(this._errorMapper.mapAvailabilityError(toApiError(raw)));
+          this._stateService.setAvailabilityError(
+            this._errorMapper.mapAvailabilityError(toApiError(raw)),
+          );
           this._stateService.setAvailability([]);
           this._stateService.setAvailabilityLoading(false);
-        }
+        },
       });
   }
 }

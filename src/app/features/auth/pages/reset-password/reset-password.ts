@@ -19,24 +19,29 @@ import { Spinner } from '../../../../shared/components/spinner/spinner';
   styleUrl: './reset-password.scss',
 })
 export class ResetPassword implements OnInit {
-
-  readonly vm        = inject(ResetPasswordViewModel);
+  readonly vm = inject(ResetPasswordViewModel);
   readonly translate = inject(Translate);
 
-  private readonly _fb     = inject(FormBuilder);
-  private readonly _route  = inject(ActivatedRoute);
+  private readonly _fb = inject(FormBuilder);
+  private readonly _route = inject(ActivatedRoute);
   private readonly _router = inject(Router);
 
   /** Token read from query params — null if missing */
   _token: string | null = null;
 
-  showPassword        = false;
+  showPassword = false;
   showConfirmPassword = false;
 
-  resetForm = this._fb.group({
-    newPassword:     ['', [Validators.required, Validators.minLength(8), PatternValidators.strongPassword]],
-    confirmPassword: ['', [Validators.required]],
-  }, { validators: [MatchValidators.password('newPassword', 'confirmPassword')] });
+  resetForm = this._fb.group(
+    {
+      newPassword: [
+        '',
+        [Validators.required, Validators.minLength(8), PatternValidators.strongPassword],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: [MatchValidators.password('newPassword', 'confirmPassword')] },
+  );
 
   ngOnInit(): void {
     this._token = this._route.snapshot.queryParamMap.get('token');
@@ -45,9 +50,11 @@ export class ResetPassword implements OnInit {
   get newPasswordError(): string {
     const control = this.resetForm.get('newPassword');
     if (control?.touched && control?.errors) {
-      if (control.errors['required'])              return this.translate.get('common.errors.required');
-      if (control.errors['minlength'])             return this.translate.get('auth.resetPassword.errorMinLength');
-      if (control.errors['invalidPasswordPattern']) return this.translate.get('common.errors.invalid-password');
+      if (control.errors['required']) return this.translate.get('common.errors.required');
+      if (control.errors['minlength'])
+        return this.translate.get('auth.resetPassword.errorMinLength');
+      if (control.errors['invalidPasswordPattern'])
+        return this.translate.get('common.errors.invalid-password');
     }
     return '';
   }
@@ -55,8 +62,9 @@ export class ResetPassword implements OnInit {
   get confirmPasswordError(): string {
     const control = this.resetForm.get('confirmPassword');
     if (control?.touched && control?.errors) {
-      if (control.errors['required'])         return this.translate.get('common.errors.required');
-      if (control.errors['passwordMismatch']) return this.translate.get('auth.resetPassword.errorMismatch');
+      if (control.errors['required']) return this.translate.get('common.errors.required');
+      if (control.errors['passwordMismatch'])
+        return this.translate.get('auth.resetPassword.errorMismatch');
     }
     return '';
   }

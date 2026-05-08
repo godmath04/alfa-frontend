@@ -1,4 +1,12 @@
-import { Component, inject, signal, ChangeDetectionStrategy, ChangeDetectorRef, ApplicationRef, HostListener } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  ApplicationRef,
+  HostListener,
+} from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../../core/services/translate';
@@ -6,9 +14,14 @@ import { SpecialtyViewModel } from '../../../../core/services/admin/specialty.vi
 import { OfficeViewModel } from '../../../../core/services/admin/office.view-model';
 import { ScheduleViewModel } from '../../../../core/services/admin/schedule.view-model';
 import {
-  AttentionSchedule, AttentionScheduleRequest,
-  Office, OfficeRequest, OfficeStatus, OfficeType,
-  Specialty, SpecialtyRequest,
+  AttentionSchedule,
+  AttentionScheduleRequest,
+  Office,
+  OfficeRequest,
+  OfficeStatus,
+  OfficeType,
+  Specialty,
+  SpecialtyRequest,
 } from '../../../../core/models/admin.model';
 
 type ActiveTab = 'specialties' | 'offices' | 'schedules';
@@ -22,54 +35,53 @@ type ActiveTab = 'specialties' | 'offices' | 'schedules';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResourceManagementPage {
-
-  readonly t          = inject(Translate);
+  readonly t = inject(Translate);
   readonly specialtyVm = inject(SpecialtyViewModel);
-  readonly officeVm    = inject(OfficeViewModel);
-  readonly scheduleVm  = inject(ScheduleViewModel);
-  readonly cdr         = inject(ChangeDetectorRef);
-  readonly appRef      = inject(ApplicationRef);
+  readonly officeVm = inject(OfficeViewModel);
+  readonly scheduleVm = inject(ScheduleViewModel);
+  readonly cdr = inject(ChangeDetectorRef);
+  readonly appRef = inject(ApplicationRef);
 
   // ─── Tab ───────────────────────────────────────────────────────────────────
   readonly _activeTab = signal<ActiveTab>('specialties');
 
   // ─── Form shared ───────────────────────────────────────────────────────────
   readonly _formVisible = signal(false);
-  readonly _editingId   = signal<number | null>(null);
-  readonly _formError   = signal<string | null>(null);
+  readonly _editingId = signal<number | null>(null);
+  readonly _formError = signal<string | null>(null);
 
   // ─── Specialty form ────────────────────────────────────────────────────────
-  readonly _sfName        = signal('');
-  readonly _sfIcon        = signal('');
+  readonly _sfName = signal('');
+  readonly _sfIcon = signal('');
   readonly _sfDescription = signal('');
-  readonly _sfDuration    = signal<number | null>(null);
+  readonly _sfDuration = signal<number | null>(null);
   readonly _iconDropdownOpen = signal(false);
 
   // ─── Office form ───────────────────────────────────────────────────────────
-  readonly _ofNumber      = signal('');
-  readonly _ofFloor       = signal('');
-  readonly _ofType        = signal<OfficeType>('INTERNAL');
-  readonly _ofStatus      = signal<OfficeStatus>('AVAILABLE');
+  readonly _ofNumber = signal('');
+  readonly _ofFloor = signal('');
+  readonly _ofType = signal<OfficeType>('INTERNAL');
+  readonly _ofStatus = signal<OfficeStatus>('AVAILABLE');
   readonly _ofSpecialtyId = signal<number | null>(null);
-  readonly _ofEquipment   = signal('');
+  readonly _ofEquipment = signal('');
 
   // ─── Schedule form ─────────────────────────────────────────────────────────
-  readonly _shCategory        = signal('');
-  readonly _shDays            = signal<string[]>([]);
-  readonly _shStartTime       = signal('');
-  readonly _shEndTime         = signal('');
+  readonly _shCategory = signal('');
+  readonly _shDays = signal<string[]>([]);
+  readonly _shStartTime = signal('');
+  readonly _shEndTime = signal('');
   readonly _shMaxAppointments = signal<number | null>(null);
 
   readonly _FLOORS = ['PB', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   readonly _WEEK_DAYS = [
-    { value: 'MONDAY',    key: 'common.days.monday' },
-    { value: 'TUESDAY',   key: 'common.days.tuesday' },
+    { value: 'MONDAY', key: 'common.days.monday' },
+    { value: 'TUESDAY', key: 'common.days.tuesday' },
     { value: 'WEDNESDAY', key: 'common.days.wednesday' },
-    { value: 'THURSDAY',  key: 'common.days.thursday' },
-    { value: 'FRIDAY',    key: 'common.days.friday' },
-    { value: 'SATURDAY',  key: 'common.days.saturday' },
-    { value: 'SUNDAY',    key: 'common.days.sunday' },
+    { value: 'THURSDAY', key: 'common.days.thursday' },
+    { value: 'FRIDAY', key: 'common.days.friday' },
+    { value: 'SATURDAY', key: 'common.days.saturday' },
+    { value: 'SUNDAY', key: 'common.days.sunday' },
   ];
 
   readonly _AVAILABLE_ICONS = [
@@ -96,7 +108,7 @@ export class ResourceManagementPage {
     this.scheduleVm.loadAll();
 
     // Force change detection after async operations complete
-    this.appRef.isStable.subscribe(isStable => {
+    this.appRef.isStable.subscribe((isStable) => {
       if (isStable) {
         this.cdr.markForCheck();
       }
@@ -155,8 +167,8 @@ export class ResourceManagementPage {
     this.cdr.markForCheck();
   }
 
-  _cancel(): void { 
-    this._closeForm(); 
+  _cancel(): void {
+    this._closeForm();
     this.cdr.markForCheck();
   }
 
@@ -169,76 +181,127 @@ export class ResourceManagementPage {
   }
 
   private _saveSpecialty(): void {
-    const name     = this._sfName().trim();
+    const name = this._sfName().trim();
     const duration = this._sfDuration();
-    if (!name)              { this._formError.set(this.t.get('admin.specialties.validation.name-required')); this.cdr.markForCheck(); return; }
-    if (!duration || duration < 5) { this._formError.set(this.t.get('admin.specialties.validation.duration-required')); this.cdr.markForCheck(); return; }
+    if (!name) {
+      this._formError.set(this.t.get('admin.specialties.validation.name-required'));
+      this.cdr.markForCheck();
+      return;
+    }
+    if (!duration || duration < 5) {
+      this._formError.set(this.t.get('admin.specialties.validation.duration-required'));
+      this.cdr.markForCheck();
+      return;
+    }
 
     const request: SpecialtyRequest = {
-      name, icon: this._sfIcon().trim() || undefined,
+      name,
+      icon: this._sfIcon().trim() || undefined,
       description: this._sfDescription().trim() || undefined,
       appointmentDuration: duration,
     };
     const id = this._editingId();
-    const action$ = id !== null ? this.specialtyVm.update(id, request) : this.specialtyVm.create(request);
-    action$.subscribe({ 
-      next: () => { this._closeForm(); this.cdr.markForCheck(); }, 
-      error: () => { this._formError.set(this.t.get('admin.specialties.save-error')); this.cdr.markForCheck(); }
+    const action$ =
+      id !== null ? this.specialtyVm.update(id, request) : this.specialtyVm.create(request);
+    action$.subscribe({
+      next: () => {
+        this._closeForm();
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this._formError.set(this.t.get('admin.specialties.save-error'));
+        this.cdr.markForCheck();
+      },
     });
   }
 
   private _saveOffice(): void {
     const number = this._ofNumber().trim();
-    if (!number) { this._formError.set(this.t.get('admin.offices.validation.number-required')); this.cdr.markForCheck(); return; }
+    if (!number) {
+      this._formError.set(this.t.get('admin.offices.validation.number-required'));
+      this.cdr.markForCheck();
+      return;
+    }
 
     const request: OfficeRequest = {
       number,
-      floor:       this._ofFloor().trim() || undefined,
-      type:        this._ofType(),
-      status:      this._ofStatus(),
+      floor: this._ofFloor().trim() || undefined,
+      type: this._ofType(),
+      status: this._ofStatus(),
       specialtyId: this._ofSpecialtyId() ?? undefined,
-      equipment:   this._ofEquipment().split(',').map(e => e.trim()).filter(Boolean),
+      equipment: this._ofEquipment()
+        .split(',')
+        .map((e) => e.trim())
+        .filter(Boolean),
     };
     const id = this._editingId();
     const action$ = id !== null ? this.officeVm.update(id, request) : this.officeVm.create(request);
-    action$.subscribe({ 
-      next: () => { this._closeForm(); this.cdr.markForCheck(); }, 
-      error: () => { this._formError.set(this.t.get('admin.offices.save-error')); this.cdr.markForCheck(); }
+    action$.subscribe({
+      next: () => {
+        this._closeForm();
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this._formError.set(this.t.get('admin.offices.save-error'));
+        this.cdr.markForCheck();
+      },
     });
   }
 
   private _saveSchedule(): void {
     const category = this._shCategory().trim();
-    const days     = this._shDays();
-    const start    = this._shStartTime();
-    const end      = this._shEndTime();
-    const max      = this._shMaxAppointments();
+    const days = this._shDays();
+    const start = this._shStartTime();
+    const end = this._shEndTime();
+    const max = this._shMaxAppointments();
 
-    if (!category)      { this._formError.set(this.t.get('admin.schedules.validation.category-required')); this.cdr.markForCheck(); return; }
-    if (!days.length)   { this._formError.set(this.t.get('admin.schedules.validation.days-required')); this.cdr.markForCheck(); return; }
-    if (!start || !end) { this._formError.set(this.t.get('admin.schedules.validation.time-required')); this.cdr.markForCheck(); return; }
-    if (!max || max < 1){ this._formError.set(this.t.get('admin.schedules.validation.max-required')); this.cdr.markForCheck(); return; }
+    if (!category) {
+      this._formError.set(this.t.get('admin.schedules.validation.category-required'));
+      this.cdr.markForCheck();
+      return;
+    }
+    if (!days.length) {
+      this._formError.set(this.t.get('admin.schedules.validation.days-required'));
+      this.cdr.markForCheck();
+      return;
+    }
+    if (!start || !end) {
+      this._formError.set(this.t.get('admin.schedules.validation.time-required'));
+      this.cdr.markForCheck();
+      return;
+    }
+    if (!max || max < 1) {
+      this._formError.set(this.t.get('admin.schedules.validation.max-required'));
+      this.cdr.markForCheck();
+      return;
+    }
 
     const request: AttentionScheduleRequest = {
-      category, days,
+      category,
+      days,
       startTime: `${start}:00`,
-      endTime:   `${end}:00`,
+      endTime: `${end}:00`,
       maxAppointments: max,
     };
     const id = this._editingId();
-    const action$ = id !== null ? this.scheduleVm.update(id, request) : this.scheduleVm.create(request);
-    action$.subscribe({ 
-      next: () => { this._closeForm(); this.cdr.markForCheck(); }, 
-      error: () => { this._formError.set(this.t.get('admin.schedules.save-error')); this.cdr.markForCheck(); }
+    const action$ =
+      id !== null ? this.scheduleVm.update(id, request) : this.scheduleVm.create(request);
+    action$.subscribe({
+      next: () => {
+        this._closeForm();
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this._formError.set(this.t.get('admin.schedules.save-error'));
+        this.cdr.markForCheck();
+      },
     });
   }
 
   // ─── Days toggle ───────────────────────────────────────────────────────────
   _toggleDay(day: string): void {
     const current = this._shDays();
-    this._shDays.set(
-      current.includes(day) ? current.filter(d => d !== day) : [...current, day]
-    );
+    this._shDays.set(current.includes(day) ? current.filter((d) => d !== day) : [...current, day]);
     this.cdr.markForCheck();
   }
 
@@ -248,13 +311,13 @@ export class ResourceManagementPage {
 
   // ─── Day display helper ────────────────────────────────────────────────────
   _formatDays(days: string[]): string {
-    return days.map(d => this.t.get(`common.days.${d.toLowerCase()}-short`)).join(', ');
+    return days.map((d) => this.t.get(`common.days.${d.toLowerCase()}-short`)).join(', ');
   }
 
   // ─── Icon dropdown ─────────────────────────────────────────────────────────
   _getIconLabel(name: string): string {
     if (!name) return this.t.get('admin.specialties.fields.icon-none');
-    const icon = this._AVAILABLE_ICONS.find(i => i.name === name);
+    const icon = this._AVAILABLE_ICONS.find((i) => i.name === name);
     return icon ? icon.label : name;
   }
 
@@ -288,10 +351,20 @@ export class ResourceManagementPage {
   }
 
   private _resetForms(): void {
-    this._sfName.set(''); this._sfIcon.set(''); this._sfDescription.set(''); this._sfDuration.set(null);
-    this._ofNumber.set(''); this._ofFloor.set(''); this._ofType.set('INTERNAL');
-    this._ofStatus.set('AVAILABLE'); this._ofSpecialtyId.set(null); this._ofEquipment.set('');
-    this._shCategory.set(''); this._shDays.set([]); this._shStartTime.set('');
-    this._shEndTime.set(''); this._shMaxAppointments.set(null);
+    this._sfName.set('');
+    this._sfIcon.set('');
+    this._sfDescription.set('');
+    this._sfDuration.set(null);
+    this._ofNumber.set('');
+    this._ofFloor.set('');
+    this._ofType.set('INTERNAL');
+    this._ofStatus.set('AVAILABLE');
+    this._ofSpecialtyId.set(null);
+    this._ofEquipment.set('');
+    this._shCategory.set('');
+    this._shDays.set([]);
+    this._shStartTime.set('');
+    this._shEndTime.set('');
+    this._shMaxAppointments.set(null);
   }
 }

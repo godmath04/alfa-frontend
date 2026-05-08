@@ -7,7 +7,9 @@ import { ProfileResponse, UpdateProfileRequest } from './profile.model';
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
   private readonly _http = inject(HttpClient);
-  private get baseUrl() { return environment.apiUrl; }
+  private get baseUrl() {
+    return environment.apiUrl;
+  }
 
   getProfile(): Observable<ProfileResponse> {
     return this._http.get<ProfileResponse>(`${this.baseUrl}/api/auth/profile`);

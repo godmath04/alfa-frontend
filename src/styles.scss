@@ -8,62 +8,64 @@
 // --- Color Palette ---
 :root {
   // Primary
-  --color-primary-dark:     #023059;
-  --color-primary-medium:   #023859;
-  --color-accent-1:         #369AD9;
-  --color-accent-2:         #36ABD9;
+  --color-primary-dark: #023059;
+  --color-primary-medium: #023859;
+  --color-accent-1: #369ad9;
+  --color-accent-2: #36abd9;
 
   // Neutrals
-  --color-background:       #F2F2F2;
-  --color-white:            #FFFFFF;
-  --color-border:           #D1D5DB;
-  --color-text-primary:     #023059;
-  --color-text-secondary:   #36ABD9;
-  --color-text-muted:       #6B7280;
+  --color-background: #f2f2f2;
+  --color-white: #ffffff;
+  --color-border: #d1d5db;
+  --color-text-primary: #023059;
+  --color-text-secondary: #36abd9;
+  --color-text-muted: #6b7280;
 
   // Status
-  --color-success:          #22C55E;
-  --color-warning:          #F59E0B;
-  --color-error:            #EF4444;
-  --color-info:             #369AD9;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #369ad9;
 
   // Badge status
-  --color-status-completed:   #22C55E;
-  --color-status-pending:     #F59E0B;
-  --color-status-in-progress: #369AD9;
-  --color-status-cancelled:   #EF4444;
-  --color-status-confirmed:   #36ABD9;
+  --color-status-completed: #22c55e;
+  --color-status-pending: #f59e0b;
+  --color-status-in-progress: #369ad9;
+  --color-status-cancelled: #ef4444;
+  --color-status-confirmed: #36abd9;
 
   // --- Typography ---
-  --font-family:            'Inter', sans-serif;
-  --font-size-xs:           0.75rem;   // 12px
-  --font-size-sm:           0.875rem;  // 14px
-  --font-size-base:         1rem;      // 16px
-  --font-size-lg:           1.125rem;  // 18px
-  --font-size-xl:           1.25rem;   // 20px
-  --font-size-2xl:          1.5rem;    // 24px
+  --font-family: 'Inter', sans-serif;
+  --font-size-xs: 0.75rem; // 12px
+  --font-size-sm: 0.875rem; // 14px
+  --font-size-base: 1rem; // 16px
+  --font-size-lg: 1.125rem; // 18px
+  --font-size-xl: 1.25rem; // 20px
+  --font-size-2xl: 1.5rem; // 24px
 
   // --- Spacing ---
-  --spacing-xs:    0.25rem;   // 4px
-  --spacing-sm:    0.5rem;    // 8px
-  --spacing-md:    1rem;      // 16px
-  --spacing-lg:    1.5rem;    // 24px
-  --spacing-xl:    2rem;      // 32px
+  --spacing-xs: 0.25rem; // 4px
+  --spacing-sm: 0.5rem; // 8px
+  --spacing-md: 1rem; // 16px
+  --spacing-lg: 1.5rem; // 24px
+  --spacing-xl: 2rem; // 32px
 
   // --- Border Radius ---
-  --radius-sm:     4px;
-  --radius-md:     8px;
-  --radius-lg:     12px;
-  --radius-full:   9999px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
 
   // --- Shadows ---
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md:  0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg:  0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
 // --- Reset base ---
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;

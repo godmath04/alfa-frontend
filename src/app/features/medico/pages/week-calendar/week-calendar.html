@@ -1,17 +1,24 @@
 <div class="cal-page">
-
   <!-- ─── Header ──────────────────────────────────────── -->
   <div class="cal-page__header">
     <div class="cal-page__title-group">
       <h1 class="cal-page__title">{{ t.get('medico.nav.calendario') }}</h1>
     </div>
     <div class="cal-page__week-nav">
-      <button class="cal-page__nav-btn cal-page__nav-btn--prev" (click)="vm.prevWeek()" [disabled]="vm.loading()">
+      <button
+        class="cal-page__nav-btn cal-page__nav-btn--prev"
+        (click)="vm.prevWeek()"
+        [disabled]="vm.loading()"
+      >
         <lucide-icon name="chevron-left" [size]="18"></lucide-icon>
         {{ t.get('medico.agenda.prevWeek') }}
       </button>
       <span class="cal-page__week-badge">{{ _formatWeekRange() }}</span>
-      <button class="cal-page__nav-btn cal-page__nav-btn--next" (click)="vm.nextWeek()" [disabled]="vm.loading()">
+      <button
+        class="cal-page__nav-btn cal-page__nav-btn--next"
+        (click)="vm.nextWeek()"
+        [disabled]="vm.loading()"
+      >
         {{ t.get('medico.agenda.nextWeek') }}
         <lucide-icon name="chevron-right" [size]="18"></lucide-icon>
       </button>
@@ -44,16 +51,21 @@
           (click)="_goToDay(day.date)"
         >
           <div class="cal-page__week-left">
-            <div class="cal-page__week-icon" [class.cal-page__week-icon--today]="_isToday(day.date)">
+            <div
+              class="cal-page__week-icon"
+              [class.cal-page__week-icon--today]="_isToday(day.date)"
+            >
               <lucide-icon name="calendar" [size]="22"></lucide-icon>
             </div>
             <div>
               <p class="cal-page__week-day">{{ _formatDayHeader(day.date) }}</p>
               <p class="cal-page__week-count">
                 {{ day.appointments.length }}
-                {{ day.appointments.length === 1
+                {{
+                  day.appointments.length === 1
                     ? t.get('medico.agenda.week.count-singular')
-                    : t.get('medico.agenda.week.count-plural') }}
+                    : t.get('medico.agenda.week.count-plural')
+                }}
               </p>
             </div>
           </div>
@@ -67,5 +79,4 @@
       }
     </div>
   }
-
 </div>

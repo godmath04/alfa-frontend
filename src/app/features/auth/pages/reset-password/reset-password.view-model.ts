@@ -7,19 +7,19 @@ import { AuthService } from '../../../../core/services/auth/auth';
 
 @Injectable()
 export class ResetPasswordViewModel {
-
   private readonly _authService = inject(AuthService);
-  private readonly _destroyRef  = inject(DestroyRef);
+  private readonly _destroyRef = inject(DestroyRef);
 
   readonly loading = signal<boolean>(false);
   readonly success = signal<boolean>(false);
-  readonly error   = signal<string | null>(null);
+  readonly error = signal<string | null>(null);
 
   reset(token: string, newPassword: string): void {
     this.loading.set(true);
     this.error.set(null);
 
-    this._authService.resetPassword(token, newPassword)
+    this._authService
+      .resetPassword(token, newPassword)
       .pipe(timeout(10000), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
@@ -35,7 +35,7 @@ export class ResetPasswordViewModel {
           } else {
             this.error.set('auth.resetPassword.errorGeneric');
           }
-        }
+        },
       });
   }
 }
