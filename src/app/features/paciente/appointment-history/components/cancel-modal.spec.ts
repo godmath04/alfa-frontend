@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { importProvidersFrom } from '@angular/core';
-import { LucideAngularModule, AlertCircle, Calendar, Clock, Stethoscope, FileText } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  AlertCircle,
+  Calendar,
+  Clock,
+  Stethoscope,
+  FileText,
+} from 'lucide-angular';
 
 import { CancelModalComponent } from './cancel-modal';
 

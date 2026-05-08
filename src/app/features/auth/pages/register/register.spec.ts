@@ -3,7 +3,17 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { importProvidersFrom } from '@angular/core';
-import { LucideAngularModule, ArrowLeft, Mail, Lock, User, Phone, IdCard, Eye, CheckCircle2 } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  ArrowLeft,
+  Mail,
+  Lock,
+  User,
+  Phone,
+  IdCard,
+  Eye,
+  CheckCircle2,
+} from 'lucide-angular';
 
 import { Register } from './register';
 
@@ -19,7 +29,16 @@ describe('Register', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         importProvidersFrom(
-          LucideAngularModule.pick({ ArrowLeft, Mail, Lock, User, Phone, IdCard, Eye, CheckCircle2 }),
+          LucideAngularModule.pick({
+            ArrowLeft,
+            Mail,
+            Lock,
+            User,
+            Phone,
+            IdCard,
+            Eye,
+            CheckCircle2,
+          }),
         ),
       ],
     }).compileComponents();

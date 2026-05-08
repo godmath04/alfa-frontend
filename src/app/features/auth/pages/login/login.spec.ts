@@ -3,7 +3,16 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { importProvidersFrom } from '@angular/core';
-import { LucideAngularModule, Mail, Lock, Eye, EyeOff, User, Stethoscope, BarChart3 } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  User,
+  Stethoscope,
+  BarChart3,
+} from 'lucide-angular';
 
 import { Login } from './login';
 
