@@ -1,4 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { importProvidersFrom } from '@angular/core';
+import { LucideAngularModule, Link2Off, ArrowLeft } from 'lucide-angular';
 
 import { ResetPassword } from './reset-password';
 
@@ -9,6 +14,12 @@ describe('ResetPassword', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ResetPassword],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        importProvidersFrom(LucideAngularModule.pick({ Link2Off, ArrowLeft })),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ResetPassword);

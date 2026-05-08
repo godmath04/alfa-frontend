@@ -1,4 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { importProvidersFrom } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 
 import { Dashboard } from './dashboard';
 
@@ -8,7 +13,13 @@ describe('Dashboard', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [Dashboard],
+      imports: [Dashboard],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        importProvidersFrom(LucideAngularModule.pick({})),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Dashboard);

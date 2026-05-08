@@ -1,4 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { importProvidersFrom } from '@angular/core';
+import { LucideAngularModule, ArrowLeft, Mail, Lock, User, Phone, IdCard, Eye, CheckCircle2 } from 'lucide-angular';
 
 import { Register } from './register';
 
@@ -8,7 +13,15 @@ describe('Register', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [Register],
+      imports: [Register],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        importProvidersFrom(
+          LucideAngularModule.pick({ ArrowLeft, Mail, Lock, User, Phone, IdCard, Eye, CheckCircle2 }),
+        ),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Register);
