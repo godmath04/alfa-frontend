@@ -1,13 +1,15 @@
-// Jenkinsfile (igual para ci/cd y feature/ci-demo)
+@Library('mi-lib') _
+
 def branchName() {
-  // Multibranch: BRANCH_NAME. Pipeline-from-SCM: suele venir GIT_BRANCH (origin/xxx)
   def b = (env.BRANCH_NAME ?: env.GIT_BRANCH ?: "")
   return b.replaceFirst(/^origin\//, "")
 }
+
 def shouldBuildAndArchive() {
   def b = branchName()
   return (b == "ci/cd" || b == "main" || b == "master" || b.startsWith("release/"))
 }
+
 pipeline {
   agent any
   tools {
@@ -31,50 +33,28 @@ pipeline {
     }
     stage("Install") {
       steps {
-        // Respeta packageManager: npm@11.9.0 si Corepack está disponible
-        sh "corepack enable || true"
-        sh "corepack prepare npm@11.9.0 --activate || true"
-        sh "npm ci"
+        nodeUtils.install()
       }
     }
     stage("Quality") {
       parallel {
         stage("Lint (Prettier)") {
-          steps {
-            sh "npx prettier -c ."
-          }
+          steps { nodeUtils.lint() }
         }
         stage("Test") {
-          steps {
-            // Usa el target test configurado en angular.json (@angular/build:unit-test)
-            // --watch=false para que no quede esperando en CI
-            sh "npm test -- --watch=false"
-          }
+          steps { nodeUtils.test() }
         }
         stage("Audit") {
-          steps {
-            // No rompe el build, pero lo marca UNSTABLE si encuentra issues
-            catchError(buildResult: "SUCCESS", stageResult: "UNSTABLE") {
-              sh "npm audit --audit-level=high"
-            }
-          }
+          steps { nodeUtils.audit() }
         }
       }
     }
-    stage("Build") {
+    stage("Build & Archive") {
       when {
         expression { shouldBuildAndArchive() }
       }
       steps {
-        sh "npm run build"
-      }
-    }
-    stage("Archive") {
-      when {
-        expression { shouldBuildAndArchive() }
-      }
-      steps {
-        archiveArtifacts artifacts: "dist/**", fingerprint: true, allowEmptyArchive: true
+        buildAngular()
       }
     }
   }
