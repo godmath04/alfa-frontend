@@ -1,0 +1,315 @@
+<div class="ns-page">
+
+  <!-- ─── Header ──────────────────────────────────────────────────── -->
+  <div class="ns-page__header">
+    <div class="ns-page__title-group">
+      <h1 class="ns-page__title">{{ t.get('admin.notifications.title') }}</h1>
+      <p class="ns-page__subtitle">{{ t.get('admin.notifications.subtitle') }}</p>
+    </div>
+  </div>
+
+  <!-- ─── Loading ─────────────────────────────────────────────────── -->
+  @if (vm.loading()) {
+    <div class="ns-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="ns-page__spinner"></lucide-icon>
+      <span>{{ t.get('admin.notifications.loading') }}</span>
+    </div>
+  }
+
+  <!-- ─── Global error ─────────────────────────────────────────────── -->
+  @if (!vm.loading() && vm.error()) {
+    <div class="ns-page__state ns-page__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ t.get(vm.error()!) }}</span>
+    </div>
+  }
+
+  @if (!vm.loading()) {
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION A — Scheduler Hour
+    ════════════════════════════════════════════════════════════════ -->
+    <section class="ns-card ns-card--scheduler">
+      <div class="ns-card__header">
+        <div class="ns-card__icon-wrap ns-card__icon-wrap--blue">
+          <lucide-icon name="bell-ring" [size]="20"></lucide-icon>
+        </div>
+        <div>
+          <h2 class="ns-card__title">{{ t.get('admin.notifications.schedulerHour.title') }}</h2>
+          <p class="ns-card__desc">{{ t.get('admin.notifications.schedulerHour.description') }}</p>
+        </div>
+      </div>
+
+      <div class="ns-scheduler__form">
+        <div class="ns-field">
+          <label class="ns-field__label" for="scheduler-hour-input">
+            {{ t.get('admin.notifications.schedulerHour.label') }}
+          </label>
+          <input
+            id="scheduler-hour-input"
+            class="ns-field__input ns-field__input--hour"
+            type="number"
+            min="0"
+            max="23"
+            [value]="_schedulerInput()"
+            (input)="_onSchedulerInput($event)"
+          />
+        </div>
+
+        <button
+          class="ns-btn ns-btn--primary"
+          id="scheduler-save-btn"
+          (click)="_saveSchedulerHour()"
+          [disabled]="vm.schedulerSaving()"
+        >
+          @if (vm.schedulerSaving()) {
+            <lucide-icon name="loader-circle" [size]="16" class="ns-page__spinner"></lucide-icon>
+          }
+          {{ vm.schedulerSaving() ? t.get('admin.notifications.schedulerHour.saving') : t.get('admin.notifications.schedulerHour.save') }}
+        </button>
+      </div>
+
+      @if (_schedulerSaved()) {
+        <p class="ns-scheduler__saved">
+          <lucide-icon name="check" [size]="14"></lucide-icon>
+          {{ t.get('admin.notifications.schedulerHour.saved') }}
+        </p>
+      }
+      @if (_schedulerError()) {
+        <p class="ns-scheduler__error">{{ _schedulerError() }}</p>
+      }
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECTION B — Rules Table
+    ════════════════════════════════════════════════════════════════ -->
+    <section class="ns-card">
+      <div class="ns-card__header ns-card__header--between">
+        <div class="ns-card__header-left">
+          <div class="ns-card__icon-wrap ns-card__icon-wrap--dark">
+            <lucide-icon name="bell" [size]="20"></lucide-icon>
+          </div>
+          <div>
+            <h2 class="ns-card__title">{{ t.get('admin.notifications.rules.title') }}</h2>
+          </div>
+        </div>
+        @if (!_formVisible()) {
+          <button class="ns-btn ns-btn--primary" id="new-rule-btn" (click)="_openCreate()">
+            <lucide-icon name="plus" [size]="16"></lucide-icon>
+            {{ t.get('admin.notifications.rules.newRule') }}
+          </button>
+        }
+      </div>
+
+      <!-- Protected rule toggle error banner -->
+      @if (_toggleError()) {
+        <div class="ns-banner ns-banner--warning">
+          <lucide-icon name="circle-alert" [size]="16"></lucide-icon>
+          <span>{{ _toggleError() }}</span>
+          <button class="ns-banner__close" (click)="_toggleError.set(null)">
+            <lucide-icon name="x" [size]="14"></lucide-icon>
+          </button>
+        </div>
+      }
+
+      <!-- ─── Modal / Form panel ──────────────────────────────────── -->
+      @if (_formVisible()) {
+        <div class="ns-modal-overlay" (click)="_cancel()">
+          <div class="ns-modal" (click)="$event.stopPropagation()">
+            <div class="ns-modal__header">
+              <h3 class="ns-modal__title">
+                {{ _isEditing() ? t.get('admin.notifications.rules.modal.titleEdit') : t.get('admin.notifications.rules.modal.titleCreate') }}
+              </h3>
+              <button class="ns-modal__close" id="modal-close-btn" (click)="_cancel()">
+                <lucide-icon name="x" [size]="18"></lucide-icon>
+              </button>
+            </div>
+
+            <div class="ns-modal__body">
+
+              <!-- Rule type -->
+              <div class="ns-field">
+                <label class="ns-field__label" for="f-rule-type">{{ t.get('admin.notifications.rules.modal.ruleType') }}</label>
+                <select id="f-rule-type" class="ns-field__select"
+                  [value]="_fRuleType()" (change)="_onRuleTypeChange($event)">
+                  <option value="IMMEDIATE">{{ t.get('admin.notifications.rules.modal.ruleTypes.immediate') }}</option>
+                  <option value="DAYS_BEFORE">{{ t.get('admin.notifications.rules.modal.ruleTypes.daysBefore') }}</option>
+                </select>
+              </div>
+
+              <!-- Days before (conditional) -->
+              @if (_fRuleType() === 'DAYS_BEFORE') {
+                <div class="ns-field">
+                  <label class="ns-field__label" for="f-days-before">
+                    {{ t.get('admin.notifications.rules.modal.daysBeforeLabel') }} *
+                  </label>
+                  <input
+                    id="f-days-before"
+                    class="ns-field__input"
+                    type="number"
+                    min="1"
+                    [placeholder]="t.get('admin.notifications.rules.modal.daysBeforePlaceholder')"
+                    [value]="_fDaysBefore() ?? ''"
+                    (input)="_fDaysBefore.set(+$any($event.target).value || null)"
+                  />
+                </div>
+              }
+
+              <!-- Channel -->
+              <div class="ns-field">
+                <label class="ns-field__label" for="f-channel">{{ t.get('admin.notifications.rules.modal.channelLabel') }}</label>
+                <select id="f-channel" class="ns-field__select"
+                  [value]="_fChannel()" (change)="_fChannel.set($any($event.target).value)">
+                  <option value="EMAIL">{{ t.get('admin.notifications.rules.channels.email') }}</option>
+                  <option value="WHATSAPP">{{ t.get('admin.notifications.rules.channels.whatsapp') }}</option>
+                  <option value="BOTH">{{ t.get('admin.notifications.rules.channels.both') }}</option>
+                </select>
+              </div>
+
+              <!-- Purpose -->
+              <div class="ns-field">
+                <label class="ns-field__label" for="f-purpose">{{ t.get('admin.notifications.rules.modal.purposeLabel') }}</label>
+                <select id="f-purpose" class="ns-field__select"
+                  [value]="_fPurpose()" (change)="_fPurpose.set($any($event.target).value)">
+                  <option value="REMINDER">{{ t.get('admin.notifications.rules.purposes.reminder') }}</option>
+                  <option value="CONFIRMATION">{{ t.get('admin.notifications.rules.purposes.confirmation') }}</option>
+                </select>
+              </div>
+
+              <!-- Active toggle -->
+              <div class="ns-field ns-field--row">
+                <span class="ns-field__label">{{ t.get('admin.notifications.rules.modal.activeLabel') }}</span>
+                <button
+                  class="ns-toggle"
+                  id="f-active-toggle"
+                  [class.ns-toggle--on]="_fActive()"
+                  (click)="_fActive.set(!_fActive())"
+                  type="button"
+                >
+                  @if (_fActive()) {
+                    <lucide-icon name="toggle-right" [size]="32"></lucide-icon>
+                  } @else {
+                    <lucide-icon name="toggle-left" [size]="32"></lucide-icon>
+                  }
+                </button>
+              </div>
+
+              @if (_fError()) {
+                <p class="ns-field__error">{{ _fError() }}</p>
+              }
+            </div>
+
+            <div class="ns-modal__footer">
+              <button class="ns-btn ns-btn--ghost" id="modal-cancel-btn" (click)="_cancel()">
+                {{ t.get('admin.notifications.rules.modal.cancel') }}
+              </button>
+              <button class="ns-btn ns-btn--primary" id="modal-save-btn"
+                (click)="_save()" [disabled]="vm.saving()">
+                @if (vm.saving()) {
+                  <lucide-icon name="loader-circle" [size]="16" class="ns-page__spinner"></lucide-icon>
+                }
+                {{ t.get('admin.notifications.rules.modal.save') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ─── Rules Table ─────────────────────────────────────────── -->
+      @if (vm.rules().length === 0 && !_formVisible()) {
+        <div class="ns-page__state">
+          <lucide-icon name="bell" [size]="40"></lucide-icon>
+          <span>{{ t.get('admin.notifications.empty') }}</span>
+        </div>
+      } @else {
+        <div class="ns-table-wrap">
+          <table class="ns-table">
+            <thead class="ns-table__head">
+              <tr>
+                <th class="ns-table__th">{{ t.get('admin.notifications.rules.table.type') }}</th>
+                <th class="ns-table__th">{{ t.get('admin.notifications.rules.table.daysBefore') }}</th>
+                <th class="ns-table__th">{{ t.get('admin.notifications.rules.table.channel') }}</th>
+                <th class="ns-table__th">{{ t.get('admin.notifications.rules.table.purpose') }}</th>
+                <th class="ns-table__th">{{ t.get('admin.notifications.rules.table.status') }}</th>
+                <th class="ns-table__th">{{ t.get('admin.notifications.rules.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (rule of vm.rules(); track rule.id) {
+                <tr class="ns-table__row" [class.ns-table__row--inactive]="!rule.active">
+
+                  <!-- Type badge -->
+                  <td class="ns-table__td">
+                    <span class="ns-badge"
+                      [class.ns-badge--blue]="rule.ruleType === 'IMMEDIATE'"
+                      [class.ns-badge--purple]="rule.ruleType === 'DAYS_BEFORE'">
+                      {{ _typeLabel(rule) }}
+                    </span>
+                  </td>
+
+                  <!-- Days before -->
+                  <td class="ns-table__td ns-table__td--muted">
+                    @if (rule.ruleType === 'DAYS_BEFORE') {
+                      {{ rule.daysBefore }} {{ t.get('admin.notifications.rules.types.daysBefore') }}
+                    } @else {
+                      —
+                    }
+                  </td>
+
+                  <!-- Channel badge -->
+                  <td class="ns-table__td">
+                    <span class="ns-badge ns-badge--channel">
+                      <lucide-icon [name]="_channelIcon(rule.channel)" [size]="13"></lucide-icon>
+                      {{ _channelLabel(rule.channel) }}
+                    </span>
+                  </td>
+
+                  <!-- Purpose badge -->
+                  <td class="ns-table__td">
+                    <span class="ns-badge"
+                      [class.ns-badge--orange]="rule.purpose === 'REMINDER'"
+                      [class.ns-badge--green]="rule.purpose === 'CONFIRMATION'">
+                      {{ _purposeLabel(rule.purpose) }}
+                    </span>
+                  </td>
+
+                  <!-- Toggle switch -->
+                  <td class="ns-table__td">
+                    <button
+                      class="ns-toggle ns-toggle--sm"
+                      [class.ns-toggle--on]="rule.active"
+                      [class.ns-toggle--protected]="_isProtected(rule)"
+                      [title]="_isProtected(rule) ? t.get('admin.notifications.rules.modal.protectedRule') : t.get('admin.notifications.rules.actions.toggle')"
+                      (click)="_toggleActive(rule)"
+                    >
+                      @if (rule.active) {
+                        <lucide-icon name="toggle-right" [size]="28"></lucide-icon>
+                      } @else {
+                        <lucide-icon name="toggle-left" [size]="28"></lucide-icon>
+                      }
+                    </button>
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="ns-table__td">
+                    <button
+                      class="ns-action-btn ns-action-btn--edit"
+                      id="edit-rule-{{ rule.id }}"
+                      [title]="t.get('admin.notifications.rules.actions.edit')"
+                      (click)="_openEdit(rule)"
+                    >
+                      <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                    </button>
+                  </td>
+
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+  }
+
+</div>
