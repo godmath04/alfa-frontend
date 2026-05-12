@@ -1,0 +1,1003 @@
+.wizard {
+  max-width: 800px;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-xl);
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+// ── HEADER ──────────────────────────────────────────
+.wizard__title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.wizard__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+// ── STEPPER ─────────────────────────────────────────
+.wizard__steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.wizard__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.wizard__step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-white);
+  transition: all 0.2s ease;
+}
+
+.wizard__step--active .wizard__step-circle {
+  background: var(--color-accent-1);
+  border-color: var(--color-accent-1);
+  color: var(--color-white);
+}
+
+.wizard__step--done .wizard__step-circle {
+  background: var(--color-accent-1);
+  border-color: var(--color-accent-1);
+  color: var(--color-white);
+}
+
+.wizard__step-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.wizard__step--active .wizard__step-label {
+  color: var(--color-accent-1);
+  font-weight: 600;
+}
+
+.wizard__step--done .wizard__step-label {
+  color: var(--color-accent-1);
+}
+
+.wizard__step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--color-border);
+  margin: 0 var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  transition: background 0.2s ease;
+}
+
+.wizard__step-line--done {
+  background: var(--color-accent-1);
+}
+
+// ── BODY ────────────────────────────────────────────
+.wizard__body {
+  min-height: 200px;
+  padding: var(--spacing-lg) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+// ── FOOTER ──────────────────────────────────────────
+.wizard__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+}
+
+// ══════════════════════════════════════════════════════
+// ── FLOW SELECTOR (STEP 0) ───────────────────────────
+// ══════════════════════════════════════════════════════
+.flow-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.flow-selector__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.flow-selector__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 600px;
+}
+
+.flow-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.flow-card__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.flow-card--manual {
+  .flow-card__icon {
+    background: #e8f4fd;
+    color: var(--color-accent-1);
+  }
+
+  &:hover {
+    border-color: var(--color-accent-1);
+
+    .flow-card__icon {
+      background: var(--color-accent-1);
+      color: var(--color-white);
+    }
+  }
+}
+
+.flow-card--quick {
+  .flow-card__icon {
+    background: #fef3c7;
+    color: #d97706;
+  }
+
+  &:hover {
+    border-color: #d97706;
+
+    .flow-card__icon {
+      background: #d97706;
+      color: var(--color-white);
+    }
+  }
+}
+
+.flow-card__title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.flow-card__desc {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+// ══════════════════════════════════════════════════════
+// ── SPECIALTIES GRID (STEP 1) ───────────────────────
+// ══════════════════════════════════════════════════════
+.specialties-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.specialties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.specialty-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent-1);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &--selected {
+    border-color: var(--color-accent-1);
+    background: #f0f9ff;
+    box-shadow: var(--shadow-sm);
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+.specialty-icon {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary, #004d73); // Dark blue fallback to ensure the white LOGO.svg is visible
+  padding: 8px;
+}
+
+.specialty-info {
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+}
+
+.specialty-desc {
+  margin: var(--spacing-xs) 0 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.specialty-badge {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-accent-1);
+  background: #e6f7ff; // Subtly tinted background for the badge
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  width: fit-content;
+  font-weight: 500;
+}
+
+.empty-state {
+  grid-column: 1 / -1; // Ensures it breaks out of the grid column constraints and centers
+}
+
+.loading-state, .error-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
+  gap: var(--spacing-sm);
+}
+
+.error-state {
+  color: var(--color-danger, red);
+}
+
+.error-state--inline {
+  flex-direction: row;
+  padding: var(--spacing-md);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+
+  p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ── DOCTORS GRID (STEP 2) ───────────────────────────
+// ══════════════════════════════════════════════════════
+.doctors-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.doctor-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent-1);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.doctor-avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: cover; // Better for photos than contain
+  border-radius: var(--radius-full); // Circular avatar
+  border: 2px solid var(--color-border);
+  background: var(--color-background, #f5f5f5);
+}
+
+.doctor-info {
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+}
+
+.doctor-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: #f59e0b; // Golden color for stars
+  font-weight: 500;
+}
+
+.doctor-exp {
+  margin: var(--spacing-xs) 0 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+// ══════════════════════════════════════════════════════
+// ── DATETIME SELECTION (STEP 3) ─────────────────────
+// ══════════════════════════════════════════════════════
+.datetime-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.selected-doctor-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-background, #f8fafc);
+  border-radius: var(--radius-md);
+
+  .doctor-avatar-small {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-border);
+    background: var(--color-white);
+  }
+
+  h4 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+  }
+
+  .summary-label {
+    margin: 0 0 4px 0;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: var(--color-accent-1);
+  }
+
+  .doctor-specialty-subtitle {
+    margin: 4px 0 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 0;
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.dates-carousel {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-sm);
+
+  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+}
+
+.date-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+
+  .date-card__dayname {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .date-card__number {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 4px 0;
+    transition: color 0.2s ease;
+  }
+
+  .date-card__month {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  &:hover {
+    border-color: var(--color-accent-1);
+    transform: translateY(-2px);
+  }
+
+  &--selected {
+    background: var(--color-accent-1);
+    border-color: var(--color-accent-1);
+    box-shadow: var(--shadow-sm);
+
+    .date-card__dayname, .date-card__number, .date-card__month {
+      color: var(--color-white);
+    }
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+.times-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.time-slot {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: var(--color-accent-1);
+    color: var(--color-accent-1);
+    background: #f0f9ff;
+  }
+
+  &--selected {
+    background: var(--color-accent-1);
+    border-color: var(--color-accent-1);
+    color: var(--color-white);
+
+    &:hover {
+      color: var(--color-white);
+      background: var(--color-accent-1);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ── CONFIRMATION (STEP 4 MANUAL) ────────────────────
+// ══════════════════════════════════════════════════════
+.confirmation-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.confirmation__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.confirmation__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: -8px 0 0 0;
+}
+
+.summary-card {
+  background: var(--color-background, #f8fafc);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.summary-row__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.summary-row__value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-align: right;
+
+  &--highlight {
+    font-size: var(--font-size-lg);
+    color: var(--color-accent-1);
+  }
+
+  &--status {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 2px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ── Motivo field ────────────────────────────────────
+.motivo-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.motivo-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.motivo-field {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background: var(--color-white);
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-accent-1);
+    box-shadow: 0 0 0 3px rgba(0, 77, 115, 0.1);
+  }
+
+  &--error {
+    border-color: var(--color-danger, #ef4444);
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ── VOUCHER / COMPROBANTE (STEP 5 / QUICK STEP 3) ──
+// ══════════════════════════════════════════════════════
+.voucher-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-lg) 0;
+}
+
+.voucher-success-icon {
+  color: #16a34a;
+  animation: voucher-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes voucher-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.voucher__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.voucher__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: -8px 0 0 0;
+  text-align: center;
+}
+
+.voucher-details {
+  width: 100%;
+  max-width: 500px;
+  background: var(--color-background, #f8fafc);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+// ══════════════════════════════════════════════════════
+// ── QUICK FLOW: PROPOSAL (STEP 2) ──────────────────
+// ══════════════════════════════════════════════════════
+.proposal-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.proposal__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-md);
+  color: #16a34a;
+  font-weight: 600;
+  font-size: var(--font-size-md);
+  transition: all 0.3s ease;
+
+  &--urgent {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+    animation: pulse-urgent 1s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse-urgent {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+// ══════════════════════════════════════════════════════
+// ── ANIMATION UTILITIES ─────────────────────────────
+// ══════════════════════════════════════════════════════
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// ══════════════════════════════════════════════════════
+// ── MOBILE RESPONSIVE ────────────────────────────────
+// ══════════════════════════════════════════════════════
+@media (max-width: 768px) {
+
+  // ── Wizard container ──
+  .wizard {
+    margin: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+  }
+
+  // ── Header ──
+  .wizard__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .wizard__subtitle {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-md);
+  }
+
+  // ── Stepper: hide labels, keep circles compact ──
+  .wizard__steps {
+    margin-bottom: var(--spacing-md);
+    overflow-x: auto;
+    gap: 0;
+  }
+
+  .wizard__step {
+    gap: 2px;
+  }
+
+  .wizard__step-circle {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-xs);
+  }
+
+  .wizard__step-label {
+    display: none; // Hide labels on mobile — circles with numbers suffice
+  }
+
+  .wizard__step-line {
+    margin: 0 var(--spacing-xs);
+    margin-bottom: 0;
+    min-width: 20px;
+  }
+
+  // ── Body ──
+  .wizard__body {
+    padding: var(--spacing-md) 0;
+  }
+
+  // ── Footer ──
+  .wizard__footer {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+
+    app-button {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // ── Flow selector ──
+  .flow-selector {
+    padding: var(--spacing-md) 0;
+  }
+
+  .flow-selector__title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .flow-selector__cards {
+    grid-template-columns: 1fr; // Stack vertically on mobile
+    gap: var(--spacing-md);
+  }
+
+  .flow-card {
+    padding: var(--spacing-lg) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .flow-card__icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .flow-card__title {
+    font-size: var(--font-size-md);
+  }
+
+  .flow-card__desc {
+    font-size: var(--font-size-xs);
+  }
+
+  // ── Specialty grid ──
+  .specialties-grid {
+    grid-template-columns: 1fr; // Single column on mobile
+  }
+
+  .specialty-card {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .specialty-icon {
+    width: 42px;
+    height: 42px;
+    padding: 6px;
+  }
+
+  // ── Doctors grid ──
+  .doctors-grid {
+    grid-template-columns: 1fr; // Single column on mobile
+  }
+
+  .doctor-card {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .doctor-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  // ── Date/time (step 3) ──
+  .section-title {
+    font-size: var(--font-size-md);
+  }
+
+  .date-card {
+    min-width: 64px;
+    padding: var(--spacing-sm);
+
+    .date-card__number {
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  .times-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: var(--spacing-sm);
+  }
+
+  .time-slot {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  // ── Confirmation (step 4) ──
+  .confirmation__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .summary-card {
+    padding: var(--spacing-md);
+  }
+
+  .summary-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .summary-row__value {
+    text-align: left;
+  }
+
+  .motivo-field {
+    padding: var(--spacing-sm);
+  }
+
+  // ── Voucher ──
+  .voucher__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .voucher-details {
+    padding: var(--spacing-md);
+  }
+
+  // ── Proposal (quick step 2) ──
+  .proposal__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .countdown-timer {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm);
+  }
+
+  // ── Doctor banner (step 3) ──
+  .selected-doctor-banner {
+    padding: var(--spacing-sm);
+
+    .doctor-avatar-small {
+      width: 36px;
+      height: 36px;
+    }
+
+    h4 {
+      font-size: var(--font-size-sm);
+    }
+  }
+}

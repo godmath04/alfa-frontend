@@ -15,7 +15,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'ejecutivo',
-    loadChildren: () => import('./features/ejecutivo/ejecutivo.routes').then(m => m.EJECUTIVO_ROUTES)
+    loadChildren: () => import('./features/ejecutivo/executive.routes').then(m => m.EXECUTIVE_ROUTES)
   },
   {
     path: 'admin',

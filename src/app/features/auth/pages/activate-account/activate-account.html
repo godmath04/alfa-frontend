@@ -1,0 +1,54 @@
+<div class="activate-page">
+
+  <div class="activate-page__card">
+    <div class="activate-page__icon">
+      <lucide-icon name="lock" [size]="32"></lucide-icon>
+    </div>
+
+    <h1 class="activate-page__title">{{ t.get('auth.activate.title') }}</h1>
+    <p class="activate-page__subtitle">{{ t.get('auth.activate.subtitle') }}</p>
+
+    @if (_email()) {
+      <div class="activate-page__email">{{ _email() }}</div>
+    }
+
+    <div class="activate-page__field">
+      <label class="activate-page__label">{{ t.get('auth.activate.password') }}</label>
+      <div class="activate-page__input-wrap">
+        <input
+          class="activate-page__input"
+          [type]="_showPass() ? 'text' : 'password'"
+          [value]="_password()"
+          (input)="_password.set($any($event.target).value)"
+          [placeholder]="t.get('auth.activate.password-placeholder')" />
+        <button class="activate-page__eye" type="button" (click)="_togglePass()">
+          <lucide-icon [name]="_showPass() ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="activate-page__field">
+      <label class="activate-page__label">{{ t.get('auth.activate.confirm') }}</label>
+      <div class="activate-page__input-wrap">
+        <input
+          class="activate-page__input"
+          [type]="_showPass() ? 'text' : 'password'"
+          [value]="_confirm()"
+          (input)="_confirm.set($any($event.target).value)"
+          [placeholder]="t.get('auth.activate.confirm-placeholder')" />
+      </div>
+    </div>
+
+    @if (_error()) {
+      <p class="activate-page__error">{{ _error() }}</p>
+    }
+
+    <button class="activate-page__btn" (click)="_submit()" [disabled]="_loading()">
+      @if (_loading()) {
+        <lucide-icon name="loader-circle" [size]="18" class="activate-page__spinner"></lucide-icon>
+      }
+      {{ t.get('auth.activate.submit') }}
+    </button>
+  </div>
+
+</div>

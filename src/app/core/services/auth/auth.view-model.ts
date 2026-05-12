@@ -30,8 +30,14 @@ export class AuthViewModel {
       .pipe(timeout(10000), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (response) => {
-          this._authState.setSession(response.token, response.role);
           this.loading.set(false);
+          if (response.status === 'GUEST') {
+            this._router.navigate(['/auth/activate-account'], {
+              queryParams: { email: email }
+            });
+            return;
+          }
+          this._authState.setSession(response.token, response.role);
           this._redirectByRole(response.role);
         },
         error: (raw) => {

@@ -28,7 +28,7 @@ export class QuickAppointmentViewModel {
     this._destroyRef.onDestroy(() => this.clearCountdown());
   }
 
-  requestQuickProposal(onSuccess: () => void): void {
+  requestQuickProposal(onSuccess: () => void, patientId?: number): void {
     const specialty = this._stateService.selectedSpecialty();
     const date      = this._stateService.selectedDate();
     if (!specialty || !date) return;
@@ -36,7 +36,7 @@ export class QuickAppointmentViewModel {
     this._stateService.setProposalLoading(true);
     this._stateService.setProposalError(null);
 
-    this._appointmentService.getQuickProposal(specialty.id, date)
+    this._appointmentService.getQuickProposal(specialty.id, date, patientId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (proposal) => {
@@ -52,23 +52,23 @@ export class QuickAppointmentViewModel {
       });
   }
 
-  cancelQuickProposal(): void {
+  cancelQuickProposal(patientId?: number): void {
     this.clearCountdown();
     this._stateService.setProposal(null);
     this._stateService.setProposalCountdown(0);
 
-    this._appointmentService.cancelQuickProposal()
+    this._appointmentService.cancelQuickProposal(patientId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe();
   }
 
-  cancelSilently(): void {
+  cancelSilently(patientId?: number): void {
     if (!this._stateService.proposal()) return;
     this.clearCountdown();
     this._stateService.setProposal(null);
     this._stateService.setProposalCountdown(0);
 
-    this._appointmentService.cancelQuickProposal()
+    this._appointmentService.cancelQuickProposal(patientId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe();
   }

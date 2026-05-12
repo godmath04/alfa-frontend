@@ -25,7 +25,7 @@ export class AppointmentCreationViewModel {
     this._stateService.setMotivo(motivo);
   }
 
-  confirmManualAppointment(onSuccess: () => void): void {
+  confirmManualAppointment(onSuccess: () => void, patientId?: number): void {
     const doctor = this._stateService.selectedDoctor();
     const date   = this._stateService.selectedDate();
     const time   = this._stateService.selectedTime();
@@ -45,7 +45,7 @@ export class AppointmentCreationViewModel {
     this._stateService.setCreating(true);
     this._stateService.setCreateError(null);
 
-    this._appointmentService.createAppointment(request)
+    this._appointmentService.createAppointment(request, patientId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (result) => {
@@ -60,7 +60,7 @@ export class AppointmentCreationViewModel {
       });
   }
 
-  confirmQuickAppointment(onSuccess: () => void, onClearCountdown: () => void): void {
+  confirmQuickAppointment(onSuccess: () => void, onClearCountdown: () => void, patientId?: number): void {
     const proposal = this._stateService.proposal();
     const motivo   = this._stateService.motivo();
     if (!proposal || !motivo) return;
@@ -73,7 +73,7 @@ export class AppointmentCreationViewModel {
     this._stateService.setCreating(true);
     this._stateService.setCreateError(null);
 
-    this._appointmentService.confirmQuickAppointment(request)
+    this._appointmentService.confirmQuickAppointment(request, patientId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (result) => {

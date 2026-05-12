@@ -118,17 +118,19 @@ export class AppointmentService {
 
   // ─── Manual appointment ────────────────────────────
 
-  createAppointment(request: CreateAppointmentRequest): Observable<AppointmentResponse> {
-    return this._http.post<CitaResponse>(`${this.baseUrl}/api/agendamiento/citas`, request)
+  createAppointment(request: CreateAppointmentRequest, patientId?: number): Observable<AppointmentResponse> {
+    const body = patientId ? { ...request, pacienteId: patientId } : request;
+    return this._http.post<CitaResponse>(`${this.baseUrl}/api/agendamiento/citas`, body)
       .pipe(map(r => this._mapCitaResponse(r)));
   }
 
   // ─── Quick appointment ─────────────────────────────
 
-  getQuickProposal(specialtyId: number, date: string): Observable<QuickProposalResponse> {
-    const params = new HttpParams()
+  getQuickProposal(specialtyId: number, date: string, patientId?: number): Observable<QuickProposalResponse> {
+    let params = new HttpParams()
       .set('especialidadId', specialtyId.toString())
       .set('fecha', date);
+    if (patientId) params = params.set('pacienteId', patientId.toString());
 
     return this._http.get<PropuestaResponse>(`${this.baseUrl}/api/agendamiento/citas/rapida/propuesta`, { params })
       .pipe(
@@ -149,13 +151,17 @@ export class AppointmentService {
       );
   }
 
-  confirmQuickAppointment(request: ConfirmQuickRequest): Observable<AppointmentResponse> {
-    return this._http.post<CitaResponse>(`${this.baseUrl}/api/agendamiento/citas/rapida/confirmar`, request)
+  confirmQuickAppointment(request: ConfirmQuickRequest, patientId?: number): Observable<AppointmentResponse> {
+    const body = patientId ? { ...request, pacienteId: patientId } : request;
+    return this._http.post<CitaResponse>(`${this.baseUrl}/api/agendamiento/citas/rapida/confirmar`, body)
       .pipe(map(r => this._mapCitaResponse(r)));
   }
 
-  cancelQuickProposal(): Observable<void> {
-    return this._http.delete<void>(`${this.baseUrl}/api/agendamiento/citas/rapida/propuesta`);
+  cancelQuickProposal(patientId?: number): Observable<void> {
+    const options = patientId
+      ? { params: new HttpParams().set('pacienteId', patientId.toString()) }
+      : {};
+    return this._http.delete<void>(`${this.baseUrl}/api/agendamiento/citas/rapida/propuesta`, options);
   }
 
   // ─── Appointment History (Mis Citas) ─────────────────
