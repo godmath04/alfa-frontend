@@ -1,0 +1,129 @@
+version: 2.1
+
+# ── Orbs ────────────────────────────────────────────────────────────────────
+orbs:
+  node: circleci/node@6
+
+# ── Filtros reutilizables ────────────────────────────────────────────────────
+# Equivalente a shouldBuildAndArchive(): ci/cd, main, master, release/*
+build_branches: &build_branches
+  filters:
+    branches:
+      only:
+        - main
+        - master
+        - ci/cd
+        - /^release\/.*/
+
+# ── Jobs ─────────────────────────────────────────────────────────────────────
+jobs:
+
+  # ── Install ────────────────────────────────────────────────────────────────
+  install:
+    docker:
+      - image: cimg/node:22.22.2
+    steps:
+      - checkout
+      - run:
+          name: "Versiones"
+          command: |
+            node -v
+            npm -v
+      - node/install-packages:        # cachea node_modules automáticamente
+          pkg-manager: npm
+      - persist_to_workspace:         # comparte node_modules con jobs siguientes
+          root: .
+          paths:
+            - .
+
+  # ── Lint (Prettier) ────────────────────────────────────────────────────────
+  lint:
+    docker:
+      - image: cimg/node:22.22.2
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Lint (Prettier)"
+          # Ajusta el script según tu package.json (ej: "lint", "format:check")
+          command: npm run lint
+      - run:
+          name: "Branch info"
+          when: always
+          command: echo "Branch: $CIRCLE_BRANCH"
+
+  # ── Test ───────────────────────────────────────────────────────────────────
+  test:
+    docker:
+      - image: cimg/node:22.22.2
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Tests"
+          command: npm test
+      - run:
+          name: "Branch info"
+          when: always
+          command: echo "Branch: $CIRCLE_BRANCH"
+
+  # ── Audit ──────────────────────────────────────────────────────────────────
+  audit:
+    docker:
+      - image: cimg/node:22.22.2
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Audit"
+          # --audit-level moderate es un buen punto de partida
+          command: npm audit --audit-level moderate
+      - run:
+          name: "Branch info"
+          when: always
+          command: echo "Branch: $CIRCLE_BRANCH"
+
+  # ── Build & Archive ────────────────────────────────────────────────────────
+  build:
+    docker:
+      - image: cimg/node:22.22.2
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Build Angular"
+          # Ajusta al script de tu package.json (ej: build:prod)
+          command: npm run build -- --configuration production
+      - run:
+          name: "Branch info"
+          when: always
+          command: echo "Branch: $CIRCLE_BRANCH | Build+Archive: true"
+      - store_artifacts:             # equivalente a "Archive" de Jenkins
+          path: dist
+          destination: build
+
+# ── Workflow ──────────────────────────────────────────────────────────────────
+workflows:
+  ci:
+    jobs:
+      # 1. Install siempre primero
+      - install
+
+      # 2. Quality en paralelo (esperan a install)
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - audit:
+          requires:
+            - install
+
+      # 3. Build solo en ramas específicas (ci/cd, main, master, release/*)
+      - build:
+          requires:
+            - lint
+            - test
+            - audit
+          <<: *build_branches
