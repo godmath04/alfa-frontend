@@ -26,6 +26,10 @@ export const ADMIN_ROUTES: Routes = [
         path: 'config',
         loadComponent: () => import('./pages/config/config').then(m => m.ConfigPage),
       },
+      {
+        path: 'notification-settings',
+        loadComponent: () => import('./pages/notification-settings/notification-settings').then(m => m.NotificationSettingsPage),
+      },
     ],
   },
 ];
