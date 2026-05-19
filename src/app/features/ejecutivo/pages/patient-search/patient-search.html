@@ -130,8 +130,8 @@
             <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-type') }} *</label>
             <select class="ps-page__input ps-page__select"
               (change)="_fIdType.set($any($event.target).value)">
-              <option value="CEDULA" [selected]="_fIdType() === 'CEDULA'">{{ t.get('admin.doctors.fields.id-type-cedula') }}</option>
-              <option value="PASAPORTE" [selected]="_fIdType() === 'PASAPORTE'">{{ t.get('admin.doctors.fields.id-type-pasaporte') }}</option>
+              <option value="cedula"   [selected]="_fIdType() === 'cedula'">{{ t.get('auth.register.id-type.cedula') }}</option>
+              <option value="passport" [selected]="_fIdType() === 'passport'">{{ t.get('auth.register.id-type.passport') }}</option>
             </select>
           </div>
           <div class="ps-page__field">
@@ -139,6 +139,54 @@
             <input class="ps-page__input" type="text"
               [value]="_fIdNumber()" (input)="_fIdNumber.set($any($event.target).value)"
               [placeholder]="t.get('ejecutivo.patients.form.id-number-placeholder')" />
+          </div>
+
+          <!-- Fecha de nacimiento -->
+          <div class="ps-page__field ps-page__field--full">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.birth-date') }} *</label>
+            <div class="ps-page__date-row">
+              <select class="ps-page__input ps-page__select" (change)="_fBirthDay.set($any($event.target).value)">
+                <option value="">{{ t.get('ejecutivo.patients.form.birth-day') }}</option>
+                @for (d of days; track d) {
+                  <option [value]="d.toString()" [selected]="_fBirthDay() === d.toString()">{{ d }}</option>
+                }
+              </select>
+              <select class="ps-page__input ps-page__select" (change)="_fBirthMonth.set($any($event.target).value)">
+                <option value="">{{ t.get('ejecutivo.patients.form.birth-month') }}</option>
+                @for (m of months; track m.value) {
+                  <option [value]="m.value" [selected]="_fBirthMonth() === m.value">{{ m.name }}</option>
+                }
+              </select>
+              <select class="ps-page__input ps-page__select" (change)="_fBirthYear.set($any($event.target).value)">
+                <option value="">{{ t.get('ejecutivo.patients.form.birth-year') }}</option>
+                @for (y of years; track y) {
+                  <option [value]="y.toString()" [selected]="_fBirthYear() === y.toString()">{{ y }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <!-- Ciudad -->
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.city') }} *</label>
+            <select class="ps-page__input ps-page__select" (change)="_fCity.set($any($event.target).value)">
+              <option value="">{{ t.get('ejecutivo.patients.form.city-placeholder') }}</option>
+              @for (c of cities; track c) {
+                <option [value]="c" [selected]="_fCity() === c">{{ c }}</option>
+              }
+              <option value="Otra">{{ t.get('auth.register.city.other') }}</option>
+            </select>
+          </div>
+
+          <!-- Género -->
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.gender') }} *</label>
+            <select class="ps-page__input ps-page__select" (change)="_fGender.set($any($event.target).value)">
+              <option value="">{{ t.get('ejecutivo.patients.form.gender-placeholder') }}</option>
+              <option value="M" [selected]="_fGender() === 'M'">{{ t.get('auth.register.gender.male') }}</option>
+              <option value="F" [selected]="_fGender() === 'F'">{{ t.get('auth.register.gender.female') }}</option>
+              <option value="O" [selected]="_fGender() === 'O'">{{ t.get('auth.register.gender.other') }}</option>
+            </select>
           </div>
         </div>
 

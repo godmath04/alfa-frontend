@@ -18,6 +18,9 @@ export interface CrearPacienteRequest {
   idType:    string;
   idNumber:  string;
   phone:     string;
+  birthDate: string;
+  city:      string;
+  gender:    string;
 }
 
 export interface EjecutivoCitaItem {

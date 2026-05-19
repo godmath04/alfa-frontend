@@ -195,11 +195,22 @@
         "id-type":                "Tipo de documento",
         "id-number":              "Número de documento",
         "id-number-placeholder":  "Cédula o pasaporte",
+        "birth-date":             "Fecha de nacimiento",
+        "birth-day":              "Día",
+        "birth-month":            "Mes",
+        "birth-year":             "Año",
+        "city":                   "Ciudad",
+        "city-placeholder":       "Seleccionar ciudad...",
+        "gender":                 "Sexo",
+        "gender-placeholder":     "Seleccionar...",
         "save":                   "Registrar paciente",
         "error-first":            "El nombre es obligatorio",
         "error-last":             "El apellido es obligatorio",
         "error-email":            "El correo es obligatorio",
         "error-id":               "El número de documento es obligatorio",
+        "error-birth":            "La fecha de nacimiento es obligatoria",
+        "error-city":             "La ciudad es obligatoria",
+        "error-gender":           "El sexo es obligatorio",
         "error-save":             "Error al registrar el paciente"
       }
     },
@@ -422,7 +433,13 @@
       "noSpecialties": "No hay especialidades disponibles en este momento.",
       "selectDateTitle": "Elegir Fecha",
       "selectTimeTitle": "Horarios Disponibles",
-      "noAvailableTimes": "No hay disponibilidad para el día seleccionado."
+      "noAvailableTimes": "No hay disponibilidad para el día seleccionado.",
+      "status": {
+        "pendiente":  "Pendiente",
+        "confirmada": "Confirmada",
+        "completada": "Completada",
+        "cancelada":  "Cancelada"
+      }
     }
   },
   "admin": {
