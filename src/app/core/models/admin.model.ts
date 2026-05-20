@@ -136,3 +136,28 @@ export interface UserProfile {
   idType:    string | null;
   idNumber:  string | null;
 }
+
+// ─── Notification Rules ───────────────────────────────────────────────────────
+
+export type NotificationRuleType    = 'DAYS_BEFORE' | 'IMMEDIATE';
+export type NotificationChannel     = 'WHATSAPP' | 'EMAIL' | 'BOTH';
+export type NotificationPurpose     = 'REMINDER' | 'CONFIRMATION';
+
+export interface NotificationRuleResponse {
+  id:          number;
+  ruleType:    NotificationRuleType;
+  daysBefore:  number | null;
+  channel:     NotificationChannel;
+  purpose:     NotificationPurpose;
+  active:      boolean;
+  createdAt:   string;
+  updatedAt:   string;
+}
+
+export interface NotificationRuleRequest {
+  ruleType:   NotificationRuleType;
+  daysBefore: number | null;
+  channel:    NotificationChannel;
+  purpose:    NotificationPurpose;
+  active:     boolean;
+}

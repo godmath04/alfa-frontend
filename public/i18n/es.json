@@ -448,14 +448,15 @@
       "subtitle": "Panel Administrador"
     },
     "nav": {
-      "resources":   "Gestión de Recursos",
-      "specialties": "Especialidades",
-      "offices":     "Consultorios",
-      "schedules":   "Horarios de Atención",
-      "doctors":     "Perfiles de Médicos",
-      "users":       "Usuarios",
-      "config":      "Configuración",
-      "logout":      "Cerrar sesión"
+      "resources":      "Gestión de Recursos",
+      "specialties":    "Especialidades",
+      "offices":        "Consultorios",
+      "schedules":      "Horarios de Atención",
+      "doctors":        "Perfiles de Médicos",
+      "users":          "Usuarios",
+      "config":         "Configuración",
+      "notifications":  "Notificaciones",
+      "logout":         "Cerrar sesión"
     },
     "config": {
       "title":    "Configuración del Sistema",
@@ -711,6 +712,80 @@
       "validation": {
         "name-required":     "El nombre es obligatorio",
         "duration-required": "La duración mínima es 5 minutos"
+      }
+    },
+    "notifications": {
+      "title": "Configuración de Notificaciones",
+      "subtitle": "Gestiona las reglas de notificación y la hora de envío automático",
+      "loading": "Cargando configuración...",
+      "empty": "No hay reglas de notificación registradas",
+      "error": {
+        "load":      "Error al cargar las reglas. Intenta de nuevo.",
+        "save":      "Error al guardar. Verifica los datos e intenta de nuevo.",
+        "toggle":    "Error al cambiar el estado de la regla.",
+        "scheduler": "Error al guardar la hora de envío."
+      },
+      "schedulerHour": {
+        "title":       "Hora de envío de notificaciones",
+        "description": "El sistema enviará notificaciones diariamente a esta hora",
+        "label":       "Hora de ejecución (0-23)",
+        "save":        "Guardar hora",
+        "saving":      "Guardando...",
+        "saved":       "Hora guardada correctamente"
+      },
+      "rules": {
+        "title":   "Reglas de Notificación",
+        "newRule": "Nueva regla",
+        "table": {
+          "type":      "Tipo",
+          "daysBefore":"Días antes",
+          "channel":   "Canal",
+          "purpose":   "Propósito",
+          "status":    "Estado",
+          "actions":   "Acciones"
+        },
+        "types": {
+          "immediate":  "Inmediata",
+          "dayBefore":  "día antes",
+          "daysBefore": "días antes"
+        },
+        "channels": {
+          "whatsapp": "WhatsApp",
+          "email":    "Email",
+          "both":     "Ambos"
+        },
+        "purposes": {
+          "reminder":     "Recordatorio",
+          "confirmation": "Confirmación"
+        },
+        "status": {
+          "active":   "Activa",
+          "inactive": "Inactiva"
+        },
+        "actions": {
+          "edit":   "Editar regla",
+          "toggle": "Activar / Desactivar"
+        },
+        "modal": {
+          "titleCreate":    "Nueva regla",
+          "titleEdit":      "Editar regla",
+          "ruleType":       "Tipo de regla",
+          "daysBeforeLabel":"Días de anticipación",
+          "daysBeforePlaceholder": "Ej: 2",
+          "channelLabel":   "Canal de envío",
+          "purposeLabel":   "Propósito",
+          "activeLabel":    "Activa",
+          "save":           "Guardar",
+          "cancel":         "Cancelar",
+          "protectedRule":  "Esta regla es de seguridad del sistema y no puede desactivarse",
+          "validation": {
+            "daysRequired":    "Los días de anticipación son obligatorios y deben ser mayores a 0"
+          },
+          "ruleTypes": {
+            "immediate":  "Inmediata",
+            "daysBefore": "Días antes"
+          }
+        }
       }
     }
   },
