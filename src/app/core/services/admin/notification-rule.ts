@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import {
   NotificationRuleRequest,
   NotificationRuleResponse,
+  SystemConfig,
 } from '../../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
@@ -43,16 +44,21 @@ export class NotificationRuleService {
   // ─── Scheduler Hour ────────────────────────────────────────────────────────
 
   getSchedulerHour(): Observable<string> {
-    return this._http.get<string>(
-      `${this._baseUrl}/system-configurations/key/scheduler.notification.hour`,
-      { responseType: 'text' as 'json' }
-    );
+    return this._http
+      .get<SystemConfig>(
+        `${this._baseUrl}/config/key/scheduler.notification.hour`
+      )
+      .pipe(map((config) => config.value));
   }
 
   updateSchedulerHour(hour: number): Observable<void> {
     return this._http.put<void>(
-      `${this._baseUrl}/system-configurations/key/scheduler.notification.hour`,
-      { value: String(hour) }
+      `${this._baseUrl}/config/key/scheduler.notification.hour`,
+      {
+        key: 'scheduler.notification.hour',
+        value: String(hour),
+        description: 'Hora de ejecucion',
+      }
     );
   }
 }
