@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
@@ -13,7 +13,7 @@ import {
   List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
   UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
   Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
-  Wind, Footprints, Ban,
+  Wind, Footprints, Ban, ArrowRight,
   BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio
 } from 'lucide-angular';
 
@@ -23,6 +23,7 @@ import { Translate } from './core/services/translate';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideRouter(APP_ROUTES),
     provideHttpClient(withInterceptors([authInterceptor])),
@@ -41,7 +42,7 @@ export const appConfig: ApplicationConfig = {
         List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
         UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
         Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
-        Wind, Footprints, Ban,
+        Wind, Footprints, Ban, ArrowRight,
         BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio
       })
     ),

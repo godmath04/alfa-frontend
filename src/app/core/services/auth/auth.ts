@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { LoginRequest, LoginResponse, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest } from '../../models/auth.model';
+import { LoginRequest, LoginResponse, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest, ActivateAccountRequest } from '../../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,5 +32,10 @@ export class AuthService {
   resetPassword(token: string, newPassword: string): Observable<void> {
     const body: ResetPasswordRequest = { token, newPassword };
     return this._http.post<void>(`${this.baseUrl}/api/auth/reset-password`, body);
+  }
+
+  activateAccount(email: string, password: string): Observable<LoginResponse> {
+    const body: ActivateAccountRequest = { email, password };
+    return this._http.post<LoginResponse>(`${this.baseUrl}/api/auth/activate-account`, body);
   }
 }

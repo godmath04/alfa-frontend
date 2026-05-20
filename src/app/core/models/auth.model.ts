@@ -4,8 +4,14 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
-  role: string;
+  token:  string;
+  role:   string;
+  status: string;
+}
+
+export interface ActivateAccountRequest {
+  email:    string;
+  password: string;
 }
 
 export interface RegisterRequest {

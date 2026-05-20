@@ -1,0 +1,212 @@
+<div class="ps-page">
+
+  <div class="ps-page__header">
+    <div>
+      <h1 class="ps-page__title">{{ t.get('ejecutivo.patients.title') }}</h1>
+      <p class="ps-page__subtitle">{{ t.get('ejecutivo.patients.subtitle') }}</p>
+    </div>
+    <button class="ps-page__btn ps-page__btn--primary" (click)="_openForm()">
+      <lucide-icon name="plus" [size]="16"></lucide-icon>
+      {{ t.get('ejecutivo.patients.new') }}
+    </button>
+  </div>
+
+  <!-- ─── Búsqueda ─────────────────────────────────────────────────── -->
+  <div class="ps-page__search-bar">
+    <lucide-icon name="search" [size]="18" class="ps-page__search-icon"></lucide-icon>
+    <input
+      class="ps-page__search-input"
+      type="text"
+      [value]="_query()"
+      (input)="_query.set($any($event.target).value)"
+      (keydown.enter)="_search()"
+      [placeholder]="t.get('ejecutivo.patients.search-placeholder')" />
+    <button class="ps-page__btn ps-page__btn--primary" (click)="_search()" [disabled]="_loading() || _query().trim().length < 2">
+      @if (_loading()) {
+        <lucide-icon name="loader-circle" [size]="16" class="ps-page__spinner"></lucide-icon>
+      } @else {
+        {{ t.get('ejecutivo.patients.search-btn') }}
+      }
+    </button>
+  </div>
+
+  <!-- ─── Error ────────────────────────────────────────────────────── -->
+  @if (_error()) {
+    <div class="ps-page__state ps-page__state--error">
+      <lucide-icon name="circle-alert" [size]="24"></lucide-icon>
+      <span>{{ _error() }}</span>
+    </div>
+  }
+
+  <!-- ─── Resultados ───────────────────────────────────────────────── -->
+  @if (_searched() && !_loading() && !_error()) {
+    @if (_results().length === 0) {
+      <div class="ps-page__state">
+        <lucide-icon name="user-x" [size]="40"></lucide-icon>
+        <span>{{ t.get('ejecutivo.patients.no-results') }}</span>
+        <button class="ps-page__btn ps-page__btn--ghost" (click)="_openForm()">
+          {{ t.get('ejecutivo.patients.register-new') }}
+        </button>
+      </div>
+    } @else {
+      <div class="ps-page__card">
+        <table class="ps-page__table">
+          <thead class="ps-page__thead">
+            <tr>
+              <th class="ps-page__th">{{ t.get('ejecutivo.patients.table.name') }}</th>
+              <th class="ps-page__th">{{ t.get('ejecutivo.patients.table.id') }}</th>
+              <th class="ps-page__th">{{ t.get('ejecutivo.patients.table.email') }}</th>
+              <th class="ps-page__th">{{ t.get('ejecutivo.patients.table.phone') }}</th>
+              <th class="ps-page__th">{{ t.get('ejecutivo.patients.table.status') }}</th>
+              <th class="ps-page__th">{{ t.get('ejecutivo.patients.table.actions') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of _results(); track p.id) {
+              <tr class="ps-page__row">
+                <td class="ps-page__td ps-page__td--name">{{ p.firstName }} {{ p.lastName }}</td>
+                <td class="ps-page__td ps-page__td--muted">{{ p.idNumber ?? '—' }}</td>
+                <td class="ps-page__td ps-page__td--muted">{{ p.email }}</td>
+                <td class="ps-page__td ps-page__td--muted">{{ p.phone ?? '—' }}</td>
+                <td class="ps-page__td">
+                  <span class="ps-page__badge"
+                    [class.ps-page__badge--activo]="p.status === 'ACTIVE'"
+                    [class.ps-page__badge--invitado]="p.status === 'GUEST'"
+                    [class.ps-page__badge--inactivo]="p.status === 'INACTIVE'">
+                    {{ t.get('ejecutivo.patients.estado.' + p.status.toLowerCase()) }}
+                  </span>
+                </td>
+                <td class="ps-page__td">
+                  <button class="ps-page__action-btn" (click)="_openProfile(p)">
+                    <lucide-icon name="arrow-right" [size]="15"></lucide-icon>
+                    {{ t.get('ejecutivo.patients.view') }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  <!-- ─── Modal crear paciente ─────────────────────────────────────── -->
+  @if (_showForm()) {
+    <div class="ps-page__overlay">
+      <div class="ps-page__modal">
+        <div class="ps-page__modal-header">
+          <h2 class="ps-page__modal-title">{{ t.get('ejecutivo.patients.form.title') }}</h2>
+          <button class="ps-page__icon-btn" (click)="_cancelForm()">
+            <lucide-icon name="x" [size]="20"></lucide-icon>
+          </button>
+        </div>
+
+        <div class="ps-page__form-grid">
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.first-name') }} *</label>
+            <input class="ps-page__input" type="text"
+              [value]="_fFirstName()" (input)="_fFirstName.set($any($event.target).value)"
+              [placeholder]="t.get('ejecutivo.patients.form.first-name-placeholder')" />
+          </div>
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.last-name') }} *</label>
+            <input class="ps-page__input" type="text"
+              [value]="_fLastName()" (input)="_fLastName.set($any($event.target).value)"
+              [placeholder]="t.get('ejecutivo.patients.form.last-name-placeholder')" />
+          </div>
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.email') }} *</label>
+            <input class="ps-page__input" type="email"
+              [value]="_fEmail()" (input)="_fEmail.set($any($event.target).value)"
+              [placeholder]="t.get('ejecutivo.patients.form.email-placeholder')" />
+          </div>
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.phone') }}</label>
+            <input class="ps-page__input" type="tel"
+              [value]="_fPhone()" (input)="_fPhone.set($any($event.target).value)"
+              [placeholder]="t.get('ejecutivo.patients.form.phone-placeholder')" />
+          </div>
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-type') }} *</label>
+            <select class="ps-page__input ps-page__select"
+              (change)="_fIdType.set($any($event.target).value)">
+              <option value="cedula"   [selected]="_fIdType() === 'cedula'">{{ t.get('auth.register.id-type.cedula') }}</option>
+              <option value="passport" [selected]="_fIdType() === 'passport'">{{ t.get('auth.register.id-type.passport') }}</option>
+            </select>
+          </div>
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-number') }} *</label>
+            <input class="ps-page__input" type="text"
+              [value]="_fIdNumber()" (input)="_fIdNumber.set($any($event.target).value)"
+              [placeholder]="t.get('ejecutivo.patients.form.id-number-placeholder')" />
+          </div>
+
+          <!-- Fecha de nacimiento -->
+          <div class="ps-page__field ps-page__field--full">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.birth-date') }} *</label>
+            <div class="ps-page__date-row">
+              <select class="ps-page__input ps-page__select" (change)="_fBirthDay.set($any($event.target).value)">
+                <option value="">{{ t.get('ejecutivo.patients.form.birth-day') }}</option>
+                @for (d of days; track d) {
+                  <option [value]="d.toString()" [selected]="_fBirthDay() === d.toString()">{{ d }}</option>
+                }
+              </select>
+              <select class="ps-page__input ps-page__select" (change)="_fBirthMonth.set($any($event.target).value)">
+                <option value="">{{ t.get('ejecutivo.patients.form.birth-month') }}</option>
+                @for (m of months; track m.value) {
+                  <option [value]="m.value" [selected]="_fBirthMonth() === m.value">{{ m.name }}</option>
+                }
+              </select>
+              <select class="ps-page__input ps-page__select" (change)="_fBirthYear.set($any($event.target).value)">
+                <option value="">{{ t.get('ejecutivo.patients.form.birth-year') }}</option>
+                @for (y of years; track y) {
+                  <option [value]="y.toString()" [selected]="_fBirthYear() === y.toString()">{{ y }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <!-- Ciudad -->
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.city') }} *</label>
+            <select class="ps-page__input ps-page__select" (change)="_fCity.set($any($event.target).value)">
+              <option value="">{{ t.get('ejecutivo.patients.form.city-placeholder') }}</option>
+              @for (c of cities; track c) {
+                <option [value]="c" [selected]="_fCity() === c">{{ c }}</option>
+              }
+              <option value="Otra">{{ t.get('auth.register.city.other') }}</option>
+            </select>
+          </div>
+
+          <!-- Género -->
+          <div class="ps-page__field">
+            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.gender') }} *</label>
+            <select class="ps-page__input ps-page__select" (change)="_fGender.set($any($event.target).value)">
+              <option value="">{{ t.get('ejecutivo.patients.form.gender-placeholder') }}</option>
+              <option value="M" [selected]="_fGender() === 'M'">{{ t.get('auth.register.gender.male') }}</option>
+              <option value="F" [selected]="_fGender() === 'F'">{{ t.get('auth.register.gender.female') }}</option>
+              <option value="O" [selected]="_fGender() === 'O'">{{ t.get('auth.register.gender.other') }}</option>
+            </select>
+          </div>
+        </div>
+
+        @if (_fError()) {
+          <p class="ps-page__form-error">{{ _fError() }}</p>
+        }
+
+        <div class="ps-page__modal-actions">
+          <button class="ps-page__btn ps-page__btn--ghost" (click)="_cancelForm()">
+            {{ t.get('common.buttons.cancel') }}
+          </button>
+          <button class="ps-page__btn ps-page__btn--primary" (click)="_savePatient()" [disabled]="_fSaving()">
+            @if (_fSaving()) {
+              <lucide-icon name="loader-circle" [size]="16" class="ps-page__spinner"></lucide-icon>
+            }
+            {{ t.get('ejecutivo.patients.form.save') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

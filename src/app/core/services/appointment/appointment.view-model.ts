@@ -121,21 +121,21 @@ export class AppointmentViewModel {
     this._creationVM.setMotivo(motivo);
   }
 
-  confirmManualAppointment(onSuccess: () => void): void {
-    this._creationVM.confirmManualAppointment(onSuccess);
+  confirmManualAppointment(onSuccess: () => void, patientId?: number): void {
+    this._creationVM.confirmManualAppointment(onSuccess, patientId);
   }
 
   // ─── Quick appointment actions ─────────────────────
 
-  requestQuickProposal(onSuccess: () => void): void {
-    this._quickVM.requestQuickProposal(onSuccess);
+  requestQuickProposal(onSuccess: () => void, patientId?: number): void {
+    this._quickVM.requestQuickProposal(onSuccess, patientId);
   }
 
-  confirmQuickAppointment(onSuccess: () => void): void {
-    this._creationVM.confirmQuickAppointment(onSuccess, () => this._quickVM.clearCountdown());
+  confirmQuickAppointment(onSuccess: () => void, patientId?: number): void {
+    this._creationVM.confirmQuickAppointment(onSuccess, () => this._quickVM.clearCountdown(), patientId);
   }
 
-  cancelQuickProposal(): void {
-    this._quickVM.cancelQuickProposal();
+  cancelQuickProposal(patientId?: number): void {
+    this._quickVM.cancelQuickProposal(patientId);
   }
 }

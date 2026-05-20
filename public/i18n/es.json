@@ -137,6 +137,106 @@
       "errorMinLength": "La contraseña debe tener al menos 8 caracteres.",
       "errorNoToken": "Enlace de recuperación inválido.",
       "errorGeneric": "Ocurrió un error. Intenta nuevamente."
+    },
+    "activate": {
+      "title":                "Crea tu contraseña",
+      "subtitle":             "El hospital ya registró tu información. Crea una contraseña para acceder al portal cuando quieras.",
+      "password":             "Nueva contraseña",
+      "password-placeholder": "Mínimo 6 caracteres",
+      "confirm":              "Confirmar contraseña",
+      "confirm-placeholder":  "Repite tu contraseña",
+      "submit":               "Activar mi cuenta",
+      "error-length":         "La contraseña debe tener al menos 6 caracteres",
+      "error-match":          "Las contraseñas no coinciden",
+      "error-generic":        "Ocurrió un error al activar tu cuenta. Intenta nuevamente."
+    }
+  },
+  "ejecutivo": {
+    "sidebar": {
+      "brand":    "Alfa Hospital",
+      "subtitle": "Call Center"
+    },
+    "nav": {
+      "patients": "Pacientes"
+    },
+    "patients": {
+      "title":              "Gestión de Pacientes",
+      "subtitle":           "Busca un paciente o registra uno nuevo para agendar una cita",
+      "new":                "Nuevo Paciente",
+      "search-placeholder": "Buscar por nombre o cédula...",
+      "search-btn":         "Buscar",
+      "search-error":       "Error al buscar pacientes",
+      "no-results":         "No se encontraron pacientes con esa búsqueda",
+      "register-new":       "Registrar como nuevo paciente",
+      "view":               "Ver perfil",
+      "estado": {
+        "active":   "Activo",
+        "guest":    "Invitado",
+        "inactive": "Inactivo"
+      },
+      "table": {
+        "name":    "Nombre",
+        "id":      "Cédula / Pasaporte",
+        "email":   "Correo",
+        "phone":   "Teléfono",
+        "status":  "Estado",
+        "actions": "Acciones"
+      },
+      "form": {
+        "title":                  "Registrar Paciente",
+        "first-name":             "Nombre",
+        "first-name-placeholder": "Ej: Juan",
+        "last-name":              "Apellido",
+        "last-name-placeholder":  "Ej: Pérez",
+        "email":                  "Correo electrónico",
+        "email-placeholder":      "Ej: juan@email.com",
+        "phone":                  "Teléfono",
+        "phone-placeholder":      "Ej: 0991234567",
+        "id-type":                "Tipo de documento",
+        "id-number":              "Número de documento",
+        "id-number-placeholder":  "Cédula o pasaporte",
+        "birth-date":             "Fecha de nacimiento",
+        "birth-day":              "Día",
+        "birth-month":            "Mes",
+        "birth-year":             "Año",
+        "city":                   "Ciudad",
+        "city-placeholder":       "Seleccionar ciudad...",
+        "gender":                 "Sexo",
+        "gender-placeholder":     "Seleccionar...",
+        "save":                   "Registrar paciente",
+        "error-first":            "El nombre es obligatorio",
+        "error-last":             "El apellido es obligatorio",
+        "error-email":            "El correo es obligatorio",
+        "error-id":               "El número de documento es obligatorio",
+        "error-birth":            "La fecha de nacimiento es obligatoria",
+        "error-city":             "La ciudad es obligatoria",
+        "error-gender":           "El sexo es obligatorio",
+        "error-save":             "Error al registrar el paciente"
+      }
+    },
+    "profile": {
+      "back":                "Volver a búsqueda",
+      "load-error":          "Error al cargar el perfil del paciente",
+      "cancel-success":      "Cita cancelada exitosamente",
+      "cancel-error":        "Error al cancelar la cita",
+      "book":                "Agendar cita",
+      "email":               "Correo",
+      "phone":               "Teléfono",
+      "id":                  "Documento",
+      "active-appointments": "Citas activas",
+      "no-active":           "No tiene citas activas",
+      "history":             "Historial de citas",
+      "no-history":          "No tiene historial de citas",
+      "cancel":              "Cancelar",
+      "table": {
+        "date":      "Fecha",
+        "time":      "Hora",
+        "doctor":    "Médico",
+        "specialty": "Especialidad",
+        "office":    "Consultorio",
+        "status":    "Estado",
+        "actions":   "Acciones"
+      }
     }
   },
   "common": {
@@ -333,7 +433,13 @@
       "noSpecialties": "No hay especialidades disponibles en este momento.",
       "selectDateTitle": "Elegir Fecha",
       "selectTimeTitle": "Horarios Disponibles",
-      "noAvailableTimes": "No hay disponibilidad para el día seleccionado."
+      "noAvailableTimes": "No hay disponibilidad para el día seleccionado.",
+      "status": {
+        "pendiente":  "Pendiente",
+        "confirmada": "Confirmada",
+        "completada": "Completada",
+        "cancelada":  "Cancelada"
+      }
     }
   },
   "admin": {
