@@ -151,6 +151,7 @@
   &--PENDIENTE  .apt-card__accent  { background: var(--color-status-pending); }
   &--CONFIRMADA .apt-card__accent  { background: var(--color-status-confirmed); }
   &--CANCELADA  .apt-card__accent  { background: var(--color-status-cancelled); }
+  &--NO_ASISTIO .apt-card__accent  { background: var(--color-text-muted); }
 
   &__body {
     display: flex;
@@ -281,6 +282,11 @@
       background: rgba(239, 68, 68, 0.12);
       color: var(--color-status-cancelled);
       border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    &--NO_ASISTIO {
+      background: rgba(107, 114, 128, 0.12);
+      color: var(--color-text-muted);
+      border: 1px solid rgba(107, 114, 128, 0.3);
     }
   }
 }
