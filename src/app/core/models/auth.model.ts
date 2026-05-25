@@ -10,8 +10,14 @@ export interface LoginResponse {
 }
 
 export interface ActivateAccountRequest {
-  email:    string;
+  token:    string;   // UUID extracted from URL query param
   password: string;
+}
+
+export interface ActivateAccountResponse {
+  email:  string;
+  role:   string;
+  status: string;
 }
 
 export interface RegisterRequest {

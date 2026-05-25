@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { CrearPacienteRequest, EjecutivoCitaItem, PacienteSearch } from '../../models/executive.model';
-import { ActivateAccountRequest, LoginResponse } from '../../models/auth.model';
+import { ActivateAccountRequest, ActivateAccountResponse } from '../../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExecutiveService {
@@ -33,8 +33,8 @@ export class ExecutiveService {
     return this._http.put<EjecutivoCitaItem>(`${this._agendUrl}/citas/${citaId}/cancelar-ejecutivo`, {});
   }
 
-  activateAccount(email: string, password: string): Observable<LoginResponse> {
-    const request: ActivateAccountRequest = { email, password };
-    return this._http.post<LoginResponse>(`${this._authUrl}/activate-account`, request);
+  activateAccount(token: string, password: string): Observable<ActivateAccountResponse> {
+    const request: ActivateAccountRequest = { token, password };
+    return this._http.post<ActivateAccountResponse>(`${this._authUrl}/activate-account`, request);
   }
 }
