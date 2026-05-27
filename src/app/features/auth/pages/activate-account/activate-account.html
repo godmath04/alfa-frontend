@@ -1,54 +1,80 @@
 <div class="activate-page">
-
   <div class="activate-page__card">
-    <div class="activate-page__icon">
-      <lucide-icon name="lock" [size]="32"></lucide-icon>
-    </div>
 
-    <h1 class="activate-page__title">{{ t.get('auth.activate.title') }}</h1>
-    <p class="activate-page__subtitle">{{ t.get('auth.activate.subtitle') }}</p>
+    @if (vm.success()) {
 
-    @if (_email()) {
-      <div class="activate-page__email">{{ _email() }}</div>
-    }
+      <!-- ── Success state ─────────────────────────────── -->
+      <div class="activate-page__icon activate-page__icon--success">
+        <lucide-icon name="check-circle-2" [size]="48"></lucide-icon>
+      </div>
+      <h1 class="activate-page__title">{{ t.get('auth.activate.success-title') }}</h1>
+      <p class="activate-page__subtitle">{{ t.get('auth.activate.success-subtitle') }}</p>
 
-    <div class="activate-page__field">
-      <label class="activate-page__label">{{ t.get('auth.activate.password') }}</label>
-      <div class="activate-page__input-wrap">
-        <input
-          class="activate-page__input"
-          [type]="_showPass() ? 'text' : 'password'"
-          [value]="_password()"
-          (input)="_password.set($any($event.target).value)"
-          [placeholder]="t.get('auth.activate.password-placeholder')" />
-        <button class="activate-page__eye" type="button" (click)="_togglePass()">
-          <lucide-icon [name]="_showPass() ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+      <button class="activate-page__btn" (click)="vm.goToLogin()">
+        {{ t.get('auth.activate.go-to-login') }}
+      </button>
+
+    } @else {
+
+      <!-- ── Form state ─────────────────────────────────── -->
+      <div class="activate-page__icon">
+        <lucide-icon name="lock" [size]="32"></lucide-icon>
+      </div>
+      <h1 class="activate-page__title">{{ t.get('auth.activate.title') }}</h1>
+      <p class="activate-page__subtitle">{{ t.get('auth.activate.subtitle') }}</p>
+
+      <form [formGroup]="activateForm" (ngSubmit)="_submit()">
+
+        <!-- Password field -->
+        <div class="activate-page__field">
+          <label class="activate-page__label">{{ t.get('auth.activate.password') }}</label>
+          <div class="activate-page__input-wrap">
+            <input
+              class="activate-page__input"
+              [class.activate-page__input--error]="passwordError"
+              [type]="_showPass() ? 'text' : 'password'"
+              formControlName="password"
+              [placeholder]="t.get('auth.activate.password-placeholder')" />
+            <button class="activate-page__eye" type="button" (click)="_togglePass()">
+              <lucide-icon [name]="_showPass() ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+            </button>
+          </div>
+          @if (passwordError) {
+            <span class="activate-page__field-error">{{ passwordError }}</span>
+          }
+        </div>
+
+        <!-- Confirm password field -->
+        <div class="activate-page__field">
+          <label class="activate-page__label">{{ t.get('auth.activate.confirm') }}</label>
+          <div class="activate-page__input-wrap">
+            <input
+              class="activate-page__input"
+              [class.activate-page__input--error]="confirmError"
+              [type]="_showPass() ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              [placeholder]="t.get('auth.activate.confirm-placeholder')" />
+          </div>
+          @if (confirmError) {
+            <span class="activate-page__field-error">{{ confirmError }}</span>
+          }
+        </div>
+
+        <!-- Server-side HTTP error -->
+        @if (vm.error()) {
+          <p class="activate-page__error">{{ vm.error() }}</p>
+        }
+
+        <button class="activate-page__btn" type="submit" [disabled]="vm.loading()">
+          @if (vm.loading()) {
+            <lucide-icon name="loader-circle" [size]="18" class="activate-page__spinner"></lucide-icon>
+          }
+          {{ t.get('auth.activate.submit') }}
         </button>
-      </div>
-    </div>
 
-    <div class="activate-page__field">
-      <label class="activate-page__label">{{ t.get('auth.activate.confirm') }}</label>
-      <div class="activate-page__input-wrap">
-        <input
-          class="activate-page__input"
-          [type]="_showPass() ? 'text' : 'password'"
-          [value]="_confirm()"
-          (input)="_confirm.set($any($event.target).value)"
-          [placeholder]="t.get('auth.activate.confirm-placeholder')" />
-      </div>
-    </div>
+      </form>
 
-    @if (_error()) {
-      <p class="activate-page__error">{{ _error() }}</p>
     }
 
-    <button class="activate-page__btn" (click)="_submit()" [disabled]="_loading()">
-      @if (_loading()) {
-        <lucide-icon name="loader-circle" [size]="18" class="activate-page__spinner"></lucide-icon>
-      }
-      {{ t.get('auth.activate.submit') }}
-    </button>
   </div>
-
 </div>

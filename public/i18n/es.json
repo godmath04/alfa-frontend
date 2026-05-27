@@ -142,13 +142,16 @@
       "title":                "Crea tu contraseña",
       "subtitle":             "El hospital ya registró tu información. Crea una contraseña para acceder al portal cuando quieras.",
       "password":             "Nueva contraseña",
-      "password-placeholder": "Mínimo 6 caracteres",
+      "password-placeholder": "Mínimo 8 caracteres",
       "confirm":              "Confirmar contraseña",
       "confirm-placeholder":  "Repite tu contraseña",
       "submit":               "Activar mi cuenta",
       "error-length":         "La contraseña debe tener al menos 6 caracteres",
       "error-match":          "Las contraseñas no coinciden",
-      "error-generic":        "Ocurrió un error al activar tu cuenta. Intenta nuevamente."
+      "error-generic":        "Ocurrió un error al activar tu cuenta. Intenta nuevamente.",
+      "success-title":        "¡Cuenta activada exitosamente!",
+      "success-subtitle":     "Ya puedes iniciar sesión con tu nueva contraseña.",
+      "go-to-login":          "Ir a iniciar sesión"
     }
   },
   "ejecutivo": {
@@ -329,7 +332,8 @@
         "PENDIENTE": "Pendiente",
         "CONFIRMADA": "Confirmada",
         "COMPLETADA": "Completada",
-        "CANCELADA": "Cancelada"
+        "CANCELADA": "Cancelada",
+        "NO_ASISTIO": "No asistió"
       },
       "noResults": "No se encontraron citas con los filtros seleccionados.",
       "errorLoading": "Ocurrió un error al cargar las citas. Por favor intenta de nuevo.",
@@ -871,7 +875,8 @@
         "PENDIENTE":  "Pendiente",
         "CONFIRMADA": "Confirmada",
         "COMPLETADA": "Completada",
-        "CANCELADA":  "Cancelada"
+        "CANCELADA":  "Cancelada",
+        "NO_ASISTIO": "No asistió"
       }
     }
   }
