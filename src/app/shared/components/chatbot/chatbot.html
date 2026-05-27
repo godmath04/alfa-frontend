@@ -1,0 +1,103 @@
+<!-- Botón flotante FAB — solo se renderiza si el usuario está autenticado -->
+@if (vm.isAuthenticated()) {
+  <button
+    id="chatbot-fab"
+    class="chatbot-fab"
+    (click)="vm.togglePanel()"
+    [attr.aria-label]="vm.isOpen() ? 'Cerrar chat' : 'Abrir chat Alfa'"
+  >
+    @if (vm.isOpen()) {
+      <lucide-icon name="x" [size]="24" />
+    } @else {
+      <lucide-icon name="message-circle" [size]="24" />
+    }
+  </button>
+
+  <!-- Panel del Chatbot -->
+  @if (vm.isOpen()) {
+    <div class="chatbot-panel" role="dialog" aria-label="Asistente Alfa">
+      <!-- Encabezado -->
+      <div class="chatbot-header">
+        <div class="chatbot-header__info">
+          <div class="chatbot-header__avatar">A</div>
+          <div>
+            <p class="chatbot-header__name">Alfa</p>
+            <p class="chatbot-header__status">Asistente Virtual</p>
+          </div>
+        </div>
+        <button
+          class="chatbot-header__close"
+          (click)="vm.clearSession()"
+          title="Nueva conversación"
+          aria-label="Nueva conversación"
+        >
+          <lucide-icon name="trash-2" [size]="16" />
+        </button>
+      </div>
+
+      <!-- Contenedor de mensajes -->
+      <div class="chatbot-messages" #messagesContainer>
+        <!-- Mensaje de bienvenida -->
+        @if (vm.messages().length === 0) {
+          <div class="chatbot-welcome">
+            <p>¡Hola! Soy <strong>Alfa</strong>, tu asistente virtual del Hospital Alfa.</p>
+            <p>¿En qué puedo ayudarte hoy? Recuerda que puedo asistirte con agendamientos y consultas hospitalarias.</p>
+          </div>
+        }
+
+        <!-- Historial de mensajes -->
+        @for (msg of vm.messages(); track trackMessage($index, msg)) {
+          <div
+            class="chatbot-message"
+            [class.chatbot-message--user]="msg.role === 'user'"
+            [class.chatbot-message--bot]="msg.role === 'bot'"
+          >
+            <div class="chatbot-message__bubble">
+              @if (msg.role === 'bot') {
+                <!-- Renderiza el Markdown de forma segura -->
+                <markdown [data]="msg.content" />
+              } @else {
+                {{ msg.content }}
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Indicador de que Alfa está escribiendo -->
+        @if (vm.isLoading()) {
+          <div class="chatbot-message chatbot-message--bot">
+            <div class="chatbot-message__bubble chatbot-message__bubble--typing">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Input de Texto y botón de envío -->
+      <div class="chatbot-input-area">
+        <textarea
+          id="chatbot-input"
+          class="chatbot-input"
+          placeholder="Escribe tu mensaje..."
+          rows="1"
+          [value]="vm.inputText()"
+          [disabled]="vm.isLoading()"
+          (input)="vm.updateInput($any($event.target).value)"
+          (keydown)="onKeyDown($event)"
+          aria-label="Campo de mensaje"
+        ></textarea>
+        <button
+          id="chatbot-send"
+          class="chatbot-send-btn"
+          [disabled]="!vm.canSend()"
+          (click)="vm.sendMessage()"
+          aria-label="Enviar mensaje"
+        >
+          <lucide-icon name="arrow-right" [size]="18" />
+        </button>
+      </div>
+    </div>
+  }
+}
