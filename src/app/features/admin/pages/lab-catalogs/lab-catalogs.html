@@ -1,0 +1,378 @@
+<div class="res-page">
+
+  <!-- ─── Header ──────────────────────────────────────── -->
+  <div class="res-page__header">
+    <div class="res-page__title-group">
+      <h1 class="res-page__title">{{ t.get('lab.catalogs.title') }}</h1>
+      <p class="res-page__subtitle">{{ t.get('lab.catalogs.subtitle') }}</p>
+    </div>
+    @if (!_formVisible()) {
+      <button class="res-page__add-btn" (click)="_openCreate()">
+        <lucide-icon name="plus" [size]="18"></lucide-icon>
+        {{ t.get('lab.catalogs.add') }}
+      </button>
+    }
+  </div>
+
+  <!-- ─── Tabs ─────────────────────────────────────────── -->
+  <div class="res-page__tabs">
+    <button class="res-page__tab" [class.res-page__tab--active]="_activeTab() === 'laboratories'"
+            (click)="_switchTab('laboratories')">
+      <lucide-icon name="microscope" [size]="18"></lucide-icon>
+      {{ t.get('lab.catalogs.tabs.laboratories') }}
+    </button>
+    <button class="res-page__tab" [class.res-page__tab--active]="_activeTab() === 'studyTypes'"
+            (click)="_switchTab('studyTypes')">
+      <lucide-icon name="flask-conical" [size]="18"></lucide-icon>
+      {{ t.get('lab.catalogs.tabs.studyTypes') }}
+    </button>
+    <button class="res-page__tab" [class.res-page__tab--active]="_activeTab() === 'insuranceTypes'"
+            (click)="_switchTab('insuranceTypes')">
+      <lucide-icon name="shield" [size]="18"></lucide-icon>
+      {{ t.get('lab.catalogs.tabs.insuranceTypes') }}
+    </button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════
+       FORM CARD
+       ════════════════════════════════════════════════════ -->
+  @if (_formVisible()) {
+    <div class="res-page__form-card">
+      <h3 class="res-page__form-title">
+        {{ _editingId() !== null ? t.get('lab.catalogs.edit') : t.get('lab.catalogs.new') }}
+      </h3>
+
+      <!-- StudyType / InsuranceType fields -->
+      @if (_activeTab() === 'studyTypes' || _activeTab() === 'insuranceTypes') {
+        <div class="res-page__form-grid">
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('lab.catalogs.fields.name') }} *</label>
+            <input class="res-page__input" type="text"
+                   [placeholder]="t.get('lab.catalogs.fields.namePlaceholder')"
+                   [value]="_fname()"
+                   (input)="_fname.set($any($event.target).value)" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('lab.catalogs.fields.description') }}</label>
+            <input class="res-page__input" type="text"
+                   [placeholder]="t.get('lab.catalogs.fields.descriptionPlaceholder')"
+                   [value]="_fdescription()"
+                   (input)="_fdescription.set($any($event.target).value)" />
+          </div>
+        </div>
+      }
+
+      <!-- Laboratory fields -->
+      @if (_activeTab() === 'laboratories') {
+        <div class="res-page__form-grid">
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('lab.catalogs.fields.labNumber') }} *</label>
+            <input class="res-page__input" type="text"
+                   [placeholder]="t.get('lab.catalogs.fields.labNumberPlaceholder')"
+                   [value]="_labNumber()"
+                   (input)="_labNumber.set($any($event.target).value)" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('lab.catalogs.fields.labName') }} *</label>
+            <input class="res-page__input" type="text"
+                   [placeholder]="t.get('lab.catalogs.fields.labNamePlaceholder')"
+                   [value]="_labName()"
+                   (input)="_labName.set($any($event.target).value)" />
+          </div>
+          <div class="res-page__field">
+            <label class="res-page__label">{{ t.get('lab.catalogs.fields.floor') }}</label>
+            <input class="res-page__input" type="text"
+                   [placeholder]="t.get('lab.catalogs.fields.floorPlaceholder')"
+                   [value]="_labFloor()"
+                   (input)="_labFloor.set($any($event.target).value)" />
+          </div>
+        </div>
+
+        <!-- Schedule management (only when editing an existing lab) -->
+        @if (_editingId() !== null) {
+          <div class="res-page__sched-section">
+            <p class="res-page__sched-title">{{ t.get('lab.catalogs.scheduleForm.title') }}</p>
+
+            <!-- Existing schedules -->
+            @if (_editingLab()?.schedules?.length) {
+              <div class="schedule-chips">
+                @for (sch of _editingLab()!.schedules; track sch.id) {
+                  <span class="schedule-chip">
+                    {{ dayName(sch.dayOfWeek) }} {{ sch.startTime.slice(0,5) }}–{{ sch.endTime.slice(0,5) }}
+                    <button class="schedule-chip__del" (click)="_deleteSchedule(_editingId()!, sch.id)"
+                            [title]="t.get('lab.catalogs.actions.deleteSchedule')">
+                      <lucide-icon name="x" [size]="12"></lucide-icon>
+                    </button>
+                  </span>
+                }
+              </div>
+            }
+
+            <!-- Day toggles -->
+            <p class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.day') }} *</p>
+            <div class="res-page__day-toggles">
+              @for (d of _DAYS; track d.value) {
+                <button type="button" class="res-page__day-toggle"
+                        [class.res-page__day-toggle--selected]="_isSchedDaySelected(d.value)"
+                        (click)="_toggleSchedDay(d.value)">
+                  {{ d.short }}
+                </button>
+              }
+            </div>
+
+            <!-- Time inputs + slot -->
+            <div class="res-page__form-grid">
+              <div class="res-page__field">
+                <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.start') }} *</label>
+                <input class="res-page__input" type="time" [value]="_schedStart()"
+                       (input)="_schedStart.set($any($event.target).value)" />
+              </div>
+              <div class="res-page__field">
+                <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.end') }} *</label>
+                <input class="res-page__input" type="time" [value]="_schedEnd()"
+                       (input)="_schedEnd.set($any($event.target).value)" />
+              </div>
+              <div class="res-page__field">
+                <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.slot') }}</label>
+                <select class="res-page__input res-page__select" [value]="_schedSlot()"
+                        (change)="_schedSlot.set(+$any($event.target).value)">
+                  <option value="15">15 min</option>
+                  <option value="30">30 min</option>
+                  <option value="45">45 min</option>
+                  <option value="60">60 min</option>
+                </select>
+              </div>
+            </div>
+
+            @if (_schedError()) {
+              <p class="res-page__form-error">{{ _schedError() }}</p>
+            }
+
+            <div class="res-page__sched-actions">
+              <button class="res-page__btn res-page__btn--primary" type="button"
+                      (click)="_addSchedule()" [disabled]="_schedSaving()">
+                <lucide-icon name="clock-plus" [size]="16"></lucide-icon>
+                {{ t.get('lab.catalogs.actions.addSchedule') }}
+              </button>
+            </div>
+          </div>
+        }
+      }
+
+      @if (_formError()) {
+        <p class="res-page__form-error">{{ _formError() }}</p>
+      }
+
+      <div class="res-page__form-actions">
+        <button class="res-page__btn res-page__btn--ghost" (click)="_cancel()">
+          <lucide-icon name="x" [size]="16"></lucide-icon>
+          {{ t.get('common.buttons.cancel') }}
+        </button>
+        <button class="res-page__btn res-page__btn--primary" (click)="_save()">
+          {{ t.get('common.buttons.save') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ════════════════════════════════════════════════════
+       TAB CONTENT
+       ════════════════════════════════════════════════════ -->
+  @if (_loading()) {
+    <div class="res-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="res-page__spinner"></lucide-icon>
+      <span>{{ t.get('lab.catalogs.loading') }}</span>
+    </div>
+  } @else if (_listError()) {
+    <div class="res-page__state res-page__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ t.get(_listError()!) }}</span>
+    </div>
+  } @else {
+
+    <!-- ── Study Types ── -->
+    @if (_activeTab() === 'studyTypes') {
+      <div class="res-page__card">
+        @if (_studyTypes().length === 0) {
+          <div class="res-page__state">
+            <lucide-icon name="flask-conical" [size]="40"></lucide-icon>
+            <span>{{ t.get('lab.catalogs.empty') }}</span>
+          </div>
+        } @else {
+          <table class="res-page__table">
+            <thead class="res-page__thead">
+              <tr>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.name') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.description') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.status') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (st of _studyTypes(); track st.id) {
+                <tr class="res-page__row" [class.res-page__row--inactive]="!st.active">
+                  <td class="res-page__td res-page__td--name">{{ st.name }}</td>
+                  <td class="res-page__td res-page__td--muted">{{ st.description ?? '—' }}</td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge"
+                          [class.res-page__badge--active]="st.active"
+                          [class.res-page__badge--inactive]="!st.active">
+                      {{ st.active ? t.get('lab.catalogs.status.active') : t.get('lab.catalogs.status.inactive') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <div class="res-page__actions">
+                      <button class="res-page__action-btn res-page__action-btn--edit"
+                              (click)="_openEditStudyType(st)" [title]="t.get('lab.catalogs.actions.edit')">
+                        <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                      </button>
+                      @if (st.active) {
+                        <button class="res-page__action-btn res-page__action-btn--deactivate"
+                                (click)="_toggleStudyType(st)" [title]="t.get('lab.catalogs.actions.deactivate')">
+                          <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                        </button>
+                      } @else {
+                        <button class="res-page__action-btn res-page__action-btn--reactivate"
+                                (click)="_toggleStudyType(st)" [title]="t.get('lab.catalogs.actions.reactivate')">
+                          <lucide-icon name="circle-check" [size]="15"></lucide-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+
+    <!-- ── Insurance Types ── -->
+    @if (_activeTab() === 'insuranceTypes') {
+      <div class="res-page__card">
+        @if (_insuranceTypes().length === 0) {
+          <div class="res-page__state">
+            <lucide-icon name="shield" [size]="40"></lucide-icon>
+            <span>{{ t.get('lab.catalogs.empty') }}</span>
+          </div>
+        } @else {
+          <table class="res-page__table">
+            <thead class="res-page__thead">
+              <tr>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.name') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.description') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.status') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (it of _insuranceTypes(); track it.id) {
+                <tr class="res-page__row" [class.res-page__row--inactive]="!it.active">
+                  <td class="res-page__td res-page__td--name">{{ it.name }}</td>
+                  <td class="res-page__td res-page__td--muted">{{ it.description ?? '—' }}</td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge"
+                          [class.res-page__badge--active]="it.active"
+                          [class.res-page__badge--inactive]="!it.active">
+                      {{ it.active ? t.get('lab.catalogs.status.active') : t.get('lab.catalogs.status.inactive') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <div class="res-page__actions">
+                      <button class="res-page__action-btn res-page__action-btn--edit"
+                              (click)="_openEditInsuranceType(it)" [title]="t.get('lab.catalogs.actions.edit')">
+                        <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                      </button>
+                      @if (it.active) {
+                        <button class="res-page__action-btn res-page__action-btn--deactivate"
+                                (click)="_toggleInsuranceType(it)" [title]="t.get('lab.catalogs.actions.deactivate')">
+                          <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                        </button>
+                      } @else {
+                        <button class="res-page__action-btn res-page__action-btn--reactivate"
+                                (click)="_toggleInsuranceType(it)" [title]="t.get('lab.catalogs.actions.reactivate')">
+                          <lucide-icon name="circle-check" [size]="15"></lucide-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+
+    <!-- ── Laboratories ── -->
+    @if (_activeTab() === 'laboratories') {
+      <div class="res-page__card">
+        @if (_laboratories().length === 0) {
+          <div class="res-page__state">
+            <lucide-icon name="microscope" [size]="40"></lucide-icon>
+            <span>{{ t.get('lab.catalogs.empty') }}</span>
+          </div>
+        } @else {
+          <table class="res-page__table">
+            <thead class="res-page__thead">
+              <tr>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.labNumber') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.labName') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.floor') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.schedules') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.status') }}</th>
+                <th class="res-page__th">{{ t.get('lab.catalogs.table.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (lab of _laboratories(); track lab.id) {
+                <tr class="res-page__row" [class.res-page__row--inactive]="!lab.active">
+                  <td class="res-page__td res-page__td--name">{{ lab.number }}</td>
+                  <td class="res-page__td">{{ lab.name }}</td>
+                  <td class="res-page__td res-page__td--muted">{{ lab.floor ?? '—' }}</td>
+                  <td class="res-page__td">
+                    <div class="schedule-chips">
+                      @for (sch of lab.schedules; track sch.id) {
+                        <span class="schedule-chip">
+                          {{ dayName(sch.dayOfWeek) }} {{ sch.startTime.slice(0,5) }}–{{ sch.endTime.slice(0,5) }}
+                        </span>
+                      }
+                    </div>
+                  </td>
+                  <td class="res-page__td">
+                    <span class="res-page__badge"
+                          [class.res-page__badge--active]="lab.active"
+                          [class.res-page__badge--inactive]="!lab.active">
+                      {{ lab.active ? t.get('lab.catalogs.status.active') : t.get('lab.catalogs.status.inactive') }}
+                    </span>
+                  </td>
+                  <td class="res-page__td">
+                    <div class="res-page__actions">
+                      <button class="res-page__action-btn res-page__action-btn--edit"
+                              (click)="_openEditLab(lab)" [title]="t.get('lab.catalogs.actions.edit')">
+                        <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                      </button>
+                      @if (lab.active) {
+                        <button class="res-page__action-btn res-page__action-btn--deactivate"
+                                (click)="_toggleLab(lab)" [title]="t.get('lab.catalogs.actions.deactivate')">
+                          <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                        </button>
+                      } @else {
+                        <button class="res-page__action-btn res-page__action-btn--reactivate"
+                                (click)="_toggleLab(lab)" [title]="t.get('lab.catalogs.actions.reactivate')">
+                          <lucide-icon name="circle-check" [size]="15"></lucide-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+
+  }
+
+</div>

@@ -160,7 +160,8 @@
       "subtitle": "Call Center"
     },
     "nav": {
-      "patients": "Pacientes"
+      "patients":      "Pacientes",
+      "labManagement": "Gestión Lab"
     },
     "patients": {
       "title":              "Gestión de Pacientes",
@@ -223,6 +224,7 @@
       "cancel-success":      "Cita cancelada exitosamente",
       "cancel-error":        "Error al cancelar la cita",
       "book":                "Agendar cita",
+      "bookLab":             "Agendar Lab",
       "email":               "Correo",
       "phone":               "Teléfono",
       "id":                  "Documento",
@@ -271,6 +273,33 @@
       "invalid-password": "La contraseña debe tener al menos una mayúscula, minúscula y un carácter especial",
       "min-password": "Mínimo 8 caracteres",
       "invalid-phone": "Número de teléfono inválido"
+    },
+    "labManagement": {
+      "title": "Gestión de Citas de Laboratorio",
+      "errorLoading": "Error al cargar las citas",
+      "noResults": "No hay citas con los filtros seleccionados",
+      "guest": "Invitado",
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "filters": {
+        "all":        "Todos los estados",
+        "fechaDesde": "Desde",
+        "fechaHasta":  "Hasta",
+        "apply":      "Buscar"
+      },
+      "table": {
+        "patient":  "Paciente",
+        "lab":      "Laboratorio",
+        "dateTime": "Fecha / Hora",
+        "study":    "Tipo de estudio",
+        "status":   "Estado",
+        "actions":  "Acciones"
+      },
+      "actions": {
+        "complete": "Completar",
+        "cancel":   "Cancelar",
+        "upload":   "Subir Resultado"
+      }
     }
   },
   "profile": {
@@ -303,7 +332,9 @@
       "profile": "Mi Perfil",
       "appointments": "Agendar Cita",
       "myAppointments": "Mis Citas",
-      "lab": "Laboratorio",
+      "lab":        "Agendar Lab",
+      "misLabCitas": "Mis Citas Lab",
+      "labResults": "Mis Resultados Lab",
       "logout": "Cerrar sesión"
     },
     "dashboard": {
@@ -460,6 +491,7 @@
       "users":          "Usuarios",
       "config":         "Configuración",
       "notifications":  "Notificaciones",
+      "labCatalogs":    "Catálogos de Lab",
       "logout":         "Cerrar sesión"
     },
     "config": {
@@ -802,6 +834,7 @@
       "agenda":     "Citas del Día",
       "calendario": "Mi Calendario",
       "horarios":   "Mis Horarios",
+      "labResults": "Resultados de Laboratorio",
       "logout":     "Cerrar sesión"
     },
     "horarios": {
@@ -878,6 +911,217 @@
         "CANCELADA":  "Cancelada",
         "NO_ASISTIO": "No asistió"
       }
+    }
+  },
+  "lab": {
+    "appointments": {
+      "title":        "Mis Citas de Laboratorio",
+      "upcoming":     "Citas pendientes",
+      "past":         "Historial",
+      "noResults":    "No tienes citas de laboratorio registradas",
+      "errorLoading": "Error al cargar tus citas",
+      "cancel":       "Cancelar",
+      "cancelError":  "No se pudo cancelar la cita. Recuerda que debes cancelar con al menos 24h de anticipación.",
+      "prev":         "Anterior",
+      "next":         "Siguiente",
+      "status": {
+        "pendiente":  "Pendiente",
+        "completada": "Completada",
+        "cancelada":  "Cancelada"
+      }
+    },
+    "booking": {
+      "title":    "Agendar Cita de Laboratorio",
+      "subtitle": "Selecciona el laboratorio, fecha, horario y tipo de estudio",
+      "steps": {
+        "lab":     "Laboratorio",
+        "slot":    "Fecha y Hora",
+        "details": "Detalles",
+        "voucher": "Comprobante"
+      },
+      "noLabs":         "No hay laboratorios disponibles en este momento.",
+      "labNumber":      "N°",
+      "floor":          "Piso",
+      "selectDate":     "Seleccionar Fecha",
+      "selectTime":     "Horarios Disponibles",
+      "noSlots":        "No hay horarios disponibles para este día.",
+      "studyType":      "Tipo de Estudio",
+      "selectStudyType": "Seleccionar tipo de estudio...",
+      "insuranceType":  "Seguro / Convenio",
+      "selectInsuranceType": "Seleccionar seguro...",
+      "observations":   "Observaciones",
+      "observationsPlaceholder": "Notas adicionales para el laboratorio...",
+      "lab":            "Laboratorio",
+      "date":           "Fecha",
+      "time":           "Hora",
+      "confirming":     "Confirmando...",
+      "confirmButton":  "Confirmar Cita",
+      "voucher": {
+        "title":      "¡Cita de laboratorio agendada!",
+        "subtitle":   "Guarda esta información para tu visita",
+        "lab":        "Laboratorio",
+        "study":      "Tipo de Estudio",
+        "date":       "Fecha",
+        "time":       "Hora",
+        "status":     "Estado",
+        "patient":    "Paciente",
+        "newBooking": "Agendar otra cita",
+        "dashboard":  "Ir al inicio"
+      },
+      "guest": {
+        "modePatient":  "Paciente Registrado",
+        "modeGuest":    "Paciente Invitado",
+        "nombre":       "Nombre",
+        "apellido":     "Apellido",
+        "email":        "Correo Electrónico",
+        "phone":        "Teléfono",
+        "idNumber":     "Cédula / Pasaporte",
+        "requiredFields": "Todos los campos del paciente invitado son obligatorios"
+      },
+      "executive": {
+        "title":         "Agendar Cita de Laboratorio",
+        "subtitle":      "Agenda una cita de laboratorio para el paciente",
+        "backToProfile": "Volver al perfil"
+      }
+    },
+    "results": {
+      "title":       "Mis Resultados de Laboratorio",
+      "noResults":   "No tienes resultados de laboratorio aún.",
+      "errorLoading":"Error al cargar los resultados. Intenta de nuevo.",
+      "download":    "Descargar PDF",
+      "statuses": {
+        "PENDIENTE":  "Pendiente",
+        "DISPONIBLE": "Disponible",
+        "CANCELADA":  "Cancelada"
+      }
+    },
+    "guest": {
+      "brand":        "Alfa Hospital",
+      "title":        "Portal de Resultados de Laboratorio",
+      "subtitle":     "Accede a tu resultado de laboratorio con tu enlace personal",
+      "loading":      "Cargando resultado...",
+      "errorTitle":   "No se pudo cargar el resultado",
+      "invalidToken": "El enlace de acceso no es válido.",
+      "notFound":     "El resultado no fue encontrado o el enlace ha expirado.",
+      "study":        "Tipo de Estudio",
+      "lab":          "Laboratorio",
+      "date":         "Fecha de Cita",
+      "time":         "Hora",
+      "status":       "Estado",
+      "file":         "Archivo",
+      "download":     "Descargar PDF",
+      "downloadFailed": "No se pudo descargar el archivo. Intenta de nuevo.",
+      "pendingNote":  "Tu resultado estará disponible próximamente. Recibirás un correo cuando esté listo.",
+      "disclaimer":   "Este enlace es personal e intransferible. Expira 7 días después de ser emitido."
+    },
+    "upload": {
+      "title":          "Subir Resultado de Laboratorio",
+      "subtitle":       "Sube el PDF del resultado para la cita",
+      "citaId":         "Cita ID",
+      "dropzone":       "Arrastra el PDF aquí o haz clic para seleccionarlo",
+      "browse":         "Seleccionar archivo",
+      "pdfOnly":        "Solo se aceptan archivos PDF.",
+      "uploading":      "Subiendo...",
+      "uploadBtn":      "Subir Resultado",
+      "error":          "Error al subir el resultado. Intenta de nuevo.",
+      "successTitle":   "¡Resultado subido exitosamente!",
+      "successSubtitle":"El resultado ya está disponible para el paciente.",
+      "resendTitle":    "Reenviar Token de Acceso",
+      "resendDesc":     "Este resultado corresponde a un paciente invitado. Puedes reenviar el enlace de acceso.",
+      "resendBtn":      "Reenviar Token",
+      "resendSuccess":  "Token reenviado exitosamente al correo del paciente.",
+      "resendError":    "Error al reenviar el token. Intenta de nuevo."
+    },
+    "medico": {
+      "title":           "Resultados de Laboratorio de Pacientes",
+      "subtitle":        "Busca resultados por correo electrónico o número de documento",
+      "emailLabel":      "Correo del paciente",
+      "emailPlaceholder":"paciente@correo.com",
+      "or":              "ó",
+      "idLabel":         "Cédula / Pasaporte",
+      "idPlaceholder":   "Número de documento",
+      "searchBtn":       "Buscar",
+      "searchRequired":  "Ingresa un correo o número de documento para buscar.",
+      "searchError":     "Error al realizar la búsqueda. Intenta de nuevo.",
+      "noResults":       "No se encontraron resultados para esta búsqueda.",
+      "table": {
+        "patient": "Paciente",
+        "study":   "Tipo de Estudio",
+        "lab":     "Laboratorio",
+        "date":    "Fecha",
+        "status":  "Estado",
+        "actions": "Acciones"
+      }
+    },
+    "catalogs": {
+      "title":    "Catálogos de Laboratorio",
+      "subtitle": "Administra tipos de estudio, seguros y laboratorios",
+      "add":      "Agregar",
+      "new":      "Nuevo Registro",
+      "edit":     "Editar Registro",
+      "loading":  "Cargando...",
+      "empty":    "No hay registros.",
+      "loadError":"Error al cargar los datos. Intenta de nuevo.",
+      "saveError":"Error al guardar. Verifica los datos e intenta de nuevo.",
+      "tabs": {
+        "studyTypes":    "Tipos de Estudio",
+        "insuranceTypes":"Seguros / Convenios",
+        "laboratories":  "Laboratorios"
+      },
+      "fields": {
+        "name":                "Nombre",
+        "namePlaceholder":     "Ej: Hemograma Completo",
+        "description":         "Descripción",
+        "descriptionPlaceholder": "Descripción opcional",
+        "labNumber":           "Número",
+        "labNumberPlaceholder":"Ej: LAB-01",
+        "labName":             "Nombre",
+        "labNamePlaceholder":  "Ej: Laboratorio Central",
+        "floor":               "Piso",
+        "floorPlaceholder":    "Ej: PB"
+      },
+      "table": {
+        "name":        "Nombre",
+        "description": "Descripción",
+        "labNumber":   "Número",
+        "labName":     "Nombre del Laboratorio",
+        "floor":       "Piso",
+        "schedules":   "Horarios",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "status": {
+        "active":   "Activo",
+        "inactive": "Inactivo"
+      },
+      "actions": {
+        "edit":           "Editar",
+        "deactivate":     "Desactivar",
+        "reactivate":     "Reactivar",
+        "addSchedule":    "Agregar Horario",
+        "deleteSchedule": "Eliminar Horario"
+      },
+      "scheduleForm": {
+        "title": "Agregar Horario de Atención",
+        "day":   "Día de la Semana",
+        "start": "Hora de Inicio",
+        "end":   "Hora de Fin",
+        "slot":  "Duración del Turno (min)"
+      },
+      "validation": {
+        "nameRequired":        "El nombre es obligatorio",
+        "labNumberRequired":   "El número de laboratorio es obligatorio",
+        "labNameRequired":     "El nombre del laboratorio es obligatorio",
+        "scheduleRequired":    "Selecciona día, hora de inicio y hora de fin"
+      }
+    },
+    "errors": {
+      "loadLabs":       "No se pudieron cargar los laboratorios.",
+      "loadSlots":      "No se pudieron cargar los horarios disponibles.",
+      "loadCatalogs":   "No se pudieron cargar los catálogos.",
+      "loadResults":    "No se pudieron cargar los resultados.",
+      "createFailed":   "No se pudo crear la cita. Intenta de nuevo.",
+      "downloadFailed": "No se pudo descargar el archivo."
     }
   }
 }
