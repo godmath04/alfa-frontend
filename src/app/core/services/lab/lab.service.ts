@@ -114,6 +114,11 @@ export class LabService {
       `${this.api}/api/laboratorio/resultados/${citaId}/subir`, fd);
   }
 
+  getDownloadUrlByCitaId(citaId: number): Observable<{ downloadUrl: string }> {
+    return this._http.get<{ downloadUrl: string }>(
+      `${this.api}/api/laboratorio/resultados/cita/${citaId}/descargar`);
+  }
+
   reenviarToken(citaId: number): Observable<GuestResult> {
     return this._http.post<GuestResult>(
       `${this.api}/api/laboratorio/resultados/${citaId}/reenviar-token`, {});

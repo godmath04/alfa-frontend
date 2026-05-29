@@ -242,6 +242,34 @@
         "status":    "Estado",
         "actions":   "Acciones"
       }
+    },
+    "labManagement": {
+      "title": "Gestión de Citas de Laboratorio",
+      "errorLoading": "Error al cargar las citas",
+      "noResults": "No hay citas con los filtros seleccionados",
+      "guest": "Invitado",
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "filters": {
+        "all":        "Todos los estados",
+        "fechaDesde": "Desde",
+        "fechaHasta": "Hasta",
+        "apply":      "Buscar"
+      },
+      "table": {
+        "patient":  "Paciente",
+        "lab":      "Laboratorio",
+        "dateTime": "Fecha / Hora",
+        "study":    "Tipo de estudio",
+        "status":   "Estado",
+        "actions":  "Acciones"
+      },
+      "actions": {
+        "complete":  "Completar",
+        "cancel":    "Cancelar",
+        "upload":    "Subir Resultado",
+        "download":  "Ver Resultado"
+      }
     }
   },
   "common": {
@@ -273,33 +301,6 @@
       "invalid-password": "La contraseña debe tener al menos una mayúscula, minúscula y un carácter especial",
       "min-password": "Mínimo 8 caracteres",
       "invalid-phone": "Número de teléfono inválido"
-    },
-    "labManagement": {
-      "title": "Gestión de Citas de Laboratorio",
-      "errorLoading": "Error al cargar las citas",
-      "noResults": "No hay citas con los filtros seleccionados",
-      "guest": "Invitado",
-      "prev": "Anterior",
-      "next": "Siguiente",
-      "filters": {
-        "all":        "Todos los estados",
-        "fechaDesde": "Desde",
-        "fechaHasta":  "Hasta",
-        "apply":      "Buscar"
-      },
-      "table": {
-        "patient":  "Paciente",
-        "lab":      "Laboratorio",
-        "dateTime": "Fecha / Hora",
-        "study":    "Tipo de estudio",
-        "status":   "Estado",
-        "actions":  "Acciones"
-      },
-      "actions": {
-        "complete": "Completar",
-        "cancel":   "Cancelar",
-        "upload":   "Subir Resultado"
-      }
     }
   },
   "profile": {
