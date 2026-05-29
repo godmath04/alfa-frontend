@@ -1,0 +1,250 @@
+<div class="wizard">
+
+  <!-- Header + Stepper -->
+  <div class="wizard__header">
+    <h1 class="wizard__title">{{ t.get('lab.booking.title') }}</h1>
+    <p class="wizard__subtitle">{{ t.get('lab.booking.subtitle') }}</p>
+    <div class="wizard__steps">
+      @for (key of _stepLabels; track $index; let i = $index) {
+        <div class="wizard__step"
+             [class.wizard__step--active]="_currentStep === i + 1"
+             [class.wizard__step--done]="_currentStep > i + 1">
+          <div class="wizard__step-circle">
+            @if (_currentStep <= i + 1) { <span>{{ i + 1 }}</span> }
+            @if (_currentStep > i + 1)  { <lucide-icon name="check" [size]="16"></lucide-icon> }
+          </div>
+          <span class="wizard__step-label">{{ t.get(key) }}</span>
+        </div>
+        @if (i < _stepLabels.length - 1) {
+          <div class="wizard__step-line" [class.wizard__step-line--done]="_currentStep > i + 1"></div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="wizard__body">
+
+    <!-- ══ STEP 1: Select lab ══════════════════════════ -->
+    @if (_currentStep === 1) {
+      <section class="step-section">
+        <h2 class="step-section__title">{{ t.get('lab.booking.steps.lab') }}</h2>
+
+        @if (vm.labsLoading()) {
+          <div class="step-section__loader"><app-spinner size="large"></app-spinner></div>
+        } @else if (vm.labsError()) {
+          <p class="step-section__error">{{ t.get(vm.labsError()!) }}</p>
+        } @else if (vm.labs().length === 0) {
+          <p class="step-section__empty">{{ t.get('lab.booking.noLabs') }}</p>
+        } @else {
+          <div class="lab-grid">
+            @for (lab of vm.labs(); track lab.id) {
+              <div class="lab-card" [class.lab-card--selected]="vm.selectedLab()?.id === lab.id"
+                   (click)="_onLabClick(lab)">
+                <div class="lab-card__icon">
+                  <lucide-icon name="microscope" [size]="28"></lucide-icon>
+                </div>
+                <div class="lab-card__info">
+                  <span class="lab-card__name">{{ lab.name }}</span>
+                  <span class="lab-card__meta">{{ t.get('lab.booking.labNumber') }} {{ lab.number }}
+                    @if (lab.floor) { · {{ t.get('lab.booking.floor') }} {{ lab.floor }} }
+                  </span>
+                </div>
+                <lucide-icon name="chevron-right" [size]="18" class="lab-card__arrow"></lucide-icon>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+
+    <!-- ══ STEP 2: Date + time slot ══════════════════════════ -->
+    @if (_currentStep === 2) {
+      <section class="step-section">
+        <h2 class="step-section__title">{{ t.get('lab.booking.steps.slot') }}</h2>
+
+        <div class="selected-lab-badge">
+          <lucide-icon name="microscope" [size]="16"></lucide-icon>
+          {{ vm.selectedLab()?.name }}
+        </div>
+
+        <!-- Date picker -->
+        <div class="slot-section">
+          <h3 class="slot-section__label">{{ t.get('lab.booking.selectDate') }}</h3>
+          <div class="date-strip">
+            @for (entry of vm.availableDates; track entry.value) {
+              <button class="date-chip"
+                      [class.date-chip--selected]="vm.selectedDate() === entry.value"
+                      (click)="_onDateClick(entry.value)">
+                <span class="date-chip__day">{{ entry.dayName }}</span>
+                <span class="date-chip__num">{{ entry.dayNumber }}</span>
+                <span class="date-chip__month">{{ entry.monthName }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Time slots -->
+        @if (vm.selectedDate()) {
+          <div class="slot-section">
+            <h3 class="slot-section__label">{{ t.get('lab.booking.selectTime') }}</h3>
+            @if (vm.slotLoading()) {
+              <div class="slot-section__loader"><app-spinner size="default"></app-spinner></div>
+            } @else if (vm.slotError()) {
+              <p class="step-section__error">{{ t.get(vm.slotError()!) }}</p>
+            } @else if (vm.availableTimes().length === 0) {
+              <p class="step-section__empty">{{ t.get('lab.booking.noSlots') }}</p>
+            } @else {
+              <div class="time-grid">
+                @for (time of vm.availableTimes(); track time) {
+                  <button class="time-chip"
+                          [class.time-chip--selected]="vm.selectedTime() === time"
+                          (click)="_onTimeClick(time)">
+                    {{ formatToAmPm(time) }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Footer -->
+        <div class="wizard__footer">
+          <app-button variant="outline" (clicked)="_back()">
+            <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+            {{ t.get('common.buttons.back') }}
+          </app-button>
+          <app-button variant="primary"
+                      [disabled]="!vm.selectedDate() || !vm.selectedTime()"
+                      (clicked)="_next()">
+            {{ t.get('common.buttons.next') }}
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </app-button>
+        </div>
+      </section>
+    }
+
+    <!-- ══ STEP 3: Study type, insurance, observations ══ -->
+    @if (_currentStep === 3) {
+      <section class="step-section">
+        <h2 class="step-section__title">{{ t.get('lab.booking.steps.details') }}</h2>
+
+        @if (vm.catalogLoading()) {
+          <div class="step-section__loader"><app-spinner size="large"></app-spinner></div>
+        } @else {
+          <div class="form-group">
+            <label class="form-label">{{ t.get('lab.booking.studyType') }}</label>
+            <select class="field-select" (change)="_onStudyTypeChange($event)">
+              <option value="">{{ t.get('lab.booking.selectStudyType') }}</option>
+              @for (st of vm.studyTypes(); track st.id) {
+                <option [value]="st.id"
+                        [selected]="vm.selectedStudyTypeId() === st.id">
+                  {{ st.name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ t.get('lab.booking.insuranceType') }}</label>
+            <select class="field-select" (change)="_onInsuranceTypeChange($event)">
+              <option value="">{{ t.get('lab.booking.selectInsuranceType') }}</option>
+              @for (it of vm.insuranceTypes(); track it.id) {
+                <option [value]="it.id"
+                        [selected]="vm.selectedInsuranceTypeId() === it.id">
+                  {{ it.name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">{{ t.get('lab.booking.observations') }}</label>
+            <textarea class="field-textarea" rows="3"
+                      [placeholder]="t.get('lab.booking.observationsPlaceholder')"
+                      [value]="vm.observations()"
+                      (input)="_onObsInput($event)"></textarea>
+          </div>
+
+          <!-- Summary -->
+          <div class="booking-summary">
+            <div class="booking-summary__row">
+              <span class="booking-summary__label">{{ t.get('lab.booking.lab') }}</span>
+              <span class="booking-summary__value">{{ vm.selectedLab()?.name }}</span>
+            </div>
+            <div class="booking-summary__row">
+              <span class="booking-summary__label">{{ t.get('lab.booking.date') }}</span>
+              <span class="booking-summary__value">{{ vm.selectedDate() | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="booking-summary__row">
+              <span class="booking-summary__label">{{ t.get('lab.booking.time') }}</span>
+              <span class="booking-summary__value">{{ formatToAmPm(vm.selectedTime()!) }}</span>
+            </div>
+          </div>
+
+          @if (vm.catalogError()) {
+            <p class="step-section__error">{{ t.get(vm.catalogError()!) }}</p>
+          }
+
+          <div class="wizard__footer">
+            <app-button variant="outline" (clicked)="_back()">
+              <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+              {{ t.get('common.buttons.back') }}
+            </app-button>
+            <app-button variant="primary"
+                        [disabled]="!vm.canConfirmDetails() || vm.creating()"
+                        (clicked)="_confirm()">
+              @if (vm.creating()) { {{ t.get('lab.booking.confirming') }} }
+              @else { {{ t.get('lab.booking.confirmButton') }} }
+            </app-button>
+          </div>
+        }
+      </section>
+    }
+
+    <!-- ══ STEP 4: Voucher ══════════════════════════════ -->
+    @if (_currentStep === 4) {
+      <section class="voucher">
+        <div class="voucher__icon">
+          <lucide-icon name="circle-check" [size]="56"></lucide-icon>
+        </div>
+        <h2 class="voucher__title">{{ t.get('lab.booking.voucher.title') }}</h2>
+        <p class="voucher__subtitle">{{ t.get('lab.booking.voucher.subtitle') }}</p>
+
+        @if (vm.creationResult(); as result) {
+          <div class="voucher__card">
+            <div class="voucher__row">
+              <span class="voucher__label">{{ t.get('lab.booking.voucher.lab') }}</span>
+              <span class="voucher__value">{{ result.labName }}</span>
+            </div>
+            <div class="voucher__row">
+              <span class="voucher__label">{{ t.get('lab.booking.voucher.study') }}</span>
+              <span class="voucher__value">{{ result.studyTypeName }}</span>
+            </div>
+            <div class="voucher__row">
+              <span class="voucher__label">{{ t.get('lab.booking.voucher.date') }}</span>
+              <span class="voucher__value">{{ result.fecha | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="voucher__row">
+              <span class="voucher__label">{{ t.get('lab.booking.voucher.time') }}</span>
+              <span class="voucher__value">{{ formatToAmPm(result.horaInicio) }}</span>
+            </div>
+            <div class="voucher__row">
+              <span class="voucher__label">{{ t.get('lab.booking.voucher.status') }}</span>
+              <span class="voucher__badge">{{ result.estado }}</span>
+            </div>
+          </div>
+        }
+
+        <div class="voucher__actions">
+          <app-button variant="outline" (clicked)="_newBooking()">
+            {{ t.get('lab.booking.voucher.newBooking') }}
+          </app-button>
+          <app-button variant="primary" (clicked)="_goToDashboard()">
+            {{ t.get('lab.booking.voucher.dashboard') }}
+          </app-button>
+        </div>
+      </section>
+    }
+
+  </div>
+</div>

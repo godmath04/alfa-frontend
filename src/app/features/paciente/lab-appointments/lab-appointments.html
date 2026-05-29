@@ -1,0 +1,118 @@
+<div class="my-labs">
+
+  <div class="my-labs__header">
+    <h1 class="my-labs__title">{{ t.get('lab.appointments.title') }}</h1>
+  </div>
+
+  @if (_cancelError()) {
+    <div class="my-labs__alert">
+      <lucide-icon name="circle-alert" [size]="16"></lucide-icon>
+      {{ _cancelError() }}
+    </div>
+  }
+
+  @if (_loading()) {
+    <div class="my-labs__state">
+      <lucide-icon name="loader-circle" [size]="36" class="my-labs__spinner"></lucide-icon>
+    </div>
+  } @else if (_error()) {
+    <div class="my-labs__state my-labs__state--error">
+      <lucide-icon name="circle-alert" [size]="24"></lucide-icon>
+      <span>{{ _error() }}</span>
+    </div>
+  } @else if (_citas().length === 0) {
+    <div class="my-labs__state my-labs__state--empty">
+      <lucide-icon name="flask-conical" [size]="56"></lucide-icon>
+      <p>{{ t.get('lab.appointments.noResults') }}</p>
+    </div>
+  } @else {
+
+    <!-- ── Upcoming ── -->
+    @if (_upcoming().length > 0) {
+      <h2 class="my-labs__section-title">{{ t.get('lab.appointments.upcoming') }}</h2>
+      <div class="lab-cita-list">
+        @for (c of _upcoming(); track c.citaId) {
+          <div class="lab-cita-card lab-cita-card--pendiente">
+            <div class="lab-cita-card__accent"></div>
+            <div class="lab-cita-card__body">
+
+              <div class="lab-cita-card__info">
+                <span class="lab-cita-card__lab">{{ c.labName }} · {{ c.labNumber }}</span>
+                <span class="lab-cita-card__study">{{ c.studyTypeName }}</span>
+                <span class="lab-cita-card__date">
+                  {{ c.fecha | date:'dd MMM yyyy' }} · {{ formatToAmPm(c.horaInicio) }}
+                </span>
+                @if (c.insuranceTypeName) {
+                  <span class="lab-cita-card__meta">{{ t.get('lab.booking.insuranceType') }}: {{ c.insuranceTypeName }}</span>
+                }
+              </div>
+
+              <div class="lab-cita-card__right">
+                <span class="lab-cita-badge lab-cita-badge--pendiente">
+                  {{ t.get('lab.appointments.status.pendiente') }}
+                </span>
+                <button class="lab-cita-card__cancel-btn"
+                        [disabled]="_cancellingId() === c.citaId"
+                        (click)="_cancel(c.citaId)">
+                  @if (_cancellingId() === c.citaId) {
+                    <lucide-icon name="loader-circle" [size]="13" class="my-labs__spinner"></lucide-icon>
+                  } @else {
+                    <lucide-icon name="x-circle" [size]="13"></lucide-icon>
+                  }
+                  {{ t.get('lab.appointments.cancel') }}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ── Past ── -->
+    @if (_past().length > 0) {
+      <h2 class="my-labs__section-title my-labs__section-title--mt">{{ t.get('lab.appointments.past') }}</h2>
+      <div class="lab-cita-list">
+        @for (c of _past(); track c.citaId) {
+          <div class="lab-cita-card lab-cita-card--{{ c.estado.toLowerCase() }}">
+            <div class="lab-cita-card__accent"></div>
+            <div class="lab-cita-card__body">
+
+              <div class="lab-cita-card__info">
+                <span class="lab-cita-card__lab">{{ c.labName }} · {{ c.labNumber }}</span>
+                <span class="lab-cita-card__study">{{ c.studyTypeName }}</span>
+                <span class="lab-cita-card__date">
+                  {{ c.fecha | date:'dd MMM yyyy' }} · {{ formatToAmPm(c.horaInicio) }}
+                </span>
+              </div>
+
+              <div class="lab-cita-card__right">
+                <span class="lab-cita-badge lab-cita-badge--{{ c.estado.toLowerCase() }}">
+                  {{ t.get('lab.appointments.status.' + c.estado.toLowerCase()) }}
+                </span>
+              </div>
+
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ── Pagination ── -->
+    @if (_totalPages() > 1) {
+      <div class="my-labs__pagination">
+        <button class="my-labs__page-btn" [disabled]="_page() === 0" (click)="_prevPage()">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          {{ t.get('lab.appointments.prev') }}
+        </button>
+        <span class="my-labs__page-info">{{ _page() + 1 }} / {{ _totalPages() }}</span>
+        <button class="my-labs__page-btn" [disabled]="_page() >= _totalPages() - 1" (click)="_nextPage()">
+          {{ t.get('lab.appointments.next') }}
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+    }
+
+  }
+
+</div>
