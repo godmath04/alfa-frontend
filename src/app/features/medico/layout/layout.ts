@@ -20,9 +20,10 @@ export class MedicoLayout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'medico.nav.agenda',     icon: 'clipboard-list', route: '/medico/agenda'    },
-    { key: 'medico.nav.calendario', icon: 'calendar',       route: '/medico/calendario' },
-    { key: 'medico.nav.horarios',   icon: 'clock',          route: '/medico/horarios'  },
+    { key: 'medico.nav.agenda',      icon: 'clipboard-list', route: '/medico/agenda'     },
+    { key: 'medico.nav.calendario',  icon: 'calendar',       route: '/medico/calendario' },
+    { key: 'medico.nav.horarios',    icon: 'clock',          route: '/medico/horarios'   },
+    { key: 'medico.nav.labResults',  icon: 'flask-conical',  route: '/medico/lab-results'},
   ];
 
   _isActive(route: string): boolean {

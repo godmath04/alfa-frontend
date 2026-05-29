@@ -1,0 +1,104 @@
+<div class="lab-search">
+
+  <div class="lab-search__header">
+    <h1 class="lab-search__title">{{ t.get('lab.medico.title') }}</h1>
+    <p class="lab-search__subtitle">{{ t.get('lab.medico.subtitle') }}</p>
+  </div>
+
+  <!-- Search form -->
+  <div class="lab-search__form">
+    <div class="form-field">
+      <label class="form-label">{{ t.get('lab.medico.emailLabel') }}</label>
+      <input class="field-input" type="email"
+             [placeholder]="t.get('lab.medico.emailPlaceholder')"
+             [value]="_email()"
+             (input)="_email.set($any($event.target).value)" />
+    </div>
+    <div class="form-field form-field--or">
+      <span>{{ t.get('lab.medico.or') }}</span>
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ t.get('lab.medico.idLabel') }}</label>
+      <input class="field-input" type="text"
+             [placeholder]="t.get('lab.medico.idPlaceholder')"
+             [value]="_idNumber()"
+             (input)="_idNumber.set($any($event.target).value)" />
+    </div>
+    <div class="form-field form-field--btn">
+      <app-button variant="primary" [disabled]="loading()" (clicked)="_onSearch()">
+        @if (loading()) { <app-spinner size="small"></app-spinner> }
+        @else { <lucide-icon name="search" [size]="16"></lucide-icon> }
+        {{ t.get('lab.medico.searchBtn') }}
+      </app-button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="lab-search__error">
+      <lucide-icon name="alert-circle" [size]="16"></lucide-icon>
+      {{ t.get(error()!) }}
+    </div>
+  }
+
+  <!-- Results -->
+  @if (searched() && !loading()) {
+    @if (results().length === 0) {
+      <div class="lab-search__empty">
+        <lucide-icon name="search-x" [size]="48"></lucide-icon>
+        <p>{{ t.get('lab.medico.noResults') }}</p>
+      </div>
+    } @else {
+      <div class="results-table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>{{ t.get('lab.medico.table.patient') }}</th>
+              <th>{{ t.get('lab.medico.table.study') }}</th>
+              <th>{{ t.get('lab.medico.table.lab') }}</th>
+              <th>{{ t.get('lab.medico.table.date') }}</th>
+              <th>{{ t.get('lab.medico.table.status') }}</th>
+              <th>{{ t.get('lab.medico.table.actions') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of results(); track r.id) {
+              <tr>
+                <td>
+                  <div class="patient-cell">
+                    <span class="patient-cell__name">{{ r.pacienteNombre }}</span>
+                    <span class="patient-cell__email">{{ r.pacienteEmail }}</span>
+                  </div>
+                </td>
+                <td>{{ r.studyTypeName }}</td>
+                <td>{{ r.labName }}</td>
+                <td>{{ r.createdAt | date:'dd MMM yyyy' }}</td>
+                <td>
+                  <span class="status-badge status-badge--{{ r.estado }}">
+                    {{ t.get('lab.results.statuses.' + r.estado) }}
+                  </span>
+                </td>
+                <td>
+                  @if (r.estado === 'DISPONIBLE' && r.s3Key) {
+                    <button class="action-btn" [disabled]="downloading() === r.id"
+                            (click)="_download(r.id)">
+                      @if (downloading() === r.id) { <app-spinner size="small"></app-spinner> }
+                      @else { <lucide-icon name="download" [size]="14"></lucide-icon> }
+                      {{ t.get('lab.results.download') }}
+                    </button>
+                  } @else {
+                    <span class="action-na">—</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  @if (downloadError()) {
+    <p class="lab-search__dl-error">{{ t.get(downloadError()!) }}</p>
+  }
+
+</div>

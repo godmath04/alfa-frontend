@@ -11,6 +11,10 @@ export const EXECUTIVE_ROUTES: Routes = [
     children: [
       { path: '', redirectTo: 'pacientes', pathMatch: 'full' },
       {
+        path: 'lab-management',
+        loadComponent: () => import('./pages/lab-management/lab-management').then(m => m.LabManagementPage),
+      },
+      {
         path: 'pacientes',
         loadComponent: () => import('./pages/patient-search/patient-search').then(m => m.PatientSearchPage),
       },
@@ -21,6 +25,14 @@ export const EXECUTIVE_ROUTES: Routes = [
       {
         path: 'pacientes/:id/agendar',
         loadComponent: () => import('./pages/book-appointment/book-appointment').then(m => m.ExecutiveBookAppointmentPage),
+      },
+      {
+        path: 'pacientes/:id/agendar-lab',
+        loadComponent: () => import('./pages/book-lab-appointment/book-lab-appointment').then(m => m.ExecutiveBookLabAppointmentPage),
+      },
+      {
+        path: 'subir-resultado/:citaId',
+        loadComponent: () => import('./pages/upload-lab-result/upload-lab-result').then(m => m.UploadLabResultPage),
       },
     ],
   },
