@@ -2,6 +2,7 @@ import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalE
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
+import { provideMarkdown } from 'ngx-markdown';
 import {
   LucideAngularModule,
   Mail, MailCheck, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
@@ -29,6 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(APP_ROUTES),
     provideHttpClient(withInterceptors([authInterceptor])),
+    provideMarkdown(),
     provideAppInitializer(() => {
       const translate = inject(Translate);
       return translate.load();

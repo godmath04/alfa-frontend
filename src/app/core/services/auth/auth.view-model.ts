@@ -5,6 +5,7 @@ import { timeout, timer } from 'rxjs';
 
 import { AuthService } from './auth';
 import { AuthStateService } from './auth.state';
+import { ChatStateService } from '../chat/chat.state';
 import { RegisterRequest } from '../../models/auth.model';
 import { Role } from '../../models/role.enum';
 import { toApiError } from '../../models/api-error.model';
@@ -14,6 +15,7 @@ export class AuthViewModel {
 
   private readonly _authService = inject(AuthService);
   private readonly _authState   = inject(AuthStateService);
+  private readonly _chatState   = inject(ChatStateService);
   private readonly _router      = inject(Router);
   private readonly _destroyRef  = inject(DestroyRef);
 
@@ -82,8 +84,14 @@ export class AuthViewModel {
     this._authService.logout()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
-        next:  () => this._authState.clearSession(),
-        error: () => this._authState.clearSession()
+        next:  () => {
+          this._authState.clearSession();
+          this._chatState.clearSession();
+        },
+        error: () => {
+          this._authState.clearSession();
+          this._chatState.clearSession();
+        }
       });
     this._router.navigate(['/auth/login']);
   }
