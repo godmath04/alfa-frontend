@@ -1,16 +1,20 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Translate } from '../../../../core/services/translate';
 import { ExecutiveService } from '../../../../core/services/ejecutivo/executive.service';
 import { PacienteSearch, CrearPacienteRequest } from '../../../../core/models/executive.model';
 import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
+import { DocumentValidators } from '../../../../shared/validators/document.validator';
+import { PatternValidators } from '../../../../shared/validators/pattern.validator';
 
 @Component({
   selector: 'app-patient-search',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, ReactiveFormsModule],
   templateUrl: './patient-search.html',
   styleUrl: './patient-search.scss',
 })
@@ -19,6 +23,8 @@ export class PatientSearchPage {
   readonly t   = inject(Translate);
   private readonly _svc    = inject(ExecutiveService);
   private readonly _router = inject(Router);
+  private readonly _fb     = inject(FormBuilder);
+  private readonly _destroyRef = inject(DestroyRef);
 
   readonly _query      = signal('');
   readonly _results    = signal<PacienteSearch[]>([]);
@@ -28,27 +34,76 @@ export class PatientSearchPage {
 
   // ─── Formulario crear paciente ─────────────────────────────────────────────
   readonly _showForm     = signal(false);
-  readonly _fFirstName   = signal('');
-  readonly _fLastName    = signal('');
-  readonly _fEmail       = signal('');
-  readonly _fIdType      = signal('cedula');
-  readonly _fIdNumber    = signal('');
-  readonly _fPhone       = signal('');
-  readonly _fBirthDay    = signal('');
-  readonly _fBirthMonth  = signal('');
-  readonly _fBirthYear   = signal('');
-  readonly _fCity        = signal('');
-  readonly _fGender      = signal('');
   readonly _fError       = signal<string | null>(null);
   readonly _fSaving      = signal(false);
+
+  isSubmitted = false;
 
   readonly months = MONTHS_FULL;
   readonly years  = (() => {
     const cur = new Date().getFullYear();
     return Array.from({ length: 101 }, (_, i) => cur - i);
   })();
-  readonly days   = Array.from({ length: 31 }, (_, i) => i + 1);
+  days: number[] = Array.from({ length: 31 }, (_, i) => i + 1);
   readonly cities = ['Ibarra', 'Atuntaqui', 'Otavalo', 'Cotacachi', 'Quito', 'Guayaquil', 'Cuenca'];
+
+  patientForm = this._fb.group({
+    firstName:  ['', Validators.required],
+    lastName:   ['', Validators.required],
+    email:      ['', [Validators.required, Validators.email]],
+    phone:      ['', [Validators.required, PatternValidators.phoneEcuador]],
+    idType:     ['cedula', Validators.required],
+    idNumber:   ['', [Validators.required, DocumentValidators.cedula]],
+    birthDay:   ['', Validators.required],
+    birthMonth: ['', Validators.required],
+    birthYear:  ['', Validators.required],
+    city:       ['', Validators.required],
+    gender:     ['', Validators.required],
+  });
+
+  constructor() {
+    this.patientForm.get('idType')?.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((type) => {
+        const idControl = this.patientForm.get('idNumber');
+        idControl?.setValue('');
+        idControl?.markAsUntouched();
+        if (type === 'cedula') {
+          idControl?.setValidators([Validators.required, DocumentValidators.cedula]);
+        } else if (type === 'passport') {
+          idControl?.setValidators([Validators.required, DocumentValidators.pasaporte]);
+        } else {
+          idControl?.setValidators([Validators.required]);
+        }
+        idControl?.updateValueAndValidity();
+      });
+
+    this.patientForm.get('birthMonth')?.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this._updateDaysInMonth());
+
+    this.patientForm.get('birthYear')?.valueChanges
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this._updateDaysInMonth());
+  }
+
+  getFieldError(fieldName: string): string | boolean {
+    const control = this.patientForm.get(fieldName);
+    if (!this.isSubmitted || !control?.errors) return false;
+
+    const errorTranslations: Record<string, string> = {
+      email:                  'common.errors.invalid-email',
+      invalidPhonePattern:    'common.errors.invalid-phone',
+      invalidCedula:          'auth.register.errors.invalid-cedula',
+      invalidPassport:        'auth.register.errors.invalid-passport',
+    };
+
+    const firstErrorKey = Object.keys(control.errors)[0];
+    if (errorTranslations[firstErrorKey]) {
+      return this.t.get(errorTranslations[firstErrorKey]);
+    }
+    return true;
+  }
 
   _search(): void {
     const q = this._query().trim();
@@ -67,47 +122,54 @@ export class PatientSearchPage {
   }
 
   _openForm(): void {
-    this._fFirstName.set('');  this._fLastName.set('');  this._fEmail.set('');
-    this._fIdType.set('cedula'); this._fIdNumber.set(''); this._fPhone.set('');
-    this._fBirthDay.set('');   this._fBirthMonth.set(''); this._fBirthYear.set('');
-    this._fCity.set('');       this._fGender.set('');
+    this.isSubmitted = false;
+    this.patientForm.reset({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      idType: 'cedula',
+      idNumber: '',
+      birthDay: '',
+      birthMonth: '',
+      birthYear: '',
+      city: '',
+      gender: '',
+    });
     this._fError.set(null);
     this._showForm.set(true);
   }
 
-  _cancelForm(): void { this._showForm.set(false); }
+  _cancelForm(): void {
+    this._showForm.set(false);
+  }
 
   _savePatient(): void {
-    const firstName  = this._fFirstName().trim();
-    const lastName   = this._fLastName().trim();
-    const email      = this._fEmail().trim();
-    const idNumber   = this._fIdNumber().trim();
-    const birthDay   = this._fBirthDay();
-    const birthMonth = this._fBirthMonth();
-    const birthYear  = this._fBirthYear();
-    const city       = this._fCity();
-    const gender     = this._fGender();
-
-    if (!firstName)  { this._fError.set(this.t.get('ejecutivo.patients.form.error-first'));  return; }
-    if (!lastName)   { this._fError.set(this.t.get('ejecutivo.patients.form.error-last'));   return; }
-    if (!email)      { this._fError.set(this.t.get('ejecutivo.patients.form.error-email'));  return; }
-    if (!idNumber)   { this._fError.set(this.t.get('ejecutivo.patients.form.error-id'));     return; }
-    if (!birthDay || !birthMonth || !birthYear) {
-      this._fError.set(this.t.get('ejecutivo.patients.form.error-birth')); return;
+    this.isSubmitted = true;
+    if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
+      return;
     }
-    if (!city)       { this._fError.set(this.t.get('ejecutivo.patients.form.error-city'));   return; }
-    if (!gender)     { this._fError.set(this.t.get('ejecutivo.patients.form.error-gender')); return; }
 
-    const birthDate = `${birthYear}-${birthMonth}-${birthDay.padStart(2, '0')}`;
+    const { firstName, lastName, email, phone, idType, idNumber,
+            birthDay, birthMonth, birthYear, city, gender } = this.patientForm.value;
+
+    const birthDate = `${birthYear}-${birthMonth}-${birthDay!.toString().padStart(2, '0')}`;
 
     const request: CrearPacienteRequest = {
-      firstName, lastName, email, idNumber,
-      idType:    this._fIdType(),
-      phone:     this._fPhone().trim(),
-      birthDate, city, gender,
+      firstName: firstName!,
+      lastName: lastName!,
+      email: email!,
+      idType: idType!,
+      idNumber: idNumber!,
+      phone: phone!,
+      birthDate,
+      city: city!,
+      gender: gender!,
     };
 
     this._fSaving.set(true);
+    this._fError.set(null);
     this._svc.crearPaciente(request).subscribe({
       next: p => {
         this._fSaving.set(false);
@@ -120,5 +182,18 @@ export class PatientSearchPage {
         this._fError.set(msg);
       },
     });
+  }
+
+  private _updateDaysInMonth(): void {
+    const year  = this.patientForm.get('birthYear')?.value;
+    const month = this.patientForm.get('birthMonth')?.value;
+    if (year && month) {
+      const daysCount = new Date(parseInt(year), parseInt(month), 0).getDate();
+      this.days = Array.from({ length: daysCount }, (_, i) => i + 1);
+      const currentDay = this.patientForm.get('birthDay')?.value;
+      if (currentDay && parseInt(currentDay) > daysCount) {
+        this.patientForm.get('birthDay')?.setValue('');
+      }
+    }
   }
 }
