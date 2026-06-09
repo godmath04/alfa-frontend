@@ -1,0 +1,82 @@
+<div class="guest-portal">
+
+  <header class="guest-portal__header">
+    <div class="guest-portal__brand">
+      <lucide-icon name="hospital" [size]="24"></lucide-icon>
+      <span>{{ t.get('lab.guest.brand') }}</span>
+    </div>
+    <h1 class="guest-portal__title">{{ t.get('lab.guest.title') }}</h1>
+    <p class="guest-portal__subtitle">{{ t.get('lab.guest.subtitle') }}</p>
+  </header>
+
+  <div class="guest-portal__body">
+
+    @if (loading()) {
+      <div class="guest-portal__loader">
+        <app-spinner size="large"></app-spinner>
+        <p>{{ t.get('lab.guest.loading') }}</p>
+      </div>
+    } @else if (error()) {
+      <div class="guest-portal__error">
+        <lucide-icon name="triangle-alert" [size]="40"></lucide-icon>
+        <h2>{{ t.get('lab.guest.errorTitle') }}</h2>
+        <p>{{ t.get(error()!) }}</p>
+      </div>
+    } @else if (result(); as r) {
+      <div class="result-card">
+        <div class="result-card__icon">
+          <lucide-icon name="flask-conical" [size]="40"></lucide-icon>
+        </div>
+
+        <div class="result-card__detail">
+          <div class="detail-row">
+            <span class="detail-row__label">{{ t.get('lab.guest.study') }}</span>
+            <span class="detail-row__value">{{ r.studyTypeName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row__label">{{ t.get('lab.guest.lab') }}</span>
+            <span class="detail-row__value">{{ r.labName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row__label">{{ t.get('lab.guest.date') }}</span>
+            <span class="detail-row__value">{{ r.citaFecha | date:'dd MMM yyyy' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row__label">{{ t.get('lab.guest.time') }}</span>
+            <span class="detail-row__value">{{ formatToAmPm(r.citaHoraInicio) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-row__label">{{ t.get('lab.guest.status') }}</span>
+            <span class="result-badge result-badge--{{ r.estado }}">
+              {{ t.get('lab.results.statuses.' + r.estado) }}
+            </span>
+          </div>
+          @if (r.originalFileName) {
+            <div class="detail-row">
+              <span class="detail-row__label">{{ t.get('lab.guest.file') }}</span>
+              <span class="detail-row__value">{{ r.originalFileName }}</span>
+            </div>
+          }
+        </div>
+
+        @if (r.estado === 'DISPONIBLE') {
+          <div class="result-card__actions">
+            <app-button variant="primary" [disabled]="downloading()" (clicked)="_download()">
+              @if (downloading()) { <app-spinner size="small"></app-spinner> }
+              @else { <lucide-icon name="download" [size]="16"></lucide-icon> }
+              {{ t.get('lab.guest.download') }}
+            </app-button>
+          </div>
+          @if (downloadError()) {
+            <p class="result-card__dl-error">{{ t.get(downloadError()!) }}</p>
+          }
+        } @else {
+          <p class="result-card__pending-note">{{ t.get('lab.guest.pendingNote') }}</p>
+        }
+      </div>
+
+      <p class="guest-portal__disclaimer">{{ t.get('lab.guest.disclaimer') }}</p>
+    }
+
+  </div>
+</div>

@@ -19,7 +19,8 @@ export class ExecutiveLayout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'ejecutivo.nav.patients', icon: 'users', route: '/ejecutivo/pacientes' },
+    { key: 'ejecutivo.nav.patients',      icon: 'users',         route: '/ejecutivo/pacientes'      },
+    { key: 'ejecutivo.nav.labManagement', icon: 'flask-conical', route: '/ejecutivo/lab-management' },
   ];
 
   _isActive(route: string): boolean {

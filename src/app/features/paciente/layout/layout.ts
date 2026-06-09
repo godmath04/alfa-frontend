@@ -21,9 +21,12 @@ export class Layout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'profile.title', icon: 'user', route: '/paciente/profile' },
-    { key: 'paciente.nav.appointments', icon: 'calendar',  route: '/paciente/appointments' },
-    { key: 'paciente.nav.myAppointments', icon: 'file-text',  route: '/paciente/appointment-history' },
+    { key: 'profile.title',               icon: 'user',          route: '/paciente/profile'           },
+    { key: 'paciente.nav.appointments',   icon: 'calendar',      route: '/paciente/appointments'      },
+    { key: 'paciente.nav.myAppointments', icon: 'file-text',     route: '/paciente/appointment-history' },
+    { key: 'paciente.nav.lab',            icon: 'microscope',    route: '/paciente/lab-appointments'  },
+    { key: 'paciente.nav.misLabCitas',    icon: 'calendar-check', route: '/paciente/mis-lab-citas'    },
+    { key: 'paciente.nav.labResults',     icon: 'flask-conical', route: '/paciente/lab-results'       },
   ];
 
   _isActive(route: string): boolean {

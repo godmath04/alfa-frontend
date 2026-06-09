@@ -20,6 +20,7 @@ export class PatientProfilePage {
   private readonly _route  = inject(ActivatedRoute);
   private readonly _router = inject(Router);
 
+  readonly _patientId = signal<number>(0);
   readonly _patient   = signal<PacienteSearch | null>(null);
   readonly _citas     = signal<EjecutivoCitaItem[]>([]);
   readonly _loading   = signal(true);
@@ -39,6 +40,7 @@ export class PatientProfilePage {
   constructor() {
     afterNextRender(() => {
       const id = Number(this._route.snapshot.paramMap.get('id'));
+      this._patientId.set(id);
       this._load(id);
     });
   }
@@ -72,6 +74,12 @@ export class PatientProfilePage {
     const p = this._patient();
     if (!p) return;
     this._router.navigate(['/ejecutivo/pacientes', p.id, 'agendar']);
+  }
+
+  _bookLabAppointment(): void {
+    const id = this._patientId();
+    if (!id) return;
+    this._router.navigate(['/ejecutivo/pacientes', id, 'agendar-lab']);
   }
 
   _cancelCita(citaId: number): void {

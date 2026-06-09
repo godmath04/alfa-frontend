@@ -101,110 +101,156 @@
           </button>
         </div>
 
-        <div class="ps-page__form-grid">
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.first-name') }} *</label>
-            <input class="ps-page__input" type="text"
-              [value]="_fFirstName()" (input)="_fFirstName.set($any($event.target).value)"
-              [placeholder]="t.get('ejecutivo.patients.form.first-name-placeholder')" />
-          </div>
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.last-name') }} *</label>
-            <input class="ps-page__input" type="text"
-              [value]="_fLastName()" (input)="_fLastName.set($any($event.target).value)"
-              [placeholder]="t.get('ejecutivo.patients.form.last-name-placeholder')" />
-          </div>
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.email') }} *</label>
-            <input class="ps-page__input" type="email"
-              [value]="_fEmail()" (input)="_fEmail.set($any($event.target).value)"
-              [placeholder]="t.get('ejecutivo.patients.form.email-placeholder')" />
-          </div>
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.phone') }}</label>
-            <input class="ps-page__input" type="tel"
-              [value]="_fPhone()" (input)="_fPhone.set($any($event.target).value)"
-              [placeholder]="t.get('ejecutivo.patients.form.phone-placeholder')" />
-          </div>
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-type') }} *</label>
-            <select class="ps-page__input ps-page__select"
-              (change)="_fIdType.set($any($event.target).value)">
-              <option value="cedula"   [selected]="_fIdType() === 'cedula'">{{ t.get('auth.register.id-type.cedula') }}</option>
-              <option value="passport" [selected]="_fIdType() === 'passport'">{{ t.get('auth.register.id-type.passport') }}</option>
-            </select>
-          </div>
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-number') }} *</label>
-            <input class="ps-page__input" type="text"
-              [value]="_fIdNumber()" (input)="_fIdNumber.set($any($event.target).value)"
-              [placeholder]="t.get('ejecutivo.patients.form.id-number-placeholder')" />
-          </div>
+        <form [formGroup]="patientForm" (ngSubmit)="_savePatient()">
+          <div class="ps-page__form-grid">
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.first-name') }} *</label>
+              <input class="ps-page__input" type="text"
+                [class.ps-page__input--error]="getFieldError('firstName')"
+                formControlName="firstName"
+                [placeholder]="t.get('ejecutivo.patients.form.first-name-placeholder')" />
+              @if (getFieldError('firstName') && getFieldError('firstName') !== true) {
+                <span class="field-error">{{ getFieldError('firstName') }}</span>
+              }
+            </div>
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.last-name') }} *</label>
+              <input class="ps-page__input" type="text"
+                [class.ps-page__input--error]="getFieldError('lastName')"
+                formControlName="lastName"
+                [placeholder]="t.get('ejecutivo.patients.form.last-name-placeholder')" />
+              @if (getFieldError('lastName') && getFieldError('lastName') !== true) {
+                <span class="field-error">{{ getFieldError('lastName') }}</span>
+              }
+            </div>
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.email') }} *</label>
+              <input class="ps-page__input" type="email"
+                [class.ps-page__input--error]="getFieldError('email')"
+                formControlName="email"
+                [placeholder]="t.get('ejecutivo.patients.form.email-placeholder')" />
+              @if (getFieldError('email') && getFieldError('email') !== true) {
+                <span class="field-error">{{ getFieldError('email') }}</span>
+              }
+            </div>
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.phone') }} *</label>
+              <input class="ps-page__input" type="tel"
+                [class.ps-page__input--error]="getFieldError('phone')"
+                formControlName="phone"
+                [placeholder]="t.get('ejecutivo.patients.form.phone-placeholder')" />
+              @if (getFieldError('phone') && getFieldError('phone') !== true) {
+                <span class="field-error">{{ getFieldError('phone') }}</span>
+              }
+            </div>
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-type') }} *</label>
+              <select class="ps-page__input ps-page__select"
+                [class.ps-page__input--error]="getFieldError('idType')"
+                formControlName="idType">
+                <option value="cedula">{{ t.get('auth.register.id-type.cedula') }}</option>
+                <option value="passport">{{ t.get('auth.register.id-type.passport') }}</option>
+              </select>
+              @if (getFieldError('idType') && getFieldError('idType') !== true) {
+                <span class="field-error">{{ getFieldError('idType') }}</span>
+              }
+            </div>
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.id-number') }} *</label>
+              <input class="ps-page__input" type="text"
+                [class.ps-page__input--error]="getFieldError('idNumber')"
+                formControlName="idNumber"
+                [placeholder]="t.get('ejecutivo.patients.form.id-number-placeholder')" />
+              @if (getFieldError('idNumber') && getFieldError('idNumber') !== true) {
+                <span class="field-error">{{ getFieldError('idNumber') }}</span>
+              }
+            </div>
 
-          <!-- Fecha de nacimiento -->
-          <div class="ps-page__field ps-page__field--full">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.birth-date') }} *</label>
-            <div class="ps-page__date-row">
-              <select class="ps-page__input ps-page__select" (change)="_fBirthDay.set($any($event.target).value)">
-                <option value="">{{ t.get('ejecutivo.patients.form.birth-day') }}</option>
-                @for (d of days; track d) {
-                  <option [value]="d.toString()" [selected]="_fBirthDay() === d.toString()">{{ d }}</option>
+            <!-- Fecha de nacimiento -->
+            <div class="ps-page__field ps-page__field--full">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.birth-date') }} *</label>
+              <div class="ps-page__date-row">
+                <select class="ps-page__input ps-page__select"
+                  [class.ps-page__input--error]="getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear')"
+                  formControlName="birthDay">
+                  <option value="">{{ t.get('ejecutivo.patients.form.birth-day') }}</option>
+                  @for (d of days; track d) {
+                    <option [value]="d.toString()">{{ d }}</option>
+                  }
+                </select>
+                <select class="ps-page__input ps-page__select"
+                  [class.ps-page__input--error]="getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear')"
+                  formControlName="birthMonth">
+                  <option value="">{{ t.get('ejecutivo.patients.form.birth-month') }}</option>
+                  @for (m of months; track m.value) {
+                    <option [value]="m.value">{{ m.name }}</option>
+                  }
+                </select>
+                <select class="ps-page__input ps-page__select"
+                  [class.ps-page__input--error]="getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear')"
+                  formControlName="birthYear">
+                  <option value="">{{ t.get('ejecutivo.patients.form.birth-year') }}</option>
+                  @for (y of years; track y) {
+                    <option [value]="y.toString()">{{ y }}</option>
+                  }
+                </select>
+              </div>
+              @if ((getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear')) && 
+                   (getFieldError('birthDay') !== true || getFieldError('birthMonth') !== true || getFieldError('birthYear') !== true)) {
+                <span class="field-error field-error--inline">{{ getFieldError('birthDay') || getFieldError('birthMonth') || getFieldError('birthYear') }}</span>
+              }
+            </div>
+
+            <!-- Ciudad -->
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.city') }} *</label>
+              <select class="ps-page__input ps-page__select"
+                [class.ps-page__input--error]="getFieldError('city')"
+                formControlName="city">
+                <option value="">{{ t.get('ejecutivo.patients.form.city-placeholder') }}</option>
+                @for (c of cities; track c) {
+                  <option [value]="c">{{ c }}</option>
                 }
+                <option value="Otra">{{ t.get('auth.register.city.other') }}</option>
               </select>
-              <select class="ps-page__input ps-page__select" (change)="_fBirthMonth.set($any($event.target).value)">
-                <option value="">{{ t.get('ejecutivo.patients.form.birth-month') }}</option>
-                @for (m of months; track m.value) {
-                  <option [value]="m.value" [selected]="_fBirthMonth() === m.value">{{ m.name }}</option>
-                }
+              @if (getFieldError('city') && getFieldError('city') !== true) {
+                <span class="field-error">{{ getFieldError('city') }}</span>
+              }
+            </div>
+
+            <!-- Género -->
+            <div class="ps-page__field">
+              <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.gender') }} *</label>
+              <select class="ps-page__input ps-page__select"
+                [class.ps-page__input--error]="getFieldError('gender')"
+                formControlName="gender">
+                <option value="">{{ t.get('ejecutivo.patients.form.gender-placeholder') }}</option>
+                <option value="M">{{ t.get('auth.register.gender.male') }}</option>
+                <option value="F">{{ t.get('auth.register.gender.female') }}</option>
+                <option value="O">{{ t.get('auth.register.gender.other') }}</option>
               </select>
-              <select class="ps-page__input ps-page__select" (change)="_fBirthYear.set($any($event.target).value)">
-                <option value="">{{ t.get('ejecutivo.patients.form.birth-year') }}</option>
-                @for (y of years; track y) {
-                  <option [value]="y.toString()" [selected]="_fBirthYear() === y.toString()">{{ y }}</option>
-                }
-              </select>
+              @if (getFieldError('gender') && getFieldError('gender') !== true) {
+                <span class="field-error">{{ getFieldError('gender') }}</span>
+              }
             </div>
           </div>
 
-          <!-- Ciudad -->
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.city') }} *</label>
-            <select class="ps-page__input ps-page__select" (change)="_fCity.set($any($event.target).value)">
-              <option value="">{{ t.get('ejecutivo.patients.form.city-placeholder') }}</option>
-              @for (c of cities; track c) {
-                <option [value]="c" [selected]="_fCity() === c">{{ c }}</option>
+          @if (_fError()) {
+            <p class="ps-page__form-error">{{ _fError() }}</p>
+          }
+
+          <div class="ps-page__modal-actions">
+            <button type="button" class="ps-page__btn ps-page__btn--ghost" (click)="_cancelForm()">
+              {{ t.get('common.buttons.cancel') }}
+            </button>
+            <button type="submit" class="ps-page__btn ps-page__btn--primary" [disabled]="_fSaving()">
+              @if (_fSaving()) {
+                <lucide-icon name="loader-circle" [size]="16" class="ps-page__spinner"></lucide-icon>
               }
-              <option value="Otra">{{ t.get('auth.register.city.other') }}</option>
-            </select>
+              {{ t.get('ejecutivo.patients.form.save') }}
+            </button>
           </div>
-
-          <!-- Género -->
-          <div class="ps-page__field">
-            <label class="ps-page__label">{{ t.get('ejecutivo.patients.form.gender') }} *</label>
-            <select class="ps-page__input ps-page__select" (change)="_fGender.set($any($event.target).value)">
-              <option value="">{{ t.get('ejecutivo.patients.form.gender-placeholder') }}</option>
-              <option value="M" [selected]="_fGender() === 'M'">{{ t.get('auth.register.gender.male') }}</option>
-              <option value="F" [selected]="_fGender() === 'F'">{{ t.get('auth.register.gender.female') }}</option>
-              <option value="O" [selected]="_fGender() === 'O'">{{ t.get('auth.register.gender.other') }}</option>
-            </select>
-          </div>
-        </div>
-
-        @if (_fError()) {
-          <p class="ps-page__form-error">{{ _fError() }}</p>
-        }
-
-        <div class="ps-page__modal-actions">
-          <button class="ps-page__btn ps-page__btn--ghost" (click)="_cancelForm()">
-            {{ t.get('common.buttons.cancel') }}
-          </button>
-          <button class="ps-page__btn ps-page__btn--primary" (click)="_savePatient()" [disabled]="_fSaving()">
-            @if (_fSaving()) {
-              <lucide-icon name="loader-circle" [size]="16" class="ps-page__spinner"></lucide-icon>
-            }
-            {{ t.get('ejecutivo.patients.form.save') }}
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   }

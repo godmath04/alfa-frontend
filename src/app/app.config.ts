@@ -9,13 +9,15 @@ import {
   CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
   ArrowLeft, AlertCircle, Home, FileText, LogOut,
   ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
-  CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
+  CalendarDays, CalendarCheck, ChevronLeft, ChevronRight, LoaderCircle,
   CircleAlert, CalendarX, DoorOpen, Trash2,
-  List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
+  List, ListFilter, Search, SearchX, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
   UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
   Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
   Wind, Footprints, Ban, ArrowRight,
-  BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio
+  BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio,
+  FlaskConical, Shield, ClockPlus, Download, Upload, FileUp, Hospital, Send, UserPlus,
+  CircleCheck, TriangleAlert
 } from 'lucide-angular';
 
 import { APP_ROUTES } from './app.routes';
@@ -45,7 +47,9 @@ export const appConfig: ApplicationConfig = {
         UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
         Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
         Wind, Footprints, Ban, ArrowRight,
-        BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio
+        BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio,
+        FlaskConical, Shield, ClockPlus, Download, Upload, FileUp, Hospital, Send, UserPlus,
+        CircleCheck, TriangleAlert, CalendarCheck, SearchX
       })
     ),
   ]

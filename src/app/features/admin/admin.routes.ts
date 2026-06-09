@@ -30,6 +30,10 @@ export const ADMIN_ROUTES: Routes = [
         path: 'notification-settings',
         loadComponent: () => import('./pages/notification-settings/notification-settings').then(m => m.NotificationSettingsPage),
       },
+      {
+        path: 'lab-catalogs',
+        loadComponent: () => import('./pages/lab-catalogs/lab-catalogs').then(m => m.LabCatalogsPage),
+      },
     ],
   },
 ];

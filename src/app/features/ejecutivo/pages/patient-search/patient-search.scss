@@ -1,7 +1,7 @@
 $bp-mobile: 768px;
 
 .ps-page {
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
 
   &__header {
@@ -166,7 +166,7 @@ $bp-mobile: 768px;
     @media (max-width: $bp-mobile) { grid-template-columns: 1fr; }
   }
 
-  &__field { display: flex; flex-direction: column; gap: 6px; }
+  &__field { display: flex; flex-direction: column; gap: 6px; position: relative; }
   &__field--full { grid-column: 1 / -1; }
   &__date-row { display: grid; grid-template-columns: 1fr 2fr 1.5fr; gap: 8px; }
 
@@ -183,6 +183,10 @@ $bp-mobile: 768px;
     box-sizing: border-box;
     transition: border-color 0.15s;
     &:focus { outline: none; border-color: var(--color-accent-1); }
+
+    &--error {
+      border-color: var(--color-error) !important;
+    }
   }
 
   &__select { background: var(--color-white); cursor: pointer; }
@@ -194,5 +198,61 @@ $bp-mobile: 768px;
     justify-content: flex-end;
     gap: 10px;
     margin-top: 8px;
+  }
+
+  // Floating bubble field error (register style)
+  .field-error {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 10;
+
+    background-color: var(--color-error);
+    color: #fff;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    white-space: normal;
+    width: max-content;
+    max-width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+
+    @media (max-width: 480px) {
+      max-width: 85vw;
+      left: 2px;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 14px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent var(--color-error) transparent;
+    }
+
+    // Variant for inline date error
+    &--inline {
+      position: static;
+      display: inline-block;
+      margin-top: 4px;
+      opacity: 1;
+      pointer-events: auto;
+      &::before { display: none; }
+    }
+  }
+
+  // Show bubble on hover/focus-within
+  &__field {
+    &:hover .field-error,
+    &:focus-within .field-error {
+      opacity: 1;
+    }
   }
 }

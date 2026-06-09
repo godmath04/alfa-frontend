@@ -25,5 +25,9 @@ export const APP_ROUTES: Routes = [
     path: 'gerencia',
     loadChildren: () => import('./features/gerencia/gerencia.routes').then(m => m.GERENCIA_ROUTES)
   },
+  {
+    path: 'resultados/guest',
+    loadComponent: () => import('./features/public/lab-result-guest/lab-result-guest').then(m => m.LabResultGuestComponent)
+  },
   { path: '', redirectTo: 'auth', pathMatch: 'full' }
 ];

@@ -23,6 +23,10 @@ export const MEDICO_ROUTES: Routes = [
         loadComponent: () => import('./pages/my-schedule/my-schedule').then(m => m.MySchedulePage)
       },
       {
+        path: 'lab-results',
+        loadComponent: () => import('./pages/lab-results-search/lab-results-search').then(m => m.LabResultsSearchPage)
+      },
+      {
         path: 'profile',
         loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
       }

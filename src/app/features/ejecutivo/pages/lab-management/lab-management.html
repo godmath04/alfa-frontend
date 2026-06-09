@@ -1,0 +1,146 @@
+<div class="lm-page">
+
+  <div class="lm-page__header">
+    <h1 class="lm-page__title">{{ t.get('ejecutivo.labManagement.title') }}</h1>
+  </div>
+
+  <!-- ── Filters ── -->
+  <div class="lm-filters">
+    <select class="lm-filters__select"
+            [value]="_estadoFilter()"
+            (change)="_estadoFilter.set($any($event.target).value)">
+      <option value="">{{ t.get('ejecutivo.labManagement.filters.all') }}</option>
+      <option value="PENDIENTE">PENDIENTE</option>
+      <option value="COMPLETADA">COMPLETADA</option>
+      <option value="CANCELADA">CANCELADA</option>
+    </select>
+
+    <input class="lm-filters__date" type="date"
+           [value]="_fechaDesde()"
+           (change)="_fechaDesde.set($any($event.target).value)"
+           [placeholder]="t.get('ejecutivo.labManagement.filters.fechaDesde')" />
+
+    <input class="lm-filters__date" type="date"
+           [value]="_fechaHasta()"
+           (change)="_fechaHasta.set($any($event.target).value)"
+           [placeholder]="t.get('ejecutivo.labManagement.filters.fechaHasta')" />
+
+    <button class="lm-filters__btn" (click)="_applyFilters()">
+      <lucide-icon name="search" [size]="15"></lucide-icon>
+      {{ t.get('ejecutivo.labManagement.filters.apply') }}
+    </button>
+  </div>
+
+  <!-- ── Body ── -->
+  @if (_loading()) {
+    <div class="lm-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="lm-page__spinner"></lucide-icon>
+    </div>
+  } @else if (_error()) {
+    <div class="lm-page__state lm-page__state--error">
+      <lucide-icon name="circle-alert" [size]="24"></lucide-icon>
+      <span>{{ _error() }}</span>
+    </div>
+  } @else if (_citas().length === 0) {
+    <div class="lm-page__state lm-page__state--empty">
+      <lucide-icon name="flask-conical" [size]="48"></lucide-icon>
+      <p>{{ t.get('ejecutivo.labManagement.noResults') }}</p>
+    </div>
+  } @else {
+    <div class="lm-card">
+      <table class="lm-table">
+        <thead class="lm-table__head">
+          <tr>
+            <th class="lm-table__th">{{ t.get('ejecutivo.labManagement.table.patient') }}</th>
+            <th class="lm-table__th">{{ t.get('ejecutivo.labManagement.table.lab') }}</th>
+            <th class="lm-table__th">{{ t.get('ejecutivo.labManagement.table.dateTime') }}</th>
+            <th class="lm-table__th">{{ t.get('ejecutivo.labManagement.table.study') }}</th>
+            <th class="lm-table__th">{{ t.get('ejecutivo.labManagement.table.status') }}</th>
+            <th class="lm-table__th">{{ t.get('ejecutivo.labManagement.table.actions') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of _citas(); track c.citaId) {
+            <tr class="lm-table__row">
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.pacienteNombre }}</span>
+                @if (c.guest) {
+                  <span class="lm-badge lm-badge--guest">{{ t.get('ejecutivo.labManagement.guest') }}</span>
+                }
+                <span class="lm-table__meta">{{ c.pacienteEmail }}</span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.labName }}</span>
+                <span class="lm-table__meta">{{ t.get('lab.booking.labNumber') }} {{ c.labNumber }}
+                  @if (c.labFloor) { · {{ t.get('lab.booking.floor') }} {{ c.labFloor }} }
+                </span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.fecha | date:'dd MMM yyyy' }}</span>
+                <span class="lm-table__meta">{{ formatToAmPm(c.horaInicio) }}</span>
+              </td>
+
+              <td class="lm-table__td lm-table__td--muted">{{ c.studyTypeName ?? '—' }}</td>
+
+              <td class="lm-table__td">
+                <span class="lm-badge lm-badge--{{ c.estado.toLowerCase() }}">{{ c.estado }}</span>
+              </td>
+
+              <td class="lm-table__td">
+                <div class="lm-actions">
+                  @if (c.estado === 'PENDIENTE') {
+                    <button class="lm-actions__btn lm-actions__btn--complete"
+                            [disabled]="_actionLoading() === c.citaId"
+                            (click)="_completar(c.citaId)">
+                      <lucide-icon name="check" [size]="13"></lucide-icon>
+                      {{ t.get('ejecutivo.labManagement.actions.complete') }}
+                    </button>
+                    <button class="lm-actions__btn lm-actions__btn--cancel"
+                            [disabled]="_actionLoading() === c.citaId"
+                            (click)="_cancelar(c.citaId)">
+                      <lucide-icon name="x" [size]="13"></lucide-icon>
+                      {{ t.get('ejecutivo.labManagement.actions.cancel') }}
+                    </button>
+                  }
+                  @if (c.estado === 'COMPLETADA') {
+                    <button class="lm-actions__btn lm-actions__btn--upload"
+                            (click)="_upload(c.citaId)">
+                      <lucide-icon name="upload" [size]="13"></lucide-icon>
+                      {{ t.get('ejecutivo.labManagement.actions.upload') }}
+                    </button>
+                    <button class="lm-actions__btn lm-actions__btn--download"
+                            [disabled]="_downloadLoading() === c.citaId"
+                            (click)="_downloadResult(c.citaId)">
+                      <lucide-icon name="download" [size]="13"></lucide-icon>
+                      {{ t.get('ejecutivo.labManagement.actions.download') }}
+                    </button>
+                  }
+                </div>
+              </td>
+
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Pagination ── -->
+    @if (_totalPages() > 1) {
+      <div class="lm-pagination">
+        <button class="lm-pagination__btn" [disabled]="_page() === 0" (click)="_prevPage()">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          {{ t.get('ejecutivo.labManagement.prev') }}
+        </button>
+        <span class="lm-pagination__info">{{ _page() + 1 }} / {{ _totalPages() }}</span>
+        <button class="lm-pagination__btn" [disabled]="_page() >= _totalPages() - 1" (click)="_nextPage()">
+          {{ t.get('ejecutivo.labManagement.next') }}
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+    }
+  }
+
+</div>

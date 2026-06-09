@@ -20,11 +20,12 @@ export class AdminLayout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'admin.nav.resources',             icon: 'stethoscope', route: '/admin/resources'             },
-    { key: 'admin.nav.doctors',               icon: 'user-check',  route: '/admin/doctors'               },
-    { key: 'admin.nav.users',                 icon: 'users',        route: '/admin/users'                 },
-    { key: 'admin.nav.config',                icon: 'settings',     route: '/admin/config'                },
-    { key: 'admin.nav.notifications',         icon: 'bell-ring',    route: '/admin/notification-settings' },
+    { key: 'admin.nav.resources',      icon: 'stethoscope',  route: '/admin/resources'             },
+    { key: 'admin.nav.doctors',        icon: 'user-check',   route: '/admin/doctors'               },
+    { key: 'admin.nav.users',          icon: 'users',        route: '/admin/users'                 },
+    { key: 'admin.nav.config',         icon: 'settings',     route: '/admin/config'                },
+    { key: 'admin.nav.notifications',  icon: 'bell-ring',    route: '/admin/notification-settings' },
+    { key: 'admin.nav.labCatalogs',    icon: 'microscope',   route: '/admin/lab-catalogs'          },
   ];
 
   _isActive(route: string): boolean {

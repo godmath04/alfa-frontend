@@ -1,7 +1,7 @@
 $bp-mobile: 768px;
 
 .pp-page {
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
 
   &__back {
@@ -81,7 +81,7 @@ $bp-mobile: 768px;
     &--inactivo { background: rgba(107,114,128,0.12); color: var(--color-text-muted); }
   }
 
-  &__btn--book { margin-left: auto; }
+  &__btn--book:first-of-type { margin-left: auto; }
 
   &__btn {
     display: inline-flex;
@@ -95,6 +95,7 @@ $bp-mobile: 768px;
     cursor: pointer;
     transition: background 0.15s;
     &--primary { background: var(--color-accent-1); color: var(--color-white); border: none; &:hover { background: var(--color-primary-dark); } }
+    &--outline  { background: transparent; color: var(--color-accent-1); border: 1.5px solid var(--color-accent-1); &:hover { background: #f0f4ff; } }
   }
 
   &__patient-info {
@@ -103,8 +104,9 @@ $bp-mobile: 768px;
     flex-wrap: wrap;
   }
 
-  &__info-item { display: flex; flex-direction: column; gap: 2px; }
-  &__info-label { font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  &__info-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+  &__info-label { font-size: var(--font-size-xs); font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  &__info-value { font-size: var(--font-size-sm); color: var(--color-text-primary); }
 
   &__alert {
     display: flex;

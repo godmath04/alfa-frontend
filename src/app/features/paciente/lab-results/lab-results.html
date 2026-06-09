@@ -1,0 +1,59 @@
+<div class="lab-results">
+
+  <div class="lab-results__header">
+    <h1 class="lab-results__title">{{ t.get('lab.results.title') }}</h1>
+  </div>
+
+  @if (vm.loading()) {
+    <div class="lab-results__loader">
+      <app-spinner size="large"></app-spinner>
+    </div>
+  } @else if (vm.error()) {
+    <div class="lab-results__error">
+      <lucide-icon name="alert-circle" [size]="20"></lucide-icon>
+      <span>{{ t.get('lab.results.errorLoading') }}</span>
+    </div>
+  } @else if (vm.results().length === 0) {
+    <div class="lab-results__empty">
+      <lucide-icon name="flask-conical" [size]="56"></lucide-icon>
+      <p>{{ t.get('lab.results.noResults') }}</p>
+    </div>
+  } @else {
+    <div class="results-list">
+      @for (result of vm.results(); track result.id) {
+        <div class="result-card result-card--{{ result.estado }}">
+          <div class="result-card__accent"></div>
+          <div class="result-card__body">
+            <div class="result-card__info">
+              <span class="result-card__study">{{ result.studyTypeName }}</span>
+              <span class="result-card__lab">{{ result.labName }} · {{ result.labNumber }}</span>
+              <span class="result-card__date">{{ result.createdAt | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="result-card__right">
+              <span class="result-badge result-badge--{{ result.estado }}">
+                {{ t.get('lab.results.statuses.' + result.estado) }}
+              </span>
+              @if (result.estado === 'DISPONIBLE' && result.originalFileName) {
+                <app-button variant="primary" size="small"
+                            [disabled]="vm.downloadLoading() === result.id"
+                            (clicked)="_download(result.id)">
+                  @if (vm.downloadLoading() === result.id) {
+                    <app-spinner size="small"></app-spinner>
+                  } @else {
+                    <lucide-icon name="download" [size]="14"></lucide-icon>
+                    {{ t.get('lab.results.download') }}
+                  }
+                </app-button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (vm.downloadError()) {
+    <p class="lab-results__download-error">{{ t.get(vm.downloadError()!) }}</p>
+  }
+
+</div>

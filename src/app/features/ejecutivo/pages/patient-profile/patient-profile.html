@@ -35,20 +35,24 @@
           <lucide-icon name="calendar" [size]="16"></lucide-icon>
           {{ t.get('ejecutivo.profile.book') }}
         </button>
+        <button class="pp-page__btn pp-page__btn--outline pp-page__btn--book" (click)="_bookLabAppointment()">
+          <lucide-icon name="microscope" [size]="16"></lucide-icon>
+          {{ t.get('ejecutivo.profile.bookLab') }}
+        </button>
       </div>
 
       <div class="pp-page__patient-info">
         <div class="pp-page__info-item">
           <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.email') }}</span>
-          <span>{{ _patient()!.email }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.email }}</span>
         </div>
         <div class="pp-page__info-item">
           <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.phone') }}</span>
-          <span>{{ _patient()!.phone ?? '—' }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.phone ?? '—' }}</span>
         </div>
         <div class="pp-page__info-item">
           <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.id') }}</span>
-          <span>{{ _patient()!.idType }} {{ _patient()!.idNumber ?? '—' }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.idType }} {{ _patient()!.idNumber ?? '—' }}</span>
         </div>
       </div>
     </div>

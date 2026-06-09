@@ -23,6 +23,18 @@ export const PACIENTE_ROUTES: Routes = [
         loadComponent: () => import('./appointment-history/appointment-history').then(m => m.AppointmentHistoryComponent)
       },
       {
+        path: 'lab-appointments',
+        loadComponent: () => import('./book-lab-appointment/book-lab-appointment').then(m => m.BookLabAppointment)
+      },
+      {
+        path: 'mis-lab-citas',
+        loadComponent: () => import('./lab-appointments/lab-appointments').then(m => m.LabAppointmentsComponent)
+      },
+      {
+        path: 'lab-results',
+        loadComponent: () => import('./lab-results/lab-results').then(m => m.LabResultsComponent)
+      },
+      {
         path: 'profile',
         loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
       }

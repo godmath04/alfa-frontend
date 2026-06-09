@@ -1,0 +1,114 @@
+.lab-results {
+  max-width: 100%;
+  margin: var(--spacing-xl) auto;
+  padding: 0 var(--spacing-md);
+
+  &__header { margin-bottom: var(--spacing-lg); }
+
+  &__title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  &__loader, &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: calc(var(--spacing-xl) * 2);
+    color: var(--color-text-secondary);
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: #fef2f2;
+    border-radius: var(--radius-md);
+    color: #dc2626;
+    font-size: var(--font-size-sm);
+  }
+
+  &__download-error {
+    color: #dc2626;
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-md);
+    text-align: center;
+  }
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.result-card {
+  display: flex;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+
+  &__accent {
+    width: 4px;
+    flex-shrink: 0;
+    background: var(--color-border);
+  }
+
+  &--DISPONIBLE &__accent { background: #22c55e; }
+  &--PENDIENTE  &__accent { background: #f59e0b; }
+  &--CANCELADA  &__accent { background: #ef4444; }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    gap: var(--spacing-md);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__study {
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+  }
+
+  &__lab, &__date {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+  }
+}
+
+.result-badge {
+  display: inline-block;
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &--DISPONIBLE { background: #dcfce7; color: #16a34a; }
+  &--PENDIENTE  { background: #fef3c7; color: #d97706; }
+  &--CANCELADA  { background: #fee2e2; color: #dc2626; }
+}
