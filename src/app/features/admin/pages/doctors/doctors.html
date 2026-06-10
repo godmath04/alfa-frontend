@@ -1,0 +1,315 @@
+<div class="doc-page">
+
+  <!-- ─── Header ──────────────────────────────────────── -->
+  <div class="doc-page__header">
+    <div class="doc-page__title-group">
+      <h1 class="doc-page__title">{{ t.get('admin.doctors.title') }}</h1>
+      <p class="doc-page__subtitle">{{ t.get('admin.doctors.subtitle') }}</p>
+    </div>
+    @if (!_formVisible()) {
+      <button class="doc-page__add-btn" (click)="_openCreate()">
+        <lucide-icon name="plus" [size]="18"></lucide-icon>
+        {{ t.get('admin.doctors.add') }}
+      </button>
+    }
+  </div>
+
+  <!-- ─── Form ─────────────────────────────────────────── -->
+  @if (_formVisible()) {
+    <div class="doc-page__form-card">
+      <h3 class="doc-page__form-title">
+        {{ _isEditing() ? t.get('admin.doctors.edit') : t.get('admin.doctors.new') }}
+      </h3>
+
+      <!-- Row 1: user, type, first name, last name -->
+      <div class="doc-page__form-grid">
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.user') }} *</label>
+          <select class="doc-page__input doc-page__select"
+            [value]="_fUserId() ?? ''"
+            (change)="_onUserChange(+$any($event.target).value)"
+            [disabled]="_isEditing()">
+            <option value="">{{ t.get('admin.doctors.fields.user-placeholder') }}</option>
+            @for (u of (_isEditing() ? userVm.medicos() : _availableMedicos()); track u.id) {
+              <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.type') }} *</label>
+          <select class="doc-page__input doc-page__select"
+            [value]="_fType()"
+            (change)="_fType.set($any($event.target).value)">
+            <option value="INTERNO">{{ t.get('admin.doctors.types.interno') }}</option>
+            <option value="EXTERNO">{{ t.get('admin.doctors.types.externo') }}</option>
+          </select>
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.first-name') }} *</label>
+          <input class="doc-page__input" type="text"
+            [value]="_fFirstName()" (input)="_fFirstName.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.first-name-placeholder')" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.last-name') }} *</label>
+          <input class="doc-page__input" type="text"
+            [value]="_fLastName()" (input)="_fLastName.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.last-name-placeholder')" />
+        </div>
+      </div>
+
+      <!-- Row 2: email, id number, office -->
+      <div class="doc-page__form-grid">
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.email') }} *</label>
+          <input class="doc-page__input" type="email"
+            [value]="_fEmail()" (input)="_fEmail.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.email-placeholder')" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-type') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="text" readonly
+            [value]="_selectedUser()?.idType === 'CEDULA' ? t.get('admin.doctors.fields.id-type-cedula') : _selectedUser()?.idType === 'PASAPORTE' ? t.get('admin.doctors.fields.id-type-pasaporte') : t.get('admin.doctors.fields.id-type-unknown')" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-number') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="text" readonly
+            [value]="_selectedUser()?.idNumber ?? '—'" />
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.office') }}</label>
+          <select class="doc-page__input doc-page__select"
+            (change)="_fOfficeId.set(+$any($event.target).value || null)">
+            <option value="" [selected]="_fOfficeId() === null">{{ t.get('admin.doctors.fields.office-none') }}</option>
+            @for (o of _availableOffices(); track o.id) {
+              <option [value]="o.id" [selected]="o.id === _fOfficeId()">
+                {{ t.get('admin.offices.table.number') }} {{ o.number }}
+                @if (o.floor) { — {{ o.floor }} }
+                @if (o.specialtyName) { ({{ o.specialtyName }}) }
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="doc-page__field">
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.photo') }}</label>
+          <input class="doc-page__input" type="text"
+            [value]="_fPhoto()" (input)="_fPhoto.set($any($event.target).value)"
+            [placeholder]="t.get('admin.doctors.fields.photo-placeholder')" />
+        </div>
+      </div>
+
+      <!-- Specialties -->
+      <div class="doc-page__specialties-group">
+        <label class="doc-page__label">{{ t.get('admin.doctors.fields.specialties') }}</label>
+        <div class="doc-page__specialties">
+          @for (s of specialtyVm.specialties(); track s.id) {
+            @if (s.active) {
+              <label class="doc-page__chip" [class.doc-page__chip--selected]="_isSpecialtySelected(s.id)">
+                <input type="checkbox" class="doc-page__checkbox-hidden"
+                  [checked]="_isSpecialtySelected(s.id)"
+                  (change)="_toggleSpecialty(s.id)" />
+                @if (s.icon) { <lucide-icon [name]="s.icon" [size]="14"></lucide-icon> }
+                {{ s.name }}
+              </label>
+            }
+          }
+        </div>
+      </div>
+
+      @if (_formError()) {
+        <p class="doc-page__form-error">{{ _formError() }}</p>
+      }
+
+      <div class="doc-page__form-actions">
+        <button class="doc-page__btn doc-page__btn--ghost" (click)="_cancel()">
+          <lucide-icon name="x" [size]="16"></lucide-icon>
+          {{ t.get('common.buttons.cancel') }}
+        </button>
+        <button class="doc-page__btn doc-page__btn--primary" (click)="_save()"
+          [disabled]="doctorVm.saving()">
+          @if (doctorVm.saving()) {
+            <lucide-icon name="loader-circle" [size]="16" class="doc-page__spinner"></lucide-icon>
+          }
+          {{ t.get('common.buttons.save') }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ─── Loading ─────────────────────────────────────── -->
+  @if (doctorVm.loading()) {
+    <div class="doc-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="doc-page__spinner"></lucide-icon>
+      <span>{{ t.get('admin.doctors.loading') }}</span>
+    </div>
+  }
+
+  <!-- ─── Error ───────────────────────────────────────── -->
+  @if (!doctorVm.loading() && doctorVm.error()) {
+    <div class="doc-page__state doc-page__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ t.get(doctorVm.error()!) }}</span>
+    </div>
+  }
+
+  <!-- ─── Table ───────────────────────────────────────── -->
+  @if (!doctorVm.loading() && !doctorVm.error()) {
+    <div class="doc-page__card">
+      @if (doctorVm.doctors().length === 0) {
+        <div class="doc-page__state">
+          <lucide-icon name="user-check" [size]="40"></lucide-icon>
+          <span>{{ t.get('admin.doctors.empty') }}</span>
+        </div>
+      } @else {
+        <table class="doc-page__table">
+          <thead class="doc-page__thead">
+            <tr>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.name') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.id-number') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.type') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.office') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.specialties') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.status') }}</th>
+              <th class="doc-page__th">{{ t.get('admin.doctors.table.actions') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (d of doctorVm.doctors(); track d.id) {
+              <tr class="doc-page__row" [class.doc-page__row--inactive]="!d.active">
+                <td class="doc-page__td">
+                  <div class="doc-page__avatar-cell">
+                    <div class="doc-page__avatar">{{ d.firstName[0] }}{{ d.lastName[0] }}</div>
+                    <div>
+                      <p class="doc-page__name">{{ d.fullName }}</p>
+                      <p class="doc-page__email">{{ d.email }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="doc-page__td doc-page__td--muted">{{ _userOf(d.userId)?.idNumber ?? d.idNumber }}</td>
+                <td class="doc-page__td">
+                  <span class="doc-page__badge"
+                    [class.doc-page__badge--interno]="d.type === 'INTERNO'"
+                    [class.doc-page__badge--externo]="d.type === 'EXTERNO'">
+                    {{ d.type === 'INTERNO' ? t.get('admin.doctors.types.interno') : t.get('admin.doctors.types.externo') }}
+                  </span>
+                </td>
+                <td class="doc-page__td doc-page__td--muted">{{ _officeNumberOf(d.officeId) }}</td>
+                <td class="doc-page__td">
+                  <div class="doc-page__tags">
+                    @for (s of d.specialties; track s.id) {
+                      <span class="doc-page__tag">{{ s.name }}</span>
+                    }
+                    @if (d.specialties.length === 0) {
+                      <span class="doc-page__td--muted">—</span>
+                    }
+                  </div>
+                </td>
+                <td class="doc-page__td">
+                  <span class="doc-page__badge"
+                    [class.doc-page__badge--active]="d.active"
+                    [class.doc-page__badge--inactive]="!d.active">
+                    {{ d.active ? t.get('admin.specialties.status.active') : t.get('admin.specialties.status.inactive') }}
+                  </span>
+                </td>
+                <td class="doc-page__td">
+                  <div class="doc-page__actions">
+                    <button class="doc-page__action-btn doc-page__action-btn--schedule"
+                      (click)="_openSchedules(d)" [title]="t.get('admin.doctors.actions.schedules')"
+                      [class.doc-page__action-btn--schedule-active]="_scheduleDoctor()?.id === d.id">
+                      <lucide-icon name="clock" [size]="15"></lucide-icon>
+                    </button>
+                    <button class="doc-page__action-btn doc-page__action-btn--edit"
+                      (click)="_openEdit(d)" [title]="t.get('admin.doctors.actions.edit')">
+                      <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                    </button>
+                    @if (d.active) {
+                      <button class="doc-page__action-btn doc-page__action-btn--deactivate"
+                        (click)="doctorVm.deactivate(d.id)" [title]="t.get('admin.doctors.actions.deactivate')">
+                        <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                      </button>
+                    } @else {
+                      <button class="doc-page__action-btn doc-page__action-btn--reactivate"
+                        (click)="doctorVm.reactivate(d.id)" [title]="t.get('admin.doctors.actions.reactivate')">
+                        <lucide-icon name="check-circle-2" [size]="15"></lucide-icon>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+
+  <!-- ─── Schedule panel ────────────────────────────────────────────────── -->
+  @if (_scheduleDoctor()) {
+    <div class="doc-page__schedule-panel">
+      <div class="doc-page__schedule-header">
+        <h3 class="doc-page__schedule-title">
+          <lucide-icon name="clock" [size]="18"></lucide-icon>
+          {{ t.get('admin.doctors.schedules.title') }} — {{ _scheduleDoctor()!.fullName }}
+        </h3>
+      </div>
+
+      @if (horarioVm.loading()) {
+        <div class="doc-page__state">
+          <lucide-icon name="loader-circle" [size]="28" class="doc-page__spinner"></lucide-icon>
+        </div>
+      } @else {
+        <div class="doc-page__schedule-grid">
+          @for (day of _WEEK_DAYS; track day.value) {
+            <div class="doc-page__schedule-row">
+              <span class="doc-page__day-name">{{ t.get(day.key) }}</span>
+
+              @if (_isEditingDay(day.value)) {
+                <input class="doc-page__time-input" type="time"
+                  [value]="_editingDayStart()[day.value]"
+                  (input)="_setDayTime(day.value, 'start', $any($event.target).value)" />
+                <span class="doc-page__time-sep">–</span>
+                <input class="doc-page__time-input" type="time"
+                  [value]="_editingDayEnd()[day.value]"
+                  (input)="_setDayTime(day.value, 'end', $any($event.target).value)" />
+                <button class="doc-page__sched-btn doc-page__sched-btn--save"
+                  (click)="_saveDay(day.value)" [disabled]="horarioVm.saving()">
+                  <lucide-icon name="check" [size]="14"></lucide-icon>
+                </button>
+                <button class="doc-page__sched-btn doc-page__sched-btn--cancel"
+                  (click)="_cancelDay(day.value)">
+                  <lucide-icon name="x" [size]="14"></lucide-icon>
+                </button>
+              } @else if (_getHorario(day.value)) {
+                <span class="doc-page__time-display">
+                  {{ _getHorario(day.value)!.horaInicio.slice(0,5) }} – {{ _getHorario(day.value)!.horaFin.slice(0,5) }}
+                </span>
+                <button class="doc-page__sched-btn doc-page__sched-btn--edit"
+                  (click)="_editDay(day.value)">
+                  <lucide-icon name="pencil" [size]="14"></lucide-icon>
+                </button>
+                <button class="doc-page__sched-btn doc-page__sched-btn--delete"
+                  (click)="_deleteDay(day.value)">
+                  <lucide-icon name="x-circle" [size]="14"></lucide-icon>
+                </button>
+              } @else {
+                <span class="doc-page__no-schedule">{{ t.get('admin.doctors.schedules.none') }}</span>
+                <button class="doc-page__sched-btn doc-page__sched-btn--add"
+                  (click)="_setDayTime(day.value, 'start', '08:00'); _setDayTime(day.value, 'end', '17:00')">
+                  <lucide-icon name="plus" [size]="14"></lucide-icon>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+</div>

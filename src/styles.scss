@@ -2,6 +2,9 @@
 // ALFA HOSPITAL - Global Styles
 // =============================================
 
+@use 'styles/form' as *;
+@use 'styles/auth-panel' as *;
+
 // --- Color Palette ---
 :root {
   // Primary

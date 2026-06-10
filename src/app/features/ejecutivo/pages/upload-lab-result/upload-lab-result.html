@@ -1,0 +1,77 @@
+<div class="upload-page">
+
+  <div class="upload-page__back">
+    <button class="back-btn" (click)="_goBack()">
+      <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+      {{ t.get('common.buttons.back') }}
+    </button>
+  </div>
+
+  <h1 class="upload-page__title">{{ t.get('lab.upload.title') }}</h1>
+  <p class="upload-page__subtitle">{{ t.get('lab.upload.subtitle') }} — {{ t.get('lab.upload.citaId') }}: {{ citaId }}</p>
+
+  <!-- Upload section -->
+  @if (!uploadResult()) {
+    <div class="upload-card">
+      <div class="upload-card__dropzone" [class.upload-card__dropzone--has-file]="selectedFile()">
+        <lucide-icon name="file-up" [size]="40"></lucide-icon>
+        @if (selectedFile()) {
+          <span class="upload-card__filename">{{ selectedFile()!.name }}</span>
+        } @else {
+          <span>{{ t.get('lab.upload.dropzone') }}</span>
+        }
+        <label class="upload-card__browse">
+          {{ t.get('lab.upload.browse') }}
+          <input type="file" accept="application/pdf" hidden (change)="_onFileChange($event)" />
+        </label>
+      </div>
+
+      @if (uploadError()) {
+        <p class="upload-card__error">{{ uploadError() }}</p>
+      }
+
+      <div class="upload-card__actions">
+        <app-button variant="primary" [disabled]="!selectedFile() || uploading()" (clicked)="_upload()">
+          @if (uploading()) { <app-spinner size="small"></app-spinner> }
+          @else { <lucide-icon name="upload" [size]="16"></lucide-icon> }
+          {{ uploading() ? t.get('lab.upload.uploading') : t.get('lab.upload.uploadBtn') }}
+        </app-button>
+      </div>
+    </div>
+  } @else {
+    <!-- Success -->
+    <div class="upload-success">
+      <lucide-icon name="circle-check" [size]="52"></lucide-icon>
+      <h2>{{ t.get('lab.upload.successTitle') }}</h2>
+      <p>{{ t.get('lab.upload.successSubtitle') }}</p>
+      <div class="upload-success__detail">
+        <span>{{ uploadResult()!.originalFileName }}</span>
+        <span class="status-badge status-badge--{{ uploadResult()!.estado }}">
+          {{ uploadResult()!.estado }}
+        </span>
+      </div>
+    </div>
+  }
+
+  <!-- Token resend section (only if result is GUEST) -->
+  @if (uploadResult()?.guest) {
+    <div class="resend-card">
+      <h3 class="resend-card__title">{{ t.get('lab.upload.resendTitle') }}</h3>
+      <p class="resend-card__desc">{{ t.get('lab.upload.resendDesc') }}</p>
+
+      @if (resendResult()) {
+        <p class="resend-card__success">{{ t.get('lab.upload.resendSuccess') }}</p>
+      } @else {
+        <app-button variant="outline" [disabled]="resending()" (clicked)="_resendToken()">
+          @if (resending()) { <app-spinner size="small"></app-spinner> }
+          @else { <lucide-icon name="send" [size]="16"></lucide-icon> }
+          {{ t.get('lab.upload.resendBtn') }}
+        </app-button>
+        @if (resendError()) {
+          <p class="resend-card__error">{{ resendError() }}</p>
+        }
+      }
+    </div>
+  }
+
+</div>

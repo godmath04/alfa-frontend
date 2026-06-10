@@ -1,0 +1,157 @@
+$bp-mobile: 768px;
+
+.cal-page {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  // ─── Header ──────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__title-group { display: flex; flex-direction: column; gap: 4px; }
+
+  &__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    margin: 0;
+  }
+
+  // ─── Week navigation (reutiliza mismo estilo que agenda) ─
+  &__week-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  &__nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 190px;
+    height: 45px;
+    padding: 0 16px;
+    border: 2px solid var(--color-accent-1);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    color: var(--color-accent-1);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-family);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    box-sizing: border-box;
+
+    &--prev {
+      position: relative;
+      lucide-icon { position: absolute; left: 14px; }
+    }
+
+    &--next {
+      position: relative;
+      lucide-icon { position: absolute; right: 14px; }
+    }
+
+    &:hover:not(:disabled) { background: var(--color-accent-1); color: var(--color-white); }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+
+  &__week-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 190px;
+    height: 45px;
+    padding: 0 18px;
+    border: 2px solid var(--color-accent-1);
+    background: var(--color-accent-1);
+    color: var(--color-white);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  // ─── States ──────────────────────────────────────────
+  &__state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 64px 32px;
+    color: var(--color-text-muted);
+    font-size: 15px;
+
+    &--error { color: var(--color-error); }
+  }
+
+  &__spinner { animation: spin 1s linear infinite; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  // ─── Week list ───────────────────────────────────────
+  &__week-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+  }
+
+  &__week-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border: 2px solid var(--color-background);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+
+    &:hover { border-color: var(--color-accent-2); background: rgba(54, 171, 217, 0.04); }
+    &--today { border-color: var(--color-accent-1); background: rgba(54, 154, 217, 0.04); }
+  }
+
+  &__week-left { display: flex; align-items: center; gap: 16px; }
+
+  &__week-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-1);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--today { background: var(--color-primary-dark); }
+  }
+
+  &__week-day {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    margin: 0;
+    text-transform: capitalize;
+  }
+
+  &__week-count {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  &__week-arrow { color: var(--color-accent-1); }
+}

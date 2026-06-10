@@ -1,0 +1,92 @@
+<div class="my-sched">
+
+  <!-- ─── Header ──────────────────────────────────────── -->
+  <div class="my-sched__header">
+    <div class="my-sched__title-group">
+      <h1 class="my-sched__title">{{ t.get('medico.horarios.title') }}</h1>
+      <p class="my-sched__subtitle">{{ t.get('medico.horarios.subtitle') }}</p>
+    </div>
+  </div>
+
+  <!-- ─── Error de perfil ──────────────────────────────── -->
+  @if (_profileError()) {
+    <div class="my-sched__state my-sched__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ t.get('medico.horarios.profile-error') }}</span>
+    </div>
+  }
+
+  <!-- ─── Loading ─────────────────────────────────────── -->
+  @if (!_profile() && !_profileError()) {
+    <div class="my-sched__state">
+      <lucide-icon name="loader-circle" [size]="36" class="my-sched__spinner"></lucide-icon>
+      <span>{{ t.get('medico.horarios.loading') }}</span>
+    </div>
+  }
+
+  <!-- ─── Tabla de horarios ─────────────────────────────── -->
+  @if (_profile()) {
+    <div class="my-sched__card">
+      <div class="my-sched__card-header">
+        <lucide-icon name="clock" [size]="18" class="my-sched__clock-icon"></lucide-icon>
+        <span>{{ t.get('medico.horarios.card-title') }}</span>
+      </div>
+
+      @if (horarioVm.loading()) {
+        <div class="my-sched__state">
+          <lucide-icon name="loader-circle" [size]="28" class="my-sched__spinner"></lucide-icon>
+        </div>
+      } @else {
+        <div class="my-sched__grid">
+          @for (day of _WEEK_DAYS; track day.value) {
+            <div class="my-sched__row">
+              <span class="my-sched__day-name">{{ t.get(day.key) }}</span>
+
+              @if (_isEditingDay(day.value)) {
+                <input class="my-sched__time-input" type="time"
+                  [value]="_editingDayStart()[day.value]"
+                  (input)="_setDayTime(day.value, 'start', $any($event.target).value)" />
+                <span class="my-sched__sep">–</span>
+                <input class="my-sched__time-input" type="time"
+                  [value]="_editingDayEnd()[day.value]"
+                  (input)="_setDayTime(day.value, 'end', $any($event.target).value)" />
+                <button class="my-sched__btn my-sched__btn--save"
+                  (click)="_saveDay(day.value)" [disabled]="horarioVm.saving()">
+                  <lucide-icon name="check" [size]="16"></lucide-icon>
+                  {{ t.get('medico.horarios.save') }}
+                </button>
+                <button class="my-sched__btn my-sched__btn--cancel"
+                  (click)="_cancelEdit(day.value)">
+                  <lucide-icon name="x" [size]="16"></lucide-icon>
+                </button>
+
+              } @else if (_getHorario(day.value)) {
+                <span class="my-sched__time-display">
+                  {{ _getHorario(day.value)!.horaInicio.slice(0,5) }}
+                  –
+                  {{ _getHorario(day.value)!.horaFin.slice(0,5) }}
+                </span>
+                <button class="my-sched__btn my-sched__btn--edit" (click)="_editDay(day.value)">
+                  <lucide-icon name="pencil" [size]="15"></lucide-icon>
+                  {{ t.get('medico.horarios.edit') }}
+                </button>
+                <button class="my-sched__btn my-sched__btn--delete" (click)="_deleteDay(day.value)">
+                  <lucide-icon name="x-circle" [size]="15"></lucide-icon>
+                </button>
+
+              } @else {
+                <span class="my-sched__no-schedule">{{ t.get('medico.horarios.none') }}</span>
+                <button class="my-sched__btn my-sched__btn--add"
+                  (click)="_setDayTime(day.value, 'start', '08:00'); _setDayTime(day.value, 'end', '17:00')">
+                  <lucide-icon name="plus" [size]="15"></lucide-icon>
+                  {{ t.get('medico.horarios.add') }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+</div>

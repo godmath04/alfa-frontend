@@ -1,59 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
+
 import { environment } from '../../../../environments/environment';
+import { LoginRequest, LoginResponse, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest, ActivateAccountRequest, ActivateAccountResponse } from '../../models/auth.model';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class Auth {
-  private _token: string | null = null;
-  private _userRole: string | null = null;
+@Injectable({ providedIn: 'root' })
+export class AuthService {
 
-  constructor(private _http: HttpClient) {}
+  private readonly _http = inject(HttpClient);
+  private get baseUrl() { return environment.apiUrl; }
 
-  login(email: string, password: string): Observable<any> {
-    return this._http.post(`${environment.apiUrl}/api/auth/login`, { email, password }).pipe(
-      tap((response: any) => {
-        this._token = response.token;
-        this._userRole = response.role;
-      }),
-    );
+  login(email: string, password: string): Observable<LoginResponse> {
+    const body: LoginRequest = { email, password };
+    return this._http.post<LoginResponse>(`${this.baseUrl}/api/auth/login`, body);
   }
 
-  logout(): Observable<any> {
-    return this._http.post(`${environment.apiUrl}/api/auth/logout`, {}).pipe(
-      tap(() => {
-        this._token = null;
-        this._userRole = null;
-      }),
-    );
+  logout(): Observable<void> {
+    return this._http.post<void>(`${this.baseUrl}/api/auth/logout`, {});
   }
 
-  register(data: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phone: string;
-  idType: string;
-  idNumber: string;
-  birthDate: string;
-  city: string;
-  gender: string;
-}): Observable<any> {
-  return this._http.post(`${environment.apiUrl}/api/auth/register`, data);
-}
-
-  getToken(): string | null {
-    return this._token;
+  register(data: RegisterRequest): Observable<void> {
+    return this._http.post<void>(`${this.baseUrl}/api/auth/register`, data);
   }
 
-  getUserRole(): string | null {
-    return this._userRole;
+  forgotPassword(email: string): Observable<void> {
+    const body: ForgotPasswordRequest = { email };
+    return this._http.post<void>(`${this.baseUrl}/api/auth/forgot-password`, body);
   }
 
-  isAuthenticated(): boolean {
-    return this._token !== null;
+  resetPassword(token: string, newPassword: string): Observable<void> {
+    const body: ResetPasswordRequest = { token, newPassword };
+    return this._http.post<void>(`${this.baseUrl}/api/auth/reset-password`, body);
+  }
+
+  activateAccount(token: string, password: string): Observable<ActivateAccountResponse> {
+    const body: ActivateAccountRequest = { token, password };
+    return this._http.post<ActivateAccountResponse>(`${this.baseUrl}/api/auth/activate-account`, body);
   }
 }

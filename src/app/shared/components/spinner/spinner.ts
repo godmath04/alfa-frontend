@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-spinner',
-  standalone: false,
+  standalone: true,
   templateUrl: './spinner.html',
   styleUrl: './spinner.scss',
 })

@@ -1,0 +1,56 @@
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { provideMarkdown } from 'ngx-markdown';
+import {
+  LucideAngularModule,
+  Mail, MailCheck, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
+  CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
+  ArrowLeft, AlertCircle, Home, FileText, LogOut,
+  ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
+  CalendarDays, CalendarCheck, ChevronLeft, ChevronRight, LoaderCircle,
+  CircleAlert, CalendarX, DoorOpen, Trash2,
+  List, ListFilter, Search, SearchX, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
+  UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
+  Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
+  Wind, Footprints, Ban, ArrowRight,
+  BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio,
+  FlaskConical, Shield, ClockPlus, Download, Upload, FileUp, Hospital, Send, UserPlus,
+  CircleCheck, TriangleAlert
+} from 'lucide-angular';
+
+import { APP_ROUTES } from './app.routes';
+import { authInterceptor } from './core/interceptors/auth/auth-interceptor';
+import { Translate } from './core/services/translate';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZonelessChangeDetection(),
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(APP_ROUTES),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideMarkdown(),
+    provideAppInitializer(() => {
+      const translate = inject(Translate);
+      return translate.load();
+    }),
+    importProvidersFrom(
+      LucideAngularModule.pick({
+        Mail, MailCheck, Lock, Eye, EyeOff, User, Stethoscope, BarChart3,
+        CheckCircle2, Check, Phone, MapPin, Calendar, IdCard,
+        ArrowLeft, AlertCircle, Home, FileText, LogOut,
+        ClipboardList, Zap, Loader2, Clock, TimerOff, Link2Off, Camera,
+        CalendarDays, ChevronLeft, ChevronRight, LoaderCircle,
+        CircleAlert, CalendarX, DoorOpen, Trash2,
+        List, ListFilter, Search, ChevronDown, Play, Bell, UserCheck, Clock3, Hash,
+        UserX, XCircle, Plus, Pencil, X, Building, Users, Settings,
+        Heart, Baby, Brain, Activity, Bone, Ear, Hand, Microscope, Pill, Syringe, Thermometer,
+        Wind, Footprints, Ban, ArrowRight,
+        BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio,
+        FlaskConical, Shield, ClockPlus, Download, Upload, FileUp, Hospital, Send, UserPlus,
+        CircleCheck, TriangleAlert, CalendarCheck, SearchX
+      })
+    ),
+  ]
+};

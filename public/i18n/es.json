@@ -111,9 +111,184 @@
           "desc": "Conéctate con profesionales de salud certificados"
         }
       }
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contraseña",
+      "subtitle": "Ingresa tu correo electrónico para recibir un enlace de recuperación",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "ejemplo@correo.com",
+      "submitButton": "Enviar Enlace de Recuperación",
+      "successMessage": "Si el correo está registrado, recibirás un enlace de recuperación en los próximos minutos.",
+      "backToLogin": "Volver a Iniciar Sesión",
+      "errorMessage": "Ocurrió un error. Intenta nuevamente."
+    },
+    "resetPassword": {
+      "title": "Restablecer Contraseña",
+      "subtitle": "Ingresa tu nueva contraseña",
+      "newPasswordLabel": "Nueva Contraseña",
+      "newPasswordPlaceholder": "Mínimo 8 caracteres",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Repite tu nueva contraseña",
+      "submitButton": "Restablecer Contraseña",
+      "successMessage": "Tu contraseña ha sido actualizada exitosamente.",
+      "goToLogin": "Ir a Iniciar Sesión",
+      "errorExpired": "El enlace ha expirado o ya fue utilizado.",
+      "errorMismatch": "Las contraseñas no coinciden.",
+      "errorMinLength": "La contraseña debe tener al menos 8 caracteres.",
+      "errorNoToken": "Enlace de recuperación inválido.",
+      "errorGeneric": "Ocurrió un error. Intenta nuevamente."
+    },
+    "activate": {
+      "title":                "Crea tu contraseña",
+      "subtitle":             "El hospital ya registró tu información. Crea una contraseña para acceder al portal cuando quieras.",
+      "password":             "Nueva contraseña",
+      "password-placeholder": "Mínimo 8 caracteres",
+      "confirm":              "Confirmar contraseña",
+      "confirm-placeholder":  "Repite tu contraseña",
+      "submit":               "Activar mi cuenta",
+      "error-length":         "La contraseña debe tener al menos 6 caracteres",
+      "error-match":          "Las contraseñas no coinciden",
+      "error-generic":        "Ocurrió un error al activar tu cuenta. Intenta nuevamente.",
+      "success-title":        "¡Cuenta activada exitosamente!",
+      "success-subtitle":     "Ya puedes iniciar sesión con tu nueva contraseña.",
+      "go-to-login":          "Ir a iniciar sesión"
+    }
+  },
+  "ejecutivo": {
+    "sidebar": {
+      "brand":    "Alfa Hospital",
+      "subtitle": "Call Center"
+    },
+    "nav": {
+      "patients":      "Pacientes",
+      "labManagement": "Gestión Lab"
+    },
+    "patients": {
+      "title":              "Gestión de Pacientes",
+      "subtitle":           "Busca un paciente o registra uno nuevo para agendar una cita",
+      "new":                "Nuevo Paciente",
+      "search-placeholder": "Buscar por nombre o cédula...",
+      "search-btn":         "Buscar",
+      "search-error":       "Error al buscar pacientes",
+      "no-results":         "No se encontraron pacientes con esa búsqueda",
+      "register-new":       "Registrar como nuevo paciente",
+      "view":               "Ver perfil",
+      "estado": {
+        "active":   "Activo",
+        "guest":    "Invitado",
+        "inactive": "Inactivo"
+      },
+      "table": {
+        "name":    "Nombre",
+        "id":      "Cédula / Pasaporte",
+        "email":   "Correo",
+        "phone":   "Teléfono",
+        "status":  "Estado",
+        "actions": "Acciones"
+      },
+      "form": {
+        "title":                  "Registrar Paciente",
+        "first-name":             "Nombre",
+        "first-name-placeholder": "Ej: Juan",
+        "last-name":              "Apellido",
+        "last-name-placeholder":  "Ej: Pérez",
+        "email":                  "Correo electrónico",
+        "email-placeholder":      "Ej: juan@email.com",
+        "phone":                  "Teléfono",
+        "phone-placeholder":      "Ej: 0991234567",
+        "id-type":                "Tipo de documento",
+        "id-number":              "Número de documento",
+        "id-number-placeholder":  "Cédula o pasaporte",
+        "birth-date":             "Fecha de nacimiento",
+        "birth-day":              "Día",
+        "birth-month":            "Mes",
+        "birth-year":             "Año",
+        "city":                   "Ciudad",
+        "city-placeholder":       "Seleccionar ciudad...",
+        "gender":                 "Sexo",
+        "gender-placeholder":     "Seleccionar...",
+        "save":                   "Registrar paciente",
+        "error-first":            "El nombre es obligatorio",
+        "error-last":             "El apellido es obligatorio",
+        "error-email":            "El correo es obligatorio",
+        "error-id":               "El número de documento es obligatorio",
+        "error-birth":            "La fecha de nacimiento es obligatoria",
+        "error-city":             "La ciudad es obligatoria",
+        "error-gender":           "El sexo es obligatorio",
+        "error-save":             "Error al registrar el paciente"
+      }
+    },
+    "profile": {
+      "back":                "Volver a búsqueda",
+      "load-error":          "Error al cargar el perfil del paciente",
+      "cancel-success":      "Cita cancelada exitosamente",
+      "cancel-error":        "Error al cancelar la cita",
+      "book":                "Agendar cita",
+      "bookLab":             "Agendar Lab",
+      "email":               "Correo",
+      "phone":               "Teléfono",
+      "id":                  "Documento",
+      "active-appointments": "Citas activas",
+      "no-active":           "No tiene citas activas",
+      "history":             "Historial de citas",
+      "no-history":          "No tiene historial de citas",
+      "cancel":              "Cancelar",
+      "table": {
+        "date":      "Fecha",
+        "time":      "Hora",
+        "doctor":    "Médico",
+        "specialty": "Especialidad",
+        "office":    "Consultorio",
+        "status":    "Estado",
+        "actions":   "Acciones"
+      }
+    },
+    "labManagement": {
+      "title": "Gestión de Citas de Laboratorio",
+      "errorLoading": "Error al cargar las citas",
+      "noResults": "No hay citas con los filtros seleccionados",
+      "guest": "Invitado",
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "filters": {
+        "all":        "Todos los estados",
+        "fechaDesde": "Desde",
+        "fechaHasta": "Hasta",
+        "apply":      "Buscar"
+      },
+      "table": {
+        "patient":  "Paciente",
+        "lab":      "Laboratorio",
+        "dateTime": "Fecha / Hora",
+        "study":    "Tipo de estudio",
+        "status":   "Estado",
+        "actions":  "Acciones"
+      },
+      "actions": {
+        "complete":  "Completar",
+        "cancel":    "Cancelar",
+        "upload":    "Subir Resultado",
+        "download":  "Ver Resultado"
+      }
     }
   },
   "common": {
+    "days": {
+      "monday":         "Lunes",
+      "tuesday":        "Martes",
+      "wednesday":      "Miércoles",
+      "thursday":       "Jueves",
+      "friday":         "Viernes",
+      "saturday":       "Sábado",
+      "sunday":         "Domingo",
+      "monday-short":   "Lun",
+      "tuesday-short":  "Mar",
+      "wednesday-short":"Mié",
+      "thursday-short": "Jue",
+      "friday-short":   "Vie",
+      "saturday-short": "Sáb",
+      "sunday-short":   "Dom"
+    },
     "buttons": {
       "save": "Guardar",
       "cancel": "Cancelar",
@@ -128,33 +303,826 @@
       "invalid-phone": "Número de teléfono inválido"
     }
   },
+  "profile": {
+    "title": "Mi Perfil",
+    "subtitle": "Gestiona tu información personal",
+    "personalData": "Datos Personales",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "city": "Ciudad",
+    "birthDate": "Fecha de Nacimiento",
+    "idType": "Tipo de Documento",
+    "idNumber": "Número de Documento",
+    "gender": "Sexo",
+    "photo": "Foto de Perfil",
+    "changePhoto": "Cambiar foto",
+    "successMessage": "Perfil actualizado correctamente.",
+    "errorMessage": "Ocurrió un error al actualizar el perfil.",
+    "errors": {
+      "notPastDate": "La fecha de nacimiento debe ser anterior a hoy."
+    }
+  },
   "paciente": {
     "sidebar": {
+      "brand":    "Alfa Hospital",
       "subtitle": "Healthcare Management"
     },
     "nav": {
       "profile": "Mi Perfil",
       "appointments": "Agendar Cita",
-      "lab": "Laboratorio",
+      "myAppointments": "Mis Citas",
+      "lab":        "Agendar Lab",
+      "misLabCitas": "Mis Citas Lab",
+      "labResults": "Mis Resultados Lab",
       "logout": "Cerrar sesión"
     },
     "dashboard": {
       "title": "Mi Perfil",
       "welcome": "Bienvenido de nuevo"
     },
+    "appointmentHistory": {
+      "title": "Historial de Citas",
+      "filters": {
+        "status": "Estado",
+        "allStatuses": "Todos los estados",
+        "dateFrom": "Fecha desde",
+        "dateTo": "Fecha hasta",
+        "search": "Buscar",
+        "clear": "Limpiar filtros"
+      },
+      "table": {
+        "date": "Fecha",
+        "time": "Hora",
+        "doctor": "Médico",
+        "specialty": "Especialidad",
+        "office": "Consultorio",
+        "status": "Estado"
+      },
+      "statuses": {
+        "PENDIENTE": "Pendiente",
+        "CONFIRMADA": "Confirmada",
+        "COMPLETADA": "Completada",
+        "CANCELADA": "Cancelada",
+        "NO_ASISTIO": "No asistió"
+      },
+      "noResults": "No se encontraron citas con los filtros seleccionados.",
+      "errorLoading": "Ocurrió un error al cargar las citas. Por favor intenta de nuevo.",
+      "pagination": {
+        "page": "Página",
+        "of": "de",
+        "total": "Total",
+        "appointments": "citas",
+        "previous": "Anterior",
+        "next": "Siguiente"
+      },
+      "cancel": {
+        "button": "Cancelar",
+        "confirmTitle": "Cancelar cita",
+        "confirmMessage": "¿Estás seguro de que deseas cancelar esta cita? Esta acción no se puede deshacer.",
+        "confirmDetails": "Detalles de la cita:",
+        "confirmButton": "Sí, cancelar cita",
+        "cancelButton": "Volver",
+        "cancelling": "Cancelando...",
+        "success": "La cita ha sido cancelada exitosamente.",
+        "errorGeneric": "Ocurrió un error al cancelar la cita. Intenta nuevamente."
+      }
+    },
     "appointments": {
       "title": "Agendar Cita Médica",
       "subtitle": "Sigue los pasos para programar tu consulta",
       "steps": {
-        "specialty": "Seleccionar Especialidad",
-        "doctor": "Seleccionar Médico",
-        "datetime": "Elegir Fecha y Hora"
+        "specialty": "Especialidad",
+        "doctor": "Médico",
+        "datetime": "Fecha y Hora",
+        "confirmation": "Confirmación",
+        "voucher": "Comprobante",
+        "quickSpecialtyDate": "Especialidad y Fecha",
+        "quickConfirm": "Confirmar Cita"
+      },
+      "flowSelector": {
+        "title": "¿Cómo deseas agendar tu cita?",
+        "manual": {
+          "title": "Cita Manual",
+          "description": "Elige paso a paso tu especialidad, médico, fecha y horario"
+        },
+        "quick": {
+          "title": "Cita Rápida",
+          "description": "Encontramos el mejor horario disponible para ti"
+        }
+      },
+      "confirmation": {
+        "title": "Resumen de tu cita",
+        "subtitle": "Revisa los datos antes de confirmar",
+        "specialtyLabel": "Especialidad",
+        "doctorLabel": "Médico",
+        "dateLabel": "Fecha",
+        "timeLabel": "Hora",
+        "officeLabel": "Consultorio",
+        "motivoLabel": "Motivo de consulta",
+        "motivoPlaceholder": "Describe brevemente el motivo de tu consulta...",
+        "motivoRequired": "El motivo es obligatorio",
+        "confirmButton": "Confirmar Cita",
+        "creating": "Creando cita..."
+      },
+      "voucher": {
+        "title": "¡Cita agendada exitosamente!",
+        "subtitle": "Guarda esta información para tu consulta",
+        "appointmentId": "N° de cita",
+        "patient": "Paciente",
+        "status": "Estado",
+        "newAppointment": "Agendar otra cita",
+        "goToDashboard": "Ir al inicio"
+      },
+      "quick": {
+        "searchButton": "Buscar horario disponible",
+        "proposalTitle": "Te encontramos este horario",
+        "expiresIn": "Expira en",
+        "cancelProposal": "Cancelar propuesta",
+        "expired": "La propuesta ha expirado. Intenta de nuevo.",
+        "searching": "Buscando el mejor horario..."
       },
       "footer": {
         "back": "Volver",
         "next": "Siguiente",
         "confirm": "Confirmar Cita"
+      },
+      "errors": {
+        "fetch-catalog": "No se pudo cargar el catálogo de especialidades",
+        "fetch-doctors": "No se pudieron cargar los médicos",
+        "doctor-not-found": "Médico no encontrado en el sistema.",
+        "doctor-not-available": "El médico no atiende este día.",
+        "create-failed": "No se pudo crear la cita. Intenta de nuevo.",
+        "slot-conflict": "El horario seleccionado ya fue reservado. Por favor elige otro.",
+        "business-rule": "No se puede crear la cita en este horario.",
+        "proposal-failed": "No se encontró disponibilidad. Intenta otra fecha.",
+        "confirm-quick-failed": "No se pudo confirmar la cita rápida.",
+        "proposal-expired": "Tu reserva expiró. Solicita una nueva propuesta."
+      },
+      "doctorSingular": "médico",
+
+      "doctorPlural": "médicos",
+      "loadingDoctors": "Buscando médicos disponibles...",
+      "experienceYears": "años de experiencia",
+      "noDoctors": "No hay médicos disponibles para esta especialidad.",
+      "noSpecialties": "No hay especialidades disponibles en este momento.",
+      "selectDateTitle": "Elegir Fecha",
+      "selectTimeTitle": "Horarios Disponibles",
+      "noAvailableTimes": "No hay disponibilidad para el día seleccionado.",
+      "status": {
+        "pendiente":  "Pendiente",
+        "confirmada": "Confirmada",
+        "completada": "Completada",
+        "cancelada":  "Cancelada"
       }
+    }
+  },
+  "admin": {
+    "sidebar": {
+      "brand":    "Alfa Hospital",
+      "subtitle": "Panel Administrador"
+    },
+    "nav": {
+      "resources":      "Gestión de Recursos",
+      "specialties":    "Especialidades",
+      "offices":        "Consultorios",
+      "schedules":      "Horarios de Atención",
+      "doctors":        "Perfiles de Médicos",
+      "users":          "Usuarios",
+      "config":         "Configuración",
+      "notifications":  "Notificaciones",
+      "labCatalogs":    "Catálogos de Lab",
+      "logout":         "Cerrar sesión"
+    },
+    "config": {
+      "title":    "Configuración del Sistema",
+      "subtitle": "Parámetros globales del sistema hospitalario",
+      "add":      "Nueva Configuración",
+      "new":      "Nueva Configuración",
+      "edit":     "Editar Configuración",
+      "loading":  "Cargando configuraciones...",
+      "empty":    "No hay configuraciones registradas",
+      "error":    "Error al cargar las configuraciones. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "fields": {
+        "key":                  "Clave",
+        "key-placeholder":      "Ej: appointment.max_days_ahead",
+        "value":                "Valor",
+        "value-placeholder":    "Ej: 30",
+        "description":          "Descripción",
+        "description-placeholder": "Descripción del parámetro"
+      },
+      "table": {
+        "key":         "Clave",
+        "value":       "Valor",
+        "description": "Descripción",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "actions": {
+        "edit":       "Editar configuración",
+        "deactivate": "Desactivar",
+        "reactivate": "Reactivar"
+      },
+      "validation": {
+        "key-required":   "La clave es obligatoria",
+        "value-required": "El valor es obligatorio"
+      }
+    },
+    "resources": {
+      "title":    "Gestión de Recursos",
+      "subtitle": "Administra especialidades, consultorios y horarios del sistema",
+      "add":      "Agregar",
+      "new":      "Nuevo Registro",
+      "edit":     "Editar Registro"
+    },
+    "offices": {
+      "loading":    "Cargando consultorios...",
+      "empty":      "No hay consultorios registrados",
+      "error":      "Error al cargar los consultorios. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "fields": {
+        "number":              "Número",
+        "number-placeholder":  "Ej: 101",
+        "floor":               "Piso",
+        "floor-none":          "Sin piso asignado",
+        "type":                "Tipo",
+        "status":              "Estado",
+        "specialty":           "Especialidad",
+        "specialty-none":      "Sin especialidad",
+        "equipment":           "Equipamiento",
+        "equipment-placeholder": "Ej: ECG, Monitor de Presión, Desfibrilador"
+      },
+      "types": {
+        "internal": "Interno",
+        "external": "Externo"
+      },
+      "statuses": {
+        "available":   "Disponible",
+        "occupied":    "Ocupado",
+        "maintenance": "Mantenimiento"
+      },
+      "table": {
+        "number":   "Número",
+        "floor":    "Piso",
+        "type":     "Tipo",
+        "status":   "Estado",
+        "specialty": "Especialidad",
+        "active":   "Activo",
+        "actions":  "Acciones"
+      },
+      "actions": {
+        "edit":       "Editar consultorio",
+        "deactivate": "Desactivar consultorio",
+        "reactivate": "Reactivar consultorio"
+      },
+      "validation": {
+        "number-required": "El número del consultorio es obligatorio"
+      }
+    },
+    "doctors": {
+      "title":    "Perfiles de Médicos",
+      "subtitle": "Administra los perfiles del personal médico del hospital",
+      "add":      "Nuevo Médico",
+      "new":      "Nuevo Perfil de Médico",
+      "edit":     "Editar Perfil de Médico",
+      "loading":  "Cargando médicos...",
+      "empty":    "No hay perfiles de médicos registrados",
+      "error":    "Error al cargar los médicos. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "types": {
+        "interno": "Interno",
+        "externo": "Externo"
+      },
+      "fields": {
+        "user":                  "Usuario del Sistema",
+        "user-placeholder":      "Selecciona un usuario...",
+        "type":                  "Tipo de Atención",
+        "email":                 "Correo Electrónico",
+        "email-placeholder":     "correo@ejemplo.com",
+        "first-name":            "Nombre",
+        "first-name-placeholder":"Ej: Juan",
+        "last-name":             "Apellido",
+        "last-name-placeholder": "Ej: Pérez",
+        "id-type":                       "Tipo de Documento",
+        "id-type-cedula":                "Cédula",
+        "id-type-pasaporte":             "Pasaporte",
+        "id-type-unknown":               "No especificado",
+        "id-number":                     "Número de Documento",
+        "id-number-placeholder-cedula":  "10 dígitos numéricos",
+        "id-number-placeholder-pasaporte": "Hasta 15 caracteres alfanuméricos",
+        "office":                "Consultorio Asignado",
+        "office-none":           "Sin consultorio asignado",
+        "photo":                 "Foto de Perfil (URL)",
+        "photo-placeholder":     "https://...",
+        "specialties":           "Especialidades"
+      },
+      "table": {
+        "name":        "Médico",
+        "id-number":   "Cédula",
+        "type":        "Tipo",
+        "office":      "Consultorio",
+        "specialties": "Especialidades",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "actions": {
+        "edit":       "Editar perfil",
+        "deactivate": "Desactivar médico",
+        "reactivate": "Reactivar médico",
+        "schedules":  "Ver horarios de atención"
+      },
+      "schedules": {
+        "title": "Horarios de Atención",
+        "none":  "Sin horario asignado"
+      },
+      "validation": {
+        "user-required":  "Debes seleccionar un usuario del sistema",
+        "email-required": "El correo electrónico es obligatorio",
+        "first-required": "El nombre es obligatorio",
+        "last-required":  "El apellido es obligatorio",
+        "office-taken":            "El consultorio ya está asignado a un médico interno",
+        "id-required":             "El número de documento es obligatorio",
+        "id-cedula-invalid":       "La cédula debe tener exactamente 10 dígitos numéricos",
+        "id-pasaporte-invalid":    "El pasaporte solo permite letras y números, máximo 15 caracteres"
+      }
+    },
+    "users": {
+      "title":    "Gestión de Usuarios",
+      "subtitle": "Consulta y administra los roles de todos los usuarios del sistema",
+      "loading":  "Cargando usuarios...",
+      "empty":    "No hay usuarios registrados",
+      "error":    "Error al cargar los usuarios. Intenta de nuevo.",
+      "table": {
+        "name":    "Usuario",
+        "email":   "Correo Electrónico",
+        "role":    "Rol",
+        "actions": "Acciones"
+      },
+      "roles": {
+        "paciente":      "Paciente",
+        "medico":        "Médico",
+        "ejecutivo":     "Ejecutivo",
+        "administrador": "Administrador",
+        "gerencia":      "Gerencia"
+      },
+      "actions": {
+        "change-role": "Cambiar rol",
+        "save":        "Guardar rol",
+        "cancel":      "Cancelar"
+      }
+    },
+    "schedules": {
+      "loading":    "Cargando horarios...",
+      "empty":      "No hay horarios registrados",
+      "error":      "Error al cargar los horarios. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "fields": {
+        "category":             "Categoría",
+        "category-placeholder": "Ej: Consulta General",
+        "days":                 "Días de Atención",
+        "start":                "Hora de Inicio",
+        "end":                  "Hora de Fin",
+        "max":                  "Máx. Citas por Día",
+        "max-placeholder":      "Ej: 20"
+      },
+      "table": {
+        "category": "Categoría",
+        "days":     "Días",
+        "hours":    "Horario",
+        "max":      "Máx. Citas",
+        "status":   "Estado",
+        "actions":  "Acciones"
+      },
+      "actions": {
+        "edit":       "Editar horario",
+        "deactivate": "Desactivar horario",
+        "reactivate": "Reactivar horario"
+      },
+      "validation": {
+        "category-required": "La categoría es obligatoria",
+        "days-required":     "Selecciona al menos un día",
+        "time-required":     "La hora de inicio y fin son obligatorias",
+        "max-required":      "El máximo de citas debe ser al menos 1"
+      }
+    },
+    "specialties": {
+      "title":    "Gestión de Especialidades",
+      "subtitle": "Administra el catálogo de especialidades médicas del sistema",
+      "add":      "Nueva Especialidad",
+      "new":      "Nueva Especialidad",
+      "edit":     "Editar Especialidad",
+      "loading":  "Cargando especialidades...",
+      "empty":    "No hay especialidades registradas",
+      "error":    "Error al cargar las especialidades. Intenta de nuevo.",
+      "save-error": "Error al guardar. Verifica los datos e intenta de nuevo.",
+      "fields": {
+        "name":                 "Nombre",
+        "name-placeholder":     "Ej: Cardiología",
+        "icon":                 "Ícono",
+        "icon-none":            "Sin ícono",
+        "icon-placeholder":     "Ej: heart, brain, eye...",
+        "description":          "Descripción",
+        "description-placeholder": "Descripción breve de la especialidad",
+        "duration":             "Duración (min)",
+        "duration-unit":        "min",
+        "duration-placeholder": "Ej: 30"
+      },
+      "table": {
+        "icon":        "Ícono",
+        "name":        "Nombre",
+        "description": "Descripción",
+        "duration":    "Duración",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "status": {
+        "active":   "Activa",
+        "inactive": "Inactiva"
+      },
+      "actions": {
+        "edit":       "Editar especialidad",
+        "deactivate": "Desactivar especialidad",
+        "reactivate": "Reactivar especialidad"
+      },
+      "validation": {
+        "name-required":     "El nombre es obligatorio",
+        "duration-required": "La duración mínima es 5 minutos"
+      }
+    },
+    "notifications": {
+      "title": "Configuración de Notificaciones",
+      "subtitle": "Gestiona las reglas de notificación y la hora de envío automático",
+      "loading": "Cargando configuración...",
+      "empty": "No hay reglas de notificación registradas",
+      "error": {
+        "load":      "Error al cargar las reglas. Intenta de nuevo.",
+        "save":      "Error al guardar. Verifica los datos e intenta de nuevo.",
+        "toggle":    "Error al cambiar el estado de la regla.",
+        "scheduler": "Error al guardar la hora de envío."
+      },
+      "schedulerHour": {
+        "title":       "Hora de envío de notificaciones",
+        "description": "El sistema enviará notificaciones diariamente a esta hora",
+        "label":       "Hora de ejecución (0-23)",
+        "save":        "Guardar hora",
+        "saving":      "Guardando...",
+        "saved":       "Hora guardada correctamente"
+      },
+      "rules": {
+        "title":   "Reglas de Notificación",
+        "newRule": "Nueva regla",
+        "table": {
+          "type":      "Tipo",
+          "daysBefore":"Días antes",
+          "channel":   "Canal",
+          "purpose":   "Propósito",
+          "status":    "Estado",
+          "actions":   "Acciones"
+        },
+        "types": {
+          "immediate":  "Inmediata",
+          "dayBefore":  "día antes",
+          "daysBefore": "días antes"
+        },
+        "channels": {
+          "whatsapp": "WhatsApp",
+          "email":    "Email",
+          "both":     "Ambos"
+        },
+        "purposes": {
+          "reminder":     "Recordatorio",
+          "confirmation": "Confirmación"
+        },
+        "status": {
+          "active":   "Activa",
+          "inactive": "Inactiva"
+        },
+        "actions": {
+          "edit":   "Editar regla",
+          "toggle": "Activar / Desactivar"
+        },
+        "modal": {
+          "titleCreate":    "Nueva regla",
+          "titleEdit":      "Editar regla",
+          "ruleType":       "Tipo de regla",
+          "daysBeforeLabel":"Días de anticipación",
+          "daysBeforePlaceholder": "Ej: 2",
+          "channelLabel":   "Canal de envío",
+          "purposeLabel":   "Propósito",
+          "activeLabel":    "Activa",
+          "save":           "Guardar",
+          "cancel":         "Cancelar",
+          "protectedRule":  "Esta regla es de seguridad del sistema y no puede desactivarse",
+          "validation": {
+            "daysRequired":    "Los días de anticipación son obligatorios y deben ser mayores a 0"
+          },
+          "ruleTypes": {
+            "immediate":  "Inmediata",
+            "daysBefore": "Días antes"
+          }
+        }
+      }
+    }
+  },
+  "medico": {
+    "sidebar": {
+      "brand":    "Alfa Hospital",
+      "subtitle": "Portal Médico"
+    },
+    "nav": {
+      "agenda":     "Citas del Día",
+      "calendario": "Mi Calendario",
+      "horarios":   "Mis Horarios",
+      "labResults": "Resultados de Laboratorio",
+      "logout":     "Cerrar sesión"
+    },
+    "horarios": {
+      "title":         "Mis Horarios de Atención",
+      "subtitle":      "Configura los días y horas en que atiendes pacientes",
+      "card-title":    "Horario semanal",
+      "loading":       "Cargando horarios...",
+      "profile-error": "No se encontró tu perfil en el sistema. Contacta al administrador.",
+      "none":          "Sin horario asignado",
+      "add":           "Agregar",
+      "edit":          "Editar",
+      "save":          "Guardar"
+    },
+    "agenda": {
+      "title-day": "Citas del Día",
+      "title-week": "Mi Agenda Semanal",
+      "subtitle-day": "Agenda para",
+      "subtitle-week": "Resumen semanal de citas",
+      "view-day": "Día",
+      "view-week": "Semana",
+      "today": "Hoy",
+      "prevWeek": "Semana anterior",
+      "nextWeek": "Semana siguiente",
+      "loading": "Cargando agenda...",
+      "office": "Consultorio",
+      "reason": "Motivo",
+      "stats": {
+        "total":     "Total del día",
+        "confirmed": "Confirmadas",
+        "pending":   "Pendientes",
+        "completed": "Completadas",
+        "cancelled": "Canceladas",
+        "next":      "Próxima cita",
+        "none":      "Ninguna"
+      },
+      "search-placeholder": "Buscar por nombre de paciente...",
+      "filter": {
+        "all": "Todos los estados",
+        "confirmed": "Confirmadas",
+        "pending": "Pendientes"
+      },
+      "table": {
+        "time": "Hora",
+        "patient": "Paciente",
+        "office": "Consultorio",
+        "reason": "Motivo",
+        "status": "Estado",
+        "detail": "Detalle",
+        "until": "hasta",
+        "empty": "No hay citas para este día"
+      },
+      "detail": {
+        "patient-info": "Información del Paciente",
+        "specialty": "Especialidad",
+        "office": "Consultorio",
+        "date": "Fecha",
+        "schedule": "Horario",
+        "quick-actions": "Acciones Rápidas",
+        "absent": "Paciente Ausente",
+        "view-record": "Ver expediente",
+        "notes-title": "Notas de la Cita",
+        "notes-reason": "Motivo:",
+        "notes-placeholder": "Agregar notas para esta cita..."
+      },
+      "week": {
+        "empty": "Sin citas esta semana",
+        "count-singular": "cita programada",
+        "count-plural": "citas programadas"
+      },
+      "status": {
+        "PENDIENTE":  "Pendiente",
+        "CONFIRMADA": "Confirmada",
+        "COMPLETADA": "Completada",
+        "CANCELADA":  "Cancelada",
+        "NO_ASISTIO": "No asistió"
+      }
+    }
+  },
+  "lab": {
+    "appointments": {
+      "title":        "Mis Citas de Laboratorio",
+      "upcoming":     "Citas pendientes",
+      "past":         "Historial",
+      "noResults":    "No tienes citas de laboratorio registradas",
+      "errorLoading": "Error al cargar tus citas",
+      "cancel":       "Cancelar",
+      "cancelError":  "No se pudo cancelar la cita. Recuerda que debes cancelar con al menos 24h de anticipación.",
+      "prev":         "Anterior",
+      "next":         "Siguiente",
+      "status": {
+        "pendiente":  "Pendiente",
+        "completada": "Completada",
+        "cancelada":  "Cancelada"
+      }
+    },
+    "booking": {
+      "title":    "Agendar Cita de Laboratorio",
+      "subtitle": "Selecciona el laboratorio, fecha, horario y tipo de estudio",
+      "steps": {
+        "lab":     "Laboratorio",
+        "slot":    "Fecha y Hora",
+        "details": "Detalles",
+        "voucher": "Comprobante"
+      },
+      "noLabs":         "No hay laboratorios disponibles en este momento.",
+      "labNumber":      "N°",
+      "floor":          "Piso",
+      "selectDate":     "Seleccionar Fecha",
+      "selectTime":     "Horarios Disponibles",
+      "noSlots":        "No hay horarios disponibles para este día.",
+      "studyType":      "Tipo de Estudio",
+      "selectStudyType": "Seleccionar tipo de estudio...",
+      "insuranceType":  "Seguro / Convenio",
+      "selectInsuranceType": "Seleccionar seguro...",
+      "observations":   "Observaciones",
+      "observationsPlaceholder": "Notas adicionales para el laboratorio...",
+      "lab":            "Laboratorio",
+      "date":           "Fecha",
+      "time":           "Hora",
+      "confirming":     "Confirmando...",
+      "confirmButton":  "Confirmar Cita",
+      "voucher": {
+        "title":      "¡Cita de laboratorio agendada!",
+        "subtitle":   "Guarda esta información para tu visita",
+        "lab":        "Laboratorio",
+        "study":      "Tipo de Estudio",
+        "date":       "Fecha",
+        "time":       "Hora",
+        "status":     "Estado",
+        "patient":    "Paciente",
+        "newBooking": "Agendar otra cita",
+        "dashboard":  "Ir al inicio"
+      },
+      "guest": {
+        "modePatient":  "Paciente Registrado",
+        "modeGuest":    "Paciente Invitado",
+        "nombre":       "Nombre",
+        "apellido":     "Apellido",
+        "email":        "Correo Electrónico",
+        "phone":        "Teléfono",
+        "idNumber":     "Cédula / Pasaporte",
+        "requiredFields": "Todos los campos del paciente invitado son obligatorios"
+      },
+      "executive": {
+        "title":         "Agendar Cita de Laboratorio",
+        "subtitle":      "Agenda una cita de laboratorio para el paciente",
+        "backToProfile": "Volver al perfil"
+      }
+    },
+    "results": {
+      "title":       "Mis Resultados de Laboratorio",
+      "noResults":   "No tienes resultados de laboratorio aún.",
+      "errorLoading":"Error al cargar los resultados. Intenta de nuevo.",
+      "download":    "Descargar PDF",
+      "statuses": {
+        "PENDIENTE":  "Pendiente",
+        "DISPONIBLE": "Disponible",
+        "CANCELADA":  "Cancelada"
+      }
+    },
+    "guest": {
+      "brand":        "Alfa Hospital",
+      "title":        "Portal de Resultados de Laboratorio",
+      "subtitle":     "Accede a tu resultado de laboratorio con tu enlace personal",
+      "loading":      "Cargando resultado...",
+      "errorTitle":   "No se pudo cargar el resultado",
+      "invalidToken": "El enlace de acceso no es válido.",
+      "notFound":     "El resultado no fue encontrado o el enlace ha expirado.",
+      "study":        "Tipo de Estudio",
+      "lab":          "Laboratorio",
+      "date":         "Fecha de Cita",
+      "time":         "Hora",
+      "status":       "Estado",
+      "file":         "Archivo",
+      "download":     "Descargar PDF",
+      "downloadFailed": "No se pudo descargar el archivo. Intenta de nuevo.",
+      "pendingNote":  "Tu resultado estará disponible próximamente. Recibirás un correo cuando esté listo.",
+      "disclaimer":   "Este enlace es personal e intransferible. Expira 7 días después de ser emitido."
+    },
+    "upload": {
+      "title":          "Subir Resultado de Laboratorio",
+      "subtitle":       "Sube el PDF del resultado para la cita",
+      "citaId":         "Cita ID",
+      "dropzone":       "Arrastra el PDF aquí o haz clic para seleccionarlo",
+      "browse":         "Seleccionar archivo",
+      "pdfOnly":        "Solo se aceptan archivos PDF.",
+      "uploading":      "Subiendo...",
+      "uploadBtn":      "Subir Resultado",
+      "error":          "Error al subir el resultado. Intenta de nuevo.",
+      "successTitle":   "¡Resultado subido exitosamente!",
+      "successSubtitle":"El resultado ya está disponible para el paciente.",
+      "resendTitle":    "Reenviar Token de Acceso",
+      "resendDesc":     "Este resultado corresponde a un paciente invitado. Puedes reenviar el enlace de acceso.",
+      "resendBtn":      "Reenviar Token",
+      "resendSuccess":  "Token reenviado exitosamente al correo del paciente.",
+      "resendError":    "Error al reenviar el token. Intenta de nuevo."
+    },
+    "medico": {
+      "title":           "Resultados de Laboratorio de Pacientes",
+      "subtitle":        "Busca resultados por correo electrónico o número de documento",
+      "emailLabel":      "Correo del paciente",
+      "emailPlaceholder":"paciente@correo.com",
+      "or":              "ó",
+      "idLabel":         "Cédula / Pasaporte",
+      "idPlaceholder":   "Número de documento",
+      "searchBtn":       "Buscar",
+      "searchRequired":  "Ingresa un correo o número de documento para buscar.",
+      "searchError":     "Error al realizar la búsqueda. Intenta de nuevo.",
+      "noResults":       "No se encontraron resultados para esta búsqueda.",
+      "table": {
+        "patient": "Paciente",
+        "study":   "Tipo de Estudio",
+        "lab":     "Laboratorio",
+        "date":    "Fecha",
+        "status":  "Estado",
+        "actions": "Acciones"
+      }
+    },
+    "catalogs": {
+      "title":    "Catálogos de Laboratorio",
+      "subtitle": "Administra tipos de estudio, seguros y laboratorios",
+      "add":      "Agregar",
+      "new":      "Nuevo Registro",
+      "edit":     "Editar Registro",
+      "loading":  "Cargando...",
+      "empty":    "No hay registros.",
+      "loadError":"Error al cargar los datos. Intenta de nuevo.",
+      "saveError":"Error al guardar. Verifica los datos e intenta de nuevo.",
+      "tabs": {
+        "studyTypes":    "Tipos de Estudio",
+        "insuranceTypes":"Seguros / Convenios",
+        "laboratories":  "Laboratorios"
+      },
+      "fields": {
+        "name":                "Nombre",
+        "namePlaceholder":     "Ej: Hemograma Completo",
+        "description":         "Descripción",
+        "descriptionPlaceholder": "Descripción opcional",
+        "labNumber":           "Número",
+        "labNumberPlaceholder":"Ej: LAB-01",
+        "labName":             "Nombre",
+        "labNamePlaceholder":  "Ej: Laboratorio Central",
+        "floor":               "Piso",
+        "floorPlaceholder":    "Ej: PB"
+      },
+      "table": {
+        "name":        "Nombre",
+        "description": "Descripción",
+        "labNumber":   "Número",
+        "labName":     "Nombre del Laboratorio",
+        "floor":       "Piso",
+        "schedules":   "Horarios",
+        "status":      "Estado",
+        "actions":     "Acciones"
+      },
+      "status": {
+        "active":   "Activo",
+        "inactive": "Inactivo"
+      },
+      "actions": {
+        "edit":           "Editar",
+        "deactivate":     "Desactivar",
+        "reactivate":     "Reactivar",
+        "addSchedule":    "Agregar Horario",
+        "deleteSchedule": "Eliminar Horario"
+      },
+      "scheduleForm": {
+        "title": "Agregar Horario de Atención",
+        "day":   "Día de la Semana",
+        "start": "Hora de Inicio",
+        "end":   "Hora de Fin",
+        "slot":  "Duración del Turno (min)"
+      },
+      "validation": {
+        "nameRequired":        "El nombre es obligatorio",
+        "labNumberRequired":   "El número de laboratorio es obligatorio",
+        "labNameRequired":     "El nombre del laboratorio es obligatorio",
+        "scheduleRequired":    "Selecciona día, hora de inicio y hora de fin"
+      }
+    },
+    "errors": {
+      "loadLabs":       "No se pudieron cargar los laboratorios.",
+      "loadSlots":      "No se pudieron cargar los horarios disponibles.",
+      "loadCatalogs":   "No se pudieron cargar los catálogos.",
+      "loadResults":    "No se pudieron cargar los resultados.",
+      "createFailed":   "No se pudo crear la cita. Intenta de nuevo.",
+      "downloadFailed": "No se pudo descargar el archivo."
     }
   }
 }

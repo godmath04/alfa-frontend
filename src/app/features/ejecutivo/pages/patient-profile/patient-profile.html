@@ -1,0 +1,161 @@
+<div class="pp-page">
+
+  <button class="pp-page__back" (click)="_goBack()">
+    <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+    {{ t.get('ejecutivo.profile.back') }}
+  </button>
+
+  @if (_loading()) {
+    <div class="pp-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="pp-page__spinner"></lucide-icon>
+    </div>
+  } @else if (_error()) {
+    <div class="pp-page__state pp-page__state--error">
+      <lucide-icon name="circle-alert" [size]="36"></lucide-icon>
+      <span>{{ _error() }}</span>
+    </div>
+  } @else if (_patient()) {
+
+    <!-- ─── Datos del paciente ──────────────────────────────────────── -->
+    <div class="pp-page__card pp-page__card--patient">
+      <div class="pp-page__patient-header">
+        <div class="pp-page__avatar">
+          <lucide-icon name="user" [size]="28"></lucide-icon>
+        </div>
+        <div>
+          <h1 class="pp-page__patient-name">{{ _patient()!.firstName }} {{ _patient()!.lastName }}</h1>
+          <span class="pp-page__badge"
+            [class.pp-page__badge--activo]="_patient()!.status === 'ACTIVE'"
+            [class.pp-page__badge--invitado]="_patient()!.status === 'GUEST'"
+            [class.pp-page__badge--inactivo]="_patient()!.status === 'INACTIVE'">
+            {{ t.get('ejecutivo.patients.estado.' + _patient()!.status.toLowerCase()) }}
+          </span>
+        </div>
+        <button class="pp-page__btn pp-page__btn--primary pp-page__btn--book" (click)="_bookAppointment()">
+          <lucide-icon name="calendar" [size]="16"></lucide-icon>
+          {{ t.get('ejecutivo.profile.book') }}
+        </button>
+        <button class="pp-page__btn pp-page__btn--outline pp-page__btn--book" (click)="_bookLabAppointment()">
+          <lucide-icon name="microscope" [size]="16"></lucide-icon>
+          {{ t.get('ejecutivo.profile.bookLab') }}
+        </button>
+      </div>
+
+      <div class="pp-page__patient-info">
+        <div class="pp-page__info-item">
+          <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.email') }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.email }}</span>
+        </div>
+        <div class="pp-page__info-item">
+          <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.phone') }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.phone ?? '—' }}</span>
+        </div>
+        <div class="pp-page__info-item">
+          <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.id') }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.idType }} {{ _patient()!.idNumber ?? '—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Alertas cancelación ─────────────────────────────────────── -->
+    @if (_cancelSuccess()) {
+      <div class="pp-page__alert pp-page__alert--success">
+        <lucide-icon name="check-circle-2" [size]="16"></lucide-icon>
+        {{ _cancelSuccess() }}
+      </div>
+    }
+    @if (_cancelError()) {
+      <div class="pp-page__alert pp-page__alert--error">
+        <lucide-icon name="circle-alert" [size]="16"></lucide-icon>
+        {{ _cancelError() }}
+      </div>
+    }
+
+    <!-- ─── Citas activas ───────────────────────────────────────────── -->
+    <h2 class="pp-page__section-title">{{ t.get('ejecutivo.profile.active-appointments') }}</h2>
+
+    @if (_pendingCitas().length === 0) {
+      <div class="pp-page__empty">{{ t.get('ejecutivo.profile.no-active') }}</div>
+    } @else {
+      <div class="pp-page__card">
+        <table class="pp-page__table">
+          <thead class="pp-page__thead">
+            <tr>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.date') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.time') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.doctor') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.specialty') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.office') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.status') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.actions') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of _pendingCitas(); track c.id) {
+              <tr class="pp-page__row">
+                <td class="pp-page__td">{{ c.fecha }}</td>
+                <td class="pp-page__td pp-page__td--muted">{{ c.horaInicio.slice(0,5) }}</td>
+                <td class="pp-page__td pp-page__td--name">{{ c.medicoNombre }}</td>
+                <td class="pp-page__td pp-page__td--muted">{{ c.especialidad }}</td>
+                <td class="pp-page__td pp-page__td--muted">{{ c.consultorioNumero }}</td>
+                <td class="pp-page__td">
+                  <span class="pp-page__cita-badge" [class]="'pp-page__cita-badge ' + _estadoClass(c.estado)">
+                    {{ t.get('paciente.appointments.status.' + c.estado.toLowerCase()) }}
+                  </span>
+                </td>
+                <td class="pp-page__td">
+                  <button class="pp-page__cancel-btn"
+                    (click)="_cancelCita(c.id)"
+                    [disabled]="_cancellingId() === c.id">
+                    @if (_cancellingId() === c.id) {
+                      <lucide-icon name="loader-circle" [size]="14" class="pp-page__spinner"></lucide-icon>
+                    } @else {
+                      <lucide-icon name="x-circle" [size]="14"></lucide-icon>
+                    }
+                    {{ t.get('ejecutivo.profile.cancel') }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ─── Historial ───────────────────────────────────────────────── -->
+    <h2 class="pp-page__section-title pp-page__section-title--mt">{{ t.get('ejecutivo.profile.history') }}</h2>
+
+    @if (_pastCitas().length === 0) {
+      <div class="pp-page__empty">{{ t.get('ejecutivo.profile.no-history') }}</div>
+    } @else {
+      <div class="pp-page__card">
+        <table class="pp-page__table">
+          <thead class="pp-page__thead">
+            <tr>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.date') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.time') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.doctor') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.specialty') }}</th>
+              <th class="pp-page__th">{{ t.get('ejecutivo.profile.table.status') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of _pastCitas(); track c.id) {
+              <tr class="pp-page__row pp-page__row--past">
+                <td class="pp-page__td pp-page__td--muted">{{ c.fecha }}</td>
+                <td class="pp-page__td pp-page__td--muted">{{ c.horaInicio.slice(0,5) }}</td>
+                <td class="pp-page__td">{{ c.medicoNombre }}</td>
+                <td class="pp-page__td pp-page__td--muted">{{ c.especialidad }}</td>
+                <td class="pp-page__td">
+                  <span class="pp-page__cita-badge" [class]="'pp-page__cita-badge ' + _estadoClass(c.estado)">
+                    {{ t.get('paciente.appointments.status.' + c.estado.toLowerCase()) }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>

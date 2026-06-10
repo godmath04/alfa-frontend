@@ -1,27 +1,33 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Auth } from '../../../core/services/auth/auth';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
+
+import { AuthViewModel } from '../../../core/services/auth/auth.view-model';
 import { Translate } from '../../../core/services/translate';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
-  standalone: false,
+  standalone: true,
+  imports: [RouterOutlet, LucideAngularModule],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
 })
 export class Layout {
 
-  _navItems = [
-    { key: 'paciente.nav.profile',      icon: 'user',      route: '/paciente/profile'      },
-    { key: 'paciente.nav.appointments', icon: 'calendar',  route: '/paciente/appointments' },
-    { key: 'paciente.nav.lab',          icon: 'file-text', route: '/paciente/lab-history'  },
-  ];
+  readonly _translate = inject(Translate);
 
-  constructor(
-    private _router: Router,
-    private _auth: Auth,
-    public _translate: Translate
-  ) {}
+  private readonly _vm     = inject(AuthViewModel);
+  private readonly _router = inject(Router);
+
+  readonly _navItems = [
+    { key: 'profile.title',               icon: 'user',          route: '/paciente/profile'           },
+    { key: 'paciente.nav.appointments',   icon: 'calendar',      route: '/paciente/appointments'      },
+    { key: 'paciente.nav.myAppointments', icon: 'file-text',     route: '/paciente/appointment-history' },
+    { key: 'paciente.nav.lab',            icon: 'microscope',    route: '/paciente/lab-appointments'  },
+    { key: 'paciente.nav.misLabCitas',    icon: 'calendar-check', route: '/paciente/mis-lab-citas'    },
+    { key: 'paciente.nav.labResults',     icon: 'flask-conical', route: '/paciente/lab-results'       },
+  ];
 
   _isActive(route: string): boolean {
     return this._router.url.startsWith(route);
@@ -32,9 +38,6 @@ export class Layout {
   }
 
   _logout(): void {
-    this._auth.logout().subscribe({
-      next: () => this._router.navigate(['/auth/login']),
-      error: () => this._router.navigate(['/auth/login'])
-    });
+    this._vm.logout();
   }
 }
