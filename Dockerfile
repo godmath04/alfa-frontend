@@ -3,6 +3,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+ARG API_URL=http://localhost:8080
+RUN sed -i "s|\${API_URL}|${API_URL}|g" src/environments/environment.ts
 RUN npm run build
 
 FROM nginx:alpine
