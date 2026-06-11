@@ -17,7 +17,7 @@ import {
   Wind, Footprints, Ban, ArrowRight,
   BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio,
   FlaskConical, Shield, ClockPlus, Download, Upload, FileUp, Hospital, Send, UserPlus,
-  CircleCheck, TriangleAlert
+  CircleCheck, TriangleAlert, LayoutDashboard
 } from 'lucide-angular';
 
 import { APP_ROUTES } from './app.routes';
@@ -49,7 +49,7 @@ export const appConfig: ApplicationConfig = {
         Wind, Footprints, Ban, ArrowRight,
         BellRing, ToggleLeft, ToggleRight, MessageCircle, AtSign, Radio,
         FlaskConical, Shield, ClockPlus, Download, Upload, FileUp, Hospital, Send, UserPlus,
-        CircleCheck, TriangleAlert, CalendarCheck, SearchX
+        CircleCheck, TriangleAlert, CalendarCheck, SearchX, LayoutDashboard
       })
     ),
   ]
