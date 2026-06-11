@@ -108,14 +108,14 @@
                 @if (c.estado === 'COMPLETADA') {
                   @if (_resultsMap().has(c.citaId)) {
                     <div class="lab-cita-card__actions">
-                      <button class="btn btn--outline btn--small" (click)="_viewPdf(c.citaId)">
-                        <lucide-icon name="eye" [size]="16"></lucide-icon>
+                      <app-button variant="outline" size="small" (clicked)="_viewPdf(c.citaId)">
+                        <lucide-icon name="eye" [size]="14"></lucide-icon>
                         {{ t.get('lab.appointments.actions.view') }}
-                      </button>
-                      <button class="btn btn--outline btn--small" (click)="_downloadPdf(c.citaId)">
-                        <lucide-icon name="download" [size]="16"></lucide-icon>
+                      </app-button>
+                      <app-button variant="outline" size="small" (clicked)="_downloadPdf(c.citaId)">
+                        <lucide-icon name="download" [size]="14"></lucide-icon>
                         {{ t.get('lab.appointments.actions.download') }}
-                      </button>
+                      </app-button>
                     </div>
                   } @else {
                     <span class="lab-cita-badge lab-cita-badge--pendiente" style="display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
