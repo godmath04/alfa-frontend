@@ -61,6 +61,11 @@
 
         @if (r.estado === 'DISPONIBLE') {
           <div class="result-card__actions">
+            <app-button variant="outline" [disabled]="downloading()" (clicked)="_view()">
+              @if (downloading()) { <app-spinner size="small"></app-spinner> }
+              @else { <lucide-icon name="eye" [size]="16"></lucide-icon> }
+              {{ t.get('lab.guest.view') }}
+            </app-button>
             <app-button variant="primary" [disabled]="downloading()" (clicked)="_download()">
               @if (downloading()) { <app-spinner size="small"></app-spinner> }
               @else { <lucide-icon name="download" [size]="16"></lucide-icon> }

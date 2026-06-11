@@ -4,6 +4,21 @@
     <h1 class="my-labs__title">{{ t.get('lab.appointments.title') }}</h1>
   </div>
 
+  <div class="my-labs__filters">
+    <button class="my-labs__chip" [class.my-labs__chip--active]="_filter() === 'TODAS'" (click)="_setFilter('TODAS')">
+      {{ t.get('lab.appointments.filters.all') }}
+    </button>
+    <button class="my-labs__chip" [class.my-labs__chip--active]="_filter() === 'COMPLETADA'" (click)="_setFilter('COMPLETADA')">
+      {{ t.get('lab.appointments.filters.completed') }}
+    </button>
+    <button class="my-labs__chip" [class.my-labs__chip--active]="_filter() === 'PENDIENTE'" (click)="_setFilter('PENDIENTE')">
+      {{ t.get('lab.appointments.filters.pending') }}
+    </button>
+    <button class="my-labs__chip" [class.my-labs__chip--active]="_filter() === 'CANCELADA'" (click)="_setFilter('CANCELADA')">
+      {{ t.get('lab.appointments.filters.cancelled') }}
+    </button>
+  </div>
+
   @if (_cancelError()) {
     <div class="my-labs__alert">
       <lucide-icon name="circle-alert" [size]="16"></lucide-icon>
@@ -90,6 +105,25 @@
                 <span class="lab-cita-badge lab-cita-badge--{{ c.estado.toLowerCase() }}">
                   {{ t.get('lab.appointments.status.' + c.estado.toLowerCase()) }}
                 </span>
+                @if (c.estado === 'COMPLETADA') {
+                  @if (_resultsMap().has(c.citaId)) {
+                    <div class="lab-cita-card__actions">
+                      <button class="btn btn--outline btn--small" (click)="_viewPdf(c.citaId)">
+                        <lucide-icon name="eye" [size]="16"></lucide-icon>
+                        {{ t.get('lab.appointments.actions.view') }}
+                      </button>
+                      <button class="btn btn--outline btn--small" (click)="_downloadPdf(c.citaId)">
+                        <lucide-icon name="download" [size]="16"></lucide-icon>
+                        {{ t.get('lab.appointments.actions.download') }}
+                      </button>
+                    </div>
+                  } @else {
+                    <span class="lab-cita-badge lab-cita-badge--pendiente" style="display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                      <lucide-icon name="clock" [size]="14"></lucide-icon>
+                      {{ t.get('lab.appointments.pendingResult') }}
+                    </span>
+                  }
+                }
               </div>
 
             </div>
