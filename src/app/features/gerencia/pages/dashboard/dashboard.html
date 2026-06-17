@@ -154,7 +154,7 @@
         <div class="stacked-bar-container">
           <div class="bars-wrapper">
             @for (mes of data; track mes.period) {
-              <div class="bar-group">
+              <div class="bar-group" title="{{ formatPeriod(mes.period) }} - Completadas: {{ mes.completadas }}, Pendientes: {{ mes.pendientes }}, Canceladas: {{ mes.canceladas }}">
                 @if (mes.completadas + mes.pendientes + mes.canceladas > 0) {
                   <div class="bar-stack" [style.height.px]="(mes.completadas + mes.pendientes + mes.canceladas) * 140 / vm.maxCitasValue()">
                     @if (mes.completadas > 0) {

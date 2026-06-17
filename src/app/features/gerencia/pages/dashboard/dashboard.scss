@@ -275,10 +275,6 @@
         padding-bottom: var(--spacing-xs);
         margin-bottom: var(--spacing-md);
 
-        &:hover .bar-group:not(:hover) {
-          opacity: 0.45;
-        }
-
         .bar-group {
           display: flex;
           flex-direction: column;
