@@ -240,32 +240,50 @@
       @if (vm.labTurnaround(); as labT) {
         <div class="gauge-card-container">
           <div class="gauge-svg-wrapper">
-            <svg class="gauge-svg" viewBox="0 0 100 50">
+            <svg class="gauge-svg" viewBox="0 -6 100 74">
               <!-- Shimmer backing/shadow -->
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#dadada" stroke-linecap="round" stroke-width="15"></path>
+              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#f1f5f9" stroke-linecap="round" stroke-width="12"></path>
               <!-- Color sectors -->
               <!-- Green (0-24h, 90deg sweep) -->
-              <path d="M 10 50 A 40 40 0 0 1 50 10" fill="none" stroke="#22C55E" stroke-linecap="round" stroke-width="15"></path>
+              <path d="M 10 50 A 40 40 0 0 1 50 10" fill="none" stroke="#10B981" stroke-linecap="round" stroke-width="12"></path>
               <!-- Yellow (24-72h, 45deg sweep) -->
-              <path d="M 50 10 A 40 40 0 0 1 78.28 21.72" fill="none" stroke="#F59E0B" stroke-linecap="round" stroke-width="15"></path>
+              <path d="M 50 10 A 40 40 0 0 1 78.28 21.72" fill="none" stroke="#F59E0B" stroke-linecap="round" stroke-width="12"></path>
               <!-- Red (>72h, 45deg sweep) -->
-              <path d="M 78.28 21.72 A 40 40 0 0 1 90 50" fill="none" stroke="#EF4444" stroke-linecap="round" stroke-width="15"></path>
+              <path d="M 78.28 21.72 A 40 40 0 0 1 90 50" fill="none" stroke="#EF4444" stroke-linecap="round" stroke-width="12"></path>
               
-              <!-- Dynamic Needle rotating around (50, 50) starting at left (20, 50) -->
-              <line stroke="#1a1c1c" stroke-linecap="round" stroke-width="2.5" x1="50" y1="50" x2="20" y2="50"
+              <!-- Dynamic Needle rotating around (50, 50) starting at left (22, 50) -->
+              <line stroke="#475569" stroke-linecap="round" stroke-width="1.8" x1="50" y1="50" x2="22" y2="50"
                     [style.transform]="'rotate(' + vm.labGaugeRotation() + 'deg)'"
                     style="transform-origin: 50px 50px; transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);"></line>
-              <circle cx="50" cy="50" fill="#1a1c1c" r="4.5"></circle>
               
-              <!-- Labels -->
-              <text class="gauge-text" x="5" y="55">0</text>
-              <text class="gauge-text" x="45" y="5">24h</text>
-              <text class="gauge-text" x="80" y="20">72h</text>
-              <text class="gauge-text" x="90" y="55">>72h</text>
+              <!-- Styled Precision Pivot Ring -->
+              <circle cx="50" cy="50" fill="none" stroke="#cbd5e1" stroke-width="0.8" r="5"></circle>
+              <circle cx="50" cy="50" fill="#ffffff" stroke="#475569" stroke-width="1.5" r="3.2"></circle>
+              <circle cx="50" cy="50" fill="#475569" r="1.2"></circle>
+              
+              <!-- Labels aligned with text-anchor to avoid clipping -->
+              <text class="gauge-text" x="8" y="64" text-anchor="start">0</text>
+              <text class="gauge-text" x="50" y="-1" text-anchor="middle">24h</text>
+              <text class="gauge-text" x="84" y="15" text-anchor="middle">72h</text>
+              <text class="gauge-text" x="92" y="64" text-anchor="end">>72h</text>
             </svg>
-            <div class="gauge-inner-value">
-              <span class="value-num">{{ labT.promedioHoras }}h</span>
+          </div>
+          
+          <div class="gauge-value-display" [ngClass]="{
+            'status-success': labT.promedioHoras <= 24,
+            'status-warning': labT.promedioHoras > 24 && labT.promedioHoras <= 72,
+            'status-danger': labT.promedioHoras > 72
+          }">
+            <div class="value-highlight">
+              <span class="value-num">{{ labT.promedioHoras }}</span>
+              <span class="value-unit">h</span>
+              <span class="status-badge">
+                @if (labT.promedioHoras <= 24) { Óptimo }
+                @else if (labT.promedioHoras <= 72) { Aceptable }
+                @else { Crítico }
+              </span>
             </div>
+            <span class="value-label">Tiempo promedio de respuesta</span>
           </div>
           
           <div class="gauge-footer-stats">
