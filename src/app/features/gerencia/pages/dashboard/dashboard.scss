@@ -423,7 +423,7 @@
         gap: var(--spacing-md);
 
         .prog-label {
-          width: 100px;
+          width: 180px;
           font-size: var(--font-size-sm);
           color: var(--color-text-muted);
           white-space: nowrap;
@@ -639,6 +639,7 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-weight: 600;
+        text-align: left;
       }
 
       td {
@@ -646,6 +647,10 @@
         font-size: var(--font-size-sm);
         color: var(--color-text-primary);
         vertical-align: middle;
+      }
+
+      th.text-right, td.text-right {
+        text-align: right !important;
       }
 
       tr.hover\:bg-surface-container-low:hover {
