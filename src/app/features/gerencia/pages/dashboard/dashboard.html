@@ -387,7 +387,6 @@
   <div class="full-width-card">
     <div class="card-header border-b border-outline-variant flex justify-between items-center">
       <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.topMedicos.title') }}</h3>
-      <a class="font-label-md text-label-md text-secondary hover:underline" href="#">{{ translate.get('gerencia.dashboard.topMedicos.viewAll') }}</a>
     </div>
     @if (vm.topMedicos(); as top) {
       <div class="table-container custom-scrollbar">
@@ -398,8 +397,7 @@
               <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.especialidad') }}</th>
               <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.tipo') }}</th>
               <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.totalCitas') }}</th>
-              <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.rating') }}</th>
-              <th class="py-sm px-lg font-medium text-right">{{ translate.get('gerencia.dashboard.topMedicos.headers.acciones') }}</th>
+              <th class="py-sm px-lg font-medium text-right">{{ translate.get('gerencia.dashboard.topMedicos.headers.rating') }}</th>
             </tr>
           </thead>
           <tbody class="font-body-md text-body-md text-on-surface divide-y divide-surface-variant">
@@ -426,7 +424,7 @@
                 </td>
                 <td class="py-md px-lg font-medium">{{ medico.totalCitas | number }}</td>
                 <td class="py-md px-lg">
-                  <div class="flex items-center gap-xs text-warning">
+                  <div class="flex items-center justify-end gap-xs text-warning">
                     <!-- Dynamic rendering of stars based on rating -->
                     @for (star of [1, 2, 3, 4, 5]; track star) {
                       @if (medico.calificacion >= star) {
@@ -439,11 +437,6 @@
                     }
                     <span class="text-on-surface-variant font-label-sm ml-xs">{{ medico.calificacion }}</span>
                   </div>
-                </td>
-                <td class="py-md px-lg text-right">
-                  <button class="text-outline hover:text-primary transition-colors p-sm rounded-full hover:bg-surface-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
-                  </button>
                 </td>
               </tr>
             }
