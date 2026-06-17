@@ -34,7 +34,12 @@
       <div class="kpi-card group">
         <div class="kpi-header">
           <div class="icon bg-secondary-fixed">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
           </div>
           <span class="delta success bg-success-muted">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg>
@@ -43,16 +48,27 @@
         </div>
         <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.pacientesActivos') }}</p>
         <h3 class="kpi-value">{{ kpis.pacientesActivos.value | number:'1.0-0' }}</h3>
-        <svg class="sparkline-chart stroke-secondary" fill="none" viewBox="0 0 100 30">
-          <path [attr.d]="vm.getSparklinePath(kpis.pacientesActivos.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
+        @if (kpis.pacientesActivos.sparkline && kpis.pacientesActivos.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-secondary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.pacientesActivos.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#6366f1" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
       </div>
 
       <!-- Doctores Activos -->
       <div class="kpi-card group">
         <div class="kpi-header">
           <div class="icon bg-primary-fixed">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M19 10h4" />
+              <path d="M21 8v4" />
+            </svg>
           </div>
           <span class="delta neutral">
             - {{ kpis.doctoresActivos.delta }}%
@@ -60,16 +76,33 @@
         </div>
         <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.doctoresActivos') }}</p>
         <h3 class="kpi-value">{{ kpis.doctoresActivos.value }}</h3>
-        <svg class="sparkline-chart stroke-primary" fill="none" viewBox="0 0 100 30">
-          <path [attr.d]="vm.getSparklinePath(kpis.doctoresActivos.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" stroke-width="2"></path>
-        </svg>
+        @if (kpis.doctoresActivos.sparkline && kpis.doctoresActivos.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-primary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.doctoresActivos.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="var(--color-primary-dark)" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
       </div>
 
       <!-- Citas Hoy -->
       <div class="kpi-card group">
         <div class="kpi-header">
           <div class="icon bg-tertiary-fixed">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2v4"/>
+              <path d="M16 2v4"/>
+              <rect width="18" height="18" x="3" y="4" rx="2"/>
+              <path d="M3 10h18"/>
+              <path d="M8 14h.01"/>
+              <path d="M12 14h.01"/>
+              <path d="M16 14h.01"/>
+              <path d="M8 18h.01"/>
+              <path d="M12 18h.01"/>
+              <path d="M16 18h.01"/>
+            </svg>
           </div>
           <span class="delta success bg-success-muted">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg>
@@ -78,16 +111,29 @@
         </div>
         <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.citasHoy') }}</p>
         <h3 class="kpi-value">{{ kpis.citasHoy.value }}</h3>
-        <svg class="sparkline-chart stroke-tertiary-container" fill="none" viewBox="0 0 100 30">
-          <path [attr.d]="vm.getSparklinePath(kpis.citasHoy.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
+        @if (kpis.citasHoy.sparkline && kpis.citasHoy.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-tertiary-container" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.citasHoy.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#14b8a6" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
       </div>
 
       <!-- No-show Rate -->
       <div class="kpi-card group">
         <div class="kpi-header">
           <div class="icon bg-error-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2v4"/>
+              <path d="M16 2v4"/>
+              <rect width="18" height="18" x="3" y="4" rx="2"/>
+              <path d="M3 10h18"/>
+              <path d="M10 16l4-4"/>
+              <path d="M14 16l-4-4"/>
+            </svg>
           </div>
           <span class="delta error bg-error-muted">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/></svg>
@@ -96,16 +142,25 @@
         </div>
         <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.noShowRate') }}</p>
         <h3 class="kpi-value">{{ kpis.noShowRatePct.value }}{{ kpis.noShowRatePct.unit }}</h3>
-        <svg class="sparkline-chart stroke-error" fill="none" viewBox="0 0 100 30">
-          <path [attr.d]="vm.getSparklinePath(kpis.noShowRatePct.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
+        @if (kpis.noShowRatePct.sparkline && kpis.noShowRatePct.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-error" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.noShowRatePct.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="var(--color-error)" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
       </div>
 
       <!-- Lab Turnaround -->
       <div class="kpi-card group">
         <div class="kpi-header">
           <div class="icon bg-secondary-fixed-cyan">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M7 1h2a.5.5 0 0 1 .5.5c0 .253-.08.5-.246.735l-2.072 2.9A4.004 4.004 0 0 0 6 7.5v3.293l2 2V7.5a3 3 0 0 1 .84-2.063l1.815-2.54A1.5 1.5 0 0 0 9.5 1H11a.5.5 0 0 0 0-1H5a.5.5 0 0 0 0 1h1.5a.5.5 0 0 1 .5.5zM8 6a1.5 1.5 0 0 0-1.5 1.5v4.5A1.5 1.5 0 0 0 8 13.5a1.5 1.5 0 0 0 1.5-1.5v-4.5A1.5 1.5 0 0 0 8 6z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
           </div>
           <span class="delta success bg-success-muted">
             {{ kpis.labTurnaroundHoras.delta }}h
@@ -113,16 +168,25 @@
         </div>
         <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.labTurnaround') }}</p>
         <h3 class="kpi-value">{{ kpis.labTurnaroundHoras.value }}{{ kpis.labTurnaroundHoras.unit }}</h3>
-        <svg class="sparkline-chart stroke-secondary" fill="none" viewBox="0 0 100 30">
-          <path [attr.d]="vm.getSparklinePath(kpis.labTurnaroundHoras.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
+        @if (kpis.labTurnaroundHoras.sparkline && kpis.labTurnaroundHoras.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-secondary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.labTurnaroundHoras.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#06b6d4" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
       </div>
 
       <!-- Notificaciones -->
       <div class="kpi-card group">
         <div class="kpi-header">
           <div class="icon bg-purple-muted">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
           </div>
           <span class="delta success bg-success-muted">
             {{ kpis.notifDeliveryPct.delta }}%
@@ -130,9 +194,15 @@
         </div>
         <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.notificaciones') }}</p>
         <h3 class="kpi-value">{{ kpis.notifDeliveryPct.value }}{{ kpis.notifDeliveryPct.unit }}</h3>
-        <svg class="sparkline-chart stroke-primary" fill="none" viewBox="0 0 100 30">
-          <path [attr.d]="vm.getSparklinePath(kpis.notifDeliveryPct.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
+        @if (kpis.notifDeliveryPct.sparkline && kpis.notifDeliveryPct.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-primary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.notifDeliveryPct.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#a855f7" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
       </div>
     </div>
   }
