@@ -191,7 +191,7 @@
       @if (vm.citasPorEspecialidad(); as data) {
         <div class="donut-chart-wrapper">
           <div class="donut-svg-container">
-            <svg class="donut-svg" viewBox="0 0 100 100">
+            <svg class="donut-svg" viewBox="-10 -10 120 120">
               <!-- Base Circle background -->
               <circle cx="50" cy="50" fill="none" r="40" stroke="#f3f3f3" stroke-width="20"></circle>
               <!-- Dynamic SVG circles with computed offsets and rotations -->
@@ -221,9 +221,7 @@
           <div class="donut-legend-grid">
             @for (slice of vm.donutSlices(); track slice.nombre) {
               <div class="legend-row"
-                   [class.active-legend]="activeSlice()?.nombre === slice.nombre"
-                   (mouseenter)="activeSlice.set(slice)"
-                   (mouseleave)="activeSlice.set(null)">
+                   [class.active-legend]="activeSlice()?.nombre === slice.nombre">
                 <span class="dot" [style.background-color]="slice.color"></span>
                 <span class="cat-name">{{ slice.nombre }}</span>
                 <span class="cat-pct">{{ slice.pct }}%</span>
