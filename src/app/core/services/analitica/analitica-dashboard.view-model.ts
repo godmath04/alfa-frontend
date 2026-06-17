@@ -187,4 +187,8 @@ export class AnaliticaDashboardViewModel {
   clear(): void {
     this._state.clearDashboard();
   }
+
+  exportReport(): void {
+    window.print();
+  }
 }

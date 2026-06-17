@@ -4,7 +4,7 @@
       <h2 class="font-display text-display text-on-surface">{{ greeting() }}</h2>
       <p class="font-body-md text-body-md text-on-surface-variant mt-xs">{{ currentDate }}</p>
     </div>
-    <button class="flex items-center justify-center gap-sm bg-primary-container text-white px-md py-sm rounded-lg hover:bg-primary transition-colors shadow-sm font-label-md text-label-md">
+    <button class="btn-primary" (click)="vm.exportReport()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -143,7 +143,6 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.citasEstado') }}</h3>
-        <button class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></button>
       </div>
       @if (vm.citasPorEstado(); as data) {
         <div class="stacked-bar-container">
@@ -173,7 +172,6 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.distribucionEspecialidad') }}</h3>
-        <button class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></button>
       </div>
       @if (vm.citasPorEspecialidad(); as data) {
         <div class="donut-chart-wrapper">
@@ -217,7 +215,6 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.estudiosSolicitados') }}</h3>
-        <button class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></button>
       </div>
       @if (vm.labEstudiosTop(); as top) {
         <div class="progress-list-container">
@@ -239,7 +236,6 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.tiempoRespuestaLab') }}</h3>
-        <button class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></button>
       </div>
       @if (vm.labTurnaround(); as labT) {
         <div class="gauge-card-container">
@@ -297,7 +293,6 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.notificaciones') }}</h3>
-        <button class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></button>
       </div>
       @if (vm.notificationsDonut(); as notifInfo) {
         <div class="donut-chart-wrapper">
@@ -352,7 +347,6 @@
           </div>
           <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.chatbot') }}</h3>
         </div>
-        <button class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></button>
       </div>
       @if (vm.chatbotResumen(); as chat) {
         <div class="chatbot-grid-stats">
