@@ -730,8 +730,8 @@
   justify-content: center;
 }
 
-@media print {
-  ::ng-deep {
+::ng-deep {
+  @media print {
     html, body {
       height: auto !important;
       overflow: visible !important;
@@ -751,44 +751,46 @@
     .content {
       padding: 0 !important;
       margin: 0 !important;
+      height: auto !important;
       overflow: visible !important;
       background-color: #ffffff !important;
     }
-  }
-
-  .dashboard-container {
-    padding: 0 !important;
-    gap: 15px !important;
-    background-color: #ffffff !important;
-  }
-  
-  .dashboard-top-section {
-    margin-bottom: 15px !important;
-    
-    .btn-primary {
-      display: none !important;
+    .dashboard-container {
+      padding: 0 !important;
+      gap: 15px !important;
+      background-color: #ffffff !important;
+      height: auto !important;
+      overflow: visible !important;
     }
-  }
-  
-  .kpi-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 10px !important;
-  }
-  
-  .charts-double-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 15px !important;
-    page-break-inside: avoid;
-  }
-  
-  .full-width-card {
-    page-break-inside: avoid;
-  }
-  
-  .chart-card, .kpi-card {
-    box-shadow: none !important;
-    border: 1px solid #e2e8f0 !important;
-    background-color: #ffffff !important;
-    page-break-inside: avoid;
+    
+    .dashboard-top-section {
+      margin-bottom: 15px !important;
+      
+      .btn-primary {
+        display: none !important;
+      }
+    }
+    
+    .kpi-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 10px !important;
+    }
+    
+    .charts-double-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 15px !important;
+      page-break-inside: avoid;
+    }
+    
+    .full-width-card {
+      page-break-inside: avoid;
+    }
+    
+    .chart-card, .kpi-card {
+      box-shadow: none !important;
+      border: 1px solid #e2e8f0 !important;
+      background-color: #ffffff !important;
+      page-break-inside: avoid;
+    }
   }
 }
