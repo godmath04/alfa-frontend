@@ -1136,5 +1136,71 @@
       "createFailed":   "No se pudo crear la cita. Intenta de nuevo.",
       "downloadFailed": "No se pudo descargar el archivo."
     }
+  },
+  "gerencia": {
+    "nav": {
+      "dashboard": "Dashboard"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Buenos días",
+        "afternoon": "Buenas tardes",
+        "night": "Buenas noches"
+      },
+      "roles": {
+        "gerencia": "Gerencia",
+        "administrador": "Administrador",
+        "ejecutivo": "Ejecutivo",
+        "medico": "Doctor",
+        "paciente": "Paciente",
+        "usuario": "Usuario"
+      },
+      "exportReport": "Exportar Reporte",
+      "loading": "Cargando analítica en tiempo real...",
+      "kpis": {
+        "pacientesActivos": "Pacientes Activos",
+        "doctoresActivos": "Doctores Activos",
+        "citasHoy": "Citas Hoy",
+        "noShowRate": "Tasa de Inasistencia",
+        "labTurnaround": "Tiempo de Respuesta Lab",
+        "notificaciones": "Notificaciones"
+      },
+      "charts": {
+        "citasEstado": "Citas por Estado",
+        "completadas": "Completadas",
+        "pendientes": "Pendientes",
+        "canceladas": "Canceladas",
+        "distribucionEspecialidad": "Distribución por Especialidad",
+        "total": "Total",
+        "estudiosSolicitados": "Estudios más solicitados",
+        "tiempoRespuestaLab": "Tiempo de respuesta de laboratorio",
+        "pendiente": "Pendiente",
+        "disponible": "Disponible",
+        "notificaciones": "Notificaciones",
+        "noNotif": "Módulo de notificaciones no disponible",
+        "chatbot": "Chatbot IA",
+        "noChatbot": "Módulo de Chatbot no disponible",
+        "sesiones": "Sesiones",
+        "mensajes": "Mensajes",
+        "msgSesion": "Msg / Sesión",
+        "chatbotProcessed": "El chatbot ha procesado",
+        "chatbotMessagesIn": "mensajes en",
+        "chatbotSessions": "sesiones, con un promedio de",
+        "chatbotMessagesPerSession": "mensajes por sesión."
+      },
+      "topMedicos": {
+        "title": "Top Médicos",
+        "viewAll": "Ver todos",
+        "headers": {
+          "medico": "Médico",
+          "especialidad": "Especialidad",
+          "tipo": "Tipo",
+          "totalCitas": "Total Citas",
+          "rating": "Rating",
+          "acciones": "Acciones"
+        },
+        "empty": "Listado de médicos no disponible"
+      }
+    }
   }
 }
