@@ -275,6 +275,10 @@
         padding-bottom: var(--spacing-xs);
         margin-bottom: var(--spacing-md);
 
+        &:hover .bar-group:not(:hover) {
+          opacity: 0.45;
+        }
+
         .bar-group {
           display: flex;
           flex-direction: column;
@@ -283,6 +287,20 @@
           flex: 1;
           max-width: 60px;
           min-width: 32px;
+          transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+
+          &:hover {
+            transform: translateY(-4px);
+
+            .bar-stack {
+              filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+            }
+            .bar-label {
+              color: var(--color-text-primary);
+              font-weight: 600;
+            }
+          }
 
           .bar-stack {
             width: 100%;
@@ -319,6 +337,7 @@
             white-space: pre-line;
             text-align: center;
             line-height: 1.2;
+            transition: color 0.2s ease, font-weight 0.2s ease;
           }
         }
       }
