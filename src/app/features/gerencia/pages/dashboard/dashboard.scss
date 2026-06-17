@@ -211,6 +211,36 @@
         font-weight: 600;
       }
 
+      .timeframe-selector {
+        display: flex;
+        background: #f1f5f9;
+        padding: 2px;
+        border-radius: 8px;
+        gap: 2px;
+
+        .selector-btn {
+          background: transparent;
+          border: none;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #64748b;
+          cursor: pointer;
+          transition: all 0.15s ease;
+
+          &:hover {
+            color: #1e293b;
+          }
+
+          &.active {
+            background: #ffffff;
+            color: var(--color-primary-dark);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+          }
+        }
+      }
+
       .menu-btn {
         background: none;
         border: none;
@@ -250,30 +280,45 @@
           flex-direction: column;
           align-items: center;
           gap: var(--spacing-xs);
-          width: 40px;
+          flex: 1;
+          max-width: 60px;
+          min-width: 32px;
 
           .bar-stack {
             width: 100%;
+            max-width: 20px;
             height: 140px;
             display: flex;
             flex-direction: column-reverse; // Accumulate bottom-up
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            border-radius: 6px;
             overflow: hidden;
-            background-color: var(--color-background);
+            background-color: transparent;
+            gap: 3px;
 
             .bar {
               width: 100%;
-              transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
               
               &.bg-completadas { background-color: var(--color-primary-dark); }
-              &.bg-pendientes { background-color: var(--color-accent-2); }
-              &.bg-canceladas { background-color: rgba(239, 68, 68, 0.4); } // soft red
+              &.bg-pendientes { background-color: #bfdbfe; } // soft blue
+              &.bg-canceladas { background-color: #fecdd3; } // soft pink
             }
+          }
+
+          .bar-stack-placeholder {
+            width: 100%;
+            max-width: 20px;
+            height: 140px;
+            background-color: transparent;
           }
 
           .bar-label {
             font-size: var(--font-size-xs);
             color: var(--color-text-muted);
+            font-weight: 500;
+            white-space: pre-line;
+            text-align: center;
+            line-height: 1.2;
           }
         }
       }
@@ -295,8 +340,8 @@
             height: 8px;
             border-radius: 50%;
             &.bg-completadas { background-color: var(--color-primary-dark); }
-            &.bg-pendientes { background-color: var(--color-accent-2); }
-            &.bg-canceladas { background-color: rgba(239, 68, 68, 0.4); }
+            &.bg-pendientes { background-color: #bfdbfe; }
+            &.bg-canceladas { background-color: #fecdd3; }
           }
         }
       }
@@ -322,7 +367,8 @@
         }
 
         .donut-segment {
-          transition: stroke-dashoffset 0.5s ease;
+          transition: stroke-dashoffset 0.5s ease, stroke-width 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s ease;
+          cursor: pointer;
         }
 
         .donut-inner-content {
@@ -359,6 +405,20 @@
           align-items: center;
           justify-content: space-between;
           font-size: var(--font-size-sm);
+          padding: 4px var(--spacing-sm);
+          border-radius: var(--radius-md);
+          cursor: pointer;
+          transition: background-color 0.15s ease, transform 0.15s ease;
+
+          &:hover, &.active-legend {
+            background-color: var(--color-background);
+            transform: translateX(4px);
+
+            .cat-name {
+              color: var(--color-text-primary);
+              font-weight: 600;
+            }
+          }
 
           .dot {
             width: 8px;
@@ -369,6 +429,7 @@
           .cat-name {
             flex: 1;
             color: var(--color-text-muted);
+            transition: color 0.15s ease, font-weight 0.15s ease;
           }
           .cat-pct {
             font-weight: 600;

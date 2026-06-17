@@ -1,4 +1,4 @@
-import { inject, Injectable, DestroyRef, computed } from '@angular/core';
+import { inject, Injectable, DestroyRef, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -22,6 +22,30 @@ export class AnaliticaDashboardViewModel {
   readonly notificacionesResumen = this._state.notificacionesResumen.asReadonly();
   readonly chatbotResumen = this._state.chatbotResumen.asReadonly();
   readonly topMedicos = this._state.topMedicos.asReadonly();
+
+  // State signals for granularity filter
+  readonly selectedMonths = signal<number>(6);
+  readonly selectedGroupBy = signal<'MONTH' | 'DAY'>('MONTH');
+
+  readonly maxCitasValue = computed(() => {
+    const data = this.citasPorEstado();
+    if (!data || data.length === 0) return 1;
+    const maxVal = Math.max(...data.map(d => d.completadas + d.pendientes + d.canceladas));
+    return maxVal > 0 ? maxVal : 1;
+  });
+
+  changeCitasFilter(months: number, groupBy: 'MONTH' | 'DAY'): void {
+    this.selectedMonths.set(months);
+    this.selectedGroupBy.set(groupBy);
+    this._service.getCitasPorEstado(months, groupBy).subscribe({
+      next: (res) => {
+        this._state.citasPorEstado.set(res);
+      },
+      error: (err) => {
+        console.error('Error updating citasPorEstado', err);
+      }
+    });
+  }
 
   // Computed signal to calculate donut background safely on view-model, not template.
   readonly donutBackground = computed(() => {

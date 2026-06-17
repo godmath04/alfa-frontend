@@ -143,19 +143,34 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.citasEstado') }}</h3>
+        
+        <div class="timeframe-selector">
+          <button class="selector-btn" [class.active]="vm.selectedGroupBy() === 'MONTH' && vm.selectedMonths() === 6" (click)="vm.changeCitasFilter(6, 'MONTH')">6 Meses</button>
+          <button class="selector-btn" [class.active]="vm.selectedGroupBy() === 'MONTH' && vm.selectedMonths() === 12" (click)="vm.changeCitasFilter(12, 'MONTH')">12 Meses</button>
+          <button class="selector-btn" [class.active]="vm.selectedGroupBy() === 'DAY'" (click)="vm.changeCitasFilter(1, 'DAY')">Por Día</button>
+        </div>
       </div>
       @if (vm.citasPorEstado(); as data) {
         <div class="stacked-bar-container">
           <div class="bars-wrapper">
             @for (mes of data; track mes.period) {
               <div class="bar-group">
-                <div class="bar-stack">
-                  <!-- Custom heights mapped to actual values -->
-                  <div class="bar bg-completadas" [style.height.%]="mes.completadas + mes.pendientes + mes.canceladas > 0 ? (mes.completadas / (mes.completadas + mes.pendientes + mes.canceladas)) * 100 : 0" title="Completadas: {{mes.completadas}}"></div>
-                  <div class="bar bg-pendientes" [style.height.%]="mes.completadas + mes.pendientes + mes.canceladas > 0 ? (mes.pendientes / (mes.completadas + mes.pendientes + mes.canceladas)) * 100 : 0" title="Pendientes: {{mes.pendientes}}"></div>
-                  <div class="bar bg-canceladas" [style.height.%]="mes.completadas + mes.pendientes + mes.canceladas > 0 ? (mes.canceladas / (mes.completadas + mes.pendientes + mes.canceladas)) * 100 : 0" title="Canceladas: {{mes.canceladas}}"></div>
-                </div>
-                <span class="bar-label">{{ mes.period | slice:5:7 }}</span>
+                @if (mes.completadas + mes.pendientes + mes.canceladas > 0) {
+                  <div class="bar-stack" [style.height.px]="(mes.completadas + mes.pendientes + mes.canceladas) * 140 / vm.maxCitasValue()">
+                    @if (mes.completadas > 0) {
+                      <div class="bar bg-completadas" [style.flex-grow]="mes.completadas" title="Completadas: {{mes.completadas}}"></div>
+                    }
+                    @if (mes.pendientes > 0) {
+                      <div class="bar bg-pendientes" [style.flex-grow]="mes.pendientes" title="Pendientes: {{mes.pendientes}}"></div>
+                    }
+                    @if (mes.canceladas > 0) {
+                      <div class="bar bg-canceladas" [style.flex-grow]="mes.canceladas" title="Canceladas: {{mes.canceladas}}"></div>
+                    }
+                  </div>
+                } @else {
+                  <div class="bar-stack-placeholder"></div>
+                }
+                <span class="bar-label">{{ formatPeriod(mes.period) }}</span>
               </div>
             }
           </div>
@@ -186,18 +201,29 @@
                         [attr.stroke-dasharray]="'251.2'"
                         [attr.stroke-dashoffset]="slice.dashoffset"
                         [attr.transform]="slice.transform"
-                        stroke-width="20"
-                        class="donut-segment"></circle>
+                        [attr.stroke-width]="activeSlice()?.nombre === slice.nombre ? 24 : 20"
+                        [style.filter]="activeSlice()?.nombre === slice.nombre ? 'brightness(0.9)' : 'none'"
+                        class="donut-segment"
+                        (mouseenter)="activeSlice.set(slice)"
+                        (mouseleave)="activeSlice.set(null)"></circle>
               }
             </svg>
             <div class="donut-inner-content">
-              <span class="total-val">{{ data.total }}</span>
-              <span class="total-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+              @if (activeSlice(); as active) {
+                <span class="total-val" [style.color]="active.color">{{ active.pct }}%</span>
+                <span class="total-label" style="max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ active.nombre }}">{{ active.nombre }}</span>
+              } @else {
+                <span class="total-val">{{ data.total }}</span>
+                <span class="total-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+              }
             </div>
           </div>
           <div class="donut-legend-grid">
             @for (slice of vm.donutSlices(); track slice.nombre) {
-              <div class="legend-row">
+              <div class="legend-row"
+                   [class.active-legend]="activeSlice()?.nombre === slice.nombre"
+                   (mouseenter)="activeSlice.set(slice)"
+                   (mouseleave)="activeSlice.set(null)">
                 <span class="dot" [style.background-color]="slice.color"></span>
                 <span class="cat-name">{{ slice.nombre }}</span>
                 <span class="cat-pct">{{ slice.pct }}%</span>

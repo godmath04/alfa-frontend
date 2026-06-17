@@ -29,8 +29,8 @@ export class AnaliticaService {
     return this._http.get<HeaderKpisResponse>(`${this._apiUrl}/dashboard/header-kpis`);
   }
 
-  getCitasPorEstado(months: number = 6): Observable<CitasPorEstadoResponse[]> {
-    return this._http.get<CitasPorEstadoResponse[]>(`${this._apiUrl}/dashboard/citas-por-estado`, { params: { months } });
+  getCitasPorEstado(months: number = 6, groupBy: string = 'MONTH'): Observable<CitasPorEstadoResponse[]> {
+    return this._http.get<CitasPorEstadoResponse[]>(`${this._apiUrl}/dashboard/citas-por-estado`, { params: { months, groupBy } });
   }
 
   getCitasPorEspecialidad(months: number = 1): Observable<CitasPorEspecialidadResponse> {
