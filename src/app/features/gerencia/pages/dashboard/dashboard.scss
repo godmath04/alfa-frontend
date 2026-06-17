@@ -367,9 +367,18 @@
           overflow: visible;
         }
 
+        .donut-svg:hover .donut-segment:not(:hover) {
+          opacity: 0.5;
+        }
+
         .donut-segment {
-          transition: stroke-dashoffset 0.5s ease, stroke-width 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s ease;
+          transition: stroke-dashoffset 0.5s ease, stroke-width 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s ease, opacity 0.2s ease;
           cursor: pointer;
+        }
+
+        @keyframes donutTextFadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
 
         .donut-inner-content {
@@ -379,17 +388,21 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          pointer-events: none;
 
           .total-val {
             font-size: var(--font-size-xl);
             font-weight: 700;
             color: var(--color-text-primary);
+            transition: color 0.2s ease;
+            animation: donutTextFadeIn 0.25s ease-out forwards;
           }
           .total-label {
             font-size: var(--font-size-xs);
             color: var(--color-text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            animation: donutTextFadeIn 0.25s ease-out forwards;
           }
         }
       }
@@ -413,8 +426,7 @@
           width: 100%;
           box-sizing: border-box;
 
-          &:hover, &.active-legend {
-            background-color: var(--color-background);
+          &.active-legend {
             transform: translateX(4px);
 
             .cat-name {

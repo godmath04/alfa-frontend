@@ -221,7 +221,8 @@
           <div class="donut-legend-grid">
             @for (slice of vm.donutSlices(); track slice.nombre) {
               <div class="legend-row"
-                   [class.active-legend]="activeSlice()?.nombre === slice.nombre">
+                   [class.active-legend]="activeSlice()?.nombre === slice.nombre"
+                   [style.background-color]="activeSlice()?.nombre === slice.nombre ? slice.color + '1A' : 'transparent'">
                 <span class="dot" [style.background-color]="slice.color"></span>
                 <span class="cat-name">{{ slice.nombre }}</span>
                 <span class="cat-pct">{{ slice.pct }}%</span>
