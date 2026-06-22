@@ -82,6 +82,7 @@
   &__actions {
     display: flex;
     justify-content: center;
+    gap: var(--spacing-md);
     margin-top: var(--spacing-lg);
   }
 

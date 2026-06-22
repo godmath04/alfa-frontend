@@ -34,16 +34,28 @@
                 {{ t.get('lab.results.statuses.' + result.estado) }}
               </span>
               @if (result.estado === 'DISPONIBLE' && result.originalFileName) {
-                <app-button variant="primary" size="small"
-                            [disabled]="vm.downloadLoading() === result.id"
-                            (clicked)="_download(result.id)">
-                  @if (vm.downloadLoading() === result.id) {
-                    <app-spinner size="small"></app-spinner>
-                  } @else {
-                    <lucide-icon name="download" [size]="14"></lucide-icon>
-                    {{ t.get('lab.results.download') }}
-                  }
-                </app-button>
+                <div class="result-card__actions" style="display: flex; gap: 8px;">
+                  <app-button variant="outline" size="small"
+                              [disabled]="vm.downloadLoading() === result.id"
+                              (clicked)="_view(result.id)">
+                    @if (vm.downloadLoading() === result.id) {
+                      <app-spinner size="small"></app-spinner>
+                    } @else {
+                      <lucide-icon name="eye" [size]="14"></lucide-icon>
+                      {{ t.get('lab.appointments.actions.view') }}
+                    }
+                  </app-button>
+                  <app-button variant="outline" size="small"
+                              [disabled]="vm.downloadLoading() === result.id"
+                              (clicked)="_download(result.id)">
+                    @if (vm.downloadLoading() === result.id) {
+                      <app-spinner size="small"></app-spinner>
+                    } @else {
+                      <lucide-icon name="download" [size]="14"></lucide-icon>
+                      {{ t.get('lab.appointments.actions.download') }}
+                    }
+                  </app-button>
+                </div>
               }
             </div>
           </div>

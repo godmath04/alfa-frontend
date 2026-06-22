@@ -927,6 +927,17 @@
       "cancelError":  "No se pudo cancelar la cita. Recuerda que debes cancelar con al menos 24h de anticipación.",
       "prev":         "Anterior",
       "next":         "Siguiente",
+      "pendingResult": "Pendiente resultado",
+      "filters": {
+        "all": "Todas",
+        "completed": "Completadas",
+        "pending": "Pendientes",
+        "cancelled": "Canceladas"
+      },
+      "actions": {
+        "view": "Ver PDF",
+        "download": "Descargar"
+      },
       "status": {
         "pendiente":  "Pendiente",
         "completada": "Completada",
@@ -1013,6 +1024,7 @@
       "status":       "Estado",
       "file":         "Archivo",
       "download":     "Descargar PDF",
+      "view":         "Ver PDF",
       "downloadFailed": "No se pudo descargar el archivo. Intenta de nuevo.",
       "pendingNote":  "Tu resultado estará disponible próximamente. Recibirás un correo cuando esté listo.",
       "disclaimer":   "Este enlace es personal e intransferible. Expira 7 días después de ser emitido."
@@ -1125,6 +1137,72 @@
       "loadResults":    "No se pudieron cargar los resultados.",
       "createFailed":   "No se pudo crear la cita. Intenta de nuevo.",
       "downloadFailed": "No se pudo descargar el archivo."
+    }
+  },
+  "gerencia": {
+    "nav": {
+      "dashboard": "Dashboard"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Buenos días",
+        "afternoon": "Buenas tardes",
+        "night": "Buenas noches"
+      },
+      "roles": {
+        "gerencia": "Gerencia",
+        "administrador": "Administrador",
+        "ejecutivo": "Ejecutivo",
+        "medico": "Doctor",
+        "paciente": "Paciente",
+        "usuario": "Usuario"
+      },
+      "exportReport": "Exportar Reporte",
+      "loading": "Cargando analítica en tiempo real...",
+      "kpis": {
+        "pacientesActivos": "Pacientes Activos",
+        "doctoresActivos": "Doctores Activos",
+        "citasHoy": "Citas Hoy",
+        "noShowRate": "Tasa de Inasistencia",
+        "labTurnaround": "Tiempo de Respuesta Lab",
+        "notificaciones": "Notificaciones"
+      },
+      "charts": {
+        "citasEstado": "Citas por Estado",
+        "completadas": "Completadas",
+        "pendientes": "Pendientes",
+        "canceladas": "Canceladas",
+        "distribucionEspecialidad": "Distribución por Especialidad",
+        "total": "Total",
+        "estudiosSolicitados": "Estudios más solicitados",
+        "tiempoRespuestaLab": "Tiempo de respuesta de laboratorio",
+        "pendiente": "Pendiente",
+        "disponible": "Disponible",
+        "notificaciones": "Notificaciones",
+        "noNotif": "Módulo de notificaciones no disponible",
+        "chatbot": "Chatbot IA",
+        "noChatbot": "Módulo de Chatbot no disponible",
+        "sesiones": "Sesiones",
+        "mensajes": "Mensajes",
+        "msgSesion": "Msg / Sesión",
+        "chatbotProcessed": "El chatbot ha procesado",
+        "chatbotMessagesIn": "mensajes en",
+        "chatbotSessions": "sesiones, con un promedio de",
+        "chatbotMessagesPerSession": "mensajes por sesión."
+      },
+      "topMedicos": {
+        "title": "Top Médicos",
+        "viewAll": "Ver todos",
+        "headers": {
+          "medico": "Médico",
+          "especialidad": "Especialidad",
+          "tipo": "Tipo",
+          "totalCitas": "Total Citas",
+          "rating": "Rating",
+          "acciones": "Acciones"
+        },
+        "empty": "Listado de médicos no disponible"
+      }
     }
   }
 }

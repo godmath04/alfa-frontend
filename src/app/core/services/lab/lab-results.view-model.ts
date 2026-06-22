@@ -24,12 +24,32 @@ export class LabResultsViewModel {
     });
   }
 
-  download(id: string): void {
+  view(id: string): void {
     this._state.setDownloadLoading(id);
     this._state.setDownloadError(null);
     this._svc.getDownloadUrl(id).subscribe({
       next: ({ downloadUrl }) => {
         window.open(downloadUrl, '_blank');
+        this._state.setDownloadLoading(null);
+      },
+      error: () => {
+        this._state.setDownloadError('lab.errors.downloadFailed');
+        this._state.setDownloadLoading(null);
+      },
+    });
+  }
+
+  download(id: string): void {
+    this._state.setDownloadLoading(id);
+    this._state.setDownloadError(null);
+    this._svc.getDownloadUrl(id).subscribe({
+      next: ({ downloadUrl }) => {
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `Resultado_${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
         this._state.setDownloadLoading(null);
       },
       error: () => {

@@ -5,8 +5,15 @@ import { Role } from '../../core/models/role.enum';
 export const GERENCIA_ROUTES: Routes = [
   {
     path: '',
+    loadComponent: () => import('./layout/layout').then(m => m.Layout),
     canActivate: [roleGuard],
     data: { roles: [Role.Gerencia] },
-    children: []
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard)
+      }
+    ]
   }
 ];

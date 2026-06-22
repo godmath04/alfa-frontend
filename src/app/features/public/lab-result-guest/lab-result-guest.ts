@@ -54,4 +54,13 @@ export class LabResultGuestComponent implements OnInit {
       error: () => { this.downloadError.set('lab.guest.downloadFailed'); this.downloading.set(false); },
     });
   }
+
+  _view(): void {
+    this.downloading.set(true);
+    this.downloadError.set(null);
+    this._svc.getGuestDownloadUrl(this._token).subscribe({
+      next: ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this.downloading.set(false); },
+      error: () => { this.downloadError.set('lab.guest.downloadFailed'); this.downloading.set(false); },
+    });
+  }
 }

@@ -92,31 +92,35 @@
               <td class="lm-table__td">
                 <div class="lm-actions">
                   @if (c.estado === 'PENDIENTE') {
-                    <button class="lm-actions__btn lm-actions__btn--complete"
-                            [disabled]="_actionLoading() === c.citaId"
-                            (click)="_completar(c.citaId)">
-                      <lucide-icon name="check" [size]="13"></lucide-icon>
+                    <app-button variant="outline" size="small"
+                                [disabled]="_actionLoading() === c.citaId"
+                                (clicked)="_completar(c.citaId)">
+                      <lucide-icon name="check" [size]="14"></lucide-icon>
                       {{ t.get('ejecutivo.labManagement.actions.complete') }}
-                    </button>
-                    <button class="lm-actions__btn lm-actions__btn--cancel"
-                            [disabled]="_actionLoading() === c.citaId"
-                            (click)="_cancelar(c.citaId)">
-                      <lucide-icon name="x" [size]="13"></lucide-icon>
+                    </app-button>
+                    <app-button variant="destructive" size="small"
+                                [disabled]="_actionLoading() === c.citaId"
+                                (clicked)="_cancelar(c.citaId)">
+                      <lucide-icon name="x" [size]="14"></lucide-icon>
                       {{ t.get('ejecutivo.labManagement.actions.cancel') }}
-                    </button>
+                    </app-button>
                   }
                   @if (c.estado === 'COMPLETADA') {
-                    <button class="lm-actions__btn lm-actions__btn--upload"
-                            (click)="_upload(c.citaId)">
-                      <lucide-icon name="upload" [size]="13"></lucide-icon>
+                    <app-button variant="primary" size="small"
+                                (clicked)="_upload(c.citaId)">
+                      <lucide-icon name="upload" [size]="14"></lucide-icon>
                       {{ t.get('ejecutivo.labManagement.actions.upload') }}
-                    </button>
-                    <button class="lm-actions__btn lm-actions__btn--download"
-                            [disabled]="_downloadLoading() === c.citaId"
-                            (click)="_downloadResult(c.citaId)">
-                      <lucide-icon name="download" [size]="13"></lucide-icon>
-                      {{ t.get('ejecutivo.labManagement.actions.download') }}
-                    </button>
+                    </app-button>
+                    <app-button variant="outline" size="small"
+                                [disabled]="_downloadLoading() === c.citaId"
+                                (clicked)="_downloadResult(c.citaId)">
+                      @if (_downloadLoading() === c.citaId) {
+                        <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                      } @else {
+                        <lucide-icon name="download" [size]="14"></lucide-icon>
+                        {{ t.get('ejecutivo.labManagement.actions.download') }}
+                      }
+                    </app-button>
                   }
                 </div>
               </td>

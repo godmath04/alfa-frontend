@@ -1,0 +1,560 @@
+<div class="dashboard-container">
+  <div class="dashboard-top-section">
+    <div>
+      <h2 class="font-display text-display text-on-surface">{{ greeting() }}</h2>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-xs">{{ currentDate }}</p>
+    </div>
+    <button class="btn-primary" (click)="vm.exportReport()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+      </svg>
+      {{ translate.get('gerencia.dashboard.exportReport') }}
+    </button>
+  </div>
+
+  @if (vm.loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ translate.get('gerencia.dashboard.loading') }}</p>
+    </div>
+  }
+
+  @if (vm.error()) {
+    <div class="error-state">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
+      <p>{{ vm.error() }}</p>
+    </div>
+  }
+
+  <!-- 6 KPIs Row -->
+  @if (vm.headerKpis(); as kpis) {
+    <div class="kpi-grid">
+      <!-- Pacientes Activos -->
+      <div class="kpi-card group">
+        <div class="kpi-header">
+          <div class="icon bg-secondary-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <span class="delta success bg-success-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg>
+            {{ kpis.pacientesActivos.delta }}%
+          </span>
+        </div>
+        <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.pacientesActivos') }}</p>
+        <h3 class="kpi-value">{{ kpis.pacientesActivos.value | number:'1.0-0' }}</h3>
+        @if (kpis.pacientesActivos.sparkline && kpis.pacientesActivos.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-secondary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.pacientesActivos.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#6366f1" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
+      </div>
+
+      <!-- Doctores Activos -->
+      <div class="kpi-card group">
+        <div class="kpi-header">
+          <div class="icon bg-primary-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M19 10h4" />
+              <path d="M21 8v4" />
+            </svg>
+          </div>
+          <span class="delta neutral">
+            - {{ kpis.doctoresActivos.delta }}%
+          </span>
+        </div>
+        <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.doctoresActivos') }}</p>
+        <h3 class="kpi-value">{{ kpis.doctoresActivos.value }}</h3>
+        @if (kpis.doctoresActivos.sparkline && kpis.doctoresActivos.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-primary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.doctoresActivos.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="var(--color-primary-dark)" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
+      </div>
+
+      <!-- Citas Hoy -->
+      <div class="kpi-card group">
+        <div class="kpi-header">
+          <div class="icon bg-tertiary-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2v4"/>
+              <path d="M16 2v4"/>
+              <rect width="18" height="18" x="3" y="4" rx="2"/>
+              <path d="M3 10h18"/>
+              <path d="M8 14h.01"/>
+              <path d="M12 14h.01"/>
+              <path d="M16 14h.01"/>
+              <path d="M8 18h.01"/>
+              <path d="M12 18h.01"/>
+              <path d="M16 18h.01"/>
+            </svg>
+          </div>
+          <span class="delta success bg-success-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg>
+            {{ kpis.citasHoy.delta }}%
+          </span>
+        </div>
+        <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.citasHoy') }}</p>
+        <h3 class="kpi-value">{{ kpis.citasHoy.value }}</h3>
+        @if (kpis.citasHoy.sparkline && kpis.citasHoy.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-tertiary-container" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.citasHoy.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#14b8a6" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
+      </div>
+
+      <!-- No-show Rate -->
+      <div class="kpi-card group">
+        <div class="kpi-header">
+          <div class="icon bg-error-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 2v4"/>
+              <path d="M16 2v4"/>
+              <rect width="18" height="18" x="3" y="4" rx="2"/>
+              <path d="M3 10h18"/>
+              <path d="M10 16l4-4"/>
+              <path d="M14 16l-4-4"/>
+            </svg>
+          </div>
+          <span class="delta error bg-error-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/></svg>
+            {{ kpis.noShowRatePct.delta }}%
+          </span>
+        </div>
+        <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.noShowRate') }}</p>
+        <h3 class="kpi-value">{{ kpis.noShowRatePct.value }}{{ kpis.noShowRatePct.unit }}</h3>
+        @if (kpis.noShowRatePct.sparkline && kpis.noShowRatePct.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-error" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.noShowRatePct.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="var(--color-error)" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
+      </div>
+
+      <!-- Lab Turnaround -->
+      <div class="kpi-card group">
+        <div class="kpi-header">
+          <div class="icon bg-secondary-fixed-cyan">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <span class="delta success bg-success-muted">
+            {{ kpis.labTurnaroundHoras.delta }}h
+          </span>
+        </div>
+        <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.labTurnaround') }}</p>
+        <h3 class="kpi-value">{{ kpis.labTurnaroundHoras.value }}{{ kpis.labTurnaroundHoras.unit }}</h3>
+        @if (kpis.labTurnaroundHoras.sparkline && kpis.labTurnaroundHoras.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-secondary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.labTurnaroundHoras.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#06b6d4" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
+      </div>
+
+      <!-- Notificaciones -->
+      <div class="kpi-card group">
+        <div class="kpi-header">
+          <div class="icon bg-purple-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+          </div>
+          <span class="delta success bg-success-muted">
+            {{ kpis.notifDeliveryPct.delta }}%
+          </span>
+        </div>
+        <p class="kpi-label">{{ translate.get('gerencia.dashboard.kpis.notificaciones') }}</p>
+        <h3 class="kpi-value">{{ kpis.notifDeliveryPct.value }}{{ kpis.notifDeliveryPct.unit }}</h3>
+        @if (kpis.notifDeliveryPct.sparkline && kpis.notifDeliveryPct.sparkline.length > 0) {
+          <svg class="sparkline-chart stroke-primary" fill="none" viewBox="0 0 100 30">
+            <path [attr.d]="vm.getSparklinePath(kpis.notifDeliveryPct.sparkline)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        } @else {
+          <svg class="sparkline-chart opacity-30" fill="none" viewBox="0 0 100 30">
+            <line x1="0" y1="15" x2="100" y2="15" stroke="#a855f7" stroke-width="1" stroke-dasharray="2 2"></line>
+          </svg>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- First Charts Grid -->
+  <div class="charts-double-grid">
+    <!-- Citas por Estado (Stacked bar chart) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.citasEstado') }}</h3>
+        
+        <div class="timeframe-selector">
+          <button class="selector-btn" [class.active]="vm.selectedGroupBy() === 'MONTH' && vm.selectedMonths() === 6" (click)="vm.changeCitasFilter(6, 'MONTH')">6 Meses</button>
+          <button class="selector-btn" [class.active]="vm.selectedGroupBy() === 'MONTH' && vm.selectedMonths() === 12" (click)="vm.changeCitasFilter(12, 'MONTH')">12 Meses</button>
+          <button class="selector-btn" [class.active]="vm.selectedGroupBy() === 'DAY'" (click)="vm.changeCitasFilter(1, 'DAY')">Por Día</button>
+        </div>
+      </div>
+      @if (vm.citasPorEstado(); as data) {
+        <div class="stacked-bar-container">
+          <div class="bars-wrapper">
+            @for (mes of data; track mes.period) {
+              <div class="bar-group" title="{{ formatPeriod(mes.period) }} - Completadas: {{ mes.completadas }}, Pendientes: {{ mes.pendientes }}, Canceladas: {{ mes.canceladas }}">
+                @if (mes.completadas + mes.pendientes + mes.canceladas > 0) {
+                  <div class="bar-stack" [style.height.px]="(mes.completadas + mes.pendientes + mes.canceladas) * 140 / vm.maxCitasValue()">
+                    @if (mes.completadas > 0) {
+                      <div class="bar bg-completadas" [style.flex-grow]="mes.completadas" title="Completadas: {{mes.completadas}}"></div>
+                    }
+                    @if (mes.pendientes > 0) {
+                      <div class="bar bg-pendientes" [style.flex-grow]="mes.pendientes" title="Pendientes: {{mes.pendientes}}"></div>
+                    }
+                    @if (mes.canceladas > 0) {
+                      <div class="bar bg-canceladas" [style.flex-grow]="mes.canceladas" title="Canceladas: {{mes.canceladas}}"></div>
+                    }
+                  </div>
+                } @else {
+                  <div class="bar-stack-placeholder"></div>
+                }
+                <span class="bar-label">{{ formatPeriod(mes.period) }}</span>
+              </div>
+            }
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="dot bg-completadas"></span> {{ translate.get('gerencia.dashboard.charts.completadas') }}</span>
+            <span class="legend-item"><span class="dot bg-pendientes"></span> {{ translate.get('gerencia.dashboard.charts.pendientes') }}</span>
+            <span class="legend-item"><span class="dot bg-canceladas"></span> {{ translate.get('gerencia.dashboard.charts.canceladas') }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Distribución por Especialidad (Donut chart SVG) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.distribucionEspecialidad') }}</h3>
+      </div>
+      @if (vm.citasPorEspecialidad(); as data) {
+        <div class="donut-chart-wrapper">
+          <div class="donut-svg-container">
+            <svg class="donut-svg" viewBox="-10 -10 120 120">
+              <!-- Base Circle background -->
+              <circle cx="50" cy="50" fill="none" r="40" stroke="#f3f3f3" stroke-width="20"></circle>
+              <!-- Dynamic SVG circles with computed offsets and rotations -->
+              @for (slice of vm.donutSlices(); track slice.nombre) {
+                <circle cx="50" cy="50" fill="none" r="40"
+                        [attr.stroke]="slice.color"
+                        [attr.stroke-dasharray]="'251.2'"
+                        [attr.stroke-dashoffset]="slice.dashoffset"
+                        [attr.transform]="slice.transform"
+                        [attr.stroke-width]="activeSlice()?.nombre === slice.nombre ? 24 : 20"
+                        [style.filter]="activeSlice()?.nombre === slice.nombre ? 'brightness(0.9)' : 'none'"
+                        class="donut-segment"
+                        (mouseenter)="activeSlice.set(slice)"
+                        (mouseleave)="activeSlice.set(null)"></circle>
+              }
+            </svg>
+            <div class="donut-inner-content">
+              @if (activeSlice(); as active) {
+                <span class="total-val" [style.color]="active.color">{{ active.pct }}%</span>
+                <span class="total-label" style="max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ active.nombre }}">{{ active.nombre }}</span>
+              } @else {
+                <span class="total-val">{{ data.total }}</span>
+                <span class="total-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+              }
+            </div>
+          </div>
+          <div class="donut-legend-grid">
+            @for (slice of vm.donutSlices(); track slice.nombre) {
+              <div class="legend-row"
+                   [class.active-legend]="activeSlice()?.nombre === slice.nombre"
+                   [style.background-color]="activeSlice()?.nombre === slice.nombre ? slice.color + '1A' : 'transparent'">
+                <span class="dot" [style.background-color]="slice.color"></span>
+                <span class="cat-name">{{ slice.nombre }}</span>
+                <span class="cat-pct">{{ slice.pct }}%</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Second Charts Grid -->
+  <div class="charts-double-grid">
+    <!-- Estudios más solicitados (Progress list) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.estudiosSolicitados') }}</h3>
+      </div>
+      @if (vm.labEstudiosTop(); as top) {
+        <div class="progress-list-container">
+          @for (est of top.estudios; track est.estudio; let i = $index) {
+            <div class="progress-row">
+              <span class="prog-label">{{ est.estudio }}</span>
+              <div class="prog-bar-bg">
+                <!-- Color styles matching design limits -->
+                <div class="prog-bar-fill" [style.width.%]="est.pct" [class.bg-success]="i === 0" [class.bg-secondary]="i > 0 && i < 4" [class.bg-warning]="i >= 4"></div>
+              </div>
+              <span class="prog-pct">{{ est.pct }}%</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Tiempo de respuesta de laboratorio (Gauge) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.tiempoRespuestaLab') }}</h3>
+      </div>
+      @if (vm.labTurnaround(); as labT) {
+        <div class="gauge-card-container">
+          <div class="gauge-svg-wrapper">
+            <svg class="gauge-svg" viewBox="0 -6 100 74">
+              <!-- Shimmer backing/shadow -->
+              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#f1f5f9" stroke-linecap="round" stroke-width="12"></path>
+              <!-- Color sectors -->
+              <!-- Green (0-24h, 90deg sweep) -->
+              <path d="M 10 50 A 40 40 0 0 1 50 10" fill="none" stroke="#10B981" stroke-linecap="round" stroke-width="12"></path>
+              <!-- Yellow (24-72h, 45deg sweep) -->
+              <path d="M 50 10 A 40 40 0 0 1 78.28 21.72" fill="none" stroke="#F59E0B" stroke-linecap="round" stroke-width="12"></path>
+              <!-- Red (>72h, 45deg sweep) -->
+              <path d="M 78.28 21.72 A 40 40 0 0 1 90 50" fill="none" stroke="#EF4444" stroke-linecap="round" stroke-width="12"></path>
+              
+              <!-- Dynamic Needle rotating around (50, 50) starting at left (22, 50) -->
+              <line stroke="#475569" stroke-linecap="round" stroke-width="1.8" x1="50" y1="50" x2="22" y2="50"
+                    [style.transform]="'rotate(' + vm.labGaugeRotation() + 'deg)'"
+                    style="transform-origin: 50px 50px; transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);"></line>
+              
+              <!-- Styled Precision Pivot Ring -->
+              <circle cx="50" cy="50" fill="none" stroke="#cbd5e1" stroke-width="0.8" r="5"></circle>
+              <circle cx="50" cy="50" fill="#ffffff" stroke="#475569" stroke-width="1.5" r="3.2"></circle>
+              <circle cx="50" cy="50" fill="#475569" r="1.2"></circle>
+              
+              <!-- Labels aligned with text-anchor to avoid clipping -->
+              <text class="gauge-text" x="8" y="64" text-anchor="start">0</text>
+              <text class="gauge-text" x="50" y="-1" text-anchor="middle">24h</text>
+              <text class="gauge-text" x="84" y="15" text-anchor="middle">72h</text>
+              <text class="gauge-text" x="92" y="64" text-anchor="end">>72h</text>
+            </svg>
+          </div>
+          
+          <div class="gauge-value-display" [ngClass]="{
+            'status-success': labT.promedioHoras <= 24,
+            'status-warning': labT.promedioHoras > 24 && labT.promedioHoras <= 72,
+            'status-danger': labT.promedioHoras > 72
+          }">
+            <div class="value-highlight">
+              <span class="value-num">{{ labT.promedioHoras }}</span>
+              <span class="value-unit">h</span>
+              <span class="status-badge">
+                @if (labT.promedioHoras <= 24) { Óptimo }
+                @else if (labT.promedioHoras <= 72) { Aceptable }
+                @else { Crítico }
+              </span>
+            </div>
+            <span class="value-label">Tiempo promedio de respuesta</span>
+          </div>
+          
+          <div class="gauge-footer-stats">
+            <div class="stat-box">
+              <span class="stat-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+              <span class="stat-value">{{ labT.total }}</span>
+            </div>
+            <div class="stat-box bg-error-light border-error">
+              <span class="stat-label text-error">{{ translate.get('gerencia.dashboard.charts.pendiente') }}</span>
+              <span class="stat-value text-error">{{ labT.pendientes }}</span>
+            </div>
+            <div class="stat-box bg-success-light border-success">
+              <span class="stat-label text-success">{{ translate.get('gerencia.dashboard.charts.disponible') }}</span>
+              <span class="stat-value text-success">{{ labT.disponibles }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Third Charts Grid (Notificaciones & Chatbot) -->
+  <div class="charts-double-grid">
+    <!-- Notificaciones Card (Robust Fallback) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.notificaciones') }}</h3>
+      </div>
+      @if (vm.notificationsDonut(); as notifInfo) {
+        <div class="donut-chart-wrapper">
+          <div class="donut-svg-container">
+            <svg class="donut-svg" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" fill="none" r="40" stroke="#EF4444" stroke-width="20"></circle>
+              <circle cx="50" cy="50" fill="none" r="40" stroke="#22C55E"
+                      [attr.stroke-dasharray]="'251.2'"
+                      [attr.stroke-dashoffset]="notifInfo.successOffset"
+                      [attr.transform]="notifInfo.successTransform"
+                      stroke-width="20"
+                      class="donut-segment"></circle>
+            </svg>
+            <div class="donut-inner-content">
+              <span class="total-val">{{ notifInfo.total | number }}</span>
+              <span class="total-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+            </div>
+          </div>
+          @if (vm.notificacionesResumen(); as rawNotif) {
+            <div class="donut-legend-grid">
+              @for (canal of rawNotif.porCanal; track canal.canal) {
+                <div class="legend-row-box">
+                  <div class="legend-box-header">
+                    @if (canal.canal === 'EMAIL') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-.239-.756Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/></svg>
+                    } @else {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>
+                    }
+                    <span>{{ canal.canal | titlecase }}</span>
+                  </div>
+                  <h4 class="box-stat">{{ canal.total }}</h4>
+                  <span class="box-sub">{{ canal.pct }}%</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-widget-state">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" viewBox="0 0 16 16" class="text-outline"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
+          <p>{{ translate.get('gerencia.dashboard.charts.noNotif') }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- Chatbot IA (Robust Fallback) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <div class="flex items-center gap-sm">
+          <div class="chatbot-icon-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.538 5.864c.272.02.507-.158.597-.413.313-.889 1.139-1.451 2.065-1.451a2.185 2.185 0 0 1 2.065 1.451c.09.255.325.433.597.413C12.165 5.765 13.4 6.76 13.4 8.062c0 1.258-1.168 2.37-2.613 2.388-.28.004-.516.208-.574.482-.185.86-1.002 1.568-2.213 1.568-1.21 0-2.028-.708-2.213-1.568-.058-.274-.294-.478-.574-.482C3.768 10.432 2.6 9.32 2.6 8.062H3Z"/></svg>
+          </div>
+          <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.chatbot') }}</h3>
+        </div>
+      </div>
+      @if (vm.chatbotResumen(); as chat) {
+        <div class="chatbot-grid-stats">
+          <div class="stat-box bg-purple-light border-purple">
+            <span class="stat-label text-purple">{{ translate.get('gerencia.dashboard.charts.sesiones') }}</span>
+            <span class="stat-value text-purple">{{ chat.sesiones }}</span>
+          </div>
+          <div class="stat-box bg-purple-light border-purple">
+            <span class="stat-label text-purple">{{ translate.get('gerencia.dashboard.charts.mensajes') }}</span>
+            <span class="stat-value text-purple">{{ chat.mensajes }}</span>
+          </div>
+          <div class="stat-box bg-purple-light border-purple">
+            <span class="stat-label text-purple">{{ translate.get('gerencia.dashboard.charts.msgSesion') }}</span>
+            <span class="stat-value text-purple">{{ chat.promedioMensajesPorSesion | number:'1.1-1' }}</span>
+          </div>
+        </div>
+        <div class="chatbot-summary-message">
+          <p class="font-body-md text-on-surface-variant">
+            {{ translate.get('gerencia.dashboard.charts.chatbotProcessed') }} <strong>{{ chat.mensajes }}</strong> {{ translate.get('gerencia.dashboard.charts.chatbotMessagesIn') }} <strong>{{ chat.sesiones }}</strong> {{ translate.get('gerencia.dashboard.charts.chatbotSessions') }} <strong>{{ chat.promedioMensajesPorSesion | number:'1.1-1' }}</strong> {{ translate.get('gerencia.dashboard.charts.chatbotMessagesPerSession') }}
+          </p>
+        </div>
+      } @else {
+        <div class="empty-widget-state">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" viewBox="0 0 16 16" class="text-outline"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
+          <p>{{ translate.get('gerencia.dashboard.charts.noChatbot') }}</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Top Médicos Grid (Full Width Table) -->
+  <div class="full-width-card">
+    <div class="card-header border-b border-outline-variant flex justify-between items-center">
+      <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.topMedicos.title') }}</h3>
+    </div>
+    @if (vm.topMedicos(); as top) {
+      <div class="table-container custom-scrollbar">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant border-b border-outline-variant uppercase tracking-wider">
+              <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.medico') }}</th>
+              <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.especialidad') }}</th>
+              <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.tipo') }}</th>
+              <th class="py-sm px-lg font-medium">{{ translate.get('gerencia.dashboard.topMedicos.headers.totalCitas') }}</th>
+              <th class="py-sm px-lg font-medium text-right">{{ translate.get('gerencia.dashboard.topMedicos.headers.rating') }}</th>
+            </tr>
+          </thead>
+          <tbody class="font-body-md text-body-md text-on-surface divide-y divide-surface-variant">
+            @for (medico of top.medicos; track medico.id) {
+              <tr class="hover:bg-surface-container-low transition-colors group">
+                <td class="py-md px-lg">
+                  <div class="flex items-center gap-md">
+                    @if (medico.fotoUrl) {
+                      <img [src]="medico.fotoUrl" [alt]="medico.nombreCompleto" class="doctor-avatar">
+                    } @else {
+                      <div class="doctor-avatar-placeholder">{{ medico.nombreCompleto | slice:0:2 }}</div>
+                    }
+                    <div>
+                      <p class="font-medium text-on-surface group-hover:text-primary transition-colors">{{ medico.nombreCompleto }}</p>
+                      <p class="font-label-sm text-label-sm text-outline">ID: {{ medico.medicoId }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-md px-lg">{{ medico.especialidad }}</td>
+                <td class="py-md px-lg">
+                  <span class="inline-flex items-center px-2 py-1 rounded badge" [class.badge-interno]="medico.tipo === 'INTERNO'" [class.badge-externo]="medico.tipo === 'EXTERNO'">
+                    {{ medico.tipo }}
+                  </span>
+                </td>
+                <td class="py-md px-lg font-medium">{{ medico.totalCitas | number }}</td>
+                <td class="py-md px-lg text-right">
+                  <div class="flex items-center justify-end gap-xs text-warning">
+                    <!-- Dynamic rendering of stars based on rating -->
+                    @for (star of [1, 2, 3, 4, 5]; track star) {
+                      @if (medico.calificacion >= star) {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="star-icon fill-icon" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                      } @else if (medico.calificacion > (star - 1)) {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="star-icon fill-icon" viewBox="0 0 16 16"><path d="M5.354 5.119 7.538.792A.516.516 0 0 1 8 .5c.183 0 .366.1.462.292l2.184 4.327 4.898.696A.537.537 0 0 1 16 6.32a.548.548 0 0 1-.17.447l-3.523 3.356.83 4.73c.078.442-.36.786-.746.588L8 13.187l-4.389 2.256a.52.52 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.58.58 0 0 1 .085-.302.513.513 0 0 1 .37-.245l4.898-.696zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.565.565 0 0 1 .162-.505l2.907-2.77-4.052-.576a.525.525 0 0 1-.393-.288L8.001 2.223v9.804z"/></svg>
+                      } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="star-icon text-outline" viewBox="0 0 16 16"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/></svg>
+                      }
+                    }
+                    <span class="text-on-surface-variant font-label-sm ml-xs">{{ medico.calificacion }}</span>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-widget-state py-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" viewBox="0 0 16 16" class="text-outline"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
+        <p>{{ translate.get('gerencia.dashboard.topMedicos.empty') }}</p>
+      </div>
+    }
+  </div>
+</div>

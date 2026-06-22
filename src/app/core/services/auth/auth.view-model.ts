@@ -29,7 +29,7 @@ export class AuthViewModel {
     this.loginError.set(null);
 
     this._authService.login(email, password)
-      .pipe(timeout(10000), takeUntilDestroyed(this._destroyRef))
+      .pipe(timeout(30000), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (response) => {
           this.loading.set(false);
@@ -59,7 +59,7 @@ export class AuthViewModel {
     this.registerErrors.set([]);
 
     this._authService.register(data)
-      .pipe(timeout(10000), takeUntilDestroyed(this._destroyRef))
+      .pipe(timeout(30000), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
           this.loading.set(false);
