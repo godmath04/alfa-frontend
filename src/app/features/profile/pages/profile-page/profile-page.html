@@ -105,7 +105,7 @@
         <div class="field-row">
           <div class="field-group">
             <label class="field-label">{{ translate.get('profile.idType') }}</label>
-            <input type="text" class="field-input-simple field-input-simple--disabled" formControlName="idType" />
+            <input type="text" class="field-input-simple field-input-simple--disabled" [value]="idTypeLabel" disabled />
           </div>
           <div class="field-group">
             <label class="field-label">{{ translate.get('profile.idNumber') }}</label>

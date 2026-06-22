@@ -52,7 +52,7 @@
         </div>
         <div class="pp-page__info-item">
           <span class="pp-page__info-label">{{ t.get('ejecutivo.profile.id') }}</span>
-          <span class="pp-page__info-value">{{ _patient()!.idType }} {{ _patient()!.idNumber ?? '—' }}</span>
+          <span class="pp-page__info-value">{{ _patient()!.idType === 'cedula' ? 'Cédula' : 'Pasaporte' }}: {{ _patient()!.idNumber ?? '—' }}</span>
         </div>
       </div>
     </div>
