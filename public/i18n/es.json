@@ -300,6 +300,8 @@
       "invalid-email": "Ingrese un correo válido",
       "invalid-password": "La contraseña debe tener al menos una mayúscula, minúscula y un carácter especial",
       "min-password": "Mínimo 8 caracteres",
+      "min-length": "Mínimo 2 caracteres",
+      "max-length": "Máximo 50 caracteres",
       "invalid-phone": "Número de teléfono inválido"
     }
   },
