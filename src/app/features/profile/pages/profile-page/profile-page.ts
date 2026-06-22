@@ -10,16 +10,16 @@ import { Spinner } from '../../../../shared/components/spinner/spinner';
 import { PatternValidators } from '../../../../shared/validators/pattern.validator';
 import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
 
-/** Group-level validator: assembled birth date must be strictly before today. */
+/** Group-level validator: assembled birth date must be today or in the past. */
 function birthDateNotFutureValidator(group: AbstractControl): ValidationErrors | null {
   const day   = group.get('birthDay')?.value;
   const month = group.get('birthMonth')?.value;
   const year  = group.get('birthYear')?.value;
-  if (!day || !month || !year) return null; // Validators.required handles missing fields
+  if (!day || !month || !year) return null;
   const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  return date < today ? null : { birthDateFuture: true };
+  return date <= today ? null : { birthDateFuture: true };
 }
 
 @Component({
@@ -54,8 +54,8 @@ export class ProfilePage implements OnInit {
     idNumber: [{ value: '', disabled: true }],
 
     // Editable required fields
-    firstName: ['', Validators.required],
-    lastName:  ['', Validators.required],
+    firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+    lastName:  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     phone:     ['', [Validators.required, PatternValidators.phoneEcuador]],
     gender:    ['', Validators.required],
     city:      ['', Validators.required],
@@ -124,6 +124,8 @@ export class ProfilePage implements OnInit {
 
     const errorMap: Record<string, string> = {
       required:           'common.errors.required',
+      minlength:          'common.errors.min-length',
+      maxlength:          'common.errors.max-length',
       invalidPhonePattern:'common.errors.invalid-phone',
       notPastDate:        'profile.errors.notPastDate',
     };
@@ -132,6 +134,13 @@ export class ProfilePage implements OnInit {
     return errorMap[firstKey]
       ? this.translate.get(errorMap[firstKey])
       : true;
+  }
+
+  get idTypeLabel(): string {
+    const val = this.profileForm.get('idType')?.value;
+    if (val === 'cedula') return 'Cédula';
+    if (val === 'passport') return 'Pasaporte';
+    return val ?? '';
   }
 
   /** Returns error for the birth date section (required fields OR future date). */

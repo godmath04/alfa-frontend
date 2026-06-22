@@ -3,12 +3,14 @@ import { Router, RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { AuthViewModel } from '../../../core/services/auth/auth.view-model';
+import { AgendaViewModel } from '../../../core/services/medico/agenda.view-model';
 import { Translate } from '../../../core/services/translate';
 
 @Component({
   selector: 'app-medico-layout',
   standalone: true,
   imports: [RouterOutlet, LucideAngularModule],
+  providers: [AgendaViewModel],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
 })

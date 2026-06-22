@@ -8,7 +8,7 @@ import { toApiError }                 from '../../models/api-error.model';
 import { formatDateToISO }            from '../../../shared/utils/date-time.utils';
 import { DailyAgenda, DoctorAppointment } from '../../models/medico.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AgendaViewModel {
 
   private readonly _service    = inject(MedicoService);
