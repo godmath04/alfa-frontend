@@ -111,6 +111,12 @@
                         Subir PDF
                       </app-button>
                     } @else {
+                      <app-button variant="primary" size="small"
+                                  [disabled]="_downloadLoading() === c.citaId"
+                                  (clicked)="_downloadResult(c.citaId, true)">
+                        <lucide-icon name="eye" [size]="14"></lucide-icon>
+                        Ver
+                      </app-button>
                       <app-button variant="outline" size="small"
                                   [disabled]="_downloadLoading() === c.citaId"
                                   (clicked)="_downloadResult(c.citaId)">
@@ -118,7 +124,7 @@
                           <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
                         } @else {
                           <lucide-icon name="download" [size]="14"></lucide-icon>
-                          Descargar PDF
+                          Descargar
                         }
                       </app-button>
                       @if (c.guest) {

@@ -87,9 +87,10 @@ export class LabService {
     return this._http.get<LabResult>(`${this.api}/api/laboratorio/resultados/${id}`);
   }
 
-  getDownloadUrl(id: string): Observable<{ downloadUrl: string }> {
+  getDownloadUrl(id: string, inline: boolean = false): Observable<{ downloadUrl: string }> {
+    const params = new HttpParams().set('inline', inline);
     return this._http.get<{ downloadUrl: string }>(
-      `${this.api}/api/laboratorio/resultados/${id}/descargar`);
+      `${this.api}/api/laboratorio/resultados/${id}/descargar`, { params });
   }
 
   // ─── Laboratorio: guest ───────────────────────────────────────────────────
@@ -114,9 +115,10 @@ export class LabService {
       `${this.api}/api/laboratorio/resultados/${citaId}/subir`, fd);
   }
 
-  getDownloadUrlByCitaId(citaId: number): Observable<{ downloadUrl: string }> {
+  getDownloadUrlByCitaId(citaId: number, inline: boolean = false): Observable<{ downloadUrl: string }> {
+    const params = new HttpParams().set('inline', inline);
     return this._http.get<{ downloadUrl: string }>(
-      `${this.api}/api/laboratorio/resultados/cita/${citaId}/descargar`);
+      `${this.api}/api/laboratorio/resultados/cita/${citaId}/descargar`, { params });
   }
 
   getResultsBatchStatus(citaIds: number[]): Observable<Record<number, boolean>> {

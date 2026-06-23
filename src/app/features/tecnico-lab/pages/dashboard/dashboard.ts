@@ -127,9 +127,9 @@ export class TecnicoLabDashboard {
     this._router.navigate(['/tecnico-lab/subir-resultados', citaId]);
   }
 
-  _downloadResult(citaId: number): void {
+  _downloadResult(citaId: number, inline: boolean = false): void {
     this._downloadLoading.set(citaId);
-    this._svc.getDownloadUrlByCitaId(citaId).subscribe({
+    this._svc.getDownloadUrlByCitaId(citaId, inline).subscribe({
       next: ({ downloadUrl }) => {
         window.open(downloadUrl, '_blank');
         this._downloadLoading.set(null);
