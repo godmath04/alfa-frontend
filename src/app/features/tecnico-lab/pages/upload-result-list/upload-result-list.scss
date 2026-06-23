@@ -1,0 +1,55 @@
+// upload-result-list.scss — TlUploadResultListPage
+// All lm-* table/filter/badge/pagination styles come from the shared partial.
+@use '../../../../../styles/lab-table' as *;
+
+// ── Page header with role badge ───────────────────────────────────────────────
+.sr-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  &__text     { display: flex; flex-direction: column; gap: 4px; }
+
+  &__subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0369a1;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+}
+
+// ── Cita ID chip ──────────────────────────────────────────────────────────────
+.sr-cita-id {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+// ── Empty state hint ──────────────────────────────────────────────────────────
+.sr-empty__hint {
+  font-size: var(--font-size-xs, 12px);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 4px;
+  strong { color: #16a34a; }
+}

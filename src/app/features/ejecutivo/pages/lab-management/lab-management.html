@@ -106,11 +106,14 @@
                     </app-button>
                   }
                   @if (c.estado === 'COMPLETADA') {
+                    <!-- COMENTADO TEMPORALMENTE - Ejecutivo ya no sube PDFs, ahora es responsabilidad de TECNICO_LAB -->
+                    <!--
                     <app-button variant="primary" size="small"
                                 (clicked)="_upload(c.citaId)">
                       <lucide-icon name="upload" [size]="14"></lucide-icon>
                       {{ t.get('ejecutivo.labManagement.actions.upload') }}
                     </app-button>
+                    -->
                     <app-button variant="outline" size="small"
                                 [disabled]="_downloadLoading() === c.citaId"
                                 (clicked)="_downloadResult(c.citaId)">

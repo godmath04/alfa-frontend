@@ -1,5 +1,6 @@
 import { Component, afterNextRender, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+// COMENTADO TEMPORALMENTE - Router ya no es necesario: el ejecutivo no navega a subir-resultado
+// import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -20,7 +21,8 @@ export class LabManagementPage {
 
   readonly t = inject(Translate);
   private readonly _svc    = inject(LabService);
-  private readonly _router = inject(Router);
+  // COMENTADO TEMPORALMENTE - Ejecutivo ya no sube PDFs, ahora es responsabilidad de TECNICO_LAB
+  // private readonly _router = inject(Router);
 
   readonly _citas         = signal<StaffLabCitaItem[]>([]);
   readonly _loading       = signal(false);
@@ -102,9 +104,10 @@ export class LabManagementPage {
     });
   }
 
-  _upload(citaId: number): void {
-    this._router.navigate(['/ejecutivo/subir-resultado', citaId]);
-  }
+  // COMENTADO TEMPORALMENTE - Ejecutivo ya no sube PDFs, ahora es responsabilidad de TECNICO_LAB
+  // _upload(citaId: number): void {
+  //   this._router.navigate(['/ejecutivo/subir-resultado', citaId]);
+  // }
 
   _downloadResult(citaId: number): void {
     this._downloadLoading.set(citaId);

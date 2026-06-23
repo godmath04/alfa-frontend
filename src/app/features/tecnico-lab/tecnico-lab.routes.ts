@@ -13,6 +13,16 @@ export const TECNICO_LAB_ROUTES: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.TecnicoLabDashboard)
+      },
+      {
+        // Listing of completed citas — entry point from sidebar nav
+        path: 'subir-resultados',
+        loadComponent: () => import('./pages/upload-result-list/upload-result-list').then(m => m.TlUploadResultListPage)
+      },
+      {
+        // Detail page — navigated to from the listing table row
+        path: 'subir-resultados/:citaId',
+        loadComponent: () => import('./pages/upload-result/upload-result').then(m => m.TlUploadResultPage)
       }
     ]
   }

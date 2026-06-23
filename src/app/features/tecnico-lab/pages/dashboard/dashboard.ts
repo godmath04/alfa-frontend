@@ -1,25 +1,26 @@
 import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../../core/services/translate';
 import { LabService } from '../../../../core/services/lab/lab.service';
-import { StaffLabCitaItem, LabResult, GuestResult } from '../../../../core/models/lab.model';
+import { StaffLabCitaItem } from '../../../../core/models/lab.model';
 import { formatToAmPm } from '../../../../shared/utils/date-time.utils';
 import { Button } from '../../../../shared/components/button/button';
-import { Spinner } from '../../../../shared/components/spinner/spinner';
 
 @Component({
   selector: 'app-tecnico-lab-dashboard',
   standalone: true,
-  imports: [LucideAngularModule, DatePipe, Button, Spinner],
+  imports: [LucideAngularModule, DatePipe, Button],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class TecnicoLabDashboard {
 
   readonly t = inject(Translate);
-  private readonly _svc = inject(LabService);
+  private readonly _svc    = inject(LabService);
+  private readonly _router = inject(Router);
 
   readonly _citas         = signal<StaffLabCitaItem[]>([]);
   readonly _loading       = signal(false);
@@ -35,14 +36,6 @@ export class TecnicoLabDashboard {
   readonly _actionLoading   = signal<number | null>(null);
   readonly _downloadLoading = signal<number | null>(null);
   readonly _resendLoading   = signal<number | null>(null);
-
-  // Modal State
-  readonly _showUploadModal = signal(false);
-  readonly _activeCitaId    = signal<number | null>(null);
-  readonly _selectedFile    = signal<File | null>(null);
-  readonly _uploading       = signal(false);
-  readonly _uploadError     = signal<string | null>(null);
-  readonly _uploadSuccess   = signal(false);
 
   readonly formatToAmPm = formatToAmPm;
 
@@ -111,55 +104,9 @@ export class TecnicoLabDashboard {
     });
   }
 
+  // Navigate to the dedicated upload-result page (replaces the inline modal)
   _openUploadModal(citaId: number): void {
-    this._activeCitaId.set(citaId);
-    this._selectedFile.set(null);
-    this._uploadError.set(null);
-    this._uploadSuccess.set(false);
-    this._showUploadModal.set(true);
-  }
-
-  _closeUploadModal(): void {
-    this._showUploadModal.set(false);
-    this._activeCitaId.set(null);
-    this._selectedFile.set(null);
-    this._uploadError.set(null);
-    this._uploadSuccess.set(false);
-  }
-
-  _onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0] ?? null;
-    if (file && file.type !== 'application/pdf') {
-      this._uploadError.set('Solo se permiten archivos PDF');
-      this._selectedFile.set(null);
-      return;
-    }
-    this._selectedFile.set(file);
-    this._uploadError.set(null);
-  }
-
-  _uploadResult(): void {
-    const file = this._selectedFile();
-    const citaId = this._activeCitaId();
-    if (!file || !citaId) return;
-
-    this._uploading.set(true);
-    this._uploadError.set(null);
-
-    this._svc.subirResultado(citaId, file).subscribe({
-      next: () => {
-        this._uploading.set(false);
-        this._uploadSuccess.set(true);
-        // Refresh appointment state in the list
-        this._citas.update(list =>
-          list.map(c => c.citaId === citaId ? { ...c, originalFileName: file.name } : c));
-      },
-      error: () => {
-        this._uploadError.set('Error al subir el archivo. Intenta nuevamente.');
-        this._uploading.set(false);
-      },
-    });
+    this._router.navigate(['/tecnico-lab/subir-resultados', citaId]);
   }
 
   _downloadResult(citaId: number): void {
