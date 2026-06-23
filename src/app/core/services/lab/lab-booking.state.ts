@@ -32,6 +32,7 @@ interface DetailsState {
   selectedInsuranceTypeId: number | null;
   selectedInsuranceTypeName: string | null;
   observations: string;
+  medicoId: string;
 }
 
 interface CreationState {
@@ -46,7 +47,7 @@ export class LabBookingState {
   private readonly _lab      = signal<LabState>({ labs: [], selected: null, loading: false, error: null });
   private readonly _slot     = signal<SlotState>({ disponibilidad: null, selectedDate: null, selectedTime: null, loading: false, error: null });
   private readonly _catalog  = signal<CatalogState>({ studyTypes: [], insuranceTypes: [], loading: false, error: null });
-  private readonly _details  = signal<DetailsState>({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '' });
+  private readonly _details  = signal<DetailsState>({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '', medicoId: '' });
   private readonly _creation = signal<CreationState>({ result: null, loading: false, error: null });
 
   // ─── Lab ──────────────────────────────────────────────────────────────────
@@ -94,10 +95,12 @@ export class LabBookingState {
   readonly selectedInsuranceTypeId  = computed(() => this._details().selectedInsuranceTypeId);
   readonly selectedInsuranceTypeName = computed(() => this._details().selectedInsuranceTypeName);
   readonly observations             = computed(() => this._details().observations);
+  readonly medicoId                 = computed(() => this._details().medicoId);
 
   selectStudyType(id: number, name: string): void    { this._details.update(s => ({ ...s, selectedStudyTypeId: id, selectedStudyTypeName: name })); }
   selectInsuranceType(id: number, name: string): void { this._details.update(s => ({ ...s, selectedInsuranceTypeId: id, selectedInsuranceTypeName: name })); }
   setObservations(obs: string): void                  { this._details.update(s => ({ ...s, observations: obs })); }
+  setMedicoId(medicoId: string): void                 { this._details.update(s => ({ ...s, medicoId })); }
 
   // ─── Creation ─────────────────────────────────────────────────────────────
 
@@ -115,7 +118,7 @@ export class LabBookingState {
     this._lab.set({ labs: [], selected: null, loading: false, error: null });
     this._slot.set({ disponibilidad: null, selectedDate: null, selectedTime: null, loading: false, error: null });
     this._catalog.set({ studyTypes: [], insuranceTypes: [], loading: false, error: null });
-    this._details.set({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '' });
+    this._details.set({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '', medicoId: '' });
     this._creation.set({ result: null, loading: false, error: null });
   }
 }

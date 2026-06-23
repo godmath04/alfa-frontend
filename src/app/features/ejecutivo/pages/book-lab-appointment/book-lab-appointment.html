@@ -119,56 +119,6 @@
       <section class="step-section">
         <h2 class="step-section__title">{{ t.get('lab.booking.steps.details') }}</h2>
 
-        <!-- Mode selector -->
-        <div class="mode-tabs">
-          <button class="mode-tab" [class.mode-tab--active]="_mode() === 'patient'"
-                  (click)="_mode.set('patient')">
-            <lucide-icon name="user" [size]="16"></lucide-icon>
-            {{ t.get('lab.booking.guest.modePatient') }}
-          </button>
-          <button class="mode-tab" [class.mode-tab--active]="_mode() === 'guest'"
-                  (click)="_mode.set('guest')">
-            <lucide-icon name="user-plus" [size]="16"></lucide-icon>
-            {{ t.get('lab.booking.guest.modeGuest') }}
-          </button>
-        </div>
-
-        @if (_mode() === 'guest') {
-          <div class="guest-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">{{ t.get('lab.booking.guest.nombre') }}</label>
-                <input class="field-input" type="text" [value]="_guestNombre()"
-                       (input)="_guestNombre.set($any($event.target).value)" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">{{ t.get('lab.booking.guest.apellido') }}</label>
-                <input class="field-input" type="text" [value]="_guestApellido()"
-                       (input)="_guestApellido.set($any($event.target).value)" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">{{ t.get('lab.booking.guest.email') }}</label>
-              <input class="field-input" type="email" [value]="_guestEmail()"
-                     (input)="_guestEmail.set($any($event.target).value)" />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">{{ t.get('lab.booking.guest.phone') }}</label>
-                <input class="field-input" type="tel" [value]="_guestPhone()"
-                       (input)="_guestPhone.set($any($event.target).value)" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">{{ t.get('lab.booking.guest.idNumber') }}</label>
-                <input class="field-input" type="text" [value]="_guestIdNumber()"
-                       (input)="_guestIdNumber.set($any($event.target).value)" />
-              </div>
-            </div>
-            @if (_guestError()) {
-              <p class="step-section__error">{{ _guestError() }}</p>
-            }
-          </div>
-        }
 
         @if (vm.catalogLoading()) {
           <div class="step-section__loader"><app-spinner size="large"></app-spinner></div>
@@ -191,6 +141,14 @@
                 <option [value]="it.id" [selected]="vm.selectedInsuranceTypeId() === it.id">{{ it.name }}</option>
               }
             </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Médico derivante (opcional)</label>
+            <input class="field-input" type="text"
+                   placeholder="Ej: Dr. Pérez o correo"
+                   [value]="vm.medicoId()"
+                   (input)="_onMedicoInput($event)" />
           </div>
 
           <div class="form-group">

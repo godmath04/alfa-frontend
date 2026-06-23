@@ -35,6 +35,7 @@ export class LabBookingViewModel {
   readonly selectedInsuranceTypeId = this._state.selectedInsuranceTypeId;
   readonly selectedInsuranceTypeName = this._state.selectedInsuranceTypeName;
   readonly observations            = this._state.observations;
+  readonly medicoId                = this._state.medicoId;
 
   readonly creationResult  = this._state.creationResult;
   readonly creating        = this._state.creating;
@@ -112,6 +113,10 @@ export class LabBookingViewModel {
     this._state.setObservations(obs);
   }
 
+  setMedicoId(medicoId: string): void {
+    this._state.setMedicoId(medicoId);
+  }
+
   book(onSuccess: () => void, patientId?: number,
        guestData?: { nombre: string; apellido: string; email: string; phone: string; idNumber: string }
   ): void {
@@ -123,6 +128,7 @@ export class LabBookingViewModel {
     const insId       = this._state.selectedInsuranceTypeId();
     const insName     = this._state.selectedInsuranceTypeName();
     const obs         = this._state.observations();
+    const medicoId    = this._state.medicoId();
 
     if (!lab || !date || !time || !studyTypeId || !studyName || !insId || !insName) return;
 
@@ -141,6 +147,7 @@ export class LabBookingViewModel {
       guestEmail:     guestData?.email,
       guestPhone:     guestData?.phone,
       guestIdNumber:  guestData?.idNumber,
+      medicoId:       medicoId || undefined,
     };
 
     this._state.setCreating(true);

@@ -99,6 +99,7 @@ export interface LabCitaRequest {
   guestEmail?: string;
   guestPhone?: string;
   guestIdNumber?: string;
+  medicoId?: string;
 }
 
 export interface LabCitaResponse {
