@@ -2,6 +2,7 @@ import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { switchMap, map, of, catchError } from 'rxjs';
 
 import { Translate } from '../../../../core/services/translate';
 import { LabService } from '../../../../core/services/lab/lab.service';
@@ -65,11 +66,28 @@ export class TecnicoLabDashboard {
       fechaHasta: this._fechaHasta()   || undefined,
       page:       this._page(),
       size:       20,
-    }).subscribe({
-      next: r => {
-        this._citas.set(r.content);
-        this._totalPages.set(r.totalPages);
-        this._totalElements.set(Number(r.totalElements));
+    }).pipe(
+      switchMap(r => {
+        const completedIds = r.content.filter(c => c.estado === 'COMPLETADA').map(c => c.citaId);
+        if (completedIds.length === 0) {
+          return of({ page: r, statusMap: {} as Record<number, boolean> });
+        }
+        return this._svc.getResultsBatchStatus(completedIds).pipe(
+          map(statusMap => ({ page: r, statusMap })),
+          catchError(() => of({ page: r, statusMap: {} as Record<number, boolean> }))
+        );
+      })
+    ).subscribe({
+      next: ({ page, statusMap }) => {
+        const enhancedCitas = page.content.map(c => {
+          if (statusMap[c.citaId]) {
+            return { ...c, originalFileName: 'uploaded.pdf' };
+          }
+          return c;
+        });
+        this._citas.set(enhancedCitas);
+        this._totalPages.set(page.totalPages);
+        this._totalElements.set(Number(page.totalElements));
         this._loading.set(false);
       },
       error: () => {

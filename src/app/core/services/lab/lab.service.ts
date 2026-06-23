@@ -119,6 +119,12 @@ export class LabService {
       `${this.api}/api/laboratorio/resultados/cita/${citaId}/descargar`);
   }
 
+  getResultsBatchStatus(citaIds: number[]): Observable<Record<number, boolean>> {
+    if (!citaIds || citaIds.length === 0) return new Observable(sub => { sub.next({}); sub.complete(); });
+    const params = new HttpParams().set('citaIds', citaIds.join(','));
+    return this._http.get<Record<number, boolean>>(`${this.api}/api/laboratorio/resultados/batch-status`, { params });
+  }
+
   reenviarToken(citaId: number): Observable<GuestResult> {
     return this._http.post<GuestResult>(
       `${this.api}/api/laboratorio/resultados/${citaId}/reenviar-token`, {});

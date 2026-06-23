@@ -104,32 +104,35 @@
                     </app-button>
                   }
                   @if (c.estado === 'COMPLETADA') {
-                    <app-button variant="primary" size="small"
-                                (clicked)="_openUploadModal(c.citaId)">
-                      <lucide-icon name="upload" [size]="14"></lucide-icon>
-                      Subir PDF
-                    </app-button>
-                    <app-button variant="outline" size="small"
-                                [disabled]="_downloadLoading() === c.citaId"
-                                (clicked)="_downloadResult(c.citaId)">
-                      @if (_downloadLoading() === c.citaId) {
-                        <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
-                      } @else {
-                        <lucide-icon name="download" [size]="14"></lucide-icon>
-                        Descargar
-                      }
-                    </app-button>
-                    @if (c.guest) {
+                    @if (!c.originalFileName) {
+                      <app-button variant="primary" size="small"
+                                  (clicked)="_openUploadModal(c.citaId)">
+                        <lucide-icon name="upload" [size]="14"></lucide-icon>
+                        Subir PDF
+                      </app-button>
+                    } @else {
                       <app-button variant="outline" size="small"
-                                  [disabled]="_resendLoading() === c.citaId"
-                                  (clicked)="_resendToken(c.citaId)">
-                        @if (_resendLoading() === c.citaId) {
+                                  [disabled]="_downloadLoading() === c.citaId"
+                                  (clicked)="_downloadResult(c.citaId)">
+                        @if (_downloadLoading() === c.citaId) {
                           <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
                         } @else {
-                          <lucide-icon name="send" [size]="14"></lucide-icon>
-                          Reenviar Acceso
+                          <lucide-icon name="download" [size]="14"></lucide-icon>
+                          Descargar PDF
                         }
                       </app-button>
+                      @if (c.guest) {
+                        <app-button variant="outline" size="small"
+                                    [disabled]="_resendLoading() === c.citaId"
+                                    (clicked)="_resendToken(c.citaId)">
+                          @if (_resendLoading() === c.citaId) {
+                            <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                          } @else {
+                            <lucide-icon name="send" [size]="14"></lucide-icon>
+                            Reenviar Acceso
+                          }
+                        </app-button>
+                      }
                     }
                   }
                 </div>
