@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -20,7 +20,7 @@ import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class Register {
+export class Register implements OnInit, OnDestroy {
 
   readonly vm        = inject(AuthViewModel);
   readonly translate = inject(Translate);
@@ -89,6 +89,21 @@ export class Register {
     this.registerForm.get('birthYear')?.valueChanges
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => this._updateDaysInMonth());
+  }
+
+  // Limpiamos el estado del ViewModel (singleton) al entrar al formulario
+  // para que nunca muestre un éxito residual de un registro anterior.
+  ngOnInit(): void {
+    this.vm.registerSuccess.set(false);
+    this.vm.registerErrors.set([]);
+    this.isSubmitted = false;
+    this.registerForm.reset();
+  }
+
+  // Limpiamos al salir para no contaminar otras rutas.
+  ngOnDestroy(): void {
+    this.vm.registerSuccess.set(false);
+    this.vm.registerErrors.set([]);
   }
 
   getFieldError(fieldName: string): string | boolean {
