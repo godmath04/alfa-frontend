@@ -1,11 +1,7 @@
-// Roles válidos aceptados por el backend (Defensa Capa 0)
-export type ChatRole = 'PACIENTE' | 'MEDICO' | 'EJECUTIVO' | 'ADMIN' | 'GERENCIA';
-
 // Payload enviado a POST /api/ia/chat
 export interface ChatRequest {
   message: string;
-  sessionId?: string; // Opcional, se omite en el primer mensaje
-  role?: ChatRole;
+  sessionId?: string;
 }
 
 // Payload devuelto por el backend
