@@ -3,6 +3,7 @@ import {
   LabCatalog, LabDisponibilidad, LabCitaResponse,
   StudyType, InsuranceType,
 } from '../../models/lab.model';
+import { DoctorProfile } from '../../models/admin.model';
 
 interface LabState {
   labs: LabCatalog[];
@@ -33,6 +34,7 @@ interface DetailsState {
   selectedInsuranceTypeName: string | null;
   observations: string;
   medicoId: string;
+  doctors: DoctorProfile[];
 }
 
 interface CreationState {
@@ -47,7 +49,7 @@ export class LabBookingState {
   private readonly _lab      = signal<LabState>({ labs: [], selected: null, loading: false, error: null });
   private readonly _slot     = signal<SlotState>({ disponibilidad: null, selectedDate: null, selectedTime: null, loading: false, error: null });
   private readonly _catalog  = signal<CatalogState>({ studyTypes: [], insuranceTypes: [], loading: false, error: null });
-  private readonly _details  = signal<DetailsState>({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '', medicoId: '' });
+  private readonly _details  = signal<DetailsState>({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '', medicoId: '', doctors: [] });
   private readonly _creation = signal<CreationState>({ result: null, loading: false, error: null });
 
   // ─── Lab ──────────────────────────────────────────────────────────────────
@@ -96,11 +98,13 @@ export class LabBookingState {
   readonly selectedInsuranceTypeName = computed(() => this._details().selectedInsuranceTypeName);
   readonly observations             = computed(() => this._details().observations);
   readonly medicoId                 = computed(() => this._details().medicoId);
+  readonly doctors                  = computed(() => this._details().doctors);
 
   selectStudyType(id: number, name: string): void    { this._details.update(s => ({ ...s, selectedStudyTypeId: id, selectedStudyTypeName: name })); }
   selectInsuranceType(id: number, name: string): void { this._details.update(s => ({ ...s, selectedInsuranceTypeId: id, selectedInsuranceTypeName: name })); }
   setObservations(obs: string): void                  { this._details.update(s => ({ ...s, observations: obs })); }
   setMedicoId(medicoId: string): void                 { this._details.update(s => ({ ...s, medicoId })); }
+  setDoctors(doctors: DoctorProfile[]): void          { this._details.update(s => ({ ...s, doctors })); }
 
   // ─── Creation ─────────────────────────────────────────────────────────────
 
@@ -118,7 +122,7 @@ export class LabBookingState {
     this._lab.set({ labs: [], selected: null, loading: false, error: null });
     this._slot.set({ disponibilidad: null, selectedDate: null, selectedTime: null, loading: false, error: null });
     this._catalog.set({ studyTypes: [], insuranceTypes: [], loading: false, error: null });
-    this._details.set({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '', medicoId: '' });
+    this._details.set({ selectedStudyTypeId: null, selectedStudyTypeName: null, selectedInsuranceTypeId: null, selectedInsuranceTypeName: null, observations: '', medicoId: '', doctors: [] });
     this._creation.set({ result: null, loading: false, error: null });
   }
 }

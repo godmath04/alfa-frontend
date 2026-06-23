@@ -37,7 +37,13 @@
     <!-- ══ STEP 0: Flow Selector ══════════════════════════ -->
     @if (_currentStep === 0) {
       <div class="flow-selector">
-        <h2 class="flow-selector__title">{{ _translate.get('paciente.appointments.flowSelector.title') }}</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h2 class="flow-selector__title" style="margin-bottom: 0;">{{ _translate.get('paciente.appointments.flowSelector.title') }}</h2>
+          <app-button variant="outline" (clicked)="_goToDashboard()">
+            <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+            Volver al Perfil
+          </app-button>
+        </div>
         <div class="flow-selector__cards">
 
           <!-- Manual flow card -->

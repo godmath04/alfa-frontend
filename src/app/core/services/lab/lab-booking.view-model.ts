@@ -3,6 +3,7 @@ import { forkJoin } from 'rxjs';
 
 import { LabBookingState } from './lab-booking.state';
 import { LabService } from './lab.service';
+import { AdminService } from '../admin/admin.service';
 import { LabCatalog, LabCitaRequest } from '../../models/lab.model';
 import { generateNextDays } from '../../../shared/utils/date-time.utils';
 
@@ -11,6 +12,7 @@ export class LabBookingViewModel {
 
   private readonly _state = inject(LabBookingState);
   private readonly _svc   = inject(LabService);
+  private readonly _admin = inject(AdminService);
 
   // ─── Public read ─────────────────────────────────────────────────────────
 
@@ -36,6 +38,7 @@ export class LabBookingViewModel {
   readonly selectedInsuranceTypeName = this._state.selectedInsuranceTypeName;
   readonly observations            = this._state.observations;
   readonly medicoId                = this._state.medicoId;
+  readonly doctors                 = this._state.doctors;
 
   readonly creationResult  = this._state.creationResult;
   readonly creating        = this._state.creating;
@@ -67,12 +70,14 @@ export class LabBookingViewModel {
     this._state.setCatalogLoading(true);
     this._state.setCatalogError(null);
     forkJoin({
-      studyTypes:    this._svc.getStudyTypes(),
+      studyTypes:     this._svc.getStudyTypes(),
       insuranceTypes: this._svc.getInsuranceTypes(),
+      doctors:        this._admin.getActiveDoctors(),
     }).subscribe({
-      next: ({ studyTypes, insuranceTypes }) => {
+      next: ({ studyTypes, insuranceTypes, doctors }) => {
         this._state.setStudyTypes(studyTypes);
         this._state.setInsuranceTypes(insuranceTypes);
+        this._state.setDoctors(doctors);
         this._state.setCatalogLoading(false);
       },
       error: () => {

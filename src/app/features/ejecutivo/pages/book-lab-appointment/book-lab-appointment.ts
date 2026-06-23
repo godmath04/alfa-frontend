@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { DatePipe } from '@angular/common';
@@ -9,6 +9,7 @@ import { Button } from '../../../../shared/components/button/button';
 import { Spinner } from '../../../../shared/components/spinner/spinner';
 import { LabCatalog } from '../../../../core/models/lab.model';
 import { formatToAmPm } from '../../../../shared/utils/date-time.utils';
+import { DoctorProfile } from '../../../../core/models/admin.model';
 
 
 @Component({
@@ -38,6 +39,42 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
   ];
 
   readonly formatToAmPm = formatToAmPm;
+
+  // ─── Doctor selection modal ───────────────────────────────────────────────
+  _showDoctorModal = signal(false);
+  _doctorSearchQuery = signal('');
+
+  _filteredDoctors = computed(() => {
+    const q = this._doctorSearchQuery().toLowerCase().trim();
+    const docs = this.vm.doctors();
+    if (!q) return docs;
+    return docs.filter(d => 
+      d.firstName.toLowerCase().includes(q) || 
+      (d.lastName && d.lastName.toLowerCase().includes(q)) ||
+      (d.specialties?.some((s: any) => s.nombre.toLowerCase().includes(q)))
+    );
+  });
+
+  _openDoctorModal(): void {
+    this._showDoctorModal.set(true);
+    this._doctorSearchQuery.set('');
+  }
+
+  _closeDoctorModal(): void {
+    this._showDoctorModal.set(false);
+  }
+
+  _selectDoctor(doc: DoctorProfile): void {
+    this.vm.setMedicoId(doc.id.toString());
+    this._closeDoctorModal();
+  }
+
+  _getDoctorName(id: string): string {
+    if (!id) return '';
+    const doc = this.vm.doctors().find(d => d.id.toString() === id);
+    if (!doc) return id;
+    return `${doc.firstName} ${doc.lastName || ''}`;
+  }
 
   ngOnInit(): void {
     this._patientId = Number(this._route.snapshot.paramMap.get('id'));
@@ -78,9 +115,6 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
     this.vm.setObservations((event.target as HTMLTextAreaElement).value);
   }
 
-  _onMedicoInput(event: Event): void {
-    this.vm.setMedicoId((event.target as HTMLInputElement).value);
-  }
 
   _confirm(): void {
     if (!this.vm.canConfirmDetails()) return;
