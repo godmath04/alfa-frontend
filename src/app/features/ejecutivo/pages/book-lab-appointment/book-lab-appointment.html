@@ -269,14 +269,14 @@
           @for (doc of _filteredDoctors(); track doc.id) {
             <div class="doctor-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <img [src]="doc.profilePicture ? doc.profilePicture : '/images/person-icon.jpg'" 
+                <img [src]="doc.profilePhoto ? doc.profilePhoto : '/images/person-icon.jpg'" 
                      style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
                      alt="Avatar">
                 <div>
                   <h4 style="margin: 0; font-size: 0.95rem; color: var(--text-primary);">{{ doc.firstName }} {{ doc.lastName }}</h4>
                   <p style="margin: 0; font-size: 0.85rem; color: var(--text-tertiary);">
                     @if (doc.specialties && doc.specialties.length > 0) {
-                      {{ doc.specialties[0].nombre }}
+                      {{ doc.specialties[0].name }}
                     } @else {
                       Médico General
                     }

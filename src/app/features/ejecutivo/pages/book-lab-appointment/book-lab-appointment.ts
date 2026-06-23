@@ -51,7 +51,7 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
     return docs.filter(d => 
       d.firstName.toLowerCase().includes(q) || 
       (d.lastName && d.lastName.toLowerCase().includes(q)) ||
-      (d.specialties?.some((s: any) => s.nombre.toLowerCase().includes(q)))
+      (d.specialties?.some((s: any) => s.name.toLowerCase().includes(q)))
     );
   });
 
