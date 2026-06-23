@@ -151,6 +151,7 @@ export interface StaffLabCitaItem {
   insuranceTypeName: string | null;
   estado:            string;
   guest:             boolean;
+  originalFileName?: string | null;
 }
 
 // ─── Lab results ──────────────────────────────────────────────────────────────

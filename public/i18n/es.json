@@ -665,7 +665,8 @@
         "medico":        "Médico",
         "ejecutivo":     "Ejecutivo",
         "administrador": "Administrador",
-        "gerencia":      "Gerencia"
+        "gerencia":      "Gerencia",
+        "tecnico_lab":   "Técnico de Lab"
       },
       "actions": {
         "change-role": "Cambiar rol",
@@ -1153,7 +1154,8 @@
         "ejecutivo": "Ejecutivo",
         "medico": "Doctor",
         "paciente": "Paciente",
-        "usuario": "Usuario"
+        "usuario": "Usuario",
+        "tecnico_lab": "Técnico de Lab"
       },
       "exportReport": "Exportar Reporte",
       "loading": "Cargando analítica en tiempo real...",

@@ -102,6 +102,7 @@ export class AuthViewModel {
     [Role.Ejecutivo]:     '/ejecutivo',
     [Role.Administrador]: '/admin',
     [Role.Gerencia]:      '/gerencia',
+    [Role.TecnicoLab]:    '/tecnico-lab',
   };
 
   private _redirectByRole(role: string): void {

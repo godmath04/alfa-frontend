@@ -1,0 +1,219 @@
+<div class="lm-page">
+
+  <div class="lm-page__header">
+    <h1 class="lm-page__title">Panel de Citas y Análisis Clínicos</h1>
+  </div>
+
+  <!-- ── Filters ── -->
+  <div class="lm-filters">
+    <select class="lm-filters__select"
+            [value]="_estadoFilter()"
+            (change)="_estadoFilter.set($any($event.target).value)">
+      <option value="">Todas las Citas</option>
+      <option value="PENDIENTE">PENDIENTE</option>
+      <option value="COMPLETADA">COMPLETADA</option>
+      <option value="CANCELADA">CANCELADA</option>
+    </select>
+
+    <input class="lm-filters__date" type="date"
+           [value]="_fechaDesde()"
+           (change)="_fechaDesde.set($any($event.target).value)" />
+
+    <input class="lm-filters__date" type="date"
+           [value]="_fechaHasta()"
+           (change)="_fechaHasta.set($any($event.target).value)" />
+
+    <button class="lm-filters__btn" (click)="_applyFilters()">
+      <lucide-icon name="search" [size]="15"></lucide-icon>
+      Buscar Citas
+    </button>
+  </div>
+
+  <!-- ── Body ── -->
+  @if (_loading()) {
+    <div class="lm-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="lm-page__spinner"></lucide-icon>
+    </div>
+  } @else if (_error()) {
+    <div class="lm-page__state lm-page__state--error">
+      <lucide-icon name="circle-alert" [size]="24"></lucide-icon>
+      <span>{{ _error() }}</span>
+    </div>
+  } @else if (_citas().length === 0) {
+    <div class="lm-page__state lm-page__state--empty">
+      <lucide-icon name="flask-conical" [size]="48"></lucide-icon>
+      <p>No se encontraron citas de laboratorio asignadas o registradas.</p>
+    </div>
+  } @else {
+    <div class="lm-card">
+      <table class="lm-table">
+        <thead class="lm-table__head">
+          <tr>
+            <th class="lm-table__th">Paciente</th>
+            <th class="lm-table__th">Laboratorio</th>
+            <th class="lm-table__th">Fecha / Hora</th>
+            <th class="lm-table__th">Estudio</th>
+            <th class="lm-table__th">Estado</th>
+            <th class="lm-table__th">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of _citas(); track c.citaId) {
+            <tr class="lm-table__row">
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.pacienteNombre }}</span>
+                @if (c.guest) {
+                  <span class="lm-badge lm-badge--guest">GUEST</span>
+                }
+                <span class="lm-table__meta">{{ c.pacienteEmail }}</span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.labName }}</span>
+                <span class="lm-table__meta">Lab {{ c.labNumber }}
+                  @if (c.labFloor) { · Piso {{ c.labFloor }} }
+                </span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.fecha | date:'dd MMM yyyy' }}</span>
+                <span class="lm-table__meta">{{ formatToAmPm(c.horaInicio) }}</span>
+              </td>
+
+              <td class="lm-table__td lm-table__td--muted">{{ c.studyTypeName ?? '—' }}</td>
+
+              <td class="lm-table__td">
+                <span class="lm-badge lm-badge--{{ c.estado.toLowerCase() }}">{{ c.estado }}</span>
+              </td>
+
+              <td class="lm-table__td">
+                <div class="lm-actions">
+                  @if (c.estado === 'PENDIENTE') {
+                    <app-button variant="outline" size="small"
+                                [disabled]="_actionLoading() === c.citaId"
+                                (clicked)="_completar(c.citaId)">
+                      <lucide-icon name="check" [size]="14"></lucide-icon>
+                      Completar
+                    </app-button>
+                    <app-button variant="destructive" size="small"
+                                [disabled]="_actionLoading() === c.citaId"
+                                (clicked)="_cancelar(c.citaId)">
+                      <lucide-icon name="x" [size]="14"></lucide-icon>
+                      Cancelar
+                    </app-button>
+                  }
+                  @if (c.estado === 'COMPLETADA') {
+                    <app-button variant="primary" size="small"
+                                (clicked)="_openUploadModal(c.citaId)">
+                      <lucide-icon name="upload" [size]="14"></lucide-icon>
+                      Subir PDF
+                    </app-button>
+                    <app-button variant="outline" size="small"
+                                [disabled]="_downloadLoading() === c.citaId"
+                                (clicked)="_downloadResult(c.citaId)">
+                      @if (_downloadLoading() === c.citaId) {
+                        <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                      } @else {
+                        <lucide-icon name="download" [size]="14"></lucide-icon>
+                        Descargar
+                      }
+                    </app-button>
+                    @if (c.guest) {
+                      <app-button variant="outline" size="small"
+                                  [disabled]="_resendLoading() === c.citaId"
+                                  (clicked)="_resendToken(c.citaId)">
+                        @if (_resendLoading() === c.citaId) {
+                          <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                        } @else {
+                          <lucide-icon name="send" [size]="14"></lucide-icon>
+                          Reenviar Acceso
+                        }
+                      </app-button>
+                    }
+                  }
+                </div>
+              </td>
+
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Pagination ── -->
+    @if (_totalPages() > 1) {
+      <div class="lm-pagination">
+        <button class="lm-pagination__btn" [disabled]="_page() === 0" (click)="_prevPage()">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          Anterior
+        </button>
+        <span class="lm-pagination__info">{{ _page() + 1 }} / {{ _totalPages() }}</span>
+        <button class="lm-pagination__btn" [disabled]="_page() >= _totalPages() - 1" (click)="_nextPage()">
+          Siguiente
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+    }
+  }
+
+</div>
+
+<!-- ── Upload Modal ── -->
+@if (_showUploadModal()) {
+  <div class="tl-modal-backdrop">
+    <div class="tl-modal">
+      <div class="tl-modal__header">
+        <h3 class="tl-modal__title">Subir Resultados de Cita #{{ _activeCitaId() }}</h3>
+        <button class="tl-modal__close" (click)="_closeUploadModal()">
+          <lucide-icon name="x" [size]="18"></lucide-icon>
+        </button>
+      </div>
+      <div class="tl-modal__body">
+        @if (!_uploadSuccess()) {
+          <p class="tl-modal__instruction">Seleccione el reporte clínico del paciente en formato PDF para cargarlo al expediente digital.</p>
+          <div class="tl-dropzone" [class.tl-dropzone--has-file]="_selectedFile()">
+            <lucide-icon name="file-up" [size]="40"></lucide-icon>
+            @if (_selectedFile()) {
+              <span class="tl-dropzone__filename">{{ _selectedFile()!.name }}</span>
+            } @else {
+              <span>Selecciona un resultado PDF para el paciente</span>
+            }
+            <label class="tl-dropzone__browse">
+              Buscar Archivo
+              <input type="file" accept="application/pdf" hidden (change)="_onFileChange($event)" />
+            </label>
+          </div>
+
+          @if (_uploadError()) {
+            <p class="tl-modal__error">{{ _uploadError() }}</p>
+          }
+        } @else {
+          <div class="tl-success-view">
+            <lucide-icon name="check-circle" [size]="52" class="tl-success-icon"></lucide-icon>
+            <h4>¡Resultado Subido Exitosamente!</h4>
+            <p>El reporte PDF de la cita ha sido procesado y guardado en la base de datos de laboratorio.</p>
+          </div>
+        }
+      </div>
+      <div class="tl-modal__footer">
+        @if (!_uploadSuccess()) {
+          <app-button variant="outline" (clicked)="_closeUploadModal()">Cancelar</app-button>
+          <app-button variant="primary" [disabled]="!_selectedFile() || _uploading()" (clicked)="_uploadResult()">
+            @if (_uploading()) {
+              <div class="tl-btn-loading">
+                <app-spinner size="small"></app-spinner>
+                <span>Cargando...</span>
+              </div>
+            } @else {
+              <lucide-icon name="upload" [size]="16"></lucide-icon>
+              <span>Subir PDF</span>
+            }
+          </app-button>
+        } @else {
+          <app-button variant="primary" (clicked)="_closeUploadModal()">Aceptar</app-button>
+        }
+      </div>
+    </div>
+  </div>
+}

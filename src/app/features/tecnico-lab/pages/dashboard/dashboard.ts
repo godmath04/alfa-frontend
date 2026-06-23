@@ -1,0 +1,189 @@
+import { Component, afterNextRender, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+
+import { Translate } from '../../../../core/services/translate';
+import { LabService } from '../../../../core/services/lab/lab.service';
+import { StaffLabCitaItem, LabResult, GuestResult } from '../../../../core/models/lab.model';
+import { formatToAmPm } from '../../../../shared/utils/date-time.utils';
+import { Button } from '../../../../shared/components/button/button';
+import { Spinner } from '../../../../shared/components/spinner/spinner';
+
+@Component({
+  selector: 'app-tecnico-lab-dashboard',
+  standalone: true,
+  imports: [LucideAngularModule, DatePipe, Button, Spinner],
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
+})
+export class TecnicoLabDashboard {
+
+  readonly t = inject(Translate);
+  private readonly _svc = inject(LabService);
+
+  readonly _citas         = signal<StaffLabCitaItem[]>([]);
+  readonly _loading       = signal(false);
+  readonly _error         = signal<string | null>(null);
+  readonly _page          = signal(0);
+  readonly _totalPages    = signal(0);
+  readonly _totalElements = signal(0);
+
+  readonly _estadoFilter = signal('');
+  readonly _fechaDesde   = signal('');
+  readonly _fechaHasta   = signal('');
+
+  readonly _actionLoading   = signal<number | null>(null);
+  readonly _downloadLoading = signal<number | null>(null);
+  readonly _resendLoading   = signal<number | null>(null);
+
+  // Modal State
+  readonly _showUploadModal = signal(false);
+  readonly _activeCitaId    = signal<number | null>(null);
+  readonly _selectedFile    = signal<File | null>(null);
+  readonly _uploading       = signal(false);
+  readonly _uploadError     = signal<string | null>(null);
+  readonly _uploadSuccess   = signal(false);
+
+  readonly formatToAmPm = formatToAmPm;
+
+  constructor() {
+    afterNextRender(() => this._load());
+  }
+
+  _applyFilters(): void {
+    this._page.set(0);
+    this._load();
+  }
+
+  _prevPage(): void {
+    if (this._page() > 0) { this._page.update(p => p - 1); this._load(); }
+  }
+
+  _nextPage(): void {
+    if (this._page() < this._totalPages() - 1) { this._page.update(p => p + 1); this._load(); }
+  }
+
+  private _load(): void {
+    this._loading.set(true);
+    this._error.set(null);
+    this._svc.getLabCitasStaff({
+      estado:     this._estadoFilter() || undefined,
+      fechaDesde: this._fechaDesde()   || undefined,
+      fechaHasta: this._fechaHasta()   || undefined,
+      page:       this._page(),
+      size:       20,
+    }).subscribe({
+      next: r => {
+        this._citas.set(r.content);
+        this._totalPages.set(r.totalPages);
+        this._totalElements.set(Number(r.totalElements));
+        this._loading.set(false);
+      },
+      error: () => {
+        this._error.set('Error al cargar las citas de laboratorio.');
+        this._loading.set(false);
+      },
+    });
+  }
+
+  _completar(citaId: number): void {
+    this._actionLoading.set(citaId);
+    this._svc.completarLabCita(citaId).subscribe({
+      next: () => {
+        this._actionLoading.set(null);
+        this._citas.update(list =>
+          list.map(c => c.citaId === citaId ? { ...c, estado: 'COMPLETADA' } : c));
+      },
+      error: () => this._actionLoading.set(null),
+    });
+  }
+
+  _cancelar(citaId: number): void {
+    if (!confirm('¿Estás seguro de cancelar esta cita?')) return;
+    this._actionLoading.set(citaId);
+    this._svc.cancelarLabCitaEjecutivo(citaId).subscribe({
+      next: () => {
+        this._actionLoading.set(null);
+        this._citas.update(list =>
+          list.map(c => c.citaId === citaId ? { ...c, estado: 'CANCELADA' } : c));
+      },
+      error: () => this._actionLoading.set(null),
+    });
+  }
+
+  _openUploadModal(citaId: number): void {
+    this._activeCitaId.set(citaId);
+    this._selectedFile.set(null);
+    this._uploadError.set(null);
+    this._uploadSuccess.set(false);
+    this._showUploadModal.set(true);
+  }
+
+  _closeUploadModal(): void {
+    this._showUploadModal.set(false);
+    this._activeCitaId.set(null);
+    this._selectedFile.set(null);
+    this._uploadError.set(null);
+    this._uploadSuccess.set(false);
+  }
+
+  _onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    if (file && file.type !== 'application/pdf') {
+      this._uploadError.set('Solo se permiten archivos PDF');
+      this._selectedFile.set(null);
+      return;
+    }
+    this._selectedFile.set(file);
+    this._uploadError.set(null);
+  }
+
+  _uploadResult(): void {
+    const file = this._selectedFile();
+    const citaId = this._activeCitaId();
+    if (!file || !citaId) return;
+
+    this._uploading.set(true);
+    this._uploadError.set(null);
+
+    this._svc.subirResultado(citaId, file).subscribe({
+      next: () => {
+        this._uploading.set(false);
+        this._uploadSuccess.set(true);
+        // Refresh appointment state in the list
+        this._citas.update(list =>
+          list.map(c => c.citaId === citaId ? { ...c, originalFileName: file.name } : c));
+      },
+      error: () => {
+        this._uploadError.set('Error al subir el archivo. Intenta nuevamente.');
+        this._uploading.set(false);
+      },
+    });
+  }
+
+  _downloadResult(citaId: number): void {
+    this._downloadLoading.set(citaId);
+    this._svc.getDownloadUrlByCitaId(citaId).subscribe({
+      next: ({ downloadUrl }) => {
+        window.open(downloadUrl, '_blank');
+        this._downloadLoading.set(null);
+      },
+      error: () => this._downloadLoading.set(null),
+    });
+  }
+
+  _resendToken(citaId: number): void {
+    this._resendLoading.set(citaId);
+    this._svc.reenviarToken(citaId).subscribe({
+      next: () => {
+        this._resendLoading.set(null);
+        alert('Código de acceso reenviado con éxito al paciente.');
+      },
+      error: () => {
+        this._resendLoading.set(null);
+        alert('Error al reenviar el código de acceso.');
+      },
+    });
+  }
+}

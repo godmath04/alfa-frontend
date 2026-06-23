@@ -4,4 +4,5 @@ export enum Role {
   Ejecutivo     = 'EJECUTIVO',
   Administrador = 'ADMINISTRADOR',
   Gerencia      = 'GERENCIA',
+  TecnicoLab    = 'TECNICO_LAB',
 }
