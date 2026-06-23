@@ -90,7 +90,8 @@
         "title": "Por favor corrige los siguientes errores:",
         "password-mismatch": "Las contraseñas no coinciden",
         "invalid-cedula": "Cédula ecuatoriana inválida",
-        "invalid-passport": "Pasaporte inválido (6-15 caracteres alfanuméricos)"
+        "invalid-passport": "Pasaporte inválido (6-15 caracteres alfanuméricos)",
+        "underage": "Debes ser mayor de 18 años para registrarte"
       },
       "success": {
         "title": "¡Registro exitoso!",

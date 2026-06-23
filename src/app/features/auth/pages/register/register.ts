@@ -9,6 +9,7 @@ import { Translate } from '../../../../core/services/translate';
 import { DocumentValidators } from '../../../../shared/validators/document.validator';
 import { MatchValidators } from '../../../../shared/validators/match.validator';
 import { PatternValidators } from '../../../../shared/validators/pattern.validator';
+import { DateValidators } from '../../../../shared/validators/date.validator';
 import { Button } from '../../../../shared/components/button/button';
 import { Spinner } from '../../../../shared/components/spinner/spinner';
 import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
@@ -63,7 +64,7 @@ export class Register implements OnInit, OnDestroy {
     gender:          ['', Validators.required],
     acceptTerms:     [false, Validators.requiredTrue],
     acceptData:      [false, Validators.requiredTrue],
-  }, { validators: [MatchValidators.password('password', 'confirmPassword')] });
+  }, { validators: [MatchValidators.password('password', 'confirmPassword'), DateValidators.ageAtLeast18()] });
 
   constructor() {
     this.registerForm.get('idType')?.valueChanges
@@ -118,6 +119,7 @@ export class Register implements OnInit, OnDestroy {
       invalidPhonePattern:    'common.errors.invalid-phone',
       invalidCedula:          'auth.register.errors.invalid-cedula',
       invalidPassport:        'auth.register.errors.invalid-passport',
+      underage:               'auth.register.errors.underage',
     };
 
     const firstErrorKey = Object.keys(control.errors)[0];
