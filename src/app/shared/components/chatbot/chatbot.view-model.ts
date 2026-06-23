@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Chat } from '../../../core/services/chat/chat';
 import { ChatStateService } from '../../../core/services/chat/chat.state';
 import { AuthStateService } from '../../../core/services/auth/auth.state';
-import { ChatRole } from '../../../core/models/chat.model';
 
 @Injectable() // Instancia scoped al ciclo de vida del componente
 export class ChatbotViewModel {
@@ -56,13 +55,11 @@ export class ChatbotViewModel {
     this.inputText.set('');
     this.isLoading.set(true);
 
-    // 3. Obtenemos el sessionId y el rol del usuario autenticado
+    // 3. Obtenemos el sessionId (el rol lo inyecta el Gateway via X-User-Role)
     const sessionId = this._chatState.sessionId();
-    const role = (this._authState.userRole() ?? 'PACIENTE') as ChatRole;
 
     const payload = {
       message: text,
-      role,
       ...(sessionId ? { sessionId } : {}),
     };
 
