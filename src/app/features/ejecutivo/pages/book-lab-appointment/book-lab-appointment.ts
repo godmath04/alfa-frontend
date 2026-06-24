@@ -43,6 +43,15 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
   // ─── Doctor selection modal ───────────────────────────────────────────────
   _showDoctorModal = signal(false);
   _doctorSearchQuery = signal('');
+  readonly _failedImageIds = signal(new Set<number>());
+
+  _markImageFailed(id: number): void {
+    this._failedImageIds.update(set => {
+      const next = new Set(set);
+      next.add(id);
+      return next;
+    });
+  }
 
   _filteredDoctors = computed(() => {
     const q = this._doctorSearchQuery().toLowerCase().trim();
@@ -65,13 +74,21 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
   }
 
   _selectDoctor(doc: DoctorProfile): void {
-    this.vm.setMedicoId(doc.id.toString());
+    this.vm.setMedicoId(doc.email);
     this._closeDoctorModal();
+  }
+
+  _getInitials(firstName: string, lastName?: string): string {
+    const f = (firstName ?? '').trim();
+    const l = (lastName ?? '').trim();
+    const a = f.charAt(0).toUpperCase();
+    const b = l ? l.charAt(0).toUpperCase() : (f.charAt(1) ?? '').toUpperCase();
+    return (a + b).trim() || '?';
   }
 
   _getDoctorName(id: string): string {
     if (!id) return '';
-    const doc = this.vm.doctors().find(d => d.id.toString() === id);
+    const doc = this.vm.doctors().find(d => d.id.toString() === id || d.email === id);
     if (!doc) return id;
     return `${doc.firstName} ${doc.lastName || ''}`;
   }

@@ -269,9 +269,16 @@
           @for (doc of _filteredDoctors(); track doc.id) {
             <div class="doctor-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
               <div style="display: flex; align-items: center; gap: 12px;">
-                <img [src]="doc.profilePhoto ? doc.profilePhoto : '/images/person-icon.jpg'" 
-                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
-                     alt="Avatar">
+                @if (doc.profilePhoto && !_failedImageIds().has(doc.id)) {
+                  <img [src]="doc.profilePhoto"
+                       (error)="_markImageFailed(doc.id)"
+                       [alt]="doc.firstName + ' ' + doc.lastName"
+                       style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                } @else {
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; color: #475569; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem;">
+                    {{ _getInitials(doc.firstName, doc.lastName) }}
+                  </div>
+                }
                 <div>
                   <h4 style="margin: 0; font-size: 0.95rem; color: var(--text-primary);">{{ doc.firstName }} {{ doc.lastName }}</h4>
                   <p style="margin: 0; font-size: 0.85rem; color: var(--text-tertiary);">

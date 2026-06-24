@@ -1,27 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { Translate } from '../../../../core/services/translate';
 import { LabService } from '../../../../core/services/lab/lab.service';
 import { LabResult } from '../../../../core/models/lab.model';
-import { Spinner } from '../../../../shared/components/spinner/spinner';
-import { Button } from '../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-lab-results-search',
   standalone: true,
-  imports: [LucideAngularModule, DatePipe, Spinner, Button],
+  imports: [DatePipe],
   templateUrl: './lab-results-search.html',
   styleUrl: './lab-results-search.scss',
 })
-export class LabResultsSearchPage {
+export class LabResultsSearchPage implements OnInit {
 
-  readonly t = inject(Translate);
   private readonly _svc = inject(LabService);
-
-  _email    = signal('');
-  _idNumber = signal('');
 
   readonly results       = signal<LabResult[]>([]);
   readonly loading       = signal(false);
@@ -30,19 +22,58 @@ export class LabResultsSearchPage {
   readonly downloading   = signal<string | null>(null);
   readonly downloadError = signal<string | null>(null);
 
+  readonly _email    = signal('');
+  readonly _idNumber = signal('');
+
+  readonly _canSearch = computed(() =>
+    this._email().trim().length > 0 || this._idNumber().trim().length > 0
+  );
+
+  readonly _hasAnyFilter = computed(() =>
+    this._email().trim().length > 0 || this._idNumber().trim().length > 0
+  );
+
+  ngOnInit(): void {
+  }
+
   _onSearch(): void {
-    const email    = this._email().trim();
-    const idNumber = this._idNumber().trim();
-    if (!email && !idNumber) {
-      this.error.set(this.t.get('lab.medico.searchRequired'));
-      return;
-    }
+    if (!this._canSearch()) return;
     this.loading.set(true);
     this.error.set(null);
     this.searched.set(true);
+    const email    = this._email().trim();
+    const idNumber = this._idNumber().trim();
+
     this._svc.buscarResultadosMedico(email || undefined, idNumber || undefined).subscribe({
-      next: list => { this.results.set(list); this.loading.set(false); },
-      error: () => { this.error.set('lab.medico.searchError'); this.loading.set(false); },
+      next:  list => { this.results.set(list); this.loading.set(false); },
+      error: ()   => { this.error.set('error'); this.loading.set(false); },
+    });
+  }
+
+  _loadAll(): void {
+    this.loading.set(true);
+    this.error.set(null);
+    this.searched.set(true);
+    this._svc.buscarResultadosMedico(undefined, undefined).subscribe({
+      next:  list => { this.results.set(list); this.loading.set(false); },
+      error: ()   => { this.error.set('error'); this.loading.set(false); },
+    });
+  }
+
+  _clearSearch(): void {
+    this._email.set('');
+    this._idNumber.set('');
+    this.results.set([]);
+    this.searched.set(false);
+    this.error.set(null);
+  }
+
+  _view(id: string): void {
+    this.downloading.set(id);
+    this.downloadError.set(null);
+    this._svc.getDownloadUrl(id, true).subscribe({
+      next:  ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this.downloading.set(null); },
+      error: ()                => { this.downloadError.set('error'); this.downloading.set(null); },
     });
   }
 
@@ -50,8 +81,16 @@ export class LabResultsSearchPage {
     this.downloading.set(id);
     this.downloadError.set(null);
     this._svc.getDownloadUrl(id).subscribe({
-      next: ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this.downloading.set(null); },
-      error: () => { this.downloadError.set('lab.errors.downloadFailed'); this.downloading.set(null); },
+      next: ({ downloadUrl }) => {
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `Resultado_${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        this.downloading.set(null);
+      },
+      error: () => { this.downloadError.set('error'); this.downloading.set(null); },
     });
   }
 }

@@ -838,6 +838,7 @@
       "calendario": "Mi Calendario",
       "horarios":   "Mis Horarios",
       "labResults": "Resultados de Laboratorio",
+      "profile":    "Mi Perfil",
       "logout":     "Cerrar sesión"
     },
     "horarios": {
