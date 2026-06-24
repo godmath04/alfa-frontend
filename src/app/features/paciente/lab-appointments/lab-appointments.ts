@@ -88,7 +88,7 @@ export class LabAppointmentsComponent {
     const result = this._resultsMap().get(citaId);
     if (!result?.id) return;
     try {
-      const res = await lastValueFrom(this._svc.getDownloadUrl(result.id));
+      const res = await lastValueFrom(this._svc.getDownloadUrl(result.id, true));
       window.open(res.downloadUrl, '_blank');
     } catch (err) {
       console.error('Error opening PDF', err);
