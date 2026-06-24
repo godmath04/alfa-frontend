@@ -7,11 +7,12 @@ import { Translate } from '../../../../core/services/translate';
 import { LabService } from '../../../../core/services/lab/lab.service';
 import { StaffLabCitaItem } from '../../../../core/models/lab.model';
 import { formatToAmPm } from '../../../../shared/utils/date-time.utils';
+import { Button } from '../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-lab-management',
   standalone: true,
-  imports: [LucideAngularModule, DatePipe],
+  imports: [LucideAngularModule, DatePipe, Button],
   templateUrl: './lab-management.html',
   styleUrl: './lab-management.scss',
 })

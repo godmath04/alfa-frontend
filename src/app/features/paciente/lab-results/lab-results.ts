@@ -24,6 +24,10 @@ export class LabResultsComponent implements OnInit {
     this.vm.loadMisResultados();
   }
 
+  _view(id: string): void {
+    this.vm.view(id);
+  }
+
   _download(id: string): void {
     this.vm.download(id);
   }
