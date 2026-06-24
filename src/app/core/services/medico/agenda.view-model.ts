@@ -4,6 +4,8 @@ import { interval } from 'rxjs';
 
 import { MedicoService }              from './medico.service';
 import { AgendaStateService, StatusFilter, ActiveView } from './agenda.state';
+import { AuthStateService }           from '../auth/auth.state';
+import { Role }                       from '../../models/role.enum';
 import { toApiError }                 from '../../models/api-error.model';
 import { formatDateToISO }            from '../../../shared/utils/date-time.utils';
 import { DailyAgenda, DoctorAppointment } from '../../models/medico.model';
@@ -13,6 +15,7 @@ export class AgendaViewModel {
 
   private readonly _service    = inject(MedicoService);
   private readonly _state      = inject(AgendaStateService);
+  private readonly _auth       = inject(AuthStateService);
   private readonly _destroyRef = inject(DestroyRef);
 
   // Independent data source for the next-appointment card.
@@ -26,6 +29,7 @@ export class AgendaViewModel {
     interval(60_000)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
+        if (this._auth.userRole() !== Role.Medico) return;
         const current = this._state.agenda();
         if (current.length) this._autoCompleteExpired(current);
         this._loadUpcomingData();
@@ -101,6 +105,8 @@ export class AgendaViewModel {
   });
 
   loadWeek(date: Date = new Date()): void {
+    if (this._auth.userRole() !== Role.Medico) return;
+
     const monday  = this._getMondayOf(date);
     const dateStr = formatDateToISO(monday);
 
@@ -198,6 +204,8 @@ export class AgendaViewModel {
   }
 
   private _loadUpcomingData(): void {
+    if (this._auth.userRole() !== Role.Medico) return;
+
     const monday = formatDateToISO(this._getMondayOf(new Date()));
     this._service.getWeeklyAgenda(monday)
       .pipe(takeUntilDestroyed(this._destroyRef))
