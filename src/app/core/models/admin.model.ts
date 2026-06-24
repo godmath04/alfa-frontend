@@ -90,7 +90,6 @@ export interface DoctorProfileRequest {
   idNumber:      string;
   type:          DoctorType;
   officeId?:     number;
-  profilePhoto?: string;
   specialtyIds:  number[];
 }
 

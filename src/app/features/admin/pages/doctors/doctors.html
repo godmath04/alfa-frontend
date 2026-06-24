@@ -96,13 +96,6 @@
             }
           </select>
         </div>
-
-        <div class="doc-page__field">
-          <label class="doc-page__label">{{ t.get('admin.doctors.fields.photo') }}</label>
-          <input class="doc-page__input" type="text"
-            [value]="_fPhoto()" (input)="_fPhoto.set($any($event.target).value)"
-            [placeholder]="t.get('admin.doctors.fields.photo-placeholder')" />
-        </div>
       </div>
 
       <!-- Specialties -->
