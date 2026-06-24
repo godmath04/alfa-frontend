@@ -21,6 +21,46 @@
         <lucide-icon name="triangle-alert" [size]="40"></lucide-icon>
         <h2>{{ t.get('lab.guest.errorTitle') }}</h2>
         <p>{{ t.get(error()!) }}</p>
+
+        @if (error() === 'lab.guest.expired') {
+          <div class="renew-box">
+            @if (renewSuccess()) {
+              <div class="renew-box__success">
+                <lucide-icon name="check-circle" [size]="24"></lucide-icon>
+                <p>Se ha enviado un nuevo enlace de acceso a su correo electrónico registrado.</p>
+              </div>
+            } @else {
+              <h3 class="renew-box__title">¿Desea solicitar un nuevo enlace de acceso?</h3>
+              <p class="renew-box__description">
+                Por motivos de seguridad, ingrese el número de identificación (Cédula o Pasaporte) registrado para el paciente.
+              </p>
+              <div class="renew-box__form">
+                <input 
+                  type="text" 
+                  class="renew-box__input" 
+                  [placeholder]="t.get('lab.booking.guest.idNumber')"
+                  [ngModel]="idNumber()" 
+                  (ngModelChange)="idNumber.set($event)"
+                  [disabled]="renewing()"
+                />
+                <app-button 
+                  variant="primary" 
+                  [disabled]="renewing() || !idNumber().trim()" 
+                  (clicked)="_requestRenew()"
+                >
+                  @if (renewing()) {
+                    <app-spinner size="small"></app-spinner>
+                  } @else {
+                    Solicitar Enlace
+                  }
+                </app-button>
+              </div>
+              @if (renewError()) {
+                <p class="renew-box__error-text">{{ renewError() }}</p>
+              }
+            }
+          </div>
+        }
       </div>
     } @else if (result(); as r) {
       <div class="result-card">

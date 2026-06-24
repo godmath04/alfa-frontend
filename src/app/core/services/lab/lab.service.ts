@@ -60,6 +60,10 @@ export class LabService {
     return this._http.patch(`${this.api}/api/agendamiento/lab-citas/${citaId}/completar`, {});
   }
 
+  confirmarLabCita(citaId: number): Observable<LabCitaResponse> {
+    return this._http.patch<LabCitaResponse>(`${this.api}/api/agendamiento/lab-citas/${citaId}/confirmar`, {});
+  }
+
   getLabCitasStaff(params: {
     estado?: string;
     fechaDesde?: string;
@@ -88,7 +92,7 @@ export class LabService {
   }
 
   getDownloadUrl(id: string, inline: boolean = false): Observable<{ downloadUrl: string }> {
-    const params = new HttpParams().set('inline', inline);
+    const params = new HttpParams().set('inline', String(inline));
     return this._http.get<{ downloadUrl: string }>(
       `${this.api}/api/laboratorio/resultados/${id}/descargar`, { params });
   }
@@ -100,10 +104,16 @@ export class LabService {
     return this._http.get<GuestResult>(`${this.api}/api/laboratorio/guest/resultado`, { params });
   }
 
-  getGuestDownloadUrl(token: string): Observable<{ downloadUrl: string }> {
-    const params = new HttpParams().set('token', token);
+  getGuestDownloadUrl(token: string, inline: boolean = false): Observable<{ downloadUrl: string }> {
+    const params = new HttpParams().set('token', token).set('inline', String(inline));
     return this._http.get<{ downloadUrl: string }>(
       `${this.api}/api/laboratorio/guest/resultado/descargar`, { params });
+  }
+
+  solicitarRenovacionGuest(token: string, idNumber: string): Observable<void> {
+    const params = new HttpParams().set('token', token).set('idNumber', idNumber);
+    return this._http.post<void>(
+      `${this.api}/api/laboratorio/guest/resultado/solicitar-renovacion`, {}, { params });
   }
 
   // ─── Laboratorio: staff ───────────────────────────────────────────────────
@@ -115,8 +125,16 @@ export class LabService {
       `${this.api}/api/laboratorio/resultados/${citaId}/subir`, fd);
   }
 
+  eliminarResultado(citaId: number): Observable<void> {
+    return this._http.delete<void>(`${this.api}/api/laboratorio/resultados/cita/${citaId}`);
+  }
+
+  publicarResultado(citaId: number): Observable<LabResult> {
+    return this._http.patch<LabResult>(`${this.api}/api/laboratorio/resultados/cita/${citaId}/publicar`, {});
+  }
+
   getDownloadUrlByCitaId(citaId: number, inline: boolean = false): Observable<{ downloadUrl: string }> {
-    const params = new HttpParams().set('inline', inline);
+    const params = new HttpParams().set('inline', String(inline));
     return this._http.get<{ downloadUrl: string }>(
       `${this.api}/api/laboratorio/resultados/cita/${citaId}/descargar`, { params });
   }

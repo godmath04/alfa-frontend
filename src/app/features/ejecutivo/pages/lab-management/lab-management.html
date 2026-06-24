@@ -11,6 +11,7 @@
             (change)="_estadoFilter.set($any($event.target).value)">
       <option value="">{{ t.get('ejecutivo.labManagement.filters.all') }}</option>
       <option value="PENDIENTE">PENDIENTE</option>
+      <option value="CONFIRMADA">CONFIRMADA</option>
       <option value="COMPLETADA">COMPLETADA</option>
       <option value="CANCELADA">CANCELADA</option>
     </select>
@@ -105,25 +106,37 @@
                       {{ t.get('ejecutivo.labManagement.actions.cancel') }}
                     </app-button>
                   }
-                  @if (c.estado === 'COMPLETADA') {
-                    <!-- COMENTADO TEMPORALMENTE - Ejecutivo ya no sube PDFs, ahora es responsabilidad de TECNICO_LAB -->
-                    <!--
-                    <app-button variant="primary" size="small"
-                                (clicked)="_upload(c.citaId)">
-                      <lucide-icon name="upload" [size]="14"></lucide-icon>
-                      {{ t.get('ejecutivo.labManagement.actions.upload') }}
-                    </app-button>
-                    -->
-                    <app-button variant="outline" size="small"
-                                [disabled]="_downloadLoading() === c.citaId"
-                                (clicked)="_downloadResult(c.citaId)">
-                      @if (_downloadLoading() === c.citaId) {
-                        <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
-                      } @else {
-                        <lucide-icon name="download" [size]="14"></lucide-icon>
-                        {{ t.get('ejecutivo.labManagement.actions.download') }}
+                  @if (c.estado === 'CONFIRMADA' || c.estado === 'COMPLETADA') {
+                    @if (c.originalFileName) {
+                      <app-button variant="outline" size="small"
+                                  [disabled]="_downloadLoading() === c.citaId"
+                                  (clicked)="_downloadResult(c.citaId, true)">
+                        <lucide-icon name="eye" [size]="14"></lucide-icon>
+                        Ver PDF
+                      </app-button>
+                      <app-button variant="outline" size="small"
+                                  [disabled]="_downloadLoading() === c.citaId"
+                                  (clicked)="_downloadResult(c.citaId)">
+                        @if (_downloadLoading() === c.citaId) {
+                          <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                        } @else {
+                          <lucide-icon name="download" [size]="14"></lucide-icon>
+                          Descargar
+                        }
+                      </app-button>
+                      @if (c.guest && c.estado === 'COMPLETADA') {
+                        <app-button variant="outline" size="small"
+                                    [disabled]="_resendLoading() === c.citaId"
+                                    (clicked)="_resendToken(c.citaId)">
+                          @if (_resendLoading() === c.citaId) {
+                            <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                          } @else {
+                            <lucide-icon name="send" [size]="14"></lucide-icon>
+                            Reenviar Acceso
+                          }
+                        </app-button>
                       }
-                    </app-button>
+                    }
                   }
                 </div>
               </td>

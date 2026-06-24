@@ -10,6 +10,8 @@ import { PacienteSearch, CrearPacienteRequest } from '../../../../core/models/ex
 import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
 import { DocumentValidators } from '../../../../shared/validators/document.validator';
 import { PatternValidators } from '../../../../shared/validators/pattern.validator';
+import { DateValidators } from '../../../../shared/validators/date.validator';
+import { toApiError } from '../../../../core/models/api-error.model';
 
 @Component({
   selector: 'app-patient-search',
@@ -59,7 +61,7 @@ export class PatientSearchPage {
     birthYear:  ['', Validators.required],
     city:       ['', Validators.required],
     gender:     ['', Validators.required],
-  });
+  }, { validators: [DateValidators.ageAtLeast18()] });
 
   constructor() {
     this.patientForm.get('idType')?.valueChanges
@@ -96,6 +98,7 @@ export class PatientSearchPage {
       invalidPhonePattern:    'common.errors.invalid-phone',
       invalidCedula:          'auth.register.errors.invalid-cedula',
       invalidPassport:        'auth.register.errors.invalid-passport',
+      underage:               'auth.register.errors.underage',
     };
 
     const firstErrorKey = Object.keys(control.errors)[0];
@@ -157,12 +160,12 @@ export class PatientSearchPage {
     const birthDate = `${birthYear}-${birthMonth}-${birthDay!.toString().padStart(2, '0')}`;
 
     const request: CrearPacienteRequest = {
-      firstName: firstName!,
-      lastName: lastName!,
-      email: email!,
+      firstName: firstName!.trim(),
+      lastName: lastName!.trim(),
+      email: email!.trim(),
       idType: idType!,
-      idNumber: idNumber!,
-      phone: phone!,
+      idNumber: idNumber!.trim(),
+      phone: phone!.trim(),
       birthDate,
       city: city!,
       gender: gender!,
@@ -176,9 +179,10 @@ export class PatientSearchPage {
         this._showForm.set(false);
         this._router.navigate(['/ejecutivo/pacientes', p.id]);
       },
-      error: (err) => {
+      error: (raw) => {
         this._fSaving.set(false);
-        const msg = err?.error?.message ?? this.t.get('ejecutivo.patients.form.error-save');
+        const err = toApiError(raw);
+        const msg = err.error?.message ?? this.t.get('ejecutivo.patients.form.error-save');
         this._fError.set(msg);
       },
     });

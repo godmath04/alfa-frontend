@@ -101,11 +101,11 @@
                   <td class="lm-table__td">
                     <div class="lm-actions">
                       @if (c.estado === 'PENDIENTE') {
-                        <app-button variant="outline" size="small"
+                        <app-button variant="primary" size="small"
                                     [disabled]="vm.actionLoading() === c.citaId"
-                                    (clicked)="vm.completar(c.citaId)">
+                                    (clicked)="vm.confirmar(c.citaId)">
                           <lucide-icon name="check" [size]="14"></lucide-icon>
-                          Completar
+                          Confirmar Recepción
                         </app-button>
                         <app-button variant="destructive" size="small"
                                     [disabled]="vm.actionLoading() === c.citaId"
@@ -114,37 +114,63 @@
                           Cancelar
                         </app-button>
                       }
-                      @if (c.estado === 'COMPLETADA') {
+                      @if (c.estado === 'CONFIRMADA') {
                         @if (!c.originalFileName) {
                           <app-button variant="primary" size="small"
                                       (clicked)="vm.openUploadPage(c.citaId)">
                             <lucide-icon name="upload" [size]="14"></lucide-icon>
                             Subir PDF
                           </app-button>
+                          <app-button variant="destructive" size="small"
+                                      [disabled]="vm.actionLoading() === c.citaId"
+                                      (clicked)="vm.cancelar(c.citaId)">
+                            <lucide-icon name="x" [size]="14"></lucide-icon>
+                            Cancelar
+                          </app-button>
                         } @else {
-                          <app-button variant="primary" size="small"
+                          <app-button variant="outline" size="small"
                                       [disabled]="vm.downloadLoading() === c.citaId"
                                       (clicked)="vm.downloadResult(c.citaId, true)">
                             <lucide-icon name="eye" [size]="14"></lucide-icon>
-                            Ver
+                            Ver PDF
                           </app-button>
-                          <app-button variant="outline" size="small"
-                                      [disabled]="vm.downloadLoading() === c.citaId"
-                                      (clicked)="vm.downloadResult(c.citaId)">
-                            @if (vm.downloadLoading() === c.citaId) {
-                              <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
-                            } @else {
-                              <lucide-icon name="download" [size]="14"></lucide-icon>
-                              Descargar
-                            }
+                          <app-button variant="destructive" size="small"
+                                      [disabled]="vm.actionLoading() === c.citaId"
+                                      (clicked)="vm.eliminarPdf(c.citaId)">
+                            <lucide-icon name="trash-2" [size]="14"></lucide-icon>
+                            Eliminar PDF
                           </app-button>
-                          @if (c.guest) {
-                            <app-button variant="outline" size="small"
-                                        (clicked)="vm.resendToken(c.citaId)">
-                              <lucide-icon name="send" [size]="14"></lucide-icon>
-                              Reenviar Acceso
-                            </app-button>
+                          <app-button variant="primary" size="small"
+                                      [disabled]="vm.actionLoading() === c.citaId"
+                                      (clicked)="vm.publicar(c.citaId)">
+                            <lucide-icon name="send" [size]="14"></lucide-icon>
+                            Publicar Resultado
+                          </app-button>
+                        }
+                      }
+                      @if (c.estado === 'COMPLETADA') {
+                        <app-button variant="outline" size="small"
+                                    [disabled]="vm.downloadLoading() === c.citaId"
+                                    (clicked)="vm.downloadResult(c.citaId, true)">
+                          <lucide-icon name="eye" [size]="14"></lucide-icon>
+                          Ver PDF
+                        </app-button>
+                        <app-button variant="outline" size="small"
+                                    [disabled]="vm.downloadLoading() === c.citaId"
+                                    (clicked)="vm.downloadResult(c.citaId)">
+                          @if (vm.downloadLoading() === c.citaId) {
+                            <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                          } @else {
+                            <lucide-icon name="download" [size]="14"></lucide-icon>
+                            Descargar
                           }
+                        </app-button>
+                        @if (c.guest) {
+                          <app-button variant="outline" size="small"
+                                      (clicked)="vm.resendToken(c.citaId)">
+                            <lucide-icon name="send" [size]="14"></lucide-icon>
+                            Reenviar Acceso
+                          </app-button>
                         }
                       }
                     </div>

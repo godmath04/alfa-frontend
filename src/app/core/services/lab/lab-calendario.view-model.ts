@@ -51,11 +51,13 @@ export class LabCalendarioViewModel {
       size: 100, // retrieve all for the day
     }).pipe(
       switchMap(r => {
-        const completedIds = r.content.filter(c => c.estado === 'COMPLETADA').map(c => c.citaId);
-        if (completedIds.length === 0) {
+        const checkIds = r.content
+          .filter(c => c.estado === 'CONFIRMADA' || c.estado === 'COMPLETADA')
+          .map(c => c.citaId);
+        if (checkIds.length === 0) {
           return of({ page: r, statusMap: {} as Record<number, boolean> });
         }
-        return this._svc.getResultsBatchStatus(completedIds).pipe(
+        return this._svc.getResultsBatchStatus(checkIds).pipe(
           map(statusMap => ({ page: r, statusMap })),
           catchError(() => of({ page: r, statusMap: {} as Record<number, boolean> }))
         );
@@ -96,9 +98,48 @@ export class LabCalendarioViewModel {
     this.setFecha(formatDateToISO(current));
   }
 
-  completar(citaId: number): void {
+  confirmar(citaId: number): void {
     this._state.setActionLoading(citaId);
-    this._svc.completarLabCita(citaId).pipe(
+    this._svc.confirmarLabCita(citaId).pipe(
+      takeUntilDestroyed(this._destroyRef)
+    ).subscribe({
+      next: () => {
+        this._state.setActionLoading(null);
+        this._state.setCitas(
+          this.citas().map(c => c.citaId === citaId ? { ...c, estado: 'CONFIRMADA' } : c)
+        );
+      },
+      error: () => this._state.setActionLoading(null),
+    });
+  }
+
+  eliminarPdf(citaId: number): void {
+    if (!confirm('¿Estás seguro de eliminar el PDF subido?')) return;
+    this._state.setActionLoading(citaId);
+    this._svc.eliminarResultado(citaId).pipe(
+      takeUntilDestroyed(this._destroyRef)
+    ).subscribe({
+      next: () => {
+        this._state.setActionLoading(null);
+        this._state.setCitas(
+          this.citas().map(c => c.citaId === citaId ? { ...c, originalFileName: undefined } : c)
+        );
+      },
+      error: () => this._state.setActionLoading(null),
+    });
+  }
+
+  publicar(citaId: number): void {
+    if (!confirm('¿Estás seguro de publicar este resultado? Se enviará la notificación al paciente.')) return;
+    this._state.setActionLoading(citaId);
+    this._svc.publicarResultado(citaId).pipe(
+      catchError(err => {
+        if (err?.status === 409) {
+          return of(null);
+        }
+        throw err;
+      }),
+      switchMap(() => this._svc.completarLabCita(citaId)),
       takeUntilDestroyed(this._destroyRef)
     ).subscribe({
       next: () => {

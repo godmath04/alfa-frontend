@@ -11,6 +11,7 @@
             (change)="_estadoFilter.set($any($event.target).value)">
       <option value="">Todas las Citas</option>
       <option value="PENDIENTE">PENDIENTE</option>
+      <option value="CONFIRMADA">CONFIRMADA</option>
       <option value="COMPLETADA">COMPLETADA</option>
       <option value="CANCELADA">CANCELADA</option>
     </select>
@@ -90,11 +91,11 @@
               <td class="lm-table__td">
                 <div class="lm-actions">
                   @if (c.estado === 'PENDIENTE') {
-                    <app-button variant="outline" size="small"
+                    <app-button variant="primary" size="small"
                                 [disabled]="_actionLoading() === c.citaId"
-                                (clicked)="_completar(c.citaId)">
+                                (clicked)="_confirmar(c.citaId)">
                       <lucide-icon name="check" [size]="14"></lucide-icon>
-                      Completar
+                      Confirmar Recepción
                     </app-button>
                     <app-button variant="destructive" size="small"
                                 [disabled]="_actionLoading() === c.citaId"
@@ -103,42 +104,68 @@
                       Cancelar
                     </app-button>
                   }
-                  @if (c.estado === 'COMPLETADA') {
+                  @if (c.estado === 'CONFIRMADA') {
                     @if (!c.originalFileName) {
                       <app-button variant="primary" size="small"
                                   (clicked)="_openUploadModal(c.citaId)">
                         <lucide-icon name="upload" [size]="14"></lucide-icon>
                         Subir PDF
                       </app-button>
+                      <app-button variant="destructive" size="small"
+                                  [disabled]="_actionLoading() === c.citaId"
+                                  (clicked)="_cancelar(c.citaId)">
+                        <lucide-icon name="x" [size]="14"></lucide-icon>
+                        Cancelar
+                      </app-button>
                     } @else {
-                      <app-button variant="primary" size="small"
+                      <app-button variant="outline" size="small"
                                   [disabled]="_downloadLoading() === c.citaId"
                                   (clicked)="_downloadResult(c.citaId, true)">
                         <lucide-icon name="eye" [size]="14"></lucide-icon>
-                        Ver
+                        Ver PDF
                       </app-button>
+                      <app-button variant="destructive" size="small"
+                                  [disabled]="_actionLoading() === c.citaId"
+                                  (clicked)="_eliminarPdf(c.citaId)">
+                        <lucide-icon name="trash-2" [size]="14"></lucide-icon>
+                        Eliminar PDF
+                      </app-button>
+                      <app-button variant="primary" size="small"
+                                  [disabled]="_actionLoading() === c.citaId"
+                                  (clicked)="_publicar(c.citaId)">
+                        <lucide-icon name="send" [size]="14"></lucide-icon>
+                        Publicar Resultado
+                      </app-button>
+                    }
+                  }
+                  @if (c.estado === 'COMPLETADA') {
+                    <app-button variant="outline" size="small"
+                                [disabled]="_downloadLoading() === c.citaId"
+                                (clicked)="_downloadResult(c.citaId, true)">
+                      <lucide-icon name="eye" [size]="14"></lucide-icon>
+                      Ver PDF
+                    </app-button>
+                    <app-button variant="outline" size="small"
+                                [disabled]="_downloadLoading() === c.citaId"
+                                (clicked)="_downloadResult(c.citaId)">
+                      @if (_downloadLoading() === c.citaId) {
+                        <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                      } @else {
+                        <lucide-icon name="download" [size]="14"></lucide-icon>
+                        Descargar
+                      }
+                    </app-button>
+                    @if (c.guest) {
                       <app-button variant="outline" size="small"
-                                  [disabled]="_downloadLoading() === c.citaId"
-                                  (clicked)="_downloadResult(c.citaId)">
-                        @if (_downloadLoading() === c.citaId) {
+                                  [disabled]="_resendLoading() === c.citaId"
+                                  (clicked)="_resendToken(c.citaId)">
+                        @if (_resendLoading() === c.citaId) {
                           <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
                         } @else {
-                          <lucide-icon name="download" [size]="14"></lucide-icon>
-                          Descargar
+                          <lucide-icon name="send" [size]="14"></lucide-icon>
+                          Reenviar Acceso
                         }
                       </app-button>
-                      @if (c.guest) {
-                        <app-button variant="outline" size="small"
-                                    [disabled]="_resendLoading() === c.citaId"
-                                    (clicked)="_resendToken(c.citaId)">
-                          @if (_resendLoading() === c.citaId) {
-                            <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
-                          } @else {
-                            <lucide-icon name="send" [size]="14"></lucide-icon>
-                            Reenviar Acceso
-                          }
-                        </app-button>
-                      }
                     }
                   }
                 </div>

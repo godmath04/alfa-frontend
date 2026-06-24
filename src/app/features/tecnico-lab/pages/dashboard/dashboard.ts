@@ -68,11 +68,13 @@ export class TecnicoLabDashboard {
       size:       20,
     }).pipe(
       switchMap(r => {
-        const completedIds = r.content.filter(c => c.estado === 'COMPLETADA').map(c => c.citaId);
-        if (completedIds.length === 0) {
+        const checkIds = r.content
+          .filter(c => c.estado === 'CONFIRMADA' || c.estado === 'COMPLETADA')
+          .map(c => c.citaId);
+        if (checkIds.length === 0) {
           return of({ page: r, statusMap: {} as Record<number, boolean> });
         }
-        return this._svc.getResultsBatchStatus(completedIds).pipe(
+        return this._svc.getResultsBatchStatus(checkIds).pipe(
           map(statusMap => ({ page: r, statusMap })),
           catchError(() => of({ page: r, statusMap: {} as Record<number, boolean> }))
         );
@@ -97,9 +99,43 @@ export class TecnicoLabDashboard {
     });
   }
 
-  _completar(citaId: number): void {
+  _confirmar(citaId: number): void {
     this._actionLoading.set(citaId);
-    this._svc.completarLabCita(citaId).subscribe({
+    this._svc.confirmarLabCita(citaId).subscribe({
+      next: () => {
+        this._actionLoading.set(null);
+        this._citas.update(list =>
+          list.map(c => c.citaId === citaId ? { ...c, estado: 'CONFIRMADA' } : c));
+      },
+      error: () => this._actionLoading.set(null),
+    });
+  }
+
+  _eliminarPdf(citaId: number): void {
+    if (!confirm('¿Estás seguro de eliminar el PDF subido?')) return;
+    this._actionLoading.set(citaId);
+    this._svc.eliminarResultado(citaId).subscribe({
+      next: () => {
+        this._actionLoading.set(null);
+        this._citas.update(list =>
+          list.map(c => c.citaId === citaId ? { ...c, originalFileName: undefined } : c));
+      },
+      error: () => this._actionLoading.set(null),
+    });
+  }
+
+  _publicar(citaId: number): void {
+    if (!confirm('¿Estás seguro de publicar este resultado? Se enviará la notificación al paciente.')) return;
+    this._actionLoading.set(citaId);
+    this._svc.publicarResultado(citaId).pipe(
+      catchError(err => {
+        if (err?.status === 409) {
+          return of(null);
+        }
+        throw err;
+      }),
+      switchMap(() => this._svc.completarLabCita(citaId))
+    ).subscribe({
       next: () => {
         this._actionLoading.set(null);
         this._citas.update(list =>
