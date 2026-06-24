@@ -20,7 +20,8 @@ export class TecnicoLabLayout {
 
   readonly _navItems = [
     { key: 'Dashboard',       icon: 'layout-dashboard', route: '/tecnico-lab/dashboard' },
-    { key: 'Subir Resultado', icon: 'upload',            route: '/tecnico-lab/subir-resultados' },
+    { key: 'Calendario',      icon: 'calendar',         route: '/tecnico-lab/calendario' },
+    { key: 'Subir Resultado', icon: 'upload',           route: '/tecnico-lab/subir-resultados' },
   ];
 
   _isActive(route: string): boolean {

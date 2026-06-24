@@ -15,6 +15,10 @@ export const TECNICO_LAB_ROUTES: Routes = [
         loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.TecnicoLabDashboard)
       },
       {
+        path: 'calendario',
+        loadComponent: () => import('./pages/calendario/calendario').then(m => m.TecnicoLabCalendario)
+      },
+      {
         // Listing of completed citas — entry point from sidebar nav
         path: 'subir-resultados',
         loadComponent: () => import('./pages/upload-result-list/upload-result-list').then(m => m.TlUploadResultListPage)
