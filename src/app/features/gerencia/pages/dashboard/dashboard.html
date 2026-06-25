@@ -446,7 +446,7 @@
     <div class="chart-card flex-col">
       <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h3 class="font-title-md text-title-md text-on-surface">Exámenes por Especialidad</h3>
-        <div class="toggle-switch">
+        <div class="timeframe-selector">
           <button class="selector-btn" [class.active]="vm.labExamenesViewMode() === 'PCT'" (click)="vm.labExamenesViewMode.set('PCT')">%</button>
           <button class="selector-btn" [class.active]="vm.labExamenesViewMode() === 'TOTAL'" (click)="vm.labExamenesViewMode.set('TOTAL')">Total</button>
         </div>
