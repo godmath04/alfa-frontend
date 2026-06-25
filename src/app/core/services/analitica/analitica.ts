@@ -11,7 +11,9 @@ import {
   LabTurnaroundResponse,
   NotificacionesResumenResponse,
   ChatbotResumenResponse,
-  TopMedicosResponse
+  TopMedicosResponse,
+  TendenciaInasistenciaResponse,
+  AnaliticaLaboratorioResponse
 } from '../../models/analitica.model';
 
 @Injectable({ providedIn: 'root' })
@@ -59,5 +61,13 @@ export class AnaliticaService {
 
   getMedicosPorEspecialidad(): Observable<CitasPorEspecialidadResponse> {
     return this._http.get<CitasPorEspecialidadResponse>(`${this._apiUrl}/dashboard/medicos-por-especialidad`);
+  }
+
+  getTendenciaInasistencia(months: number = 6, groupBy: string = 'WEEK'): Observable<TendenciaInasistenciaResponse[]> {
+    return this._http.get<TendenciaInasistenciaResponse[]>(`${this._apiUrl}/dashboard/inasistencia`, { params: { months, groupBy } });
+  }
+
+  getAnaliticaLaboratorio(months: number = 6): Observable<AnaliticaLaboratorioResponse> {
+    return this._http.get<AnaliticaLaboratorioResponse>(`${this._apiUrl}/dashboard/laboratorio`, { params: { months } });
   }
 }

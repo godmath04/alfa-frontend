@@ -7,7 +7,9 @@ import {
   LabTurnaroundResponse,
   NotificacionesResumenResponse,
   ChatbotResumenResponse,
-  TopMedicosResponse
+  TopMedicosResponse,
+  TendenciaInasistenciaResponse,
+  AnaliticaLaboratorioResponse
 } from '../../models/analitica.model';
 
 @Injectable({ providedIn: 'root' })
@@ -24,6 +26,9 @@ export class AnaliticaDashboardState {
   readonly notificacionesResumen = signal<NotificacionesResumenResponse | null>(null);
   readonly chatbotResumen = signal<ChatbotResumenResponse | null>(null);
   readonly topMedicos = signal<TopMedicosResponse | null>(null);
+  
+  readonly tendenciaInasistencia = signal<TendenciaInasistenciaResponse[] | null>(null);
+  readonly analiticaLaboratorio = signal<AnaliticaLaboratorioResponse | null>(null);
 
   setLoading(val: boolean): void {
     this.loading.set(val);
@@ -43,6 +48,8 @@ export class AnaliticaDashboardState {
     notificacionesResumen: NotificacionesResumenResponse;
     chatbotResumen: ChatbotResumenResponse;
     topMedicos: TopMedicosResponse;
+    tendenciaInasistencia?: TendenciaInasistenciaResponse[];
+    analiticaLaboratorio?: AnaliticaLaboratorioResponse;
   }): void {
     this.headerKpis.set(data.headerKpis);
     this.citasPorEstado.set(data.citasPorEstado);
@@ -53,6 +60,8 @@ export class AnaliticaDashboardState {
     this.notificacionesResumen.set(data.notificacionesResumen);
     this.chatbotResumen.set(data.chatbotResumen);
     this.topMedicos.set(data.topMedicos);
+    if (data.tendenciaInasistencia) this.tendenciaInasistencia.set(data.tendenciaInasistencia);
+    if (data.analiticaLaboratorio) this.analiticaLaboratorio.set(data.analiticaLaboratorio);
   }
 
   clearDashboard(): void {
@@ -65,6 +74,8 @@ export class AnaliticaDashboardState {
     this.notificacionesResumen.set(null);
     this.chatbotResumen.set(null);
     this.topMedicos.set(null);
+    this.tendenciaInasistencia.set(null);
+    this.analiticaLaboratorio.set(null);
     this.error.set(null);
     this.loading.set(false);
   }

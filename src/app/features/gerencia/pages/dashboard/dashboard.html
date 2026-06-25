@@ -405,7 +405,78 @@
     </div>
   </div>
 
-  <!-- Third Charts Grid (Notificaciones & Chatbot) -->
+  <!-- Third Charts Grid (Inasistencia & Exámenes por Especialidad) -->
+  <div class="charts-double-grid">
+    <!-- Tendencia Inasistencia (Bar chart) -->
+    <div class="chart-card flex-col">
+      <div class="card-header">
+        <h3 class="font-title-md text-title-md text-on-surface">Tendencia de Inasistencia</h3>
+      </div>
+      @if (vm.tendenciaInasistencia(); as data) {
+        @if (data.length > 0) {
+          <div class="stacked-bar-container">
+            <div class="bars-wrapper">
+              @for (mes of data; track mes.periodo) {
+                <div class="bar-group" title="{{ mes.periodo }} - Inasistencias: {{ mes.inasistencias }} / {{ mes.totalCitas }} ({{ mes.tasa }}%)">
+                  @if (mes.tasa > 0) {
+                    <div class="bar-stack" [style.height.px]="mes.tasa * 140 / vm.maxInasistenciaValue()">
+                      <div class="bar bg-error" [style.flex-grow]="1"></div>
+                    </div>
+                  } @else {
+                    <div class="bar-stack-placeholder"></div>
+                  }
+                  <span class="bar-label" style="font-size: 10px">{{ mes.periodo }}</span>
+                </div>
+              }
+            </div>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="dot bg-error"></span> Tasa de Inasistencia (%)</span>
+            </div>
+          </div>
+        } @else {
+          <div class="empty-state-container" style="flex: 1; display: flex; align-items: center; justify-content: center; opacity: 0.5; padding: 2rem; flex-direction: column;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <p>No hay datos históricos en este período</p>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Exámenes por Especialidad (Progress list) -->
+    <div class="chart-card flex-col">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 class="font-title-md text-title-md text-on-surface">Exámenes por Especialidad</h3>
+        <div class="toggle-switch">
+          <button class="selector-btn" [class.active]="vm.labExamenesViewMode() === 'PCT'" (click)="vm.labExamenesViewMode.set('PCT')">%</button>
+          <button class="selector-btn" [class.active]="vm.labExamenesViewMode() === 'TOTAL'" (click)="vm.labExamenesViewMode.set('TOTAL')">Total</button>
+        </div>
+      </div>
+      @if (vm.analiticaLaboratorio(); as labData) {
+        @if (labData.examenesPorEspecialidad.length > 0) {
+          <div class="progress-list-container custom-scrollbar" style="max-height: 250px; overflow-y: auto;">
+            @for (est of labData.examenesPorEspecialidad; track est.especialidad; let i = $index) {
+              <div class="progress-row">
+                <span class="prog-label">{{ est.especialidad }}</span>
+                <div class="prog-bar-bg">
+                  <div class="prog-bar-fill" [style.width.%]="est.porcentaje" [class.bg-primary]="i % 2 === 0" [class.bg-tertiary]="i % 2 !== 0"></div>
+                </div>
+                <span class="prog-pct">
+                  {{ vm.labExamenesViewMode() === 'PCT' ? est.porcentaje + '%' : est.cantidad }}
+                </span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state-container" style="flex: 1; display: flex; align-items: center; justify-content: center; opacity: 0.5; padding: 2rem; flex-direction: column;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <p>No hay exámenes de laboratorio registrados</p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Fourth Charts Grid (Notificaciones & Chatbot) -->
   <div class="charts-double-grid">
     <!-- Notificaciones Card (Robust Fallback) -->
     <div class="chart-card flex-col">

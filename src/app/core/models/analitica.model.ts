@@ -89,3 +89,28 @@ export interface TopMedicosResponse {
     calificacion: number;
   }[];
 }
+
+export interface TendenciaInasistenciaResponse {
+  periodo: string;
+  tasa: number;
+  totalCitas: number;
+  inasistencias: number;
+}
+
+export interface AnaliticaLaboratorioResponse {
+  examenesPorEspecialidad: {
+    especialidad: string;
+    cantidad: number;
+    porcentaje: number;
+  }[];
+  tendenciaSemanal: {
+    periodo: string;
+    total: number;
+  }[];
+  distribucionResultados: {
+    normalPct: number;
+    anormalPct: number;
+    normalCount: number;
+    anormalCount: number;
+  };
+}
