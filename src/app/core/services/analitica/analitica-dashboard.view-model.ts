@@ -17,6 +17,7 @@ export class AnaliticaDashboardViewModel {
   readonly headerKpis = this._state.headerKpis.asReadonly();
   readonly citasPorEstado = this._state.citasPorEstado.asReadonly();
   readonly citasPorEspecialidad = this._state.citasPorEspecialidad.asReadonly();
+  readonly medicosPorEspecialidad = this._state.medicosPorEspecialidad.asReadonly();
   readonly labEstudiosTop = this._state.labEstudiosTop.asReadonly();
   readonly labTurnaround = this._state.labTurnaround.asReadonly();
   readonly notificacionesResumen = this._state.notificacionesResumen.asReadonly();
@@ -26,6 +27,14 @@ export class AnaliticaDashboardViewModel {
   // State signals for granularity filter
   readonly selectedMonths = signal<number>(6);
   readonly selectedGroupBy = signal<'MONTH' | 'DAY'>('MONTH');
+
+  readonly especialidadViewMode = signal<'CITAS' | 'MEDICOS'>('CITAS');
+
+  readonly activeEspecialidadData = computed(() => {
+    return this.especialidadViewMode() === 'CITAS'
+      ? this.citasPorEspecialidad()
+      : this.medicosPorEspecialidad();
+  });
 
   readonly maxCitasValue = computed(() => {
     const data = this.citasPorEstado();
@@ -49,7 +58,7 @@ export class AnaliticaDashboardViewModel {
 
   // Computed signal to calculate donut background safely on view-model, not template.
   readonly donutBackground = computed(() => {
-    const data = this.citasPorEspecialidad();
+    const data = this.activeEspecialidadData();
     if (!data || !data.categorias || data.categorias.length === 0) {
       return 'conic-gradient(#D1D5DB 0% 100%)';
     }
@@ -61,7 +70,7 @@ export class AnaliticaDashboardViewModel {
   });
 
   readonly donutSlices = computed(() => {
-    const data = this.citasPorEspecialidad();
+    const data = this.activeEspecialidadData();
     if (!data || !data.categorias || data.categorias.length === 0) return [];
     
     let accumulatedPct = 0;
@@ -159,6 +168,12 @@ export class AnaliticaDashboardViewModel {
       citasPorEspecialidad: this._service.getCitasPorEspecialidad().pipe(
         catchError(err => {
           console.error('Error loading citasPorEspecialidad', err);
+          return of(null);
+        })
+      ),
+      medicosPorEspecialidad: this._service.getMedicosPorEspecialidad().pipe(
+        catchError(err => {
+          console.error('Error loading medicosPorEspecialidad', err);
           return of(null);
         })
       ),

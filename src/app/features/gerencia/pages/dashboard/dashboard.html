@@ -257,8 +257,13 @@
     <div class="chart-card flex-col">
       <div class="card-header">
         <h3 class="font-title-md text-title-md text-on-surface">{{ translate.get('gerencia.dashboard.charts.distribucionEspecialidad') }}</h3>
+        
+        <div class="timeframe-selector">
+          <button class="selector-btn" [class.active]="vm.especialidadViewMode() === 'CITAS'" (click)="vm.especialidadViewMode.set('CITAS')">Citas</button>
+          <button class="selector-btn" [class.active]="vm.especialidadViewMode() === 'MEDICOS'" (click)="vm.especialidadViewMode.set('MEDICOS')">Médicos</button>
+        </div>
       </div>
-      @if (vm.citasPorEspecialidad(); as data) {
+      @if (vm.activeEspecialidadData(); as data) {
         <div class="donut-chart-wrapper">
           <div class="donut-svg-container">
             <svg class="donut-svg" viewBox="-10 -10 120 120">

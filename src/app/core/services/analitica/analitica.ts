@@ -56,4 +56,8 @@ export class AnaliticaService {
   getTopMedicos(limit: number = 5): Observable<TopMedicosResponse> {
     return this._http.get<TopMedicosResponse>(`${this._apiUrl}/dashboard/top-medicos`, { params: { limit } });
   }
+
+  getMedicosPorEspecialidad(): Observable<CitasPorEspecialidadResponse> {
+    return this._http.get<CitasPorEspecialidadResponse>(`${this._apiUrl}/dashboard/medicos-por-especialidad`);
+  }
 }

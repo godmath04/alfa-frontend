@@ -18,6 +18,7 @@ export class AnaliticaDashboardState {
   readonly headerKpis = signal<HeaderKpisResponse | null>(null);
   readonly citasPorEstado = signal<CitasPorEstadoResponse[] | null>(null);
   readonly citasPorEspecialidad = signal<CitasPorEspecialidadResponse | null>(null);
+  readonly medicosPorEspecialidad = signal<CitasPorEspecialidadResponse | null>(null);
   readonly labEstudiosTop = signal<LabEstudiosTopResponse | null>(null);
   readonly labTurnaround = signal<LabTurnaroundResponse | null>(null);
   readonly notificacionesResumen = signal<NotificacionesResumenResponse | null>(null);
@@ -36,6 +37,7 @@ export class AnaliticaDashboardState {
     headerKpis: HeaderKpisResponse;
     citasPorEstado: CitasPorEstadoResponse[];
     citasPorEspecialidad: CitasPorEspecialidadResponse;
+    medicosPorEspecialidad: CitasPorEspecialidadResponse;
     labEstudiosTop: LabEstudiosTopResponse;
     labTurnaround: LabTurnaroundResponse;
     notificacionesResumen: NotificacionesResumenResponse;
@@ -45,6 +47,7 @@ export class AnaliticaDashboardState {
     this.headerKpis.set(data.headerKpis);
     this.citasPorEstado.set(data.citasPorEstado);
     this.citasPorEspecialidad.set(data.citasPorEspecialidad);
+    this.medicosPorEspecialidad.set(data.medicosPorEspecialidad);
     this.labEstudiosTop.set(data.labEstudiosTop);
     this.labTurnaround.set(data.labTurnaround);
     this.notificacionesResumen.set(data.notificacionesResumen);
@@ -56,6 +59,7 @@ export class AnaliticaDashboardState {
     this.headerKpis.set(null);
     this.citasPorEstado.set(null);
     this.citasPorEspecialidad.set(null);
+    this.medicosPorEspecialidad.set(null);
     this.labEstudiosTop.set(null);
     this.labTurnaround.set(null);
     this.notificacionesResumen.set(null);
