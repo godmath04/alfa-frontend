@@ -27,6 +27,7 @@ export class AuthViewModel {
   login(email: string, password: string): void {
     this.loading.set(true);
     this.loginError.set(null);
+    this.registerSuccess.set(false);
 
     this._authService.login(email, password)
       .pipe(timeout(30000), takeUntilDestroyed(this._destroyRef))
@@ -66,7 +67,10 @@ export class AuthViewModel {
           this.registerSuccess.set(true);
           timer(2000)
             .pipe(takeUntilDestroyed(this._destroyRef))
-            .subscribe(() => this._router.navigate(['/auth/login']));
+            .subscribe(() => {
+              this.registerSuccess.set(false);
+              this._router.navigate(['/auth/login']);
+            });
         },
         error: (raw) => {
           const err = toApiError(raw);
@@ -81,6 +85,7 @@ export class AuthViewModel {
   }
 
   logout(): void {
+    this.registerSuccess.set(false);
     this._authService.logout()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
@@ -102,6 +107,7 @@ export class AuthViewModel {
     [Role.Ejecutivo]:     '/ejecutivo',
     [Role.Administrador]: '/admin',
     [Role.Gerencia]:      '/gerencia',
+    [Role.TecnicoLab]:    '/tecnico-lab',
   };
 
   private _redirectByRole(role: string): void {

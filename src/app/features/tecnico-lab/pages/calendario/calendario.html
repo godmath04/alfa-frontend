@@ -1,0 +1,187 @@
+<div class="lm-page">
+
+  <div class="lm-page__header">
+    <h1 class="lm-page__title">Calendario de Agenda Diaria</h1>
+  </div>
+
+  <!-- ── Navigation & Date Selector ── -->
+  <div class="lm-calendar-nav">
+    <button class="lm-calendar-nav__btn" (click)="vm.prevDay()">
+      <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+      Día Anterior
+    </button>
+
+    <div class="lm-calendar-nav__center">
+      <lucide-icon name="calendar" [size]="18" class="lm-calendar-nav__icon"></lucide-icon>
+      <input
+        class="lm-calendar-nav__date"
+        type="date"
+        [value]="vm.fecha()"
+        (change)="_onFechaChange($event)"
+      />
+    </div>
+
+    <button class="lm-calendar-nav__btn" (click)="vm.nextDay()">
+      Día Siguiente
+      <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+    </button>
+  </div>
+
+  <!-- ── Loading / Error States ── -->
+  @if (vm.loading()) {
+    <div class="lm-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="lm-page__spinner"></lucide-icon>
+    </div>
+  } @else if (vm.error()) {
+    <div class="lm-page__state lm-page__state--error">
+      <lucide-icon name="circle-alert" [size]="24"></lucide-icon>
+      <span>{{ vm.error() }}</span>
+    </div>
+  } @else {
+    <!-- ── Calendar Grid ── -->
+    <div class="lm-card">
+      <table class="lm-table">
+        <thead class="lm-table__head">
+          <tr>
+            <th class="lm-table__th lm-table__th--time">Hora</th>
+            <th class="lm-table__th">Paciente</th>
+            <th class="lm-table__th">Cédula</th>
+            <th class="lm-table__th">Estudio</th>
+            <th class="lm-table__th">Laboratorio</th>
+            <th class="lm-table__th">Estado</th>
+            <th class="lm-table__th">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (slot of vm.calendarGrid(); track slot.time) {
+            @if (slot.appointments.length === 0) {
+              <tr class="lm-table__row lm-table__row--empty">
+                <td class="lm-table__td lm-table__td--time">
+                  <span class="lm-calendar-time">{{ slot.formattedTime }}</span>
+                </td>
+                <td class="lm-table__td lm-table__td--empty-slot" colspan="6">
+                  <span class="lm-empty-text">Sin citas agendadas</span>
+                </td>
+              </tr>
+            } @else {
+              @for (c of slot.appointments; track c.citaId) {
+                <tr class="lm-table__row lm-table__row--appointment">
+                  <td class="lm-table__td lm-table__td--time">
+                    <span class="lm-calendar-time">{{ slot.formattedTime }}</span>
+                  </td>
+
+                  <td class="lm-table__td">
+                    <span class="lm-table__name">{{ c.pacienteNombre }}</span>
+                    @if (c.guest) {
+                      <span class="lm-badge lm-badge--guest">GUEST</span>
+                    }
+                    <span class="lm-table__meta">{{ c.pacienteEmail }}</span>
+                  </td>
+
+                  <td class="lm-table__td lm-table__td--muted">
+                    {{ c.pacienteIdNumber ?? '—' }}
+                  </td>
+
+                  <td class="lm-table__td">
+                    <span class="lm-table__name">{{ c.studyTypeName ?? '—' }}</span>
+                    <span class="lm-table__meta">{{ c.insuranceTypeName ?? '—' }}</span>
+                  </td>
+
+                  <td class="lm-table__td">
+                    <span class="lm-table__name">{{ c.labName }}</span>
+                    <span class="lm-table__meta">Lab {{ c.labNumber }}
+                      @if (c.labFloor) { · Piso {{ c.labFloor }} }
+                    </span>
+                  </td>
+
+                  <td class="lm-table__td">
+                    <span class="lm-badge lm-badge--{{ c.estado.toLowerCase() }}">{{ c.estado }}</span>
+                  </td>
+
+                  <td class="lm-table__td">
+                    <div class="lm-actions">
+                      @if (c.estado === 'PENDIENTE') {
+                        <app-button variant="primary" size="small"
+                                    [disabled]="vm.actionLoading() === c.citaId"
+                                    (clicked)="vm.confirmar(c.citaId)">
+                          <lucide-icon name="check" [size]="14"></lucide-icon>
+                          Confirmar Recepción
+                        </app-button>
+                        <app-button variant="destructive" size="small"
+                                    [disabled]="vm.actionLoading() === c.citaId"
+                                    (clicked)="vm.cancelar(c.citaId)">
+                          <lucide-icon name="x" [size]="14"></lucide-icon>
+                          Cancelar
+                        </app-button>
+                      }
+                      @if (c.estado === 'CONFIRMADA') {
+                        @if (!c.originalFileName) {
+                          <app-button variant="primary" size="small"
+                                      (clicked)="vm.openUploadPage(c.citaId)">
+                            <lucide-icon name="upload" [size]="14"></lucide-icon>
+                            Subir PDF
+                          </app-button>
+                          <app-button variant="destructive" size="small"
+                                      [disabled]="vm.actionLoading() === c.citaId"
+                                      (clicked)="vm.cancelar(c.citaId)">
+                            <lucide-icon name="x" [size]="14"></lucide-icon>
+                            Cancelar
+                          </app-button>
+                        } @else {
+                          <app-button variant="outline" size="small"
+                                      [disabled]="vm.downloadLoading() === c.citaId"
+                                      (clicked)="vm.downloadResult(c.citaId, true)">
+                            <lucide-icon name="eye" [size]="14"></lucide-icon>
+                            Ver PDF
+                          </app-button>
+                          <app-button variant="destructive" size="small"
+                                      [disabled]="vm.actionLoading() === c.citaId"
+                                      (clicked)="vm.eliminarPdf(c.citaId)">
+                            <lucide-icon name="trash-2" [size]="14"></lucide-icon>
+                            Eliminar PDF
+                          </app-button>
+                          <app-button variant="primary" size="small"
+                                      [disabled]="vm.actionLoading() === c.citaId"
+                                      (clicked)="vm.publicar(c.citaId)">
+                            <lucide-icon name="send" [size]="14"></lucide-icon>
+                            Publicar Resultado
+                          </app-button>
+                        }
+                      }
+                      @if (c.estado === 'COMPLETADA') {
+                        <app-button variant="outline" size="small"
+                                    [disabled]="vm.downloadLoading() === c.citaId"
+                                    (clicked)="vm.downloadResult(c.citaId, true)">
+                          <lucide-icon name="eye" [size]="14"></lucide-icon>
+                          Ver PDF
+                        </app-button>
+                        <app-button variant="outline" size="small"
+                                    [disabled]="vm.downloadLoading() === c.citaId"
+                                    (clicked)="vm.downloadResult(c.citaId)">
+                          @if (vm.downloadLoading() === c.citaId) {
+                            <lucide-icon name="loader-circle" [size]="14" class="lm-page__spinner"></lucide-icon>
+                          } @else {
+                            <lucide-icon name="download" [size]="14"></lucide-icon>
+                            Descargar
+                          }
+                        </app-button>
+                        @if (c.guest) {
+                          <app-button variant="outline" size="small"
+                                      (clicked)="vm.resendToken(c.citaId)">
+                            <lucide-icon name="send" [size]="14"></lucide-icon>
+                            Reenviar Acceso
+                          </app-button>
+                        }
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>

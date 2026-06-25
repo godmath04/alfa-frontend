@@ -26,6 +26,10 @@ export const APP_ROUTES: Routes = [
     loadChildren: () => import('./features/gerencia/gerencia.routes').then(m => m.GERENCIA_ROUTES)
   },
   {
+    path: 'tecnico-lab',
+    loadChildren: () => import('./features/tecnico-lab/tecnico-lab.routes').then(m => m.TECNICO_LAB_ROUTES)
+  },
+  {
     path: 'resultados/guest',
     loadComponent: () => import('./features/public/lab-result-guest/lab-result-guest').then(m => m.LabResultGuestComponent)
   },

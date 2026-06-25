@@ -27,7 +27,7 @@ export class LabResultsViewModel {
   view(id: string): void {
     this._state.setDownloadLoading(id);
     this._state.setDownloadError(null);
-    this._svc.getDownloadUrl(id).subscribe({
+    this._svc.getDownloadUrl(id, true).subscribe({
       next: ({ downloadUrl }) => {
         window.open(downloadUrl, '_blank');
         this._state.setDownloadLoading(null);

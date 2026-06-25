@@ -99,6 +99,7 @@ export interface LabCitaRequest {
   guestEmail?: string;
   guestPhone?: string;
   guestIdNumber?: string;
+  medicoId?: string;
 }
 
 export interface LabCitaResponse {
@@ -151,6 +152,7 @@ export interface StaffLabCitaItem {
   insuranceTypeName: string | null;
   estado:            string;
   guest:             boolean;
+  originalFileName?: string | null;
 }
 
 // ─── Lab results ──────────────────────────────────────────────────────────────

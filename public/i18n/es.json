@@ -90,7 +90,8 @@
         "title": "Por favor corrige los siguientes errores:",
         "password-mismatch": "Las contraseñas no coinciden",
         "invalid-cedula": "Cédula ecuatoriana inválida",
-        "invalid-passport": "Pasaporte inválido (6-15 caracteres alfanuméricos)"
+        "invalid-passport": "Pasaporte inválido (6-15 caracteres alfanuméricos)",
+        "underage": "Debes ser mayor de 18 años para registrarte"
       },
       "success": {
         "title": "¡Registro exitoso!",
@@ -495,6 +496,7 @@
       "config":         "Configuración",
       "notifications":  "Notificaciones",
       "labCatalogs":    "Catálogos de Lab",
+      "logs":           "Logs del Sistema",
       "logout":         "Cerrar sesión"
     },
     "config": {
@@ -667,7 +669,8 @@
         "medico":        "Médico",
         "ejecutivo":     "Ejecutivo",
         "administrador": "Administrador",
-        "gerencia":      "Gerencia"
+        "gerencia":      "Gerencia",
+        "tecnico_lab":   "Técnico de Lab"
       },
       "actions": {
         "change-role": "Cambiar rol",
@@ -838,6 +841,7 @@
       "calendario": "Mi Calendario",
       "horarios":   "Mis Horarios",
       "labResults": "Resultados de Laboratorio",
+      "profile":    "Mi Perfil",
       "logout":     "Cerrar sesión"
     },
     "horarios": {
@@ -1016,7 +1020,8 @@
       "loading":      "Cargando resultado...",
       "errorTitle":   "No se pudo cargar el resultado",
       "invalidToken": "El enlace de acceso no es válido.",
-      "notFound":     "El resultado no fue encontrado o el enlace ha expirado.",
+      "notFound":     "El resultado no fue encontrado.",
+      "expired":      "El enlace de acceso ha expirado.",
       "study":        "Tipo de Estudio",
       "lab":          "Laboratorio",
       "date":         "Fecha de Cita",
@@ -1139,9 +1144,17 @@
       "downloadFailed": "No se pudo descargar el archivo."
     }
   },
+  "tecnicoLab": {
+    "nav": {
+      "dashboard":       "Dashboard",
+      "calendario":      "Calendario",
+      "subirResultados": "Subir Resultado"
+    }
+  },
   "gerencia": {
     "nav": {
-      "dashboard": "Dashboard"
+      "dashboard":    "Dashboard",
+      "consultorios": "Estado de Consultorios"
     },
     "dashboard": {
       "greeting": {
@@ -1155,7 +1168,8 @@
         "ejecutivo": "Ejecutivo",
         "medico": "Doctor",
         "paciente": "Paciente",
-        "usuario": "Usuario"
+        "usuario": "Usuario",
+        "tecnico_lab": "Técnico de Lab"
       },
       "exportReport": "Exportar Reporte",
       "loading": "Cargando analítica en tiempo real...",

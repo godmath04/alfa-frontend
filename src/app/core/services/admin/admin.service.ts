@@ -90,6 +90,10 @@ export class AdminService {
     return this._http.get<DoctorProfile[]>(`${this._baseUrl}/doctors/all`);
   }
 
+  getActiveDoctors(): Observable<DoctorProfile[]> {
+    return this._http.get<DoctorProfile[]>(`${this._baseUrl}/doctors`);
+  }
+
   createDoctor(request: DoctorProfileRequest): Observable<DoctorProfile> {
     return this._http.post<DoctorProfile>(`${this._baseUrl}/doctors`, request);
   }

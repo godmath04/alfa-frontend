@@ -30,10 +30,12 @@ export const EXECUTIVE_ROUTES: Routes = [
         path: 'pacientes/:id/agendar-lab',
         loadComponent: () => import('./pages/book-lab-appointment/book-lab-appointment').then(m => m.ExecutiveBookLabAppointmentPage),
       },
-      {
+      // COMENTADO TEMPORALMENTE - Ejecutivo ya no sube PDFs, ahora es responsabilidad de TECNICO_LAB
+      // La ruta de subida se eliminó del scope del ejecutivo. Ver: tecnico-lab.routes.ts
+      /* {
         path: 'subir-resultado/:citaId',
         loadComponent: () => import('./pages/upload-lab-result/upload-lab-result').then(m => m.UploadLabResultPage),
-      },
+      }, */
     ],
   },
 ];

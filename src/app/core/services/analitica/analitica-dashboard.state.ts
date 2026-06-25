@@ -7,7 +7,9 @@ import {
   LabTurnaroundResponse,
   NotificacionesResumenResponse,
   ChatbotResumenResponse,
-  TopMedicosResponse
+  TopMedicosResponse,
+  TendenciaInasistenciaResponse,
+  AnaliticaLaboratorioResponse
 } from '../../models/analitica.model';
 
 @Injectable({ providedIn: 'root' })
@@ -18,11 +20,15 @@ export class AnaliticaDashboardState {
   readonly headerKpis = signal<HeaderKpisResponse | null>(null);
   readonly citasPorEstado = signal<CitasPorEstadoResponse[] | null>(null);
   readonly citasPorEspecialidad = signal<CitasPorEspecialidadResponse | null>(null);
+  readonly medicosPorEspecialidad = signal<CitasPorEspecialidadResponse | null>(null);
   readonly labEstudiosTop = signal<LabEstudiosTopResponse | null>(null);
   readonly labTurnaround = signal<LabTurnaroundResponse | null>(null);
   readonly notificacionesResumen = signal<NotificacionesResumenResponse | null>(null);
   readonly chatbotResumen = signal<ChatbotResumenResponse | null>(null);
   readonly topMedicos = signal<TopMedicosResponse | null>(null);
+  
+  readonly tendenciaInasistencia = signal<TendenciaInasistenciaResponse[] | null>(null);
+  readonly analiticaLaboratorio = signal<AnaliticaLaboratorioResponse | null>(null);
 
   setLoading(val: boolean): void {
     this.loading.set(val);
@@ -36,31 +42,40 @@ export class AnaliticaDashboardState {
     headerKpis: HeaderKpisResponse;
     citasPorEstado: CitasPorEstadoResponse[];
     citasPorEspecialidad: CitasPorEspecialidadResponse;
+    medicosPorEspecialidad: CitasPorEspecialidadResponse;
     labEstudiosTop: LabEstudiosTopResponse;
     labTurnaround: LabTurnaroundResponse;
     notificacionesResumen: NotificacionesResumenResponse;
     chatbotResumen: ChatbotResumenResponse;
     topMedicos: TopMedicosResponse;
+    tendenciaInasistencia?: TendenciaInasistenciaResponse[];
+    analiticaLaboratorio?: AnaliticaLaboratorioResponse;
   }): void {
     this.headerKpis.set(data.headerKpis);
     this.citasPorEstado.set(data.citasPorEstado);
     this.citasPorEspecialidad.set(data.citasPorEspecialidad);
+    this.medicosPorEspecialidad.set(data.medicosPorEspecialidad);
     this.labEstudiosTop.set(data.labEstudiosTop);
     this.labTurnaround.set(data.labTurnaround);
     this.notificacionesResumen.set(data.notificacionesResumen);
     this.chatbotResumen.set(data.chatbotResumen);
     this.topMedicos.set(data.topMedicos);
+    if (data.tendenciaInasistencia) this.tendenciaInasistencia.set(data.tendenciaInasistencia);
+    if (data.analiticaLaboratorio) this.analiticaLaboratorio.set(data.analiticaLaboratorio);
   }
 
   clearDashboard(): void {
     this.headerKpis.set(null);
     this.citasPorEstado.set(null);
     this.citasPorEspecialidad.set(null);
+    this.medicosPorEspecialidad.set(null);
     this.labEstudiosTop.set(null);
     this.labTurnaround.set(null);
     this.notificacionesResumen.set(null);
     this.chatbotResumen.set(null);
     this.topMedicos.set(null);
+    this.tendenciaInasistencia.set(null);
+    this.analiticaLaboratorio.set(null);
     this.error.set(null);
     this.loading.set(false);
   }

@@ -37,7 +37,6 @@ export class DoctorsPage {
   readonly _fIdNumber    = signal('');
   readonly _fType        = signal<DoctorType>('INTERNO');
   readonly _fOfficeId    = signal<number | null>(null);
-  readonly _fPhoto       = signal('');
   readonly _fSpecialties = signal<number[]>([]);
 
   readonly _selectedUser = computed<UserProfile | undefined>(() =>
@@ -89,7 +88,7 @@ export class DoctorsPage {
     this._editingId.set(null);
     this._fUserId.set(null); this._fEmail.set(''); this._fFirstName.set('');
     this._fLastName.set(''); this._fIdNumber.set(''); this._fType.set('INTERNO');
-    this._fOfficeId.set(null); this._fPhoto.set(''); this._fSpecialties.set([]);
+    this._fOfficeId.set(null); this._fSpecialties.set([]);
     this._formError.set(null);
     this._formVisible.set(true);
   }
@@ -99,7 +98,7 @@ export class DoctorsPage {
     this._fUserId.set(d.userId); this._fEmail.set(d.email ?? '');
     this._fFirstName.set(d.firstName); this._fLastName.set(d.lastName);
     this._fIdNumber.set(d.idNumber); this._fType.set(d.type ?? 'INTERNO');
-    this._fOfficeId.set(d.officeId); this._fPhoto.set(d.profilePhoto ?? '');
+    this._fOfficeId.set(d.officeId);
     this._fSpecialties.set(d.specialties.map(s => s.id));
     this._formError.set(null);
     this._formVisible.set(true);
@@ -125,7 +124,6 @@ export class DoctorsPage {
       userId, email, firstName, lastName, idNumber,
       type:         this._fType(),
       officeId:     this._fOfficeId() ?? undefined,
-      profilePhoto: this._fPhoto().trim() || undefined,
       specialtyIds: this._fSpecialties(),
     };
 

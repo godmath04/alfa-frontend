@@ -19,7 +19,7 @@
         (click)="_navigate(item.route)"
       >
         <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
-        <span>{{ item.key }}</span>
+        <span>{{ _translate.get(item.key) }}</span>
       </button>
       }
     </nav>
@@ -45,7 +45,7 @@
         (click)="_navigate(item.route)"
       >
         <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
-        <span>{{ item.key }}</span>
+        <span>{{ _translate.get(item.key) }}</span>
       </button>
     }
     <button class="bottomnav__item" (click)="_logout()">

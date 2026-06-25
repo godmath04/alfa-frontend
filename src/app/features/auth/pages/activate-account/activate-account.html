@@ -54,6 +54,9 @@
               [type]="_showPass() ? 'text' : 'password'"
               formControlName="confirmPassword"
               [placeholder]="t.get('auth.activate.confirm-placeholder')" />
+            <button class="activate-page__eye" type="button" (click)="_togglePass()">
+              <lucide-icon [name]="_showPass() ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+            </button>
           </div>
           @if (confirmError) {
             <span class="activate-page__field-error">{{ confirmError }}</span>

@@ -34,6 +34,10 @@ export const ADMIN_ROUTES: Routes = [
         path: 'lab-catalogs',
         loadComponent: () => import('./pages/lab-catalogs/lab-catalogs').then(m => m.LabCatalogsPage),
       },
+      {
+        path: 'logs',
+        loadComponent: () => import('./pages/system-logs/system-logs').then(m => m.SystemLogs),
+      },
     ],
   },
 ];

@@ -13,6 +13,10 @@ export const GERENCIA_ROUTES: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard)
+      },
+      {
+        path: 'consultorios',
+        loadComponent: () => import('./pages/consultorios/consultorios').then(m => m.Consultorios)
       }
     ]
   }

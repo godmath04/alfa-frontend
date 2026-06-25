@@ -1,3 +1,23 @@
+export interface ConsultorioEstado {
+  consultorioId: number;
+  numero: string;
+  ala: string;
+  tipo: string;
+  estado: 'OCUPADO' | 'DISPONIBLE' | 'LIMPIEZA';
+  medicoActual?: string;
+  horaFinActual?: string;
+  proximaDisponibilidad?: string;
+}
+
+export interface ConsultorioAgendaItem {
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  medicoNombre: string;
+  especialidad: string;
+  estado: string;
+}
+
 export interface AnaliticaHealthResponse {
   status: string;
   service: string;
@@ -88,4 +108,29 @@ export interface TopMedicosResponse {
     totalCitas: number;
     calificacion: number;
   }[];
+}
+
+export interface TendenciaInasistenciaResponse {
+  periodo: string;
+  tasa: number;
+  totalCitas: number;
+  inasistencias: number;
+}
+
+export interface AnaliticaLaboratorioResponse {
+  examenesPorEspecialidad: {
+    especialidad: string;
+    cantidad: number;
+    porcentaje: number;
+  }[];
+  tendenciaSemanal: {
+    periodo: string;
+    total: number;
+  }[];
+  distribucionResultados: {
+    normalPct: number;
+    anormalPct: number;
+    normalCount: number;
+    anormalCount: number;
+  };
 }
