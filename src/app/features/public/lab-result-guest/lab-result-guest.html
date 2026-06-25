@@ -11,20 +11,20 @@
 
   <div class="guest-portal__body">
 
-    @if (loading()) {
+    @if (_loading()) {
       <div class="guest-portal__loader">
         <app-spinner size="large"></app-spinner>
         <p>{{ t.get('lab.guest.loading') }}</p>
       </div>
-    } @else if (error()) {
+    } @else if (_error()) {
       <div class="guest-portal__error">
         <lucide-icon name="triangle-alert" [size]="40"></lucide-icon>
         <h2>{{ t.get('lab.guest.errorTitle') }}</h2>
-        <p>{{ t.get(error()!) }}</p>
+        <p>{{ t.get(_error()!) }}</p>
 
-        @if (error() === 'lab.guest.expired') {
+        @if (_error() === 'lab.guest.expired') {
           <div class="renew-box">
-            @if (renewSuccess()) {
+            @if (_renewSuccess()) {
               <div class="renew-box__success">
                 <lucide-icon name="check-circle" [size]="24"></lucide-icon>
                 <p>Se ha enviado un nuevo enlace de acceso a su correo electrónico registrado.</p>
@@ -35,34 +35,34 @@
                 Por motivos de seguridad, ingrese el número de identificación (Cédula o Pasaporte) registrado para el paciente.
               </p>
               <div class="renew-box__form">
-                <input 
-                  type="text" 
-                  class="renew-box__input" 
+                <input
+                  type="text"
+                  class="renew-box__input"
                   [placeholder]="t.get('lab.booking.guest.idNumber')"
-                  [ngModel]="idNumber()" 
-                  (ngModelChange)="idNumber.set($event)"
-                  [disabled]="renewing()"
+                  [ngModel]="_idNumber()"
+                  (ngModelChange)="_idNumber.set($event)"
+                  [disabled]="_renewing()"
                 />
-                <app-button 
-                  variant="primary" 
-                  [disabled]="renewing() || !idNumber().trim()" 
+                <app-button
+                  variant="primary"
+                  [disabled]="_renewing() || !_idNumber().trim()"
                   (clicked)="_requestRenew()"
                 >
-                  @if (renewing()) {
+                  @if (_renewing()) {
                     <app-spinner size="small"></app-spinner>
                   } @else {
                     Solicitar Enlace
                   }
                 </app-button>
               </div>
-              @if (renewError()) {
-                <p class="renew-box__error-text">{{ renewError() }}</p>
+              @if (_renewError()) {
+                <p class="renew-box__error-text">{{ _renewError() }}</p>
               }
             }
           </div>
         }
       </div>
-    } @else if (result(); as r) {
+    } @else if (_result(); as r) {
       <div class="result-card">
         <div class="result-card__icon">
           <lucide-icon name="flask-conical" [size]="40"></lucide-icon>
@@ -101,19 +101,19 @@
 
         @if (r.estado === 'DISPONIBLE') {
           <div class="result-card__actions">
-            <app-button variant="outline" [disabled]="downloading()" (clicked)="_view()">
-              @if (downloading()) { <app-spinner size="small"></app-spinner> }
+            <app-button variant="outline" [disabled]="_downloading()" (clicked)="_view()">
+              @if (_downloading()) { <app-spinner size="small"></app-spinner> }
               @else { <lucide-icon name="eye" [size]="16"></lucide-icon> }
               {{ t.get('lab.guest.view') }}
             </app-button>
-            <app-button variant="primary" [disabled]="downloading()" (clicked)="_download()">
-              @if (downloading()) { <app-spinner size="small"></app-spinner> }
+            <app-button variant="primary" [disabled]="_downloading()" (clicked)="_download()">
+              @if (_downloading()) { <app-spinner size="small"></app-spinner> }
               @else { <lucide-icon name="download" [size]="16"></lucide-icon> }
               {{ t.get('lab.guest.download') }}
             </app-button>
           </div>
-          @if (downloadError()) {
-            <p class="result-card__dl-error">{{ t.get(downloadError()!) }}</p>
+          @if (_downloadError()) {
+            <p class="result-card__dl-error">{{ t.get(_downloadError()!) }}</p>
           }
         } @else {
           <p class="result-card__pending-note">{{ t.get('lab.guest.pendingNote') }}</p>

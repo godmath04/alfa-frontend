@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { AuthViewModel } from '../../../core/services/auth/auth.view-model';
+import { Translate } from '../../../core/services/translate';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,13 +15,14 @@ import { Router } from '@angular/router';
 })
 export class Layout {
 
+  readonly _translate = inject(Translate);
+
   private readonly _vm     = inject(AuthViewModel);
   private readonly _router = inject(Router);
 
-  // El menú está vacío por ahora, luego se agregarán más opciones
   readonly _navItems = [
-    { key: 'Dashboard',    icon: 'layout-dashboard', route: '/gerencia/dashboard' },
-    { key: 'Consultorios', icon: 'building-2',        route: '/gerencia/consultorios' },
+    { key: 'gerencia.nav.dashboard',    icon: 'layout-dashboard', route: '/gerencia/dashboard' },
+    { key: 'gerencia.nav.consultorios', icon: 'building-2',       route: '/gerencia/consultorios' },
   ];
 
   _isActive(route: string): boolean {

@@ -26,7 +26,7 @@ export class AdminLayout {
     { key: 'admin.nav.config',         icon: 'settings',     route: '/admin/config'                },
     { key: 'admin.nav.notifications',  icon: 'bell-ring',    route: '/admin/notification-settings' },
     { key: 'admin.nav.labCatalogs',    icon: 'microscope',   route: '/admin/lab-catalogs'          },
-    { key: 'Logs del Sistema',         icon: 'layout-dashboard', route: '/admin/logs'                  },
+    { key: 'admin.nav.logs',            icon: 'layout-dashboard', route: '/admin/logs'                  },
   ];
 
   _isActive(route: string): boolean {

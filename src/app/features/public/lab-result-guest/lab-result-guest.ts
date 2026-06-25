@@ -24,16 +24,16 @@ export class LabResultGuestComponent implements OnInit {
   private readonly _svc   = inject(LabService);
   private readonly _route = inject(ActivatedRoute);
 
-  readonly result        = signal<GuestResult | null>(null);
-  readonly loading       = signal(true);
-  readonly error         = signal<string | null>(null);
-  readonly downloading   = signal(false);
-  readonly downloadError = signal<string | null>(null);
+  readonly _result        = signal<GuestResult | null>(null);
+  readonly _loading       = signal(true);
+  readonly _error         = signal<string | null>(null);
+  readonly _downloading   = signal(false);
+  readonly _downloadError = signal<string | null>(null);
 
-  readonly idNumber     = signal('');
-  readonly renewing     = signal(false);
-  readonly renewSuccess = signal(false);
-  readonly renewError   = signal<string | null>(null);
+  readonly _idNumber     = signal('');
+  readonly _renewing     = signal(false);
+  readonly _renewSuccess = signal(false);
+  readonly _renewError   = signal<string | null>(null);
 
   private _token = '';
 
@@ -42,54 +42,54 @@ export class LabResultGuestComponent implements OnInit {
   ngOnInit(): void {
     this._token = this._route.snapshot.queryParamMap.get('token') ?? '';
     if (!this._token) {
-      this.loading.set(false);
-      this.error.set('lab.guest.invalidToken');
+      this._loading.set(false);
+      this._error.set('lab.guest.invalidToken');
       return;
     }
     this._svc.getGuestResultado(this._token).subscribe({
-      next: r => { this.result.set(r); this.loading.set(false); },
+      next: r => { this._result.set(r); this._loading.set(false); },
       error: (err) => {
         if (err?.status === 410) {
-          this.error.set('lab.guest.expired');
+          this._error.set('lab.guest.expired');
         } else {
-          this.error.set('lab.guest.notFound');
+          this._error.set('lab.guest.notFound');
         }
-        this.loading.set(false);
+        this._loading.set(false);
       },
     });
   }
 
   _download(): void {
-    this.downloading.set(true);
-    this.downloadError.set(null);
+    this._downloading.set(true);
+    this._downloadError.set(null);
     this._svc.getGuestDownloadUrl(this._token).subscribe({
-      next: ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this.downloading.set(false); },
-      error: () => { this.downloadError.set('lab.guest.downloadFailed'); this.downloading.set(false); },
+      next: ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this._downloading.set(false); },
+      error: () => { this._downloadError.set('lab.guest.downloadFailed'); this._downloading.set(false); },
     });
   }
 
   _view(): void {
-    this.downloading.set(true);
-    this.downloadError.set(null);
+    this._downloading.set(true);
+    this._downloadError.set(null);
     this._svc.getGuestDownloadUrl(this._token, true).subscribe({
-      next: ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this.downloading.set(false); },
-      error: () => { this.downloadError.set('lab.guest.downloadFailed'); this.downloading.set(false); },
+      next: ({ downloadUrl }) => { window.open(downloadUrl, '_blank'); this._downloading.set(false); },
+      error: () => { this._downloadError.set('lab.guest.downloadFailed'); this._downloading.set(false); },
     });
   }
 
   _requestRenew(): void {
-    const doc = this.idNumber().trim();
+    const doc = this._idNumber().trim();
     if (!doc) return;
-    this.renewing.set(true);
-    this.renewError.set(null);
+    this._renewing.set(true);
+    this._renewError.set(null);
     this._svc.solicitarRenovacionGuest(this._token, doc).subscribe({
       next: () => {
-        this.renewSuccess.set(true);
-        this.renewing.set(false);
+        this._renewSuccess.set(true);
+        this._renewing.set(false);
       },
       error: (err) => {
-        this.renewError.set(err?.error?.message ?? 'Número de identificación incorrecto.');
-        this.renewing.set(false);
+        this._renewError.set(err?.error?.message ?? 'Número de identificación incorrecto.');
+        this._renewing.set(false);
       }
     });
   }

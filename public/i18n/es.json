@@ -494,6 +494,7 @@
       "config":         "Configuración",
       "notifications":  "Notificaciones",
       "labCatalogs":    "Catálogos de Lab",
+      "logs":           "Logs del Sistema",
       "logout":         "Cerrar sesión"
     },
     "config": {
@@ -1141,9 +1142,17 @@
       "downloadFailed": "No se pudo descargar el archivo."
     }
   },
+  "tecnicoLab": {
+    "nav": {
+      "dashboard":       "Dashboard",
+      "calendario":      "Calendario",
+      "subirResultados": "Subir Resultado"
+    }
+  },
   "gerencia": {
     "nav": {
-      "dashboard": "Dashboard"
+      "dashboard":    "Dashboard",
+      "consultorios": "Estado de Consultorios"
     },
     "dashboard": {
       "greeting": {
