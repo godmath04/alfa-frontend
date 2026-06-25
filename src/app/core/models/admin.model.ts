@@ -9,6 +9,27 @@ export interface Specialty {
   active:              boolean;
 }
 
+export interface LogEntry {
+  timestamp: string;
+  message: string;
+  service: string;
+  level: string;
+}
+
+export interface LogPage {
+  logs: LogEntry[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export interface AdminHealthResponse {
+  name:                string;
+  icon?:               string;
+  description?:        string;
+  appointmentDuration: number;
+}
+
 export interface SpecialtyRequest {
   name:                string;
   icon?:               string;
