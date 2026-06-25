@@ -13,7 +13,9 @@ import {
   ChatbotResumenResponse,
   TopMedicosResponse,
   TendenciaInasistenciaResponse,
-  AnaliticaLaboratorioResponse
+  AnaliticaLaboratorioResponse,
+  ConsultorioEstado,
+  ConsultorioAgendaItem
 } from '../../models/analitica.model';
 
 @Injectable({ providedIn: 'root' })
@@ -69,5 +71,15 @@ export class AnaliticaService {
 
   getAnaliticaLaboratorio(months: number = 6): Observable<AnaliticaLaboratorioResponse> {
     return this._http.get<AnaliticaLaboratorioResponse>(`${this._apiUrl}/dashboard/laboratorio`, { params: { months } });
+  }
+
+  getConsultoriosEstado(): Observable<ConsultorioEstado[]> {
+    return this._http.get<ConsultorioEstado[]>(`${this._apiUrl}/consultorios/estado`);
+  }
+
+  getConsultorioAgenda(officeId: number, desde: string, hasta: string): Observable<ConsultorioAgendaItem[]> {
+    return this._http.get<ConsultorioAgendaItem[]>(`${this._apiUrl}/consultorios/${officeId}/agenda`, {
+      params: { desde, hasta }
+    });
   }
 }

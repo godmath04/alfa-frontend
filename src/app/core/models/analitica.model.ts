@@ -1,3 +1,23 @@
+export interface ConsultorioEstado {
+  consultorioId: number;
+  numero: string;
+  ala: string;
+  tipo: string;
+  estado: 'OCUPADO' | 'DISPONIBLE' | 'LIMPIEZA';
+  medicoActual?: string;
+  horaFinActual?: string;
+  proximaDisponibilidad?: string;
+}
+
+export interface ConsultorioAgendaItem {
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  medicoNombre: string;
+  especialidad: string;
+  estado: string;
+}
+
 export interface AnaliticaHealthResponse {
   status: string;
   service: string;

@@ -19,7 +19,8 @@ export class Layout {
 
   // El menú está vacío por ahora, luego se agregarán más opciones
   readonly _navItems = [
-    { key: 'Dashboard', icon: 'layout-dashboard', route: '/gerencia/dashboard' },
+    { key: 'Dashboard',    icon: 'layout-dashboard', route: '/gerencia/dashboard' },
+    { key: 'Consultorios', icon: 'building-2',        route: '/gerencia/consultorios' },
   ];
 
   _isActive(route: string): boolean {
