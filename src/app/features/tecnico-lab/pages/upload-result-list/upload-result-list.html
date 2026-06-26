@@ -1,0 +1,124 @@
+<div class="lm-page">
+
+  <div class="lm-page__header">
+    <div class="sr-header">
+      <div class="sr-header__text">
+        <h1 class="lm-page__title">Subir Resultados de Laboratorio</h1>
+        <p class="sr-header__subtitle">Citas completadas pendientes de carga de PDF</p>
+      </div>
+      <span class="sr-header__badge">
+        <lucide-icon name="file-up" [size]="16"></lucide-icon>
+        TECNICO_LAB
+      </span>
+    </div>
+  </div>
+
+  <!-- ── Date filters ── -->
+  <div class="lm-filters">
+    <input class="lm-filters__date" type="date"
+           [value]="_fechaDesde()"
+           (change)="_fechaDesde.set($any($event.target).value)"
+           title="Fecha desde" />
+
+    <input class="lm-filters__date" type="date"
+           [value]="_fechaHasta()"
+           (change)="_fechaHasta.set($any($event.target).value)"
+           title="Fecha hasta" />
+
+    <button class="lm-filters__btn" (click)="_applyFilters()">
+      <lucide-icon name="search" [size]="15"></lucide-icon>
+      Buscar
+    </button>
+  </div>
+
+  <!-- ── Body ── -->
+  @if (_loading()) {
+    <div class="lm-page__state">
+      <lucide-icon name="loader-circle" [size]="36" class="lm-page__spinner"></lucide-icon>
+    </div>
+  } @else if (_error()) {
+    <div class="lm-page__state lm-page__state--error">
+      <lucide-icon name="circle-alert" [size]="24"></lucide-icon>
+      <span>{{ _error() }}</span>
+    </div>
+  } @else if (_citas().length === 0) {
+    <div class="lm-page__state lm-page__state--empty">
+      <lucide-icon name="inbox" [size]="48"></lucide-icon>
+      <p>No hay citas completadas pendientes de carga de PDF.</p>
+      <span class="sr-empty__hint">
+        Las citas aparecen aquí una vez que su estado cambia a <strong>COMPLETADA</strong>.
+      </span>
+    </div>
+  } @else {
+    <div class="lm-card">
+      <table class="lm-table">
+        <thead class="lm-table__head">
+          <tr>
+            <th class="lm-table__th"># Cita</th>
+            <th class="lm-table__th">Paciente</th>
+            <th class="lm-table__th">Laboratorio</th>
+            <th class="lm-table__th">Fecha / Hora</th>
+            <th class="lm-table__th">Estudio</th>
+            <th class="lm-table__th">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of _citas(); track c.citaId) {
+            <tr class="lm-table__row">
+
+              <td class="lm-table__td">
+                <span class="sr-cita-id">#{{ c.citaId }}</span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.pacienteNombre }}</span>
+                @if (c.guest) {
+                  <span class="lm-badge lm-badge--guest">GUEST</span>
+                }
+                <span class="lm-table__meta">{{ c.pacienteEmail }}</span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.labName }}</span>
+                <span class="lm-table__meta">Lab {{ c.labNumber }}
+                  @if (c.labFloor) { · Piso {{ c.labFloor }} }
+                </span>
+              </td>
+
+              <td class="lm-table__td">
+                <span class="lm-table__name">{{ c.fecha | date:'dd MMM yyyy' }}</span>
+                <span class="lm-table__meta">{{ formatToAmPm(c.horaInicio) }}</span>
+              </td>
+
+              <td class="lm-table__td lm-table__td--muted">{{ c.studyTypeName ?? '—' }}</td>
+
+              <td class="lm-table__td">
+                <app-button variant="primary" size="small" (clicked)="_goUpload(c.citaId)">
+                  <lucide-icon name="upload" [size]="14"></lucide-icon>
+                  Subir PDF
+                </app-button>
+              </td>
+
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Pagination ── -->
+    @if (_totalPages() > 1) {
+      <div class="lm-pagination">
+        <button class="lm-pagination__btn" [disabled]="_page() === 0" (click)="_prevPage()">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          Anterior
+        </button>
+        <span class="lm-pagination__info">{{ _page() + 1 }} / {{ _totalPages() }}</span>
+        <button class="lm-pagination__btn" [disabled]="_page() >= _totalPages() - 1" (click)="_nextPage()">
+          Siguiente
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+    }
+  }
+
+</div>

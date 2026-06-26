@@ -25,6 +25,7 @@ export class UsersPage {
     'EJECUTIVO',
     'ADMINISTRADOR',
     'GERENCIA',
+    'TECNICO_LAB',
   ];
 
   constructor() {
@@ -63,6 +64,7 @@ export class UsersPage {
       EJECUTIVO:     'usr-page__badge--ejecutivo',
       ADMINISTRADOR: 'usr-page__badge--admin',
       GERENCIA:      'usr-page__badge--gerencia',
+      TECNICO_LAB:   'usr-page__badge--tecnico-lab',
     };
     return map[role] ?? '';
   }

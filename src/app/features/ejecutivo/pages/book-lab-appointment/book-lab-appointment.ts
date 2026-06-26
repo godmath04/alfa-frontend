@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { DatePipe } from '@angular/common';
@@ -9,8 +9,8 @@ import { Button } from '../../../../shared/components/button/button';
 import { Spinner } from '../../../../shared/components/spinner/spinner';
 import { LabCatalog } from '../../../../core/models/lab.model';
 import { formatToAmPm } from '../../../../shared/utils/date-time.utils';
+import { DoctorProfile } from '../../../../core/models/admin.model';
 
-type BookingMode = 'patient' | 'guest';
 
 @Component({
   selector: 'app-executive-book-lab-appointment',
@@ -38,23 +38,63 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
     'lab.booking.steps.voucher',
   ];
 
-  // Guest form fields (used when mode = 'guest')
-  _mode         = signal<BookingMode>('patient');
-  _guestNombre  = signal('');
-  _guestApellido= signal('');
-  _guestEmail   = signal('');
-  _guestPhone   = signal('');
-  _guestIdNumber= signal('');
-  _guestError   = signal<string | null>(null);
-
   readonly formatToAmPm = formatToAmPm;
+
+  // ─── Doctor selection modal ───────────────────────────────────────────────
+  _showDoctorModal = signal(false);
+  _doctorSearchQuery = signal('');
+  readonly _failedImageIds = signal(new Set<number>());
+
+  _markImageFailed(id: number): void {
+    this._failedImageIds.update(set => {
+      const next = new Set(set);
+      next.add(id);
+      return next;
+    });
+  }
+
+  _filteredDoctors = computed(() => {
+    const q = this._doctorSearchQuery().toLowerCase().trim();
+    const docs = this.vm.doctors();
+    if (!q) return docs;
+    return docs.filter(d => 
+      d.firstName.toLowerCase().includes(q) || 
+      (d.lastName && d.lastName.toLowerCase().includes(q)) ||
+      (d.specialties?.some((s: any) => s.name.toLowerCase().includes(q)))
+    );
+  });
+
+  _openDoctorModal(): void {
+    this._showDoctorModal.set(true);
+    this._doctorSearchQuery.set('');
+  }
+
+  _closeDoctorModal(): void {
+    this._showDoctorModal.set(false);
+  }
+
+  _selectDoctor(doc: DoctorProfile): void {
+    this.vm.setMedicoId(doc.email);
+    this._closeDoctorModal();
+  }
+
+  _getInitials(firstName: string, lastName?: string): string {
+    const f = (firstName ?? '').trim();
+    const l = (lastName ?? '').trim();
+    const a = f.charAt(0).toUpperCase();
+    const b = l ? l.charAt(0).toUpperCase() : (f.charAt(1) ?? '').toUpperCase();
+    return (a + b).trim() || '?';
+  }
+
+  _getDoctorName(id: string): string {
+    if (!id) return '';
+    const doc = this.vm.doctors().find(d => d.id.toString() === id || d.email === id);
+    if (!doc) return id;
+    return `${doc.firstName} ${doc.lastName || ''}`;
+  }
 
   ngOnInit(): void {
     this._patientId = Number(this._route.snapshot.paramMap.get('id'));
-    // If no valid patientId, default to guest mode
-    if (!this._patientId || isNaN(this._patientId)) {
-      this._mode.set('guest');
-    }
     this.vm.clear();
     this.vm.loadLabs();
     this.vm.loadCatalogs();
@@ -92,29 +132,10 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
     this.vm.setObservations((event.target as HTMLTextAreaElement).value);
   }
 
+
   _confirm(): void {
     if (!this.vm.canConfirmDetails()) return;
-
-    if (this._mode() === 'patient') {
-      this.vm.book(() => this._next(), this._patientId);
-    } else {
-      const nombre   = this._guestNombre().trim();
-      const apellido = this._guestApellido().trim();
-      const email    = this._guestEmail().trim();
-      const phone    = this._guestPhone().trim();
-      const idNum    = this._guestIdNumber().trim();
-
-      if (!nombre || !apellido || !email || !phone || !idNum) {
-        this._guestError.set(this.t.get('lab.booking.guest.requiredFields'));
-        return;
-      }
-      this._guestError.set(null);
-      this.vm.book(
-        () => this._next(),
-        undefined,
-        { nombre, apellido, email, phone, idNumber: idNum }
-      );
-    }
+    this.vm.book(() => this._next(), this._patientId);
   }
 
   _goBack(): void {
@@ -125,6 +146,5 @@ export class ExecutiveBookLabAppointmentPage implements OnInit {
     this.vm.clear();
     this.vm.loadLabs();
     this._currentStep = 1;
-    this._guestError.set(null);
   }
 }

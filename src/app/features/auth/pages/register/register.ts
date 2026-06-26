@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -9,6 +9,7 @@ import { Translate } from '../../../../core/services/translate';
 import { DocumentValidators } from '../../../../shared/validators/document.validator';
 import { MatchValidators } from '../../../../shared/validators/match.validator';
 import { PatternValidators } from '../../../../shared/validators/pattern.validator';
+import { DateValidators } from '../../../../shared/validators/date.validator';
 import { Button } from '../../../../shared/components/button/button';
 import { Spinner } from '../../../../shared/components/spinner/spinner';
 import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
@@ -20,7 +21,7 @@ import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class Register {
+export class Register implements OnInit, OnDestroy {
 
   readonly vm        = inject(AuthViewModel);
   readonly translate = inject(Translate);
@@ -63,7 +64,7 @@ export class Register {
     gender:          ['', Validators.required],
     acceptTerms:     [false, Validators.requiredTrue],
     acceptData:      [false, Validators.requiredTrue],
-  }, { validators: [MatchValidators.password('password', 'confirmPassword')] });
+  }, { validators: [MatchValidators.password('password', 'confirmPassword'), DateValidators.ageAtLeast18()] });
 
   constructor() {
     this.registerForm.get('idType')?.valueChanges
@@ -91,6 +92,21 @@ export class Register {
       .subscribe(() => this._updateDaysInMonth());
   }
 
+  // Limpiamos el estado del ViewModel (singleton) al entrar al formulario
+  // para que nunca muestre un éxito residual de un registro anterior.
+  ngOnInit(): void {
+    this.vm.registerSuccess.set(false);
+    this.vm.registerErrors.set([]);
+    this.isSubmitted = false;
+    this.registerForm.reset();
+  }
+
+  // Limpiamos al salir para no contaminar otras rutas.
+  ngOnDestroy(): void {
+    this.vm.registerSuccess.set(false);
+    this.vm.registerErrors.set([]);
+  }
+
   getFieldError(fieldName: string): string | boolean {
     const control = this.registerForm.get(fieldName);
     if (!this.isSubmitted || !control?.errors) return false;
@@ -103,6 +119,7 @@ export class Register {
       invalidPhonePattern:    'common.errors.invalid-phone',
       invalidCedula:          'auth.register.errors.invalid-cedula',
       invalidPassport:        'auth.register.errors.invalid-passport',
+      underage:               'auth.register.errors.underage',
     };
 
     const firstErrorKey = Object.keys(control.errors)[0];

@@ -43,7 +43,8 @@ export class Dashboard implements OnInit {
       [Role.Administrador]: this.translate.get('gerencia.dashboard.roles.administrador'),
       [Role.Ejecutivo]: this.translate.get('gerencia.dashboard.roles.ejecutivo'),
       [Role.Medico]: this.translate.get('gerencia.dashboard.roles.medico'),
-      [Role.Paciente]: this.translate.get('gerencia.dashboard.roles.paciente')
+      [Role.Paciente]: this.translate.get('gerencia.dashboard.roles.paciente'),
+      [Role.TecnicoLab]: this.translate.get('gerencia.dashboard.roles.tecnico_lab')
     };
     const label = roleLabels[role ?? ''] ?? this.translate.get('gerencia.dashboard.roles.usuario');
     return `${timeGreeting}, ${label}`;

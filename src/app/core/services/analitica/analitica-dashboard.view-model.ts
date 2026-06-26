@@ -17,15 +17,27 @@ export class AnaliticaDashboardViewModel {
   readonly headerKpis = this._state.headerKpis.asReadonly();
   readonly citasPorEstado = this._state.citasPorEstado.asReadonly();
   readonly citasPorEspecialidad = this._state.citasPorEspecialidad.asReadonly();
+  readonly medicosPorEspecialidad = this._state.medicosPorEspecialidad.asReadonly();
   readonly labEstudiosTop = this._state.labEstudiosTop.asReadonly();
   readonly labTurnaround = this._state.labTurnaround.asReadonly();
   readonly notificacionesResumen = this._state.notificacionesResumen.asReadonly();
   readonly chatbotResumen = this._state.chatbotResumen.asReadonly();
   readonly topMedicos = this._state.topMedicos.asReadonly();
+  readonly tendenciaInasistencia = this._state.tendenciaInasistencia.asReadonly();
+  readonly analiticaLaboratorio = this._state.analiticaLaboratorio.asReadonly();
 
   // State signals for granularity filter
   readonly selectedMonths = signal<number>(6);
   readonly selectedGroupBy = signal<'MONTH' | 'DAY'>('MONTH');
+
+  readonly especialidadViewMode = signal<'CITAS' | 'MEDICOS'>('CITAS');
+  readonly labExamenesViewMode = signal<'PCT' | 'TOTAL'>('PCT');
+
+  readonly activeEspecialidadData = computed(() => {
+    return this.especialidadViewMode() === 'CITAS'
+      ? this.citasPorEspecialidad()
+      : this.medicosPorEspecialidad();
+  });
 
   readonly maxCitasValue = computed(() => {
     const data = this.citasPorEstado();
@@ -34,22 +46,34 @@ export class AnaliticaDashboardViewModel {
     return maxVal > 0 ? maxVal : 1;
   });
 
+  readonly maxInasistenciaValue = computed(() => {
+    const data = this.tendenciaInasistencia();
+    if (!data || data.length === 0) return 100;
+    const maxVal = Math.max(...data.map(d => d.tasa));
+    return maxVal > 0 ? Math.ceil(maxVal / 10) * 10 : 100;
+  });
+
   changeCitasFilter(months: number, groupBy: 'MONTH' | 'DAY'): void {
     this.selectedMonths.set(months);
     this.selectedGroupBy.set(groupBy);
-    this._service.getCitasPorEstado(months, groupBy).subscribe({
+    
+    forkJoin({
+      citas: this._service.getCitasPorEstado(months, groupBy),
+      inasistencia: this._service.getTendenciaInasistencia(months, groupBy === 'DAY' ? 'DAY' : 'WEEK')
+    }).subscribe({
       next: (res) => {
-        this._state.citasPorEstado.set(res);
+        this._state.citasPorEstado.set(res.citas);
+        this._state.tendenciaInasistencia.set(res.inasistencia);
       },
       error: (err) => {
-        console.error('Error updating citasPorEstado', err);
+        console.error('Error updating citas and inasistencia', err);
       }
     });
   }
 
   // Computed signal to calculate donut background safely on view-model, not template.
   readonly donutBackground = computed(() => {
-    const data = this.citasPorEspecialidad();
+    const data = this.activeEspecialidadData();
     if (!data || !data.categorias || data.categorias.length === 0) {
       return 'conic-gradient(#D1D5DB 0% 100%)';
     }
@@ -61,7 +85,7 @@ export class AnaliticaDashboardViewModel {
   });
 
   readonly donutSlices = computed(() => {
-    const data = this.citasPorEspecialidad();
+    const data = this.activeEspecialidadData();
     if (!data || !data.categorias || data.categorias.length === 0) return [];
     
     let accumulatedPct = 0;
@@ -162,6 +186,12 @@ export class AnaliticaDashboardViewModel {
           return of(null);
         })
       ),
+      medicosPorEspecialidad: this._service.getMedicosPorEspecialidad().pipe(
+        catchError(err => {
+          console.error('Error loading medicosPorEspecialidad', err);
+          return of(null);
+        })
+      ),
       labEstudiosTop: this._service.getLabEstudiosTop().pipe(
         catchError(err => {
           console.error('Error loading labEstudiosTop', err);
@@ -189,6 +219,18 @@ export class AnaliticaDashboardViewModel {
       topMedicos: this._service.getTopMedicos().pipe(
         catchError(err => {
           console.error('Error loading topMedicos', err);
+          return of(null);
+        })
+      ),
+      tendenciaInasistencia: this._service.getTendenciaInasistencia(6, 'WEEK').pipe(
+        catchError(err => {
+          console.error('Error loading tendenciaInasistencia', err);
+          return of(null);
+        })
+      ),
+      analiticaLaboratorio: this._service.getAnaliticaLaboratorio().pipe(
+        catchError(err => {
+          console.error('Error loading analiticaLaboratorio', err);
           return of(null);
         })
       )

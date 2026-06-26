@@ -79,6 +79,7 @@ $bp-mobile: 768px;
     &--ejecutivo     { background: rgba(245, 158, 11, 0.12); color: #b45309; }
     &--admin         { background: rgba(239, 68, 68, 0.12);  color: #dc2626; }
     &--gerencia      { background: rgba(139, 92, 246, 0.12); color: #7c3aed; }
+    &--tecnico-lab   { background: rgba(13, 148, 136, 0.12); color: #0d9488; }
   }
 
   &__actions { display: flex; align-items: center; gap: 6px; }

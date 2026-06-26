@@ -1,0 +1,113 @@
+<div class="upload-page">
+
+  <!-- ── Back button ── -->
+  <div class="upload-page__back">
+    <button class="back-btn" (click)="_goBack()">
+      <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+      Volver al Dashboard
+    </button>
+  </div>
+
+  <!-- ── Header ── -->
+  <h1 class="upload-page__title">Subir Resultado de Laboratorio</h1>
+  <p class="upload-page__subtitle">
+    Carga el PDF del análisis clínico para la
+    <strong>Cita #{{ citaId }}</strong>
+  </p>
+
+  <!-- ── Upload card (hidden once success) ── -->
+  @if (!uploadResult()) {
+    <div class="upload-card">
+
+      <div class="upload-card__dropzone" [class.upload-card__dropzone--has-file]="selectedFile()">
+        <lucide-icon name="file-up" [size]="44"></lucide-icon>
+
+        @if (selectedFile()) {
+          <span class="upload-card__filename">{{ selectedFile()!.name }}</span>
+        } @else {
+          <span class="upload-card__hint">Selecciona el reporte clínico en formato PDF</span>
+        }
+
+        <label class="upload-card__browse">
+          Buscar Archivo
+          <input type="file" accept="application/pdf" hidden (change)="_onFileChange($event)" />
+        </label>
+      </div>
+
+      @if (uploadError()) {
+        <p class="upload-card__error">
+          <lucide-icon name="circle-alert" [size]="14"></lucide-icon>
+          {{ uploadError() }}
+        </p>
+      }
+
+      <div class="upload-card__actions">
+        <app-button variant="outline" (clicked)="_goBack()">Cancelar</app-button>
+        <app-button
+          variant="primary"
+          [disabled]="!selectedFile() || uploading()"
+          (clicked)="_upload()">
+          @if (uploading()) {
+            <app-spinner size="small"></app-spinner>
+            Subiendo...
+          } @else {
+            <lucide-icon name="upload" [size]="16"></lucide-icon>
+            Subir PDF
+          }
+        </app-button>
+      </div>
+    </div>
+
+  } @else {
+
+    <!-- ── Success state ── -->
+    <div class="upload-success">
+      <lucide-icon name="circle-check" [size]="56" class="upload-success__icon"></lucide-icon>
+      <h2>¡Resultado Subido Exitosamente!</h2>
+      <p>El reporte PDF ha sido procesado y guardado en el expediente digital del paciente.</p>
+      <div class="upload-success__detail">
+        <lucide-icon name="file-text" [size]="16"></lucide-icon>
+        <span>{{ uploadResult()!.originalFileName }}</span>
+        <span class="status-badge status-badge--{{ uploadResult()!.estado }}">
+          {{ uploadResult()!.estado }}
+        </span>
+      </div>
+      <app-button variant="outline" (clicked)="_goBack()">Volver al Dashboard</app-button>
+    </div>
+
+    <!-- ── Guest token resend (conditional) ── -->
+    @if (uploadResult()?.guest) {
+      <div class="resend-card">
+        <div class="resend-card__header">
+          <lucide-icon name="mail" [size]="20"></lucide-icon>
+          <h3 class="resend-card__title">Enviar Acceso al Paciente Invitado</h3>
+        </div>
+        <p class="resend-card__desc">
+          Esta cita pertenece a un paciente sin cuenta registrada. Puedes reenviarle el código
+          de acceso único para que consulte su resultado.
+        </p>
+
+        @if (resendResult()) {
+          <p class="resend-card__success">
+            <lucide-icon name="check-circle" [size]="14"></lucide-icon>
+            Código de acceso reenviado con éxito.
+          </p>
+        } @else {
+          <app-button variant="outline" [disabled]="resending()" (clicked)="_resendToken()">
+            @if (resending()) {
+              <app-spinner size="small"></app-spinner>
+              Enviando...
+            } @else {
+              <lucide-icon name="send" [size]="16"></lucide-icon>
+              Reenviar Código de Acceso
+            }
+          </app-button>
+          @if (resendError()) {
+            <p class="resend-card__error">{{ resendError() }}</p>
+          }
+        }
+      </div>
+    }
+  }
+
+</div>

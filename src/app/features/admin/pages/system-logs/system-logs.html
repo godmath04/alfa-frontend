@@ -1,0 +1,118 @@
+<div class="logs-page">
+  <div class="logs-header">
+    <div class="logs-header__title-group">
+      <h1>Auditoría de Sistema</h1>
+      <p>Visualización de logs centralizados desde Loki</p>
+    </div>
+  </div>
+
+  <div class="logs-tabs">
+    <button
+      class="logs-tab"
+      [class.logs-tab--active]="_activeTab() === 'SISTEMA'"
+      (click)="_setTab('SISTEMA')">
+      <lucide-icon name="layout-dashboard" [size]="18"></lucide-icon>
+      Logs del Sistema
+    </button>
+    <button
+      class="logs-tab"
+      [class.logs-tab--active]="_activeTab() === 'NOTIFICACIONES'"
+      (click)="_setTab('NOTIFICACIONES')">
+      <lucide-icon name="bell-ring" [size]="18"></lucide-icon>
+      Notificaciones Fallidas
+    </button>
+  </div>
+
+  <div class="logs-content">
+    @if (_activeTab() === 'SISTEMA') {
+      <div class="logs-filters">
+        <div class="filter-group">
+          <label>Servicio</label>
+          <select [ngModel]="_fServicio()" (ngModelChange)="_fServicio.set($event); _applyFilters()">
+            @for (srv of _servicios; track srv) {
+              <option [value]="srv">{{ srv }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Nivel</label>
+          <select [ngModel]="_fNivel()" (ngModelChange)="_fNivel.set($event); _applyFilters()">
+            @for (lvl of _niveles; track lvl) {
+              <option [value]="lvl">{{ lvl }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Desde</label>
+          <input type="date" [ngModel]="_fDesde()" (ngModelChange)="_fDesde.set($event); _applyFilters()">
+        </div>
+        <div class="filter-group">
+          <label>Hasta</label>
+          <input type="date" [ngModel]="_fHasta()" (ngModelChange)="_fHasta.set($event); _applyFilters()">
+        </div>
+      </div>
+    }
+
+    <div class="logs-table-container">
+      @if (_loading()) {
+        <div class="logs-state logs-state--loading">
+          <lucide-icon name="loader-circle" [size]="32" class="spin"></lucide-icon>
+          <p>Consultando a Loki...</p>
+        </div>
+      } @else if (_error()) {
+        <div class="logs-state logs-state--error">
+          <lucide-icon name="triangle-alert" [size]="32"></lucide-icon>
+          <p>Error de conexión con Loki o el servidor de administración.</p>
+          <button class="retry-btn" (click)="_applyFilters()">Reintentar</button>
+        </div>
+      } @else if (_logs().length === 0) {
+        <div class="logs-state logs-state--empty">
+          <lucide-icon name="search-x" [size]="32"></lucide-icon>
+          <p>No se encontraron logs para los filtros aplicados.</p>
+        </div>
+      } @else {
+        <table class="logs-table">
+          <thead>
+            <tr>
+              <th style="width: 180px">Timestamp</th>
+              <th style="width: 80px">Nivel</th>
+              <th style="width: 200px">Servicio</th>
+              <th>Mensaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (log of _logs(); track $index) {
+              <tr>
+                <td class="log-cell-time">{{ log.timestamp }}</td>
+                <td>
+                  <span class="log-badge {{ _badgeClass(log.level) }}">{{ log.level }}</span>
+                </td>
+                <td class="log-cell-service">{{ log.service }}</td>
+                <td class="log-cell-message">{{ log.message }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    @if (!_loading() && !_error() && _total() > 0) {
+      <div class="logs-pagination">
+        <span class="logs-pagination__info">
+          Mostrando {{(_pagina() - 1) * _pageSize() + 1}} a {{ _logs().length < _pageSize() ? _total() : _pagina() * _pageSize() }} de {{ _total() }} logs
+        </span>
+        <div class="logs-pagination__actions">
+          <button [disabled]="_pagina() === 1" (click)="_prevPage()">
+            <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+            Anterior
+          </button>
+          <span class="logs-pagination__current">Página {{ _pagina() }}</span>
+          <button [disabled]="_pagina() * _pageSize() >= _total()" (click)="_nextPage()">
+            Siguiente
+            <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
