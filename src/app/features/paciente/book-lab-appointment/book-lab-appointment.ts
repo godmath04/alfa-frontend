@@ -147,6 +147,6 @@ export class BookLabAppointment implements OnInit {
   }
 
   _goToDashboard(): void {
-    this._router.navigate(['/paciente/dashboard']);
+    this._router.navigate(['/paciente/appointment-history']);
   }
 }

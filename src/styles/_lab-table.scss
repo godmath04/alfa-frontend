@@ -73,6 +73,13 @@ $bp-mobile: 768px;
     cursor: pointer;
     transition: opacity 0.15s;
     &:hover { opacity: 0.88; }
+
+    &--clear {
+      background: var(--color-white);
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+      &:hover { background: var(--color-bg-secondary); opacity: 1; }
+    }
   }
 }
 

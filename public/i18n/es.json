@@ -1149,7 +1149,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "calendario": "Calendario",
-      "subirResultados": "Subir Resultado"
+      "subirResultados": "Subir Resultado",
+      "profile": "Mi Perfil"
     }
   },
   "gerencia": {

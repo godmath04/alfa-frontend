@@ -19,9 +19,10 @@ export class TecnicoLabLayout {
   private readonly _router = inject(Router);
 
   readonly _navItems = [
-    { key: 'tecnicoLab.nav.dashboard',       icon: 'layout-dashboard', route: '/tecnico-lab/dashboard' },
-    { key: 'tecnicoLab.nav.calendario',      icon: 'calendar',         route: '/tecnico-lab/calendario' },
-    { key: 'tecnicoLab.nav.subirResultados', icon: 'upload',           route: '/tecnico-lab/subir-resultados' },
+    { key: 'tecnicoLab.nav.dashboard',  icon: 'layout-dashboard', route: '/tecnico-lab/dashboard'  },
+    { key: 'tecnicoLab.nav.calendario', icon: 'calendar',         route: '/tecnico-lab/calendario' },
+    // { key: 'tecnicoLab.nav.subirResultados', icon: 'upload', route: '/tecnico-lab/subir-resultados' },
+    { key: 'tecnicoLab.nav.profile',    icon: 'user',             route: '/tecnico-lab/profile'    },
   ];
 
   _isActive(route: string): boolean {

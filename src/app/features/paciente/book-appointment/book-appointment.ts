@@ -138,7 +138,7 @@ export class BookAppointment implements OnInit {
   }
 
   _goToDashboard(): void {
-    this._router.navigate(['/paciente/dashboard']);
+    this._router.navigate(['/paciente/appointment-history']);
   }
 
   // ─── Input handler for motivo textarea ─────────────

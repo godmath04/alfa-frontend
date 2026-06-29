@@ -49,6 +49,14 @@ export class TecnicoLabDashboard {
     this._load();
   }
 
+  _clearFilters(): void {
+    this._estadoFilter.set('');
+    this._fechaDesde.set('');
+    this._fechaHasta.set('');
+    this._page.set(0);
+    this._load();
+  }
+
   _prevPage(): void {
     if (this._page() > 0) { this._page.update(p => p - 1); this._load(); }
   }

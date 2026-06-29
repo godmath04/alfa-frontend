@@ -8,7 +8,7 @@
   <div class="lm-filters">
     <select class="lm-filters__select"
             [value]="_estadoFilter()"
-            (change)="_estadoFilter.set($any($event.target).value)">
+            (change)="_estadoFilter.set($any($event.target).value); _applyFilters()">
       <option value="">Todas las Citas</option>
       <option value="PENDIENTE">PENDIENTE</option>
       <option value="CONFIRMADA">CONFIRMADA</option>
@@ -27,6 +27,11 @@
     <button class="lm-filters__btn" (click)="_applyFilters()">
       <lucide-icon name="search" [size]="15"></lucide-icon>
       Buscar Citas
+    </button>
+
+    <button class="lm-filters__btn lm-filters__btn--clear" (click)="_clearFilters()">
+      <lucide-icon name="x" [size]="15"></lucide-icon>
+      Limpiar
     </button>
   </div>
 

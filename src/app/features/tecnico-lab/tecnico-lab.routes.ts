@@ -27,6 +27,10 @@ export const TECNICO_LAB_ROUTES: Routes = [
         // Detail page — navigated to from the listing table row
         path: 'subir-resultados/:citaId',
         loadComponent: () => import('./pages/upload-result/upload-result').then(m => m.TlUploadResultPage)
+      },
+      {
+        path: 'profile',
+        loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
       }
     ]
   }
