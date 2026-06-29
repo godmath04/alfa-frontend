@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { DatePipe } from '@angular/common';
@@ -9,6 +9,7 @@ import { Button } from '../../../shared/components/button/button';
 import { Spinner } from '../../../shared/components/spinner/spinner';
 import { LabCatalog } from '../../../core/models/lab.model';
 import { formatToAmPm } from '../../../shared/utils/date-time.utils';
+import { DoctorProfile } from '../../../core/models/admin.model';
 
 @Component({
   selector: 'app-book-lab-appointment',
@@ -34,6 +35,59 @@ export class BookLabAppointment implements OnInit {
   ];
 
   readonly formatToAmPm = formatToAmPm;
+
+  // ─── Doctor selection modal ───────────────────────────────────────────────
+  _showDoctorModal = signal(false);
+  _doctorSearchQuery = signal('');
+  readonly _failedImageIds = signal(new Set<number>());
+
+  _markImageFailed(id: number): void {
+    this._failedImageIds.update(set => {
+      const next = new Set(set);
+      next.add(id);
+      return next;
+    });
+  }
+
+  _filteredDoctors = computed(() => {
+    const q = this._doctorSearchQuery().toLowerCase().trim();
+    const docs = this.vm.doctors();
+    if (!q) return docs;
+    return docs.filter(d => 
+      d.firstName.toLowerCase().includes(q) || 
+      (d.lastName && d.lastName.toLowerCase().includes(q)) ||
+      (d.specialties?.some((s: any) => s.name.toLowerCase().includes(q)))
+    );
+  });
+
+  _openDoctorModal(): void {
+    this._showDoctorModal.set(true);
+    this._doctorSearchQuery.set('');
+  }
+
+  _closeDoctorModal(): void {
+    this._showDoctorModal.set(false);
+  }
+
+  _selectDoctor(doc: DoctorProfile): void {
+    this.vm.setMedicoId(doc.email);
+    this._closeDoctorModal();
+  }
+
+  _getInitials(firstName: string, lastName?: string): string {
+    const f = (firstName ?? '').trim();
+    const l = (lastName ?? '').trim();
+    const a = f.charAt(0).toUpperCase();
+    const b = l ? l.charAt(0).toUpperCase() : (f.charAt(1) ?? '').toUpperCase();
+    return (a + b).trim() || '?';
+  }
+
+  _getDoctorName(id: string): string {
+    if (!id) return '';
+    const doc = this.vm.doctors().find(d => d.id.toString() === id || d.email === id);
+    if (!doc) return id;
+    return `${doc.firstName} ${doc.lastName || ''}`;
+  }
 
   ngOnInit(): void {
     this.vm.clear();

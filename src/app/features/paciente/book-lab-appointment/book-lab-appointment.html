@@ -158,6 +158,26 @@
           </div>
 
           <div class="form-group">
+            <label class="form-label">Médico derivante (opcional)</label>
+            <div class="doctor-selector-wrapper" style="display: flex; gap: 8px;">
+              <input class="field-input" type="text"
+                     readonly
+                     placeholder="Ninguno seleccionado"
+                     [value]="_getDoctorName(vm.medicoId())"
+                     style="flex: 1; cursor: pointer; background-color: var(--surface-hover);"
+                     (click)="_openDoctorModal()" />
+              <app-button variant="outline" (clicked)="_openDoctorModal()">
+                Buscar
+              </app-button>
+              @if (vm.medicoId()) {
+                <app-button variant="outline" (clicked)="vm.setMedicoId('')">
+                  <lucide-icon name="x" [size]="16"></lucide-icon>
+                </app-button>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
             <label class="form-label">{{ t.get('lab.booking.observations') }}</label>
             <textarea class="field-textarea" rows="3"
                       [placeholder]="t.get('lab.booking.observationsPlaceholder')"
@@ -248,3 +268,65 @@
 
   </div>
 </div>
+
+<!-- ══ DOCTOR SELECTION MODAL ══ -->
+@if (_showDoctorModal()) {
+  <div class="modal-backdrop" (click)="_closeDoctorModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Seleccionar Médico Derivante</h3>
+        <button class="modal-close" (click)="_closeDoctorModal()">
+          <lucide-icon name="x" [size]="20"></lucide-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="search-box" style="margin-bottom: 1rem; position: relative;">
+          <lucide-icon name="search" [size]="18" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary);"></lucide-icon>
+          <input type="text" 
+                 class="field-input" 
+                 style="padding-left: 36px;"
+                 placeholder="Buscar por nombre o especialidad..."
+                 [value]="_doctorSearchQuery()"
+                 (input)="_doctorSearchQuery.set($any($event.target).value)" />
+        </div>
+
+        <div class="doctors-list" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+          @for (doc of _filteredDoctors(); track doc.id) {
+            <div class="doctor-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                @if (doc.profilePhoto && !_failedImageIds().has(doc.id)) {
+                  <img [src]="doc.profilePhoto"
+                       (error)="_markImageFailed(doc.id)"
+                       [alt]="doc.firstName + ' ' + doc.lastName"
+                       style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                } @else {
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; color: #475569; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem;">
+                    {{ _getInitials(doc.firstName, doc.lastName) }}
+                  </div>
+                }
+                <div>
+                  <h4 style="margin: 0; font-size: 0.95rem; color: var(--text-primary);">{{ doc.firstName }} {{ doc.lastName }}</h4>
+                  <p style="margin: 0; font-size: 0.85rem; color: var(--text-tertiary);">
+                    @if (doc.specialties && doc.specialties.length > 0) {
+                      {{ doc.specialties[0].name }}
+                    } @else {
+                      Médico General
+                    }
+                  </p>
+                </div>
+              </div>
+              <app-button variant="primary" (clicked)="_selectDoctor(doc)" size="small">
+                Seleccionar
+              </app-button>
+            </div>
+          } @empty {
+            <p style="text-align: center; color: var(--text-tertiary); padding: 2rem 0;">
+              No se encontraron médicos activos.
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
