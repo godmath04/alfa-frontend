@@ -31,6 +31,8 @@ export class SystemLogs {
   readonly _fDesde = signal(this._formatDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)));
   readonly _fHasta = signal(this._formatDate(new Date()));
 
+  readonly _today     = this._formatDate(new Date());
+
   readonly _pagina    = signal(1);
   readonly _pageSize  = signal(50);
 

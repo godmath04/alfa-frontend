@@ -44,11 +44,13 @@
         </div>
         <div class="filter-group">
           <label>Desde</label>
-          <input type="date" [ngModel]="_fDesde()" (ngModelChange)="_fDesde.set($event); _applyFilters()">
+          <input type="date" [ngModel]="_fDesde()" (ngModelChange)="_fDesde.set($event); _applyFilters()"
+            [max]="_fHasta() || _today">
         </div>
         <div class="filter-group">
           <label>Hasta</label>
-          <input type="date" [ngModel]="_fHasta()" (ngModelChange)="_fHasta.set($event); _applyFilters()">
+          <input type="date" [ngModel]="_fHasta()" (ngModelChange)="_fHasta.set($event); _applyFilters()"
+            [min]="_fDesde()" [max]="_today">
         </div>
       </div>
     }

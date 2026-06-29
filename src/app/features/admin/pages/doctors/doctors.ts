@@ -44,12 +44,15 @@ export class DoctorsPage {
   );
 
   readonly _availableOffices = computed(() => {
+    if (this._fType() === 'EXTERNO') return [];
     const takenByInterno = new Set(
       this.doctorVm.doctors()
         .filter(d => d.type === 'INTERNO' && d.officeId !== null && d.id !== this._editingId())
         .map(d => d.officeId)
     );
-    return this.officeVm.offices().filter(o => o.active && !takenByInterno.has(o.id));
+    return this.officeVm.offices().filter(o =>
+      o.active && o.type === 'INTERNAL' && !takenByInterno.has(o.id)
+    );
   });
 
   readonly _availableMedicos = computed(() => {
@@ -133,6 +136,11 @@ export class DoctorsPage {
       next:  () => this._cancel(),
       error: () => this._formError.set(this.t.get('admin.doctors.save-error')),
     });
+  }
+
+  _onTypeChange(type: DoctorType): void {
+    this._fType.set(type);
+    if (type === 'EXTERNO') this._fOfficeId.set(null);
   }
 
   _onUserChange(userId: number): void {

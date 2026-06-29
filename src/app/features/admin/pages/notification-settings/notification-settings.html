@@ -132,7 +132,7 @@
                 <label class="ns-field__label" for="f-rule-type">{{ t.get('admin.notifications.rules.modal.ruleType') }}</label>
                 <select id="f-rule-type" class="ns-field__select"
                   [value]="_fRuleType()" (change)="_onRuleTypeChange($event)">
-                  <option value="IMMEDIATE">{{ t.get('admin.notifications.rules.modal.ruleTypes.immediate') }}</option>
+                  <option value="IMMEDIATE" [disabled]="_hasImmediateRule()">{{ t.get('admin.notifications.rules.modal.ruleTypes.immediate') }}</option>
                   <option value="DAYS_BEFORE">{{ t.get('admin.notifications.rules.modal.ruleTypes.daysBefore') }}</option>
                 </select>
               </div>

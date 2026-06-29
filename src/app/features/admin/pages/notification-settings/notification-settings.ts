@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, signal } from '@angular/core';
+import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate }                     from '../../../../core/services/translate';
@@ -42,6 +42,11 @@ export class NotificationSettingsPage {
   // Scheduler field signal
   readonly _schedulerInput = signal<number>(8);
 
+  readonly _hasImmediateRule = computed(() => {
+    const editingId = this._editingRule()?.id;
+    return this.vm.rules().some(r => r.ruleType === 'IMMEDIATE' && r.id !== editingId);
+  });
+
   constructor() {
     afterNextRender(() => {
       this.vm.loadAll();
@@ -70,7 +75,7 @@ export class NotificationSettingsPage {
 
   _openCreate(): void {
     this._editingRule.set(null);
-    this._fRuleType.set('IMMEDIATE');
+    this._fRuleType.set(this._hasImmediateRule() ? 'DAYS_BEFORE' : 'IMMEDIATE');
     this._fDaysBefore.set(null);
     this._fChannel.set('EMAIL');
     this._fPurpose.set('REMINDER');

@@ -31,7 +31,7 @@
             [disabled]="_isEditing()">
             <option value="">{{ t.get('admin.doctors.fields.user-placeholder') }}</option>
             @for (u of (_isEditing() ? userVm.medicos() : _availableMedicos()); track u.id) {
-              <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
+              <option [value]="u.id" [selected]="u.id === _fUserId()">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
             }
           </select>
         </div>
@@ -40,7 +40,7 @@
           <label class="doc-page__label">{{ t.get('admin.doctors.fields.type') }} *</label>
           <select class="doc-page__input doc-page__select"
             [value]="_fType()"
-            (change)="_fType.set($any($event.target).value)">
+            (change)="_onTypeChange($any($event.target).value)">
             <option value="INTERNO">{{ t.get('admin.doctors.types.interno') }}</option>
             <option value="EXTERNO">{{ t.get('admin.doctors.types.externo') }}</option>
           </select>
@@ -73,7 +73,7 @@
         <div class="doc-page__field">
           <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-type') }}</label>
           <input class="doc-page__input doc-page__input--readonly" type="text" readonly
-            [value]="_selectedUser()?.idType === 'CEDULA' ? t.get('admin.doctors.fields.id-type-cedula') : _selectedUser()?.idType === 'PASAPORTE' ? t.get('admin.doctors.fields.id-type-pasaporte') : t.get('admin.doctors.fields.id-type-unknown')" />
+            [value]="_selectedUser()?.idType?.toUpperCase() === 'CEDULA' ? t.get('admin.doctors.fields.id-type-cedula') : _selectedUser()?.idType?.toUpperCase() === 'PASAPORTE' ? t.get('admin.doctors.fields.id-type-pasaporte') : t.get('admin.doctors.fields.id-type-unknown')" />
         </div>
 
         <div class="doc-page__field">
@@ -82,20 +82,22 @@
             [value]="_selectedUser()?.idNumber ?? '—'" />
         </div>
 
-        <div class="doc-page__field">
-          <label class="doc-page__label">{{ t.get('admin.doctors.fields.office') }}</label>
-          <select class="doc-page__input doc-page__select"
-            (change)="_fOfficeId.set(+$any($event.target).value || null)">
-            <option value="" [selected]="_fOfficeId() === null">{{ t.get('admin.doctors.fields.office-none') }}</option>
-            @for (o of _availableOffices(); track o.id) {
-              <option [value]="o.id" [selected]="o.id === _fOfficeId()">
-                {{ t.get('admin.offices.table.number') }} {{ o.number }}
-                @if (o.floor) { — {{ o.floor }} }
-                @if (o.specialtyName) { ({{ o.specialtyName }}) }
-              </option>
-            }
-          </select>
-        </div>
+        @if (_fType() !== 'EXTERNO') {
+          <div class="doc-page__field">
+            <label class="doc-page__label">{{ t.get('admin.doctors.fields.office') }}</label>
+            <select class="doc-page__input doc-page__select"
+              (change)="_fOfficeId.set(+$any($event.target).value || null)">
+              <option value="" [selected]="_fOfficeId() === null">{{ t.get('admin.doctors.fields.office-none') }}</option>
+              @for (o of _availableOffices(); track o.id) {
+                <option [value]="o.id" [selected]="o.id === _fOfficeId()">
+                  {{ t.get('admin.offices.table.number') }} {{ o.number }}
+                  @if (o.floor) { — {{ o.floor }} }
+                  @if (o.specialtyName) { ({{ o.specialtyName }}) }
+                </option>
+              }
+            </select>
+          </div>
+        }
       </div>
 
       <!-- Specialties -->
