@@ -26,6 +26,13 @@
     </div>
   }
 
+  @if (_callCenterMessage()) {
+    <div class="my-labs__alert my-labs__alert--info">
+      <lucide-icon name="phone" [size]="16"></lucide-icon>
+      {{ _callCenterMessage() }}
+    </div>
+  }
+
   @if (_loading()) {
     <div class="my-labs__state">
       <lucide-icon name="loader-circle" [size]="36" class="my-labs__spinner"></lucide-icon>

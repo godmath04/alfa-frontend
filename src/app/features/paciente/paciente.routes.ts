@@ -9,7 +9,7 @@ export const PACIENTE_ROUTES: Routes = [
     canActivate: [roleGuard],
     data: { roles: [Role.Paciente] },
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'appointment-history', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard)

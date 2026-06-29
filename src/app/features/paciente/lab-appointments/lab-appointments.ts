@@ -26,8 +26,9 @@ export class LabAppointmentsComponent {
   readonly _error         = signal<string | null>(null);
   readonly _page          = signal(0);
   readonly _totalPages    = signal(0);
-  readonly _cancellingId  = signal<number | null>(null);
-  readonly _cancelError   = signal<string | null>(null);
+  readonly _cancellingId      = signal<number | null>(null);
+  readonly _cancelError       = signal<string | null>(null);
+  readonly _callCenterMessage = signal<string | null>(null);
 
   // Map to store lab results by appointment ID for O(1) lookup
   readonly _resultsMap    = signal<Map<number, LabResult>>(new Map());
@@ -112,8 +113,20 @@ export class LabAppointmentsComponent {
   }
 
   _cancel(citaId: number): void {
-    this._cancellingId.set(citaId);
     this._cancelError.set(null);
+    this._callCenterMessage.set(null);
+
+    const cita = this._citas().find(c => c.citaId === citaId);
+    if (cita) {
+      const appointmentDate = new Date(`${cita.fecha}T${cita.horaInicio}`);
+      const hoursUntil = (appointmentDate.getTime() - Date.now()) / (1000 * 60 * 60);
+      if (hoursUntil < 24) {
+        this._callCenterMessage.set(this.t.get('lab.appointments.callCenterMessage'));
+        return;
+      }
+    }
+
+    this._cancellingId.set(citaId);
     this._svc.cancelarMiLabCita(citaId).subscribe({
       next: () => {
         this._cancellingId.set(null);

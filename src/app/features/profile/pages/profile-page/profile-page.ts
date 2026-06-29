@@ -10,8 +10,8 @@ import { Spinner } from '../../../../shared/components/spinner/spinner';
 import { PatternValidators } from '../../../../shared/validators/pattern.validator';
 import { MONTHS_FULL } from '../../../../shared/utils/date-time.utils';
 
-/** Group-level validator: assembled birth date must be today or in the past. */
-function birthDateNotFutureValidator(group: AbstractControl): ValidationErrors | null {
+/** Group-level validator: birth date must be in the past and at least 18 years ago. */
+function birthDateValidator(group: AbstractControl): ValidationErrors | null {
   const day   = group.get('birthDay')?.value;
   const month = group.get('birthMonth')?.value;
   const year  = group.get('birthYear')?.value;
@@ -19,7 +19,10 @@ function birthDateNotFutureValidator(group: AbstractControl): ValidationErrors |
   const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  return date <= today ? null : { birthDateFuture: true };
+  if (date > today) return { birthDateFuture: true };
+  const minAgeDate = new Date(today);
+  minAgeDate.setFullYear(minAgeDate.getFullYear() - 18);
+  return date <= minAgeDate ? null : { birthDateUnderAge: true };
 }
 
 @Component({
@@ -64,7 +67,7 @@ export class ProfilePage implements OnInit {
     birthDay:   ['', Validators.required],
     birthMonth: ['', Validators.required],
     birthYear:  ['', Validators.required],
-  }, { validators: [birthDateNotFutureValidator] });
+  }, { validators: [birthDateValidator] });
 
   constructor() {
     // Sync days-in-month when month/year change
@@ -152,9 +155,12 @@ export class ProfilePage implements OnInit {
       this.getFieldError('birthMonth') ||
       this.getFieldError('birthYear');
     if (required) return required;
-    // Then check the group-level future-date error
+    // Then check group-level validators
     if (this.profileForm.errors?.['birthDateFuture']) {
       return this.translate.get('profile.errors.notPastDate');
+    }
+    if (this.profileForm.errors?.['birthDateUnderAge']) {
+      return this.translate.get('profile.errors.underAge');
     }
     return false;
   }
