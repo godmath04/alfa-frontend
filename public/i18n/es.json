@@ -162,7 +162,8 @@
     },
     "nav": {
       "patients": "Pacientes",
-      "labManagement": "Gestión Lab"
+      "labManagement": "Gestión Lab",
+      "profile": "Mi Perfil"
     },
     "patients": {
       "title": "Gestión de Pacientes",

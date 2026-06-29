@@ -8,7 +8,7 @@
   <div class="lm-filters">
     <select class="lm-filters__select"
             [value]="_estadoFilter()"
-            (change)="_estadoFilter.set($any($event.target).value)">
+            (change)="_estadoFilter.set($any($event.target).value); _applyFilters()">
       <option value="">{{ t.get('ejecutivo.labManagement.filters.all') }}</option>
       <option value="PENDIENTE">PENDIENTE</option>
       <option value="CONFIRMADA">CONFIRMADA</option>
@@ -19,16 +19,21 @@
     <input class="lm-filters__date" type="date"
            [value]="_fechaDesde()"
            (change)="_fechaDesde.set($any($event.target).value)"
-           [placeholder]="t.get('ejecutivo.labManagement.filters.fechaDesde')" />
+           [max]="_fechaHasta() || null" />
 
     <input class="lm-filters__date" type="date"
            [value]="_fechaHasta()"
            (change)="_fechaHasta.set($any($event.target).value)"
-           [placeholder]="t.get('ejecutivo.labManagement.filters.fechaHasta')" />
+           [min]="_fechaDesde() || null" />
 
     <button class="lm-filters__btn" (click)="_applyFilters()">
       <lucide-icon name="search" [size]="15"></lucide-icon>
       {{ t.get('ejecutivo.labManagement.filters.apply') }}
+    </button>
+
+    <button class="lm-filters__btn lm-filters__btn--clear" (click)="_clearFilters()">
+      <lucide-icon name="x" [size]="15"></lucide-icon>
+      Limpiar
     </button>
   </div>
 

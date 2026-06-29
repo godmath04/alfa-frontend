@@ -1,5 +1,13 @@
 <div class="wizard">
 
+  <!-- ══ Back to profile (hidden on voucher step) ════════════ -->
+  @if (_currentStep < _totalSteps) {
+    <app-button variant="outline" (clicked)="_goBack()">
+      <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
+      Volver al Perfil
+    </app-button>
+  }
+
   <div class="wizard__header">
     <h1 class="wizard__title">{{ t.get('lab.booking.executive.title') }}</h1>
     <p class="wizard__subtitle">{{ t.get('lab.booking.executive.subtitle') }}</p>
@@ -27,13 +35,7 @@
     <!-- ══ STEP 1: Select lab ══ -->
     @if (_currentStep === 1) {
       <section class="step-section">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 class="step-section__title" style="margin-bottom: 0;">{{ t.get('lab.booking.steps.lab') }}</h2>
-          <app-button variant="outline" (clicked)="_goBack()">
-            <lucide-icon name="arrow-left" [size]="16"></lucide-icon>
-            Volver al Perfil
-          </app-button>
-        </div>
+        <h2 class="step-section__title">{{ t.get('lab.booking.steps.lab') }}</h2>
         @if (vm.labsLoading()) {
           <div class="step-section__loader"><app-spinner size="large"></app-spinner></div>
         } @else if (vm.labsError()) {

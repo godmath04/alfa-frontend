@@ -141,7 +141,7 @@
                   </div>
                 </div>
 
-                <!-- Acciones rápidas -->
+                <!-- Acciones rápidas — comentado temporalmente
                 <div class="citas__detail-card">
                   <h4 class="citas__detail-title">{{ t.get('medico.agenda.detail.quick-actions') }}</h4>
                   <div class="citas__quick-actions">
@@ -156,12 +156,9 @@
                       <lucide-icon name="user-x" [size]="14"></lucide-icon>
                       {{ t.get('medico.agenda.detail.absent') }}
                     </button>
-                    <button class="citas__action-btn citas__action-btn--purple" (click)="_stop($event)">
-                      <lucide-icon name="file-text" [size]="14"></lucide-icon>
-                      {{ t.get('medico.agenda.detail.view-record') }}
-                    </button>
                   </div>
                 </div>
+                -->
 
                 <!-- Notas de la cita -->
                 <div class="citas__detail-card">
@@ -171,12 +168,6 @@
                       <span class="citas__note-label">{{ t.get('medico.agenda.detail.notes-reason') }}</span>
                       {{ apt.reason }}
                     </div>
-                    <textarea
-                      class="citas__textarea"
-                      [placeholder]="t.get('medico.agenda.detail.notes-placeholder')"
-                      rows="3"
-                      (click)="_stop($event)"
-                    ></textarea>
                   </div>
                 </div>
 

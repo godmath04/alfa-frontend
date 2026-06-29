@@ -36,6 +36,10 @@ export const EXECUTIVE_ROUTES: Routes = [
         path: 'subir-resultado/:citaId',
         loadComponent: () => import('./pages/upload-lab-result/upload-lab-result').then(m => m.UploadLabResultPage),
       }, */
+      {
+        path: 'profile',
+        loadChildren: () => import('../profile/profile.routes').then(m => m.PROFILE_ROUTES)
+      },
     ],
   },
 ];
