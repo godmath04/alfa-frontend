@@ -486,18 +486,35 @@
       @if (vm.notificationsDonut(); as notifInfo) {
         <div class="donut-chart-wrapper">
           <div class="donut-svg-container">
-            <svg class="donut-svg" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" fill="none" r="40" stroke="#EF4444" stroke-width="20"></circle>
+            <svg class="donut-svg" viewBox="-10 -10 120 120">
+              <circle cx="50" cy="50" fill="none" r="40" stroke="#f3f3f3" stroke-width="20"></circle>
+              <circle cx="50" cy="50" fill="none" r="40" stroke="#EF4444"
+                      [attr.stroke-dasharray]="'251.2'"
+                      [attr.stroke-dashoffset]="notifInfo.failOffset"
+                      [attr.transform]="notifInfo.failTransform"
+                      [attr.stroke-width]="activeNotifSlice()?.nombre === 'Fallidas' ? 24 : 20"
+                      [style.filter]="activeNotifSlice()?.nombre === 'Fallidas' ? 'brightness(0.9)' : 'none'"
+                      class="donut-segment"
+                      (mouseenter)="activeNotifSlice.set({nombre: 'Fallidas', cantidad: 0, pct: notifInfo.failPct, color: '#EF4444'})"
+                      (mouseleave)="activeNotifSlice.set(null)"></circle>
               <circle cx="50" cy="50" fill="none" r="40" stroke="#22C55E"
                       [attr.stroke-dasharray]="'251.2'"
                       [attr.stroke-dashoffset]="notifInfo.successOffset"
                       [attr.transform]="notifInfo.successTransform"
-                      stroke-width="20"
-                      class="donut-segment"></circle>
+                      [attr.stroke-width]="activeNotifSlice()?.nombre === 'Exitosas' ? 24 : 20"
+                      [style.filter]="activeNotifSlice()?.nombre === 'Exitosas' ? 'brightness(0.9)' : 'none'"
+                      class="donut-segment"
+                      (mouseenter)="activeNotifSlice.set({nombre: 'Exitosas', cantidad: 0, pct: notifInfo.successPct, color: '#22C55E'})"
+                      (mouseleave)="activeNotifSlice.set(null)"></circle>
             </svg>
             <div class="donut-inner-content">
-              <span class="total-val">{{ notifInfo.total | number }}</span>
-              <span class="total-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+              @if (activeNotifSlice(); as active) {
+                <span class="total-val" [style.color]="active.color">{{ active.pct | number:'1.0-1' }}%</span>
+                <span class="total-label" style="max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ active.nombre }}">{{ active.nombre }}</span>
+              } @else {
+                <span class="total-val">{{ notifInfo.total | number }}</span>
+                <span class="total-label">{{ translate.get('gerencia.dashboard.charts.total') }}</span>
+              }
             </div>
           </div>
           @if (vm.notificacionesResumen(); as rawNotif) {

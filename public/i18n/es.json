@@ -1184,7 +1184,7 @@
       },
       "charts": {
         "citasEstado": "Citas por Estado",
-        "completadas": "Completadas",
+        "completadas": "Confirmadas",
         "pendientes": "Pendientes",
         "canceladas": "Canceladas",
         "distribucionEspecialidad": "Distribución por Especialidad",

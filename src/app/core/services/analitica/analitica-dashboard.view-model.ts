@@ -118,6 +118,8 @@ export class AnaliticaDashboardViewModel {
     
     return {
       total: data.total,
+      successPct,
+      failPct,
       successOffset: successOffset.toFixed(1),
       failOffset: failOffset.toFixed(1),
       successTransform: 'rotate(-90 50 50)',

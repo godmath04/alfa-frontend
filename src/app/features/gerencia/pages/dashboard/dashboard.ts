@@ -18,7 +18,7 @@ export class Dashboard implements OnInit {
   private readonly _authState = inject(AuthStateService);
 
   activeSlice = signal<{ nombre: string; cantidad: number; pct: number; color: string } | null>(null);
-
+  activeNotifSlice = signal<{ nombre: string; cantidad: number; pct: number; color: string } | null>(null);
   readonly currentDate = new Date().toLocaleDateString('es-ES', {
     weekday: 'long',
     day: 'numeric',
