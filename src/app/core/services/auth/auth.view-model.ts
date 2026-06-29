@@ -1,6 +1,6 @@
 import { Injectable, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { timeout, timer } from 'rxjs';
 
 import { AuthService } from './auth';
@@ -17,6 +17,7 @@ export class AuthViewModel {
   private readonly _authState   = inject(AuthStateService);
   private readonly _chatState   = inject(ChatStateService);
   private readonly _router      = inject(Router);
+  private readonly _route       = inject(ActivatedRoute);
   private readonly _destroyRef  = inject(DestroyRef);
 
   readonly loading         = signal<boolean>(false);
@@ -111,6 +112,11 @@ export class AuthViewModel {
   };
 
   private _redirectByRole(role: string): void {
+    const returnUrl = this._route.snapshot.queryParamMap.get('returnUrl');
+    if (returnUrl) {
+      this._router.navigateByUrl(returnUrl);
+      return;
+    }
     const route = this._roleRoutes[role as Role] ?? '/auth/login';
     this._router.navigate([route]);
   }
