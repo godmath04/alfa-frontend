@@ -113,8 +113,8 @@
         <div class="res-page__form-grid res-page__form-grid--3">
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.number') }} *</label>
-            <input class="res-page__input" type="text"
-              [value]="_ofNumber()" (input)="_ofNumber.set($any($event.target).value)"
+            <input class="res-page__input" type="text" maxlength="3"
+              [value]="_ofNumber()" (input)="_ofNumber.set($any($event.target).value.replace(/[^0-9]/g, ''))"
               [placeholder]="t.get('admin.offices.fields.number-placeholder')" />
           </div>
           <div class="res-page__field">
@@ -135,6 +135,7 @@
               <option value="EXTERNAL">{{ t.get('admin.offices.types.external') }}</option>
             </select>
           </div>
+          <!--
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.status') }}</label>
             <select class="res-page__input res-page__select"
@@ -144,6 +145,8 @@
               <option value="MAINTENANCE">{{ t.get('admin.offices.statuses.maintenance') }}</option>
             </select>
           </div>
+          -->
+          <!--
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.specialty') }}</label>
             <select class="res-page__input res-page__select"
@@ -154,6 +157,7 @@
               }
             </select>
           </div>
+          -->
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.equipment') }}</label>
             <input class="res-page__input" type="text"

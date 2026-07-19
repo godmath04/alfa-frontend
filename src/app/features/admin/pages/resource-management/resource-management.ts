@@ -196,8 +196,15 @@ export class ResourceManagementPage {
     const number = this._ofNumber().trim();
     if (!number) { this._formError.set(this.t.get('admin.offices.validation.number-required')); this.cdr.markForCheck(); return; }
 
+    const numInt = parseInt(number, 10);
+    if (isNaN(numInt) || numInt < 1 || numInt > 999) {
+      this._formError.set(this.t.get('admin.offices.validation.number-invalid'));
+      this.cdr.markForCheck();
+      return;
+    }
+
     const request: OfficeRequest = {
-      number,
+      number: String(numInt).padStart(3, '0'),
       floor:       this._ofFloor().trim() || undefined,
       type:        this._ofType(),
       status:      this._ofStatus(),

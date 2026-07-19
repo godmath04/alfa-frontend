@@ -583,7 +583,8 @@
         "reactivate": "Reactivar consultorio"
       },
       "validation": {
-        "number-required": "El número del consultorio es obligatorio"
+        "number-required": "El número del consultorio es obligatorio",
+        "number-invalid": "El número de consultorio debe ser un número positivo entre 001 y 999"
       }
     },
     "doctors": {
