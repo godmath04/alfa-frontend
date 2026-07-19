@@ -55,10 +55,9 @@
                 <td class="usr-page__td">
                   @if (_isEditing(u.id)) {
                     <select class="usr-page__role-select"
-                      [value]="_selectedRole()"
                       (change)="_selectedRole.set($any($event.target).value)">
                       @for (role of _ROLES; track role) {
-                        <option [value]="role">{{ _roleLabel(role) }}</option>
+                        <option [value]="role" [selected]="role === _selectedRole()">{{ _roleLabel(role) }}</option>
                       }
                     </select>
                   } @else {
