@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 
 import { Translate } from '../../../../core/services/translate';
@@ -7,15 +7,13 @@ import { LabService } from '../../../../core/services/lab/lab.service';
 import {
   StudyType, StudyTypeRequest,
   InsuranceType, InsuranceTypeRequest,
-  Laboratory, LaboratoryRequest, LaboratoryScheduleRequest,
+  Laboratory, LaboratoryRequest, LaboratoryScheduleRequest, LabSchedule,
 } from '../../../../core/models/lab.model';
 
 type ActiveTab = 'studyTypes' | 'insuranceTypes' | 'laboratories';
 
 // Backend uses 0-indexed days: 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
-// UI maps index → label starting at 0
-const DAY_NAMES  = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-const DAY_SHORT  = ['Lun',   'Mar',    'Mié',       'Jue',    'Vie',     'Sáb',    'Dom'];
+const DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 @Component({
   selector: 'app-lab-catalogs',
@@ -60,29 +58,33 @@ export class LabCatalogsPage implements OnInit {
   readonly _labName   = signal('');
   readonly _labFloor  = signal('');
 
-  // ─── Schedule sub-form (inside lab edit) ──────────────────────────────────
+  // ─── Schedule panel (doctors-style: per-day inline editing) ───────────────
 
-  readonly _schedDays  = signal<number[]>([]);
-  readonly _schedStart = signal('');
-  readonly _schedEnd   = signal('');
-  readonly _schedSlot  = signal<number>(30);
-  readonly _schedError = signal<string | null>(null);
-  readonly _schedSaving = signal(false);
+  // The lab whose schedule panel is open (null = closed)
+  readonly _scheduleLab = signal<Laboratory | null>(null);
 
-  // Values 0–6 match backend @Min(0) @Max(6). 0=Monday … 6=Sunday
-  readonly _DAYS = [0,1,2,3,4,5,6].map(d => ({
-    value: d,
-    label: DAY_NAMES[d],
-    short: DAY_SHORT[d],
-  }));
+  // 7 days matching backend 0-indexed convention
+  readonly _WEEK_DAYS = [0,1,2,3,4,5,6].map(d => ({ value: d, label: DAY_NAMES[d] }));
+
+  // Per-day editing state: { [dayOfWeek]: { start, end, slot } }
+  readonly _editingDayStart = signal<Record<number, string>>({});
+  readonly _editingDayEnd   = signal<Record<number, string>>({});
+  readonly _editingDaySlot  = signal<Record<number, number>>({});
+
+  // Per-day saving/error state
+  readonly _daySaving = signal<Record<number, boolean>>({});
+  readonly _dayError  = signal<string | null>(null);
+
+  /** Schedules of the currently open lab as a map {dayOfWeek → LabSchedule} */
+  readonly _schedMap = computed<Record<number, LabSchedule>>(() => {
+    const lab = this._scheduleLab();
+    if (!lab) return {};
+    return Object.fromEntries(lab.schedules.map(s => [s.dayOfWeek, s]));
+  });
+
+  // ─── Day name helper ──────────────────────────────────────────────────────
 
   readonly dayName = (d: number) => DAY_NAMES[d] ?? String(d);
-
-  // ─── Computed editing lab (for live schedule list in edit form) ────────────
-
-  readonly _editingLab = computed(() =>
-    this._laboratories().find(l => l.id === this._editingId()) ?? null
-  );
 
   ngOnInit(): void {
     this._loadAll();
@@ -106,7 +108,17 @@ export class LabCatalogsPage implements OnInit {
       });
     } else {
       this._svc.getAllLaboratories().subscribe({
-        next: list => { this._laboratories.set(list); this._loading.set(false); this._cdr.markForCheck(); },
+        next: list => {
+          this._laboratories.set(list);
+          this._loading.set(false);
+          // Keep the schedule panel in sync after reload
+          const openLabId = this._scheduleLab()?.id;
+          if (openLabId != null) {
+            const updated = list.find(l => l.id === openLabId) ?? null;
+            this._scheduleLab.set(updated);
+          }
+          this._cdr.markForCheck();
+        },
         error: () => { this._listError.set('lab.catalogs.loadError'); this._loading.set(false); this._cdr.markForCheck(); },
       });
     }
@@ -117,6 +129,7 @@ export class LabCatalogsPage implements OnInit {
   _switchTab(tab: ActiveTab): void {
     this._activeTab.set(tab);
     this._closeForm();
+    this._closeSchedulePanel();
     this._loadAll();
   }
 
@@ -127,6 +140,7 @@ export class LabCatalogsPage implements OnInit {
     this._formError.set(null);
     this._resetForm();
     this._formVisible.set(true);
+    this._closeSchedulePanel();
     this._cdr.markForCheck();
   }
 
@@ -154,8 +168,8 @@ export class LabCatalogsPage implements OnInit {
     this._labName.set(lab.name);
     this._labFloor.set(lab.floor ?? '');
     this._formError.set(null);
-    this._resetSchedSubForm();
     this._formVisible.set(true);
+    this._closeSchedulePanel();
     this._cdr.markForCheck();
   }
 
@@ -165,31 +179,121 @@ export class LabCatalogsPage implements OnInit {
     this._formVisible.set(false);
     this._editingId.set(null);
     this._formError.set(null);
-    this._resetSchedSubForm();
     this._cdr.markForCheck();
   }
 
   private _resetForm(): void {
     this._fname.set(''); this._fdescription.set('');
     this._labNumber.set(''); this._labName.set(''); this._labFloor.set('');
-    this._resetSchedSubForm();
   }
 
-  private _resetSchedSubForm(): void {
-    this._schedDays.set([]);
-    this._schedStart.set('');
-    this._schedEnd.set('');
-    this._schedSlot.set(30);
-    this._schedError.set(null);
+  // ─── Schedule panel (doctors-style) ───────────────────────────────────────
+
+  _openSchedules(lab: Laboratory): void {
+    if (this._scheduleLab()?.id === lab.id) {
+      this._closeSchedulePanel();
+    } else {
+      this._scheduleLab.set(lab);
+      this._editingDayStart.set({});
+      this._editingDayEnd.set({});
+      this._editingDaySlot.set({});
+      this._daySaving.set({});
+      this._dayError.set(null);
+      this._closeForm();
+      this._cdr.markForCheck();
+    }
   }
 
-  // ─── Save ─────────────────────────────────────────────────────────────────
+  private _closeSchedulePanel(): void {
+    this._scheduleLab.set(null);
+    this._editingDayStart.set({});
+    this._editingDayEnd.set({});
+    this._editingDaySlot.set({});
+    this._daySaving.set({});
+    this._dayError.set(null);
+    this._cdr.markForCheck();
+  }
+
+  _getScheduleForDay(d: number): LabSchedule | undefined {
+    return this._schedMap()[d];
+  }
+
+  _isEditingDay(d: number): boolean {
+    return d in this._editingDayStart();
+  }
+
+  _startEditDay(d: number): void {
+    const existing = this._getScheduleForDay(d);
+    this._editingDayStart.update(m => ({ ...m, [d]: existing?.startTime.slice(0,5) ?? '08:00' }));
+    this._editingDayEnd.update(m =>   ({ ...m, [d]: existing?.endTime.slice(0,5)   ?? '17:00' }));
+    this._editingDaySlot.update(m =>  ({ ...m, [d]: existing?.slotDurationMinutes  ?? 30 }));
+    this._dayError.set(null);
+    this._cdr.markForCheck();
+  }
+
+  _cancelEditDay(d: number): void {
+    this._editingDayStart.update(m => { const n = { ...m }; delete n[d]; return n; });
+    this._editingDayEnd.update(m =>   { const n = { ...m }; delete n[d]; return n; });
+    this._editingDaySlot.update(m =>  { const n = { ...m }; delete n[d]; return n; });
+    this._cdr.markForCheck();
+  }
+
+  _setDayField(d: number, field: 'start' | 'end', value: string): void {
+    if (field === 'start') this._editingDayStart.update(m => ({ ...m, [d]: value }));
+    else                   this._editingDayEnd.update(m =>   ({ ...m, [d]: value }));
+  }
+
+  _setDaySlot(d: number, slot: number): void {
+    this._editingDaySlot.update(m => ({ ...m, [d]: slot }));
+  }
+
+  _saveDay(d: number): void {
+    const labId = this._scheduleLab()?.id;
+    const start = this._editingDayStart()[d];
+    const end   = this._editingDayEnd()[d];
+    const slot  = this._editingDaySlot()[d] ?? 30;
+    if (!labId || !start || !end) return;
+
+    this._daySaving.update(m => ({ ...m, [d]: true }));
+    this._dayError.set(null);
+
+    const req: LaboratoryScheduleRequest = {
+      dayOfWeek:           d,
+      startTime:           `${start}:00`,
+      endTime:             `${end}:00`,
+      slotDurationMinutes: slot,
+    };
+
+    this._svc.upsertLabSchedule(labId, req).subscribe({
+      next: () => {
+        this._daySaving.update(m => { const n = { ...m }; delete n[d]; return n; });
+        this._cancelEditDay(d);
+        this._loadAll();
+      },
+      error: () => {
+        this._daySaving.update(m => { const n = { ...m }; delete n[d]; return n; });
+        this._dayError.set(this.t.get('lab.catalogs.saveError'));
+        this._cdr.markForCheck();
+      },
+    });
+  }
+
+  _deleteDay(d: number): void {
+    const labId = this._scheduleLab()?.id;
+    const sched = this._getScheduleForDay(d);
+    if (!labId || !sched) return;
+    this._svc.deleteLabSchedule(labId, sched.id).subscribe({
+      next: () => this._loadAll(),
+    });
+  }
+
+  // ─── Save lab / study-type / insurance ────────────────────────────────────
 
   _save(): void {
     const tab = this._activeTab();
-    if (tab === 'studyTypes')     this._saveStudyType();
+    if (tab === 'studyTypes')          this._saveStudyType();
     else if (tab === 'insuranceTypes') this._saveInsuranceType();
-    else                          this._saveLab();
+    else                               this._saveLab();
   }
 
   private _saveStudyType(): void {
@@ -225,19 +329,7 @@ export class LabCatalogsPage implements OnInit {
     const id = this._editingId();
     const action$ = id !== null ? this._svc.updateLaboratory(id, req) : this._svc.createLaboratory(req);
     action$.subscribe({
-      next: (lab) => {
-        this._formError.set(null);
-        // Bug fix: after creating a NEW lab, stay in edit mode so
-        // the user can immediately add schedules without closing the form.
-        if (id === null) {
-          this._editingId.set(lab.id);
-          this._loadAll();
-          this._cdr.markForCheck();
-        } else {
-          this._closeForm();
-          this._loadAll();
-        }
-      },
+      next: () => { this._closeForm(); this._loadAll(); },
       error: () => { this._formError.set(this.t.get('lab.catalogs.saveError')); this._cdr.markForCheck(); },
     });
   }
@@ -257,61 +349,5 @@ export class LabCatalogsPage implements OnInit {
   _toggleLab(lab: Laboratory): void {
     const a$: Observable<unknown> = lab.active ? this._svc.deactivateLaboratory(lab.id) : this._svc.reactivateLaboratory(lab.id);
     a$.subscribe(() => this._loadAll());
-  }
-
-  // ─── Schedule sub-form ────────────────────────────────────────────────────
-
-  _toggleSchedDay(d: number): void {
-    const cur = this._schedDays();
-    this._schedDays.set(cur.includes(d) ? cur.filter(x => x !== d) : [...cur, d]);
-    this._cdr.markForCheck();
-  }
-
-  _isSchedDaySelected(d: number): boolean {
-    return this._schedDays().includes(d);
-  }
-
-  _addSchedule(): void {
-    const labId = this._editingId();
-    const days  = this._schedDays();
-    const start = this._schedStart();
-    const end   = this._schedEnd();
-
-    if (!labId)        return;
-    if (!days.length)  { this._schedError.set(this.t.get('lab.catalogs.validation.scheduleRequired')); this._cdr.markForCheck(); return; }
-    if (!start || !end){ this._schedError.set(this.t.get('lab.catalogs.validation.scheduleRequired')); this._cdr.markForCheck(); return; }
-
-    this._schedSaving.set(true);
-    this._schedError.set(null);
-
-    const calls = days.map(d => this._svc.upsertLabSchedule(labId, {
-      dayOfWeek:           d,
-      startTime:           `${start}:00`,
-      endTime:             `${end}:00`,
-      slotDurationMinutes: this._schedSlot(),
-    } satisfies LaboratoryScheduleRequest));
-
-    forkJoin(calls).subscribe({
-      next: () => {
-        this._schedSaving.set(false);
-        // Bug fix: only reset the schedule sub-form, keep the lab edit form
-        // open so the user can continue adding more schedules.
-        this._resetSchedSubForm();
-        // Reload so the schedule chips in the edit form update live.
-        this._loadAll();
-        this._cdr.markForCheck();
-      },
-      error: () => {
-        this._schedSaving.set(false);
-        this._schedError.set(this.t.get('lab.catalogs.saveError'));
-        this._cdr.markForCheck();
-      },
-    });
-  }
-
-  _deleteSchedule(labId: number, scheduleId: number): void {
-    this._svc.deleteLabSchedule(labId, scheduleId).subscribe({
-      next: () => this._loadAll(),
-    });
   }
 }

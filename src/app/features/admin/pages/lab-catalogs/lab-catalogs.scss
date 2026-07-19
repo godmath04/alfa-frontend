@@ -179,50 +179,8 @@ $bp-mobile: 768px;
     }
   }
 
-  // ─── Schedule sub-form (inside lab edit) ──────────────
-  &__sched-section {
-    border-top: 1px solid var(--color-background);
-    margin-top: 20px;
-    padding-top: 20px;
-  }
+  // (old day-toggle styles removed — replaced by doctors-style schedule panel)
 
-  &__sched-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-primary-dark);
-    margin: 0 0 14px;
-  }
-
-  &__day-toggles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-    margin-bottom: 16px;
-  }
-
-  &__day-toggle {
-    padding: 6px 16px;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-full);
-    background: var(--color-white);
-    color: var(--color-text-muted);
-    font-size: 14px;
-    font-weight: 500;
-    font-family: var(--font-family);
-    cursor: pointer;
-    transition: all 0.15s;
-
-    &:hover { border-color: var(--color-accent-1); color: var(--color-accent-1); }
-
-    &--selected {
-      background: var(--color-accent-1);
-      border-color: var(--color-accent-1);
-      color: var(--color-white);
-    }
-  }
-
-  &__sched-actions { margin-top: 12px; }
 
   // ─── States ───────────────────────────────────────────
   &__state {
@@ -307,39 +265,161 @@ $bp-mobile: 768px;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
 
-    &--edit       { background: rgba(54, 154, 217, 0.1); color: var(--color-accent-1);
+    &--edit        { background: rgba(54, 154, 217, 0.1); color: var(--color-accent-1);
                     &:hover { background: var(--color-accent-1); color: var(--color-white); } }
-    &--deactivate { background: rgba(239, 68, 68, 0.1);  color: var(--color-error);
+    &--deactivate  { background: rgba(239, 68, 68, 0.1);  color: var(--color-error);
                     &:hover { background: var(--color-error); color: var(--color-white); } }
-    &--reactivate { background: rgba(34, 197, 94, 0.1);  color: #15803d;
+    &--reactivate  { background: rgba(34, 197, 94, 0.1);  color: #15803d;
                     &:hover { background: #22c55e; color: var(--color-white); } }
+    // Schedule clock button — mirrors doctors page
+    &--schedule        { background: rgba(139, 92, 246, 0.1); color: #7c3aed;
+                         &:hover { background: #7c3aed; color: var(--color-white); } }
+    &--schedule-active { background: #7c3aed !important; color: var(--color-white) !important; }
+  }
+
+  // ─── Doctors-style schedule panel ─────────────────────
+  &__schedule-panel {
+    margin-top: 20px;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border-top: 3px solid #7c3aed;
+    overflow: hidden;
+  }
+
+  &__schedule-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-background);
+  }
+
+  &__schedule-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    margin: 0;
+    lucide-icon { color: #7c3aed; }
+  }
+
+  &__schedule-subtitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  &__schedule-error {
+    font-size: 13px;
+    color: var(--color-error);
+    margin: 12px 20px 0;
+  }
+
+  &__schedule-grid {
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__schedule-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-background);
+    flex-wrap: wrap;
+    &:last-child { border-bottom: none; }
+  }
+
+  &__day-name {
+    width: 90px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    flex-shrink: 0;
+  }
+
+  &__time-input {
+    padding: 6px 10px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    width: 110px;
+    &:focus { outline: none; border-color: #7c3aed; }
+  }
+
+  &__time-sep { color: var(--color-text-muted); font-size: 14px; }
+
+  &__time-display {
+    font-size: 14px;
+    color: var(--color-text-primary);
+    font-weight: 500;
+    min-width: 115px;
+  }
+
+  &__slot-select {
+    padding: 6px 10px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    background: var(--color-white);
+    cursor: pointer;
+    &:focus { outline: none; border-color: #7c3aed; }
+  }
+
+  &__slot-badge {
+    font-size: 12px;
+    color: #7c3aed;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  &__no-schedule {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    font-style: italic;
+    min-width: 115px;
+  }
+
+  &__sched-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+    &--save   { background: rgba(34, 197, 94, 0.1);  color: #15803d; &:hover { background: #22c55e; color: var(--color-white); } &:disabled { opacity: 0.5; cursor: not-allowed; } }
+    &--cancel { background: rgba(107, 114, 128, 0.1); color: var(--color-text-muted); &:hover { background: var(--color-text-muted); color: var(--color-white); } }
+    &--edit   { background: rgba(54, 154, 217, 0.1);  color: var(--color-accent-1); &:hover { background: var(--color-accent-1); color: var(--color-white); } }
+    &--delete { background: rgba(239, 68, 68, 0.1);   color: var(--color-error);    &:hover { background: var(--color-error); color: var(--color-white); } }
+    &--add    { background: rgba(139, 92, 246, 0.1);  color: #7c3aed;               &:hover { background: #7c3aed; color: var(--color-white); } }
   }
 }
 
-// ── Schedule chips ─────────────────────────────────────────────────────────
+// ── Schedule chips (used in table column) ──────────────────────────────────
 
-.schedule-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.schedule-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .schedule-chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 12px;
-  background: rgba(54, 154, 217, 0.12);
+  padding: 3px 10px;
+  background: rgba(54, 154, 217, 0.1);
   color: var(--color-accent-1);
   border-radius: var(--radius-full);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
-
-  &__del {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    color: inherit;
-    opacity: 0.6;
-    display: flex;
-    align-items: center;
-    &:hover { opacity: 1; }
-  }
 }

@@ -87,76 +87,6 @@
                    (input)="_labFloor.set($any($event.target).value)" />
           </div>
         </div>
-
-        <!-- Schedule management (only when editing an existing lab) -->
-        @if (_editingId() !== null) {
-          <div class="res-page__sched-section">
-            <p class="res-page__sched-title">{{ t.get('lab.catalogs.scheduleForm.title') }}</p>
-
-            <!-- Existing schedules -->
-            @if (_editingLab()?.schedules?.length) {
-              <div class="schedule-chips">
-                @for (sch of _editingLab()!.schedules; track sch.id) {
-                  <span class="schedule-chip">
-                    {{ dayName(sch.dayOfWeek) }} {{ sch.startTime.slice(0,5) }}–{{ sch.endTime.slice(0,5) }}
-                    <button class="schedule-chip__del" (click)="_deleteSchedule(_editingId()!, sch.id)"
-                            [title]="t.get('lab.catalogs.actions.deleteSchedule')">
-                      <lucide-icon name="x" [size]="12"></lucide-icon>
-                    </button>
-                  </span>
-                }
-              </div>
-            }
-
-            <!-- Day toggles -->
-            <p class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.day') }} *</p>
-            <div class="res-page__day-toggles">
-              @for (d of _DAYS; track d.value) {
-                <button type="button" class="res-page__day-toggle"
-                        [class.res-page__day-toggle--selected]="_isSchedDaySelected(d.value)"
-                        (click)="_toggleSchedDay(d.value)">
-                  {{ d.short }}
-                </button>
-              }
-            </div>
-
-            <!-- Time inputs + slot -->
-            <div class="res-page__form-grid">
-              <div class="res-page__field">
-                <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.start') }} *</label>
-                <input class="res-page__input" type="time" [value]="_schedStart()"
-                       (input)="_schedStart.set($any($event.target).value)" />
-              </div>
-              <div class="res-page__field">
-                <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.end') }} *</label>
-                <input class="res-page__input" type="time" [value]="_schedEnd()"
-                       (input)="_schedEnd.set($any($event.target).value)" />
-              </div>
-              <div class="res-page__field">
-                <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.slot') }}</label>
-                <select class="res-page__input res-page__select"
-                        (change)="_schedSlot.set(+$any($event.target).value)">
-                  <option value="15" [selected]="_schedSlot() === 15">15 min</option>
-                  <option value="30" [selected]="_schedSlot() === 30">30 min</option>
-                  <option value="45" [selected]="_schedSlot() === 45">45 min</option>
-                  <option value="60" [selected]="_schedSlot() === 60">60 min</option>
-                </select>
-              </div>
-            </div>
-
-            @if (_schedError()) {
-              <p class="res-page__form-error">{{ _schedError() }}</p>
-            }
-
-            <div class="res-page__sched-actions">
-              <button class="res-page__btn res-page__btn--primary" type="button"
-                      (click)="_addSchedule()" [disabled]="_schedSaving()">
-                <lucide-icon name="clock-plus" [size]="16"></lucide-icon>
-                {{ t.get('lab.catalogs.actions.addSchedule') }}
-              </button>
-            </div>
-          </div>
-        }
       }
 
       @if (_formError()) {
@@ -337,6 +267,9 @@
                           {{ dayName(sch.dayOfWeek) }} {{ sch.startTime.slice(0,5) }}–{{ sch.endTime.slice(0,5) }}
                         </span>
                       }
+                      @if (lab.schedules.length === 0) {
+                        <span class="res-page__td--muted">—</span>
+                      }
                     </div>
                   </td>
                   <td class="res-page__td">
@@ -348,6 +281,13 @@
                   </td>
                   <td class="res-page__td">
                     <div class="res-page__actions">
+                      <!-- Schedules button (doctors-style) -->
+                      <button class="res-page__action-btn res-page__action-btn--schedule"
+                              [class.res-page__action-btn--schedule-active]="_scheduleLab()?.id === lab.id"
+                              (click)="_openSchedules(lab)"
+                              [title]="t.get('lab.catalogs.actions.schedules')">
+                        <lucide-icon name="clock" [size]="15"></lucide-icon>
+                      </button>
                       <button class="res-page__action-btn res-page__action-btn--edit"
                               (click)="_openEditLab(lab)" [title]="t.get('lab.catalogs.actions.edit')">
                         <lucide-icon name="pencil" [size]="15"></lucide-icon>
@@ -371,6 +311,86 @@
           </table>
         }
       </div>
+
+      <!-- ─── Schedule panel (doctors-style) ─────────────────────────────── -->
+      @if (_scheduleLab()) {
+        <div class="res-page__schedule-panel">
+          <div class="res-page__schedule-header">
+            <h3 class="res-page__schedule-title">
+              <lucide-icon name="clock" [size]="18"></lucide-icon>
+              {{ t.get('lab.catalogs.schedulePanel.title') }} — {{ _scheduleLab()!.name }}
+              <span class="res-page__schedule-subtitle">{{ _scheduleLab()!.number }}</span>
+            </h3>
+          </div>
+
+          @if (_dayError()) {
+            <p class="res-page__schedule-error">{{ _dayError() }}</p>
+          }
+
+          <div class="res-page__schedule-grid">
+            @for (day of _WEEK_DAYS; track day.value) {
+              <div class="res-page__schedule-row">
+                <span class="res-page__day-name">{{ day.label }}</span>
+
+                @if (_isEditingDay(day.value)) {
+                  <!-- Editing mode -->
+                  <input class="res-page__time-input" type="time"
+                    [value]="_editingDayStart()[day.value]"
+                    (input)="_setDayField(day.value, 'start', $any($event.target).value)" />
+                  <span class="res-page__time-sep">–</span>
+                  <input class="res-page__time-input" type="time"
+                    [value]="_editingDayEnd()[day.value]"
+                    (input)="_setDayField(day.value, 'end', $any($event.target).value)" />
+
+                  <!-- Slot duration selector -->
+                  <select class="res-page__slot-select"
+                          (change)="_setDaySlot(day.value, +$any($event.target).value)">
+                    <option value="15" [selected]="(_editingDaySlot()[day.value] ?? 30) === 15">15 min</option>
+                    <option value="30" [selected]="(_editingDaySlot()[day.value] ?? 30) === 30">30 min</option>
+                    <option value="45" [selected]="(_editingDaySlot()[day.value] ?? 30) === 45">45 min</option>
+                    <option value="60" [selected]="(_editingDaySlot()[day.value] ?? 30) === 60">60 min</option>
+                  </select>
+
+                  <button class="res-page__sched-btn res-page__sched-btn--save"
+                    (click)="_saveDay(day.value)"
+                    [disabled]="_daySaving()[day.value]">
+                    <lucide-icon name="check" [size]="14"></lucide-icon>
+                  </button>
+                  <button class="res-page__sched-btn res-page__sched-btn--cancel"
+                    (click)="_cancelEditDay(day.value)">
+                    <lucide-icon name="x" [size]="14"></lucide-icon>
+                  </button>
+
+                } @else if (_getScheduleForDay(day.value)) {
+                  <!-- Has schedule, display mode -->
+                  <span class="res-page__time-display">
+                    {{ _getScheduleForDay(day.value)!.startTime.slice(0,5) }} – {{ _getScheduleForDay(day.value)!.endTime.slice(0,5) }}
+                  </span>
+                  <span class="res-page__slot-badge">
+                    {{ _getScheduleForDay(day.value)!.slotDurationMinutes }} min / turno
+                  </span>
+                  <button class="res-page__sched-btn res-page__sched-btn--edit"
+                    (click)="_startEditDay(day.value)">
+                    <lucide-icon name="pencil" [size]="14"></lucide-icon>
+                  </button>
+                  <button class="res-page__sched-btn res-page__sched-btn--delete"
+                    (click)="_deleteDay(day.value)">
+                    <lucide-icon name="x-circle" [size]="14"></lucide-icon>
+                  </button>
+
+                } @else {
+                  <!-- No schedule yet -->
+                  <span class="res-page__no-schedule">Sin horario</span>
+                  <button class="res-page__sched-btn res-page__sched-btn--add"
+                    (click)="_startEditDay(day.value)">
+                    <lucide-icon name="plus" [size]="14"></lucide-icon>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
     }
 
   }

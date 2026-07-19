@@ -1122,8 +1122,12 @@
         "edit": "Editar",
         "deactivate": "Desactivar",
         "reactivate": "Reactivar",
+        "schedules": "Ver / editar horarios",
         "addSchedule": "Agregar Horario",
         "deleteSchedule": "Eliminar Horario"
+      },
+      "schedulePanel": {
+        "title": "Horarios de Atención"
       },
       "scheduleForm": {
         "title": "Agregar Horario de Atención",
