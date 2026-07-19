@@ -574,7 +574,7 @@
         "type": "Tipo",
         "status": "Estado",
         "specialty": "Especialidad",
-        "active": "Activo",
+        "active": "Estado",
         "actions": "Acciones"
       },
       "actions": {
