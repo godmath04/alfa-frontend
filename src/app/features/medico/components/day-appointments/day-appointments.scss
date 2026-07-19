@@ -298,6 +298,7 @@ $bp-mobile: 768px;
     &:hover { filter: brightness(0.92); }
 
     &--purple { background: rgba(168, 85, 247,  0.1); color: #6b21a8; }
+    &--green  { background: rgba(34, 197, 94,   0.1); color: #166534; }
     &--red    { background: rgba(239, 68, 68,   0.1); color: #b91c1c; }
 
     &:disabled {
