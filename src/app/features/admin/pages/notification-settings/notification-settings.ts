@@ -56,6 +56,10 @@ export class NotificationSettingsPage {
 
   // ─── Scheduler actions ────────────────────────────────────────────────────
 
+  _blockSymbols(event: KeyboardEvent): void {
+    if (['-', '+', 'e', 'E', '.'].includes(event.key)) event.preventDefault();
+  }
+
   _onSchedulerInput(event: Event): void {
     const val = parseInt((event.target as HTMLInputElement).value, 10);
     this._schedulerInput.set(isNaN(val) ? 0 : Math.min(23, Math.max(0, val)));
@@ -110,11 +114,21 @@ export class NotificationSettingsPage {
   }
 
   _save(): void {
-    // Validate daysBefore when ruleType is DAYS_BEFORE
     if (this._fRuleType() === 'DAYS_BEFORE') {
       const days = this._fDaysBefore();
       if (!days || days <= 0) {
         this._fError.set(this.t.get('admin.notifications.rules.modal.validation.daysRequired'));
+        return;
+      }
+      const editingId = this._editingRule()?.id;
+      const duplicate = this.vm.rules().some(r =>
+        r.ruleType === 'DAYS_BEFORE' &&
+        r.daysBefore === days &&
+        r.purpose === this._fPurpose() &&
+        r.id !== editingId
+      );
+      if (duplicate) {
+        this._fError.set(this.t.get('admin.notifications.rules.modal.validation.duplicateRule'));
         return;
       }
     }

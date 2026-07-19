@@ -823,7 +823,8 @@
           "cancel": "Cancelar",
           "protectedRule": "Esta regla es de seguridad del sistema y no puede desactivarse",
           "validation": {
-            "daysRequired": "Los días de anticipación son obligatorios y deben ser mayores a 0"
+            "daysRequired": "Los días de anticipación son obligatorios y deben ser mayores a 0",
+            "duplicateRule": "Ya existe una regla con la misma cantidad de días y propósito"
           },
           "ruleTypes": {
             "immediate": "Inmediata",

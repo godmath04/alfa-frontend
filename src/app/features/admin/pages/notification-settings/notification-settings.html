@@ -52,6 +52,7 @@
             min="0"
             max="23"
             [value]="_schedulerInput()"
+            (keydown)="_blockSymbols($event)"
             (input)="_onSchedulerInput($event)"
           />
         </div>
