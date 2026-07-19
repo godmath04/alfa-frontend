@@ -22,7 +22,7 @@ export class SystemLogs {
 
   readonly _activeTab = signal<'SISTEMA' | 'NOTIFICACIONES'>('SISTEMA');
 
-  readonly _servicios = ['TODOS', 'alfa-admin-service', 'alfa-agendamiento-service', 'alfa-analitica-service', 'alfa-auth-service', 'alfa-eureka-server', 'alfa-api-gateway', 'alfa-ia-service', 'alfa-laboratorio-service', 'alfa-notificaciones-service'];
+  readonly _servicios = ['TODOS', 'alfa-admin-service', 'alfa-agendamiento-service', 'alfa-analitica-service', 'alfa-auth-service', 'alfa-api-gateway', 'alfa-laboratorio-service', 'alfa-notificaciones-service'];
   readonly _niveles   = ['TODOS', 'INFO', 'WARN', 'ERROR', 'DEBUG'];
 
   readonly _fServicio = signal('TODOS');
