@@ -87,6 +87,7 @@ export class AgendaViewModel {
       pending:   apts.filter(a => effective(a) === 'PENDIENTE').length,
       completed: apts.filter(a => effective(a) === 'COMPLETADA').length,
       cancelled: apts.filter(a => effective(a) === 'CANCELADA').length,
+      noShow:    apts.filter(a => effective(a) === 'NO_ASISTIO').length,
     };
   });
 

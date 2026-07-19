@@ -16,6 +16,7 @@ export class DoctorDashboardComponent {
   @Input() pending:   number = 0;
   @Input() completed: number = 0;
   @Input() cancelled: number = 0;
+  @Input() noShow:    number = 0;
 
   readonly t = inject(Translate);
 }
