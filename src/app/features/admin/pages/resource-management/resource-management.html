@@ -158,12 +158,14 @@
             </select>
           </div>
           -->
+          <!--
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.offices.fields.equipment') }}</label>
             <input class="res-page__input" type="text"
               [value]="_ofEquipment()" (input)="_ofEquipment.set($any($event.target).value)"
               [placeholder]="t.get('admin.offices.fields.equipment-placeholder')" />
           </div>
+          -->
         </div>
       }
 
@@ -331,7 +333,7 @@
                 <th class="res-page__th">{{ t.get('admin.offices.table.number') }}</th>
                 <th class="res-page__th">{{ t.get('admin.offices.table.floor') }}</th>
                 <th class="res-page__th">{{ t.get('admin.offices.table.type') }}</th>
-                <th class="res-page__th">{{ t.get('admin.offices.table.status') }}</th>
+                <!-- <th class="res-page__th">{{ t.get('admin.offices.table.status') }}</th> -->
                 <!-- <th class="res-page__th">{{ t.get('admin.offices.table.specialty') }}</th> -->
                 <th class="res-page__th">{{ t.get('admin.offices.table.active') }}</th>
                 <th class="res-page__th">{{ t.get('admin.offices.table.actions') }}</th>
@@ -347,6 +349,7 @@
                       {{ o.type === 'INTERNAL' ? t.get('admin.offices.types.internal') : t.get('admin.offices.types.external') }}
                     </span>
                   </td>
+                  <!--
                   <td class="res-page__td">
                     <span class="res-page__badge"
                       [class.res-page__badge--available]="o.status === 'AVAILABLE'"
@@ -355,6 +358,7 @@
                       {{ t.get('admin.offices.statuses.' + o.status.toLowerCase()) }}
                     </span>
                   </td>
+                  -->
                   <!-- <td class="res-page__td res-page__td--muted">{{ o.specialtyName ?? '—' }}</td> -->
                   <td class="res-page__td">
                     <span class="res-page__badge" [class.res-page__badge--active]="o.active" [class.res-page__badge--inactive]="!o.active">
