@@ -220,6 +220,11 @@ $bp-mobile: 768px;
       background: rgba(239, 68, 68, 0.1);
       color: #b91c1c;
     }
+
+    &--no-show {
+      background: rgba(168, 85, 247, 0.1);
+      color: #6b21a8;
+    }
   }
 
   // ─── Expand icon ─────────────────────────────────────

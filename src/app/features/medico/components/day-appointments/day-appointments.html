@@ -89,6 +89,7 @@
               [class.citas__badge--confirmed]="_getEffectiveStatus(apt) === 'CONFIRMADA'"
               [class.citas__badge--completed]="_getEffectiveStatus(apt) === 'COMPLETADA'"
               [class.citas__badge--cancelled]="_getEffectiveStatus(apt) === 'CANCELADA'"
+              [class.citas__badge--no-show]="_getEffectiveStatus(apt) === 'NO_ASISTIO'"
             >
               {{ t.get('medico.agenda.status.' + _getEffectiveStatus(apt)) }}
             </span>
