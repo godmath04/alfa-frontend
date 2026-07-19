@@ -144,11 +144,18 @@ export class DoctorsPage {
   }
 
   _onUserChange(userId: number): void {
-    this._fUserId.set(userId);
+    this._fUserId.set(userId || null);
     const user = this.userVm.users().find(u => u.id === userId);
     if (user) {
       this._fEmail.set(user.email);
-      if (user.idNumber) this._fIdNumber.set(user.idNumber);
+      this._fFirstName.set(user.firstName);
+      this._fLastName.set(user.lastName);
+      this._fIdNumber.set(user.idNumber ?? '');
+    } else {
+      this._fEmail.set('');
+      this._fFirstName.set('');
+      this._fLastName.set('');
+      this._fIdNumber.set('');
     }
   }
 

@@ -47,16 +47,16 @@
         </div>
 
         <div class="doc-page__field">
-          <label class="doc-page__label">{{ t.get('admin.doctors.fields.first-name') }} *</label>
-          <input class="doc-page__input" type="text"
-            [value]="_fFirstName()" (input)="_fFirstName.set($any($event.target).value)"
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.first-name') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="text" readonly
+            [value]="_fFirstName()"
             [placeholder]="t.get('admin.doctors.fields.first-name-placeholder')" />
         </div>
 
         <div class="doc-page__field">
-          <label class="doc-page__label">{{ t.get('admin.doctors.fields.last-name') }} *</label>
-          <input class="doc-page__input" type="text"
-            [value]="_fLastName()" (input)="_fLastName.set($any($event.target).value)"
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.last-name') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="text" readonly
+            [value]="_fLastName()"
             [placeholder]="t.get('admin.doctors.fields.last-name-placeholder')" />
         </div>
       </div>
@@ -64,9 +64,9 @@
       <!-- Row 2: email, id number, office -->
       <div class="doc-page__form-grid">
         <div class="doc-page__field">
-          <label class="doc-page__label">{{ t.get('admin.doctors.fields.email') }} *</label>
-          <input class="doc-page__input" type="email"
-            [value]="_fEmail()" (input)="_fEmail.set($any($event.target).value)"
+          <label class="doc-page__label">{{ t.get('admin.doctors.fields.email') }}</label>
+          <input class="doc-page__input doc-page__input--readonly" type="email" readonly
+            [value]="_fEmail()"
             [placeholder]="t.get('admin.doctors.fields.email-placeholder')" />
         </div>
 
