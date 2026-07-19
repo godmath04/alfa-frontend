@@ -23,6 +23,26 @@ export interface LogPage {
   size: number;
 }
 
+export interface NotificationLogEntry {
+  id:          string;
+  citaId:      number | null;
+  tipo:        string;
+  destinatario: string;
+  canal:       string;
+  estado:      string;
+  intentos:    number;
+  fechaEnvio:  string;
+  mensaje:     string;
+  tipoEvento:  string;
+}
+
+export interface NotificationLogPage {
+  logs:  NotificationLogEntry[];
+  total: number;
+  page:  number;
+  size:  number;
+}
+
 export interface AdminHealthResponse {
   name:                string;
   icon?:               string;

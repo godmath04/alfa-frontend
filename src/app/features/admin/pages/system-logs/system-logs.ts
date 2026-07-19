@@ -2,7 +2,7 @@ import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { SystemLogsService } from '../../../../core/services/admin/system-logs.service';
-import { LogEntry } from '../../../../core/models/admin.model';
+import { LogEntry, NotificationLogEntry } from '../../../../core/models/admin.model';
 import { catchError, finalize } from 'rxjs';
 
 @Component({
@@ -15,10 +15,11 @@ import { catchError, finalize } from 'rxjs';
 export class SystemLogs {
   private readonly _service = inject(SystemLogsService);
 
-  readonly _logs    = signal<LogEntry[]>([]);
-  readonly _total   = signal(0);
-  readonly _loading = signal(false);
-  readonly _error   = signal(false);
+  readonly _logs        = signal<LogEntry[]>([]);
+  readonly _notifLogs   = signal<NotificationLogEntry[]>([]);
+  readonly _total       = signal(0);
+  readonly _loading     = signal(false);
+  readonly _error       = signal(false);
 
   readonly _activeTab = signal<'SISTEMA' | 'NOTIFICACIONES'>('SISTEMA');
 
@@ -74,9 +75,15 @@ export class SystemLogs {
     }
   }
 
+  _estadoBadgeClass(estado: string): string {
+    return estado === 'DLQ' ? 'log-badge--error' : 'log-badge--warn';
+  }
+
   private _loadData(): void {
     this._loading.set(true);
     this._error.set(false);
+    this._logs.set([]);
+    this._notifLogs.set([]);
 
     if (this._activeTab() === 'SISTEMA') {
       this._service.getLogs({
@@ -97,8 +104,8 @@ export class SystemLogs {
         finalize(() => this._loading.set(false)),
         catchError((err) => { this._error.set(true); throw err; })
       ).subscribe(res => {
-        this._logs.set(res.logs);
-        this._total.set(res.total);
+        this._notifLogs.set(res.logs);
+        this._total.set(Number(res.total));
       });
     }
   }

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { LogPage } from '../../models/admin.model';
+import { LogPage, NotificationLogPage } from '../../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class SystemLogsService {
@@ -26,8 +26,8 @@ export class SystemLogsService {
     return this._http.get<LogPage>(`${this._apiUrl}/logs`, { params });
   }
 
-  getFailedNotificationsLogs(pagina: number = 1): Observable<LogPage> {
-    return this._http.get<LogPage>(`${this._apiUrl}/notificaciones/logs`, {
+  getFailedNotificationsLogs(pagina: number = 1): Observable<NotificationLogPage> {
+    return this._http.get<NotificationLogPage>(`${this._apiUrl}/notificaciones/logs`, {
       params: new HttpParams().set('pagina', pagina.toString())
     });
   }

@@ -67,12 +67,17 @@
           <p>Error de conexión con Loki o el servidor de administración.</p>
           <button class="retry-btn" (click)="_applyFilters()">Reintentar</button>
         </div>
-      } @else if (_logs().length === 0) {
+      } @else if (_activeTab() === 'SISTEMA' && _logs().length === 0) {
         <div class="logs-state logs-state--empty">
           <lucide-icon name="search-x" [size]="32"></lucide-icon>
           <p>No se encontraron logs para los filtros aplicados.</p>
         </div>
-      } @else {
+      } @else if (_activeTab() === 'NOTIFICACIONES' && _notifLogs().length === 0) {
+        <div class="logs-state logs-state--empty">
+          <lucide-icon name="check-circle" [size]="32"></lucide-icon>
+          <p>No hay notificaciones fallidas registradas.</p>
+        </div>
+      } @else if (_activeTab() === 'SISTEMA') {
         <table class="logs-table">
           <thead>
             <tr>
@@ -91,6 +96,33 @@
                 </td>
                 <td class="log-cell-service">{{ log.service }}</td>
                 <td class="log-cell-message">{{ log.message }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <table class="logs-table">
+          <thead>
+            <tr>
+              <th style="width: 160px">Fecha</th>
+              <th style="width: 140px">Tipo</th>
+              <th style="width: 180px">Destinatario</th>
+              <th style="width: 90px">Canal</th>
+              <th style="width: 90px">Estado</th>
+              <th style="width: 70px">Intentos</th>
+              <th>Mensaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (log of _notifLogs(); track log.id) {
+              <tr>
+                <td class="log-cell-time">{{ log.fechaEnvio }}</td>
+                <td class="log-cell-service">{{ log.tipoEvento }}</td>
+                <td class="log-cell-service">{{ log.destinatario }}</td>
+                <td><span class="log-badge log-badge--info">{{ log.canal }}</span></td>
+                <td><span class="log-badge {{ _estadoBadgeClass(log.estado) }}">{{ log.estado }}</span></td>
+                <td style="text-align: center">{{ log.intentos }}</td>
+                <td class="log-cell-message">{{ log.mensaje }}</td>
               </tr>
             }
           </tbody>
