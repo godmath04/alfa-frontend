@@ -12,8 +12,10 @@ import {
 
 type ActiveTab = 'studyTypes' | 'insuranceTypes' | 'laboratories';
 
-const DAY_NAMES  = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-const DAY_SHORT  = ['', 'Lun',   'Mar',    'Mié',       'Jue',    'Vie',     'Sáb',    'Dom'];
+// Backend uses 0-indexed days: 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
+// UI maps index → label starting at 0
+const DAY_NAMES  = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const DAY_SHORT  = ['Lun',   'Mar',    'Mié',       'Jue',    'Vie',     'Sáb',    'Dom'];
 
 @Component({
   selector: 'app-lab-catalogs',
@@ -67,7 +69,8 @@ export class LabCatalogsPage implements OnInit {
   readonly _schedError = signal<string | null>(null);
   readonly _schedSaving = signal(false);
 
-  readonly _DAYS = [1,2,3,4,5,6,7].map(d => ({
+  // Values 0–6 match backend @Min(0) @Max(6). 0=Monday … 6=Sunday
+  readonly _DAYS = [0,1,2,3,4,5,6].map(d => ({
     value: d,
     label: DAY_NAMES[d],
     short: DAY_SHORT[d],
@@ -222,7 +225,19 @@ export class LabCatalogsPage implements OnInit {
     const id = this._editingId();
     const action$ = id !== null ? this._svc.updateLaboratory(id, req) : this._svc.createLaboratory(req);
     action$.subscribe({
-      next: () => { this._closeForm(); this._loadAll(); },
+      next: (lab) => {
+        this._formError.set(null);
+        // Bug fix: after creating a NEW lab, stay in edit mode so
+        // the user can immediately add schedules without closing the form.
+        if (id === null) {
+          this._editingId.set(lab.id);
+          this._loadAll();
+          this._cdr.markForCheck();
+        } else {
+          this._closeForm();
+          this._loadAll();
+        }
+      },
       error: () => { this._formError.set(this.t.get('lab.catalogs.saveError')); this._cdr.markForCheck(); },
     });
   }
@@ -279,8 +294,12 @@ export class LabCatalogsPage implements OnInit {
     forkJoin(calls).subscribe({
       next: () => {
         this._schedSaving.set(false);
+        // Bug fix: only reset the schedule sub-form, keep the lab edit form
+        // open so the user can continue adding more schedules.
         this._resetSchedSubForm();
+        // Reload so the schedule chips in the edit form update live.
         this._loadAll();
+        this._cdr.markForCheck();
       },
       error: () => {
         this._schedSaving.set(false);

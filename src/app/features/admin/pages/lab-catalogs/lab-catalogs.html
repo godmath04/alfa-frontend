@@ -134,12 +134,12 @@
               </div>
               <div class="res-page__field">
                 <label class="res-page__label">{{ t.get('lab.catalogs.scheduleForm.slot') }}</label>
-                <select class="res-page__input res-page__select" [value]="_schedSlot()"
+                <select class="res-page__input res-page__select"
                         (change)="_schedSlot.set(+$any($event.target).value)">
-                  <option value="15">15 min</option>
-                  <option value="30">30 min</option>
-                  <option value="45">45 min</option>
-                  <option value="60">60 min</option>
+                  <option value="15" [selected]="_schedSlot() === 15">15 min</option>
+                  <option value="30" [selected]="_schedSlot() === 30">30 min</option>
+                  <option value="45" [selected]="_schedSlot() === 45">45 min</option>
+                  <option value="60" [selected]="_schedSlot() === 60">60 min</option>
                 </select>
               </div>
             </div>
