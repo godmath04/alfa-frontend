@@ -99,9 +99,9 @@
           </div>
           <div class="res-page__field">
             <label class="res-page__label">{{ t.get('admin.specialties.fields.duration') }} *</label>
-            <input class="res-page__input" type="number" min="5" max="480"
+            <input class="res-page__input" type="number" min="10" max="60"
               [value]="_sfDuration() ?? ''"
-              (input)="_sfDuration.set(+$any($event.target).value || null)"
+              (input)="_sfDuration.set(_clampDuration(+$any($event.target).value))"
               [placeholder]="t.get('admin.specialties.fields.duration-placeholder')" />
           </div>
         </div>

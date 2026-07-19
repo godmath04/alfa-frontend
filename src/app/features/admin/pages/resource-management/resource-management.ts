@@ -119,6 +119,11 @@ export class ResourceManagementPage {
     this.cdr.markForCheck();
   }
 
+  _clampDuration(value: number): number | null {
+    if (!value) return null;
+    return Math.min(60, Math.max(10, value));
+  }
+
   _openEditSpecialty(s: Specialty): void {
     this._editingId.set(s.id);
     this._sfName.set(s.name);
