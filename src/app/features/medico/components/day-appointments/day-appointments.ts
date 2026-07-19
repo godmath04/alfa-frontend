@@ -41,6 +41,11 @@ export class DayAppointmentsComponent {
     return apt.status;
   }
 
+  _isPastRow(apt: DoctorAppointment): boolean {
+    const status = this._getEffectiveStatus(apt);
+    return status === 'COMPLETADA' || status === 'NO_ASISTIO' || status === 'CANCELADA';
+  }
+
   _isToday(apt: DoctorAppointment): boolean {
     const todayStr = new Date().toISOString().split('T')[0];
     return apt.date === todayStr;

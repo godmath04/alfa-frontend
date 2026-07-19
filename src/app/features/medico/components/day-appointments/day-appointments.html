@@ -46,7 +46,7 @@
           class="citas__row"
           [class.citas__row--alt]="i % 2 !== 0"
           [class.citas__row--active]="expandedId === apt.id"
-          [class.citas__row--past]="_getEffectiveStatus(apt) === 'COMPLETADA'"
+          [class.citas__row--past]="_isPastRow(apt)"
           (click)="_toggleRow(apt.id)"
         >
           <!-- Hora -->
