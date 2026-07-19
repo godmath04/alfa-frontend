@@ -626,7 +626,7 @@
       },
       "table": {
         "name": "Médico",
-        "id-number": "Cédula",
+        "id-number": "Documento",
         "type": "Tipo",
         "office": "Consultorio",
         "specialties": "Especialidades",

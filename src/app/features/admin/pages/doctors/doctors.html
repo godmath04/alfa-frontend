@@ -73,7 +73,7 @@
         <div class="doc-page__field">
           <label class="doc-page__label">{{ t.get('admin.doctors.fields.id-type') }}</label>
           <input class="doc-page__input doc-page__input--readonly" type="text" readonly
-            [value]="_selectedUser()?.idType?.toUpperCase() === 'CEDULA' ? t.get('admin.doctors.fields.id-type-cedula') : _selectedUser()?.idType?.toUpperCase() === 'PASAPORTE' ? t.get('admin.doctors.fields.id-type-pasaporte') : t.get('admin.doctors.fields.id-type-unknown')" />
+            [value]="(_selectedUser()?.idType?.toUpperCase() === 'CEDULA' || _selectedUser()?.idType?.toUpperCase() === 'CÉDULA') ? t.get('admin.doctors.fields.id-type-cedula') : (_selectedUser()?.idType?.toUpperCase() === 'PASAPORTE' || _selectedUser()?.idType?.toUpperCase() === 'PASSPORT') ? t.get('admin.doctors.fields.id-type-pasaporte') : t.get('admin.doctors.fields.id-type-unknown')" />
         </div>
 
         <div class="doc-page__field">
