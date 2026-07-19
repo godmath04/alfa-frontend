@@ -345,10 +345,10 @@
                   <!-- Slot duration selector -->
                   <select class="res-page__slot-select"
                           (change)="_setDaySlot(day.value, +$any($event.target).value)">
-                    <option value="15" [selected]="(_editingDaySlot()[day.value] ?? 30) === 15">15 min</option>
-                    <option value="30" [selected]="(_editingDaySlot()[day.value] ?? 30) === 30">30 min</option>
-                    <option value="45" [selected]="(_editingDaySlot()[day.value] ?? 30) === 45">45 min</option>
-                    <option value="60" [selected]="(_editingDaySlot()[day.value] ?? 30) === 60">60 min</option>
+                    <option value="15" [selected]="_editingDaySlot()[day.value] === 15">15 min</option>
+                    <option value="30" [selected]="_editingDaySlot()[day.value] === 30">30 min</option>
+                    <option value="45" [selected]="_editingDaySlot()[day.value] === 45">45 min</option>
+                    <option value="60" [selected]="_editingDaySlot()[day.value] === 60">60 min</option>
                   </select>
 
                   <button class="res-page__sched-btn res-page__sched-btn--save"

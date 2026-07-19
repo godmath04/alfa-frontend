@@ -24,6 +24,7 @@ export class DayAppointmentsComponent {
   @Output() filterChange = new EventEmitter<StatusFilter>();
   @Output() expand       = new EventEmitter<number>();
   @Output() markAbsent   = new EventEmitter<number>();
+  @Output() markCompleted = new EventEmitter<number>();
 
   readonly t            = inject(Translate);
   readonly formatToAmPm = formatToAmPm;
@@ -40,10 +41,13 @@ export class DayAppointmentsComponent {
     return apt.status;
   }
 
-  _canMarkAbsent(apt: DoctorAppointment): boolean {
-    if (this._getEffectiveStatus(apt) === 'CANCELADA') return false;
-    const start = new Date(`${apt.date}T${apt.startTime}`);
-    return new Date() >= start;
+  _isToday(apt: DoctorAppointment): boolean {
+    const todayStr = new Date().toISOString().split('T')[0];
+    return apt.date === todayStr;
+  }
+
+  _canCompleteOrAbsent(apt: DoctorAppointment): boolean {
+    return this._isToday(apt) && (apt.status === 'PENDIENTE' || apt.status === 'CONFIRMADA');
   }
 
   _onSearch(event: Event): void {
@@ -61,6 +65,11 @@ export class DayAppointmentsComponent {
   _onMarkAbsent(id: number, event: Event): void {
     event.stopPropagation();
     this.markAbsent.emit(id);
+  }
+
+  _onMarkCompleted(id: number, event: Event): void {
+    event.stopPropagation();
+    this.markCompleted.emit(id);
   }
 
   _stop(event: Event): void {

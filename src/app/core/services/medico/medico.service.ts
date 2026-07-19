@@ -41,6 +41,10 @@ export class MedicoService {
     return this._http.patch<void>(`${this._baseUrl}/citas/${id}/completar`, {});
   }
 
+  markNoShow(id: number): Observable<void> {
+    return this._http.patch<void>(`${this._baseUrl}/citas/${id}/no-asistio`, {});
+  }
+
   cancelAppointment(id: number): Observable<void> {
     return this._http.put<void>(`${this._baseUrl}/citas/${id}/cancelar`, {});
   }

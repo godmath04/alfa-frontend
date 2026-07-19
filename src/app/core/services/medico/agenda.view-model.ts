@@ -182,7 +182,7 @@ export class AgendaViewModel {
   setView(view: ActiveView): void          { this._state.setActiveView(view); }
 
   markAbsent(appointmentId: number): void {
-    this._service.cancelAppointment(appointmentId)
+    this._service.markNoShow(appointmentId)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
@@ -190,7 +190,25 @@ export class AgendaViewModel {
             this._state.agenda().map(day => ({
               ...day,
               appointments: day.appointments.map(apt =>
-                apt.id === appointmentId ? { ...apt, status: 'CANCELADA' as const } : apt
+                apt.id === appointmentId ? { ...apt, status: 'NO_ASISTIO' as any } : apt
+              ),
+            }))
+          );
+        },
+        error: () => {},
+      });
+  }
+
+  markCompleted(appointmentId: number): void {
+    this._service.completeAppointment(appointmentId)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: () => {
+          this._state.setAgenda(
+            this._state.agenda().map(day => ({
+              ...day,
+              appointments: day.appointments.map(apt =>
+                apt.id === appointmentId ? { ...apt, status: 'COMPLETADA' as any } : apt
               ),
             }))
           );
