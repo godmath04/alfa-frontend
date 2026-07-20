@@ -340,6 +340,7 @@
               &.bg-completadas { background-color: var(--color-primary-dark); }
               &.bg-pendientes { background-color: #bfdbfe; } // soft blue
               &.bg-canceladas { background-color: #fecdd3; } // soft pink
+              &.bg-error { background-color: var(--color-error, #ef4444); }
             }
           }
 
@@ -381,6 +382,7 @@
             &.bg-completadas { background-color: var(--color-primary-dark); }
             &.bg-pendientes { background-color: #bfdbfe; }
             &.bg-canceladas { background-color: #fecdd3; }
+            &.bg-error { background-color: var(--color-error, #ef4444); }
           }
         }
       }
