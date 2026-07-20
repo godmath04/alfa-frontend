@@ -225,6 +225,7 @@
           <div class="bars-wrapper">
             @for (mes of data; track mes.period) {
               <div class="bar-group" title="{{ formatPeriod(mes.period) }} - Confirmadas: {{ mes.completadas }}, Pendientes: {{ mes.pendientes }}, Canceladas: {{ mes.canceladas }}">
+                <div class="bar-tooltip">{{ mes.completadas + mes.pendientes + mes.canceladas }} citas</div>
                 @if (mes.completadas + mes.pendientes + mes.canceladas > 0) {
                   <div class="bar-stack" [style.height.px]="(mes.completadas + mes.pendientes + mes.canceladas) * 140 / vm.maxCitasValue()">
                     @if (mes.completadas > 0) {
@@ -418,6 +419,7 @@
             <div class="bars-wrapper">
               @for (mes of data; track mes.periodo) {
                 <div class="bar-group" title="{{ mes.periodo }} - Inasistencias: {{ mes.inasistencias }} / {{ mes.totalCitas }} ({{ mes.tasa }}%)">
+                  <div class="bar-tooltip">{{ mes.tasa }}%</div>
                   @if (mes.tasa > 0) {
                     <div class="bar-stack" [style.height.px]="mes.tasa * 140 / vm.maxInasistenciaValue()">
                       <div class="bar bg-error" [style.flex-grow]="1"></div>

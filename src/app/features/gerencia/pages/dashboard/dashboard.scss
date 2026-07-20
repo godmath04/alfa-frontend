@@ -309,6 +309,7 @@
           min-width: 32px;
           transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
+          position: relative;
 
           &:hover {
             transform: translateY(-4px);
@@ -320,6 +321,32 @@
               color: var(--color-text-primary);
               font-weight: 600;
             }
+            .bar-tooltip {
+              opacity: 1;
+              visibility: visible;
+              transform: translateX(-50%) translateY(-8px);
+            }
+          }
+
+          .bar-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
+            background-color: var(--color-surface-container-highest, #374151);
+            color: var(--color-on-surface, #ffffff);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+            margin-bottom: 4px;
           }
 
           .bar-stack {
