@@ -418,8 +418,11 @@
           <div class="stacked-bar-container">
             <div class="bars-wrapper">
               @for (mes of data; track mes.periodo) {
-                <div class="bar-group" title="{{ mes.periodo }} - Inasistencias: {{ mes.inasistencias }} / {{ mes.totalCitas }} ({{ mes.tasa }}%)">
-                  <div class="bar-tooltip">{{ mes.tasa }}%</div>
+                <div class="bar-group" title="{{ formatPeriod(mes.periodo) }} - Inasistencias: {{ mes.inasistencias }} / {{ mes.totalCitas }} ({{ mes.tasa }}%)">
+                  <div class="bar-tooltip">
+                    <div class="whitespace-nowrap">{{ formatPeriod(mes.periodo) }}</div>
+                    <div>{{ mes.tasa }}% inasistencia</div>
+                  </div>
                   @if (mes.tasa > 0) {
                     <div class="bar-stack" [style.height.px]="mes.tasa * 140 / vm.maxInasistenciaValue()">
                       <div class="bar bg-error" [style.flex-grow]="1"></div>
@@ -427,7 +430,7 @@
                   } @else {
                     <div class="bar-stack-placeholder"></div>
                   }
-                  <span class="bar-label" style="font-size: 10px">{{ mes.periodo }}</span>
+                  <span class="bar-label" style="font-size: 10px">{{ formatPeriod(mes.periodo) }}</span>
                 </div>
               }
             </div>
